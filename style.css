@@ -1,0 +1,422 @@
+*{
+    font-family: motserrat;
+}
+
+.container-fluid{
+    padding: 0 50px;
+    margin-top: 8px;
+}
+
+.navbar{
+    text-transform: uppercase;
+    background-color: white;
+    height: 60px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.navbar-nav a{
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.navbar .navbar-brand{
+    color: rgb(17, 110, 81);
+    font-size: 1.7em;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.log{
+    gap: 10px;
+    text-transform: uppercase;
+    
+}
+
+.log .log2{
+    background-color: #003566;
+    color: white;
+    border-color: #003566;
+    font-weight: bold;
+    box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+}
+
+.log .log2:hover {
+    background-color: #365f85;
+}
+
+.log .log2:active{
+    background-color: #003566;
+    border-color: #003566;
+}
+
+.log .log1 {
+    color: #003566;
+    border-color: #003566;
+    font-weight: bold;
+    width: 90px;
+    
+}
+
+.log .log1:hover {
+    background-color: #fff;
+    color: #003566;
+    box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+}
+
+.text{
+    color: #003566;
+}
+
+.logo{
+    width: 33px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.section-padding{
+    padding: 100px 0;
+}
+
+.carousel-item{
+    height: 100vh;
+    min-height: 300px;
+    
+}
+
+.carousel-caption{
+    bottom: 320px;
+    z-index: 2;
+
+}
+
+.carousel-caption h5{
+    font-size: 45px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 25px;
+}
+
+.carousel-caption p{
+    width: 60%;
+    margin: auto;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.carousel-inner::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+
+.req{
+    display: inline-flex;;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.req .log2{
+    width: 170px;
+    height: 50px;
+    background-color: #015F6B;
+    color: white;
+    border-color: #015F6B;
+    font-weight: bold;
+    box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border-radius: 2px;
+}
+
+.req .log2:hover{
+    background-color: #407279;
+}
+
+.req .log1{
+    width: 170px;
+    height: 50px;
+    color: #015F6B;
+    border: 2px solid;
+    border-color: #000;
+    font-weight: bold;
+   
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border-radius: 2px;
+}
+
+.req .log1:hover {
+    box-shadow: rgba(0, 0, 0, 1) 0 0 2px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+}
+
+.req .log1:active {
+    box-shadow: rgba(0, 0, 0, 1) 0 0 2px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+    background-color: #015F6B;
+    border-color: #015F6B;
+}
+
+.w-100{
+    height: 100vh;
+}
+
+.nav-link:hover{
+    border-bottom: 2px solid #003566;
+    color: #121212;
+}
+
+
+
+.actives{
+    border-bottom: 2px solid #003566;
+    color: #121212;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px){
+
+    .carousel-caption{
+        background: 350px;
+    }
+    .carousel-caption p{
+        width: 100%;
+    }
+
+    .navbar-collapse {
+        background-color: #fff;
+        padding: 10px;
+    }
+
+    .navbar-brand{
+        padding: 0;
+    }
+    .navbar {
+        text-align: center;
+    }
+
+    .log{
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-link:hover {
+        background-color: #003566;
+        color: #fff;
+    }
+
+    .actives {
+        background-color: #003566;
+        color: #fff;
+    }
+
+}
+
+@media only screen and (max-width: 767px){
+    .navbar{
+        text-align: center;
+    }
+
+    .carousel-caption{
+        bottom: 335px;
+    }
+
+    .carousel-caption h5{
+        font-size: 25px;
+    }
+
+    .carousel-caption a{
+        padding: 10px 15px;
+    }
+
+    .carousel-caption p{
+        width: 100%;
+        line-height: 1.6;
+        font-size: 12px;
+    }
+
+    .navbar-collapse {
+        background-color: #fff;
+        padding: 10px;
+    }
+
+    .navbar-brand {
+        padding: 0;
+    }
+    .log {
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-link:hover{
+        background-color: #003566;
+        color: #fff;
+    }
+    .actives {
+        background-color: #003566;
+        color: #fff;
+    }
+}
+
+.fa-star,
+.fa-star-half-alt {
+    color: #ffc107;
+}
+
+
+.value-icon-2 {
+    color: #003566;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #121212;
+}
+
+.hr {
+    margin: 50px 15% 0 15%;
+}
+
+.b {
+    width: 100px;
+    height: 100px;
+    background-color: #000;
+}
+
+.con-prod {
+    padding-top: 30px;
+}
+
+.title-line {
+    display: inline-block;
+    border: 0;
+    border-top: 2px solid #dfdada;
+    width: 15vw;
+
+}
+
+.title-text {
+    position: relative;
+    top: -0.3em;
+    background-color: #ffffff;
+    padding: 0 0.5em;
+}
+
+
+.white {
+    color: #fff;
+}
+
+.darks {
+    background-color: #ECEBEB;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.lm {
+    background-color: #015F6B;
+    color: #dddddd;
+    border: none;
+}
+
+.lm:hover {
+    background-color: #015F6B;
+}
+
+@media (max-width: 400px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    .navbar-nav {
+        flex-direction: column;
+    }
+
+    .navbar-brand{
+        align-items:flex-start;
+        
+    }
+    .navbar-brand span{
+        font-size: 20px;
+        
+    }
+
+    .navbar-toggler{
+        width: 25px;
+        height: 25px;
+        padding: 0;
+    }
+    
+    .navbar-toggler-icon{
+        width: 20px;
+        height: 20px;
+        
+    }
+
+    .nav-item {
+        margin: 10px 0;
+    }
+
+    .nav-link {
+        padding: 5px 0;
+    }
+
+    .log {
+        flex-direction: column;
+    }
+
+    .d-flex,p{
+        display: flex;
+        justify-content: center;
+        margin: 0;
+    }
+
+    .log1,
+    .log2 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .carousel-caption{
+        bottom: 10px;
+    }
+
+    .carousel-caption h5 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-caption p {
+        font-size: 1rem;
+    }
+
+    .req {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .req p {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+  .title-text {
+      font-size: 1.5rem;
+  }
+
+  .title-line {
+      display: none;
+  }
+}
+
