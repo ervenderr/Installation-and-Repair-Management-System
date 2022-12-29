@@ -420,3 +420,38 @@
   }
 }
 
+.servicecon{
+    margin-top: 100px;
+}
+
+.servicecon h2, h3{
+    font-weight: 700;
+    font-size: 50px;
+}
+
+.servicecon h3 {
+    font-weight: 700;
+    font-size: 40px;
+}
+
+.img-fluid {
+    width: 900px;
+    height: 400px;
+}
+
+.right{
+    float: right;
+}
+
+.servname{
+    padding-bottom: 20px;
+}
+
+.my-5{
+    color: #fff;
+}
+
+
+a{
+    text-decoration: none;
+}
