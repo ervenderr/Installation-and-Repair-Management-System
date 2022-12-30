@@ -455,3 +455,83 @@
 a{
     text-decoration: none;
 }
+
+.product {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.product-image {
+width: 60%;
+display: block;
+margin: 0 auto;
+}
+
+.product h2 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.product p {
+    color: #666;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.product-price {
+    color: #f44336;
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.product h2{
+    font-size: 25px;
+}
+
+.form-inline{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.form-inline .sort{
+    display: flex;
+    width: 30%;
+    align-items: center;
+}
+
+.form-inline .sort label{
+    width: 23%;
+    font-size: 20px;
+}
+
+.form-inline .searchform{
+    width: 30%;
+}
+
+#search-input, #sort-select:focus {
+    box-shadow: none;
+    border: 1px solid rgb(180, 180, 180);
+}
+
+.magni{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+.seemore{
+    background-color: #015F6B;
+    border-color: #015F6B;
+}
+
+.seemore:hover{
+    background-color: #407279;
+    border-color: #015F6B;
+}

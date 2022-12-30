@@ -2,5 +2,6 @@
 
     $page_title = "";
     $services = "";
+    $products = "";
 
 ?>

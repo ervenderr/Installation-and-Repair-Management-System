@@ -16,7 +16,7 @@
                     <a class="nav-link <?php echo $services; ?>" href="services.php">Services</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?php echo $products; ?>" href="#">Products</a>
+                    <a class="nav-link <?php echo $products; ?>" href="products.php">Products</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo $job; ?>" href="#">Job Order</a>
