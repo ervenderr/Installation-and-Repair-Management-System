@@ -15,29 +15,6 @@ include_once('homeIncludes/header.php');
     <div class="container servicecon">
         <h2 class="text-center mb-5">PRODUCTS</h2>
 
-        <form class="form-inline">
-            <div class="form-group my-2 sort">
-                <label for="sort-select">Sort by:</label>
-                <select class="form-control" id="sort-select" onchange="sort()">
-                    <option value="price-asc">Price (low to high)</option>
-                    <option value="price-desc">Price (high to low)</option>
-                    <option value="name-asc">Name (A-Z)</option>
-                    <option value="name-desc">Name (Z-A)</option>
-                </select>
-            </div>
-
-            <div class="form-group my-2 searchform">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="search-input" placeholder="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary seemore magni" type="button" onclick="search()"><i
-                                class="fas fa-search"></i></button>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-
         <div class="row">
             <!-- Product 1 -->
             <div class="col-md-4">
