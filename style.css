@@ -418,6 +418,16 @@
   .title-line {
       display: none;
   }
+
+  .servicecon img{
+    width: 300px;
+    height: 250px;
+    margin: 0 auto;
+  }
+
+  .serimg{
+    margin: 0 25px;
+  }
 }
 
 .servicecon{
