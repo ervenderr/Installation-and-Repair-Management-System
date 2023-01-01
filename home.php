@@ -13,7 +13,7 @@ include_once('homeIncludes/header.php');
   <?php include_once('homeIncludes/homenav.php');?>
 
   <div id="carouselExampleCaptions" class="carousel slide">
-    <div class="carousel-inner">
+    <div class="carousel-inner carousel-inners">
       <div class="carousel-item active">
         <img src="img/cctv.jpg" class="d-block w-100" alt="..." />
         <div class="carousel-caption">

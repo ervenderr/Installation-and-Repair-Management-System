@@ -80,7 +80,6 @@
 .carousel-item{
     height: 100vh;
     min-height: 300px;
-    
 }
 
 .carousel-caption{
@@ -103,7 +102,7 @@
     line-height: 1.9;
 }
 
-.carousel-inner::before{
+.carousel-inners::before{
     content: '';
     position: absolute;
     width: 100%;
@@ -547,3 +546,8 @@ margin: 0 auto;
     background-color: #407279;
     border-color: #015F6B;
 }
+
+
+
+
+
