@@ -1,0 +1,37 @@
+.modal-dialog {
+    width: 80%;
+    max-width: 600px;
+}
+
+.product-small-img img {
+    height: 92px;
+    margin: 10px 0;
+    display: block;
+    cursor: pointer;
+    opacity: .7;
+}
+
+.product-small-img img:hover {
+    opacity: 1;
+}
+
+.product-small-img {
+    float: left;
+}
+
+.productt {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.img-container img {
+    height: 300px;
+    border: 1px solid #015F6B;
+}
+
+.img-container {
+    float: right;
+    padding: 10px;
+}

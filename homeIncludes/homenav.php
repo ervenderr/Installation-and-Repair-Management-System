@@ -19,7 +19,7 @@
                     <a class="nav-link <?php echo $products; ?>" href="products.php">Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?php echo $job; ?>" href="#">Job Order</a>
+                    <a class="nav-link <?php echo $job; ?>" href="jobs.php">Job Order</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo $repair; ?>" href="#">Repair Request</a>

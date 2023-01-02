@@ -3,5 +3,6 @@
     $page_title = "";
     $services = "";
     $products = "";
+    $job = "";
 
 ?>
