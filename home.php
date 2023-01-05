@@ -1,5 +1,5 @@
 <?php
-
+require_once 'homeIncludes/dbconfig.php';
 require_once 'tools/variables.php';
 $page_title = 'ProtonTech | Home';
 $home = 'actives';
@@ -15,7 +15,7 @@ include_once('homeIncludes/header.php');
   <div id="carouselExampleCaptions" class="carousel slide">
     <div class="carousel-inner carousel-inners">
       <div class="carousel-item active">
-        <img src="img/cctv.jpg" class="d-block w-100" alt="..." />
+        <img src="img/cctv3.jpg" class="d-block w-100" alt="..." />
         <div class="carousel-caption">
           <h5>Smart Security Solutions</h5>
           <p>
@@ -168,56 +168,45 @@ include_once('homeIncludes/header.php');
 
   <!-- Featured Products -->
 
-  <div class="container mt-5 con-prod">
-    <div class="center">
-      <div class="text-center mb-5">
-        <b class="title-line">&nbsp;</b>
-        <h2 class="d-inline-block title-text">Featured Products</h2>
-        <b class="title-line">&nbsp;</b>
-      </div>
-      <div class="row">
-        <!-- Product 1 -->
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="img/prod1.jpg" class="card-img-top" alt="Product 1" />
-            <div class="card-body">
-              <h5 class="card-title">VIGI C300HP</h5>
-              <p class="card-text">
-                VIGI 3MP Outdoor Bullet Network Camera
-              </p>
-              <a href="#" class="btn btn-primary stretched-link lm">Learn More</a>
-            </div>
-          </div>
+  <div class="row">
+            <?php
+            $sql = "SELECT * FROM products";
+            $result = mysqli_query($conn, $sql);
+
+            // Check if there are any rows in the table
+            if (mysqli_num_rows($result) > 0) {
+                // If there are rows, output the name, price, description, and image for each row
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $name = $row['name'];
+                    $price = $row['price'];
+                    $description = $row['description'];
+                    $full_description = $row['full_descriptions'];
+                    $features = $row['features'];
+                    $image1 = $row['img1'];
+                    $image2 = $row['img2'];
+                    $image3 = $row['img3'];
+
+                    // Output the product information
+                    echo '<div class="col-md-4">';
+                    echo '<div class="product">';
+                    echo '<img src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="' . $name . '" class="product-image" data-toggle="modal" data-target="#img-modal-' . $name . '">';
+                    echo '<h2>' . $name . '</h2>';
+                    echo '<p>' . $description . '</p>';
+                    echo '<div class="product-price">' . $price . '</div>';
+                    echo '<button type="button" class="btn btn-primary seemore" data-toggle="modal" data-target="#product-modal-' . $name . '">See More</button>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+            } else {
+                // If there are no rows in the table, display a message
+                echo "No products found.";
+            }
+
+            ?>
+
+
+
         </div>
-        <!-- Product 2 -->
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="img/prod2.jpg" class="card-img-top" alt="Product 2" />
-            <div class="card-body">
-              <h5 class="card-title">VIGI C300HP</h5>
-              <p class="card-text">
-                VIGI 3MP Outdoor Bullet Network Camera
-              </p>
-              <a href="#" class="btn btn-primary stretched-link lm">Learn More</a>
-            </div>
-          </div>
-        </div>
-        <!-- Product 3 -->
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img src="img/prod3.jpg" class="card-img-top" alt="Product 3" />
-            <div class="card-body">
-              <h5 class="card-title">VIGI NVR1016H</h5>
-              <p class="card-text">
-                VIGI 16 Channel Network Video Recorder
-              </p>
-              <a href="#" class="btn btn-primary stretched-link lm">Learn More</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Footer -->
   <?php include_once('homeIncludes/footer.php');?>

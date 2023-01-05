@@ -82,8 +82,10 @@
     min-height: 300px;
 }
 
+
+
 .carousel-caption{
-    bottom: 320px;
+    bottom: 200px;
     z-index: 2;
 
 }
@@ -143,8 +145,8 @@
     width: 170px;
     height: 50px;
     color: #015F6B;
-    border: 2px solid;
-    border-color: #000;
+    border: 1px solid;
+    border-color: #015F6B;
     font-weight: bold;
    
     background-color: white;
@@ -231,7 +233,7 @@ ul .actives{
     }
 
     .carousel-caption h5{
-        font-size: 25px;
+        font-size: 30px;
     }
 
     .carousel-caption a{
@@ -241,7 +243,7 @@ ul .actives{
     .carousel-caption p{
         width: 100%;
         line-height: 1.6;
-        font-size: 12px;
+        font-size: 15px;
     }
 
     .navbar-collapse {
@@ -334,102 +336,7 @@ ul .actives{
     background-color: #015F6B;
 }
 
-@media (max-width: 400px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-    }
 
-
-    .navbar-nav {
-        flex-direction: column;
-    }
-
-    .navbar-brand{
-        align-items:flex-start;
-        
-    }
-    .navbar-brand span{
-        font-size: 20px;
-        
-    }
-
-    .navbar-toggler{
-        width: 25px;
-        height: 25px;
-        padding: 0;
-    }
-    
-    .navbar-toggler-icon{
-        width: 20px;
-        height: 20px;
-        
-    }
-
-    .nav-item {
-        margin: 10px 0;
-    }
-
-    .nav-link {
-        padding: 5px 0;
-    }
-
-    .log {
-        flex-direction: column;
-    }
-
-    .d-flex,p{
-        display: flex;
-        justify-content: center;
-        margin: 0;
-    }
-
-    .log1,
-    .log2 {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .carousel-caption{
-        bottom: 10px;
-    }
-
-    .carousel-caption h5 {
-        font-size: 1.5rem;
-    }
-
-    .carousel-caption p {
-        font-size: 1rem;
-    }
-
-    .req {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .req p {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-  .title-text {
-      font-size: 1.5rem;
-  }
-
-  .title-line {
-      display: none;
-  }
-
-  .servicecon img{
-    width: 300px;
-    height: 250px;
-    margin: 0 auto;
-  }
-
-  .serimg{
-    margin: 0 25px;
-  }
-}
 
 .servicecon{
     margin-top: 100px;
@@ -548,3 +455,141 @@ margin: 0 auto;
 }
 
 
+@media ((max-width: 500px) and (min-width: 365px)) {
+
+    .container-fluid{
+        margin-top: 5px;
+       
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    .navbar-nav {
+        flex-direction: column;
+    }
+
+
+    .navbar-brand{
+        align-items:flex-start;
+        
+    }
+    .navbar-brand span{
+        font-size: 25px;
+    }
+
+    .navbar-toggler{
+        width: 40px;
+        height: 30px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .navbar-toggler-icon{
+        width: 20px;
+        height: 20px;
+        
+    }
+
+    .nav-item {
+        margin: 10px 0;
+    }
+
+    .nav-link {
+        padding: 5px 0;
+    }
+
+    .log {
+        flex-direction: column;
+    }
+
+    .d-flex,p{
+        display: flex;
+        justify-content: center;
+        margin: 0;
+    }
+
+    .d-flex .log1,
+    .log2 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .carousel-caption{
+        bottom: 200px;
+    }
+
+    .carousel-caption h5 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-caption p {
+        font-size: 1rem;
+    }
+
+    .req {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .req .log2{
+        width: 120px;
+        height: 40px;
+        font-size: 12px;
+
+    }
+    
+    .req .log1{
+        width: 120px;
+        height: 40px;
+        font-size: 12px;
+    }
+
+
+    .req p {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+  .title-text {
+      font-size: 1.5rem;
+  }
+
+  .title-line {
+      display: none;
+  }
+
+  .servicecon img{
+    width: 300px;
+    height: 250px;
+    margin: 0 auto;
+  }
+
+  .serimg{
+    display: flex;
+  }
+}
+
+@media (max-width: 364px){
+        
+    .navbar-brand span{
+        font-size: 20px;
+    }
+
+    .navbar-toggler{
+        width: 40px;
+        height: 30px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .navbar-toggler-icon{
+        width: 20px;
+        height: 20px;
+        
+    }
+}

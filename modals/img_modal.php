@@ -18,7 +18,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     // Modal
     echo '<div class="modal fade" id="img-modal-' . htmlspecialchars($name) . '" tabindex="-1" role="dialog" aria-labelledby="img-modal-' . htmlspecialchars($name) . '" aria-hidden="true">';
-    echo '<div class="modal-dialog modal-xl" role="document">';
+    echo '<div class="modal-dialog modal-xl">';
     echo '<div class="modal-content">';
     echo '<div class="modal-header">';
     echo '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
@@ -26,7 +26,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '</button>';
     echo '</div>';
 
-    echo '<div class="modal-body">';
+
     echo '<div class="productt">';
     echo '    <div class="product-small-img">';
     echo '        <img class="img-responsive" src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="" onclick="myFunction(this,\'imgBox1\')">';
@@ -36,7 +36,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '    <div class="img-container">';
     echo '        <img class="img-responsive" id="imgBox1" src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="">';
     echo '    </div>';
-    echo '</div>';
     echo '</div>';
 
     

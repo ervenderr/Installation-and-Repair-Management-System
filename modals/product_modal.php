@@ -23,14 +23,14 @@ while ($row = mysqli_fetch_assoc($result)) {
   echo '<div class="modal-content">';
   echo '<div class="modal-header">';
   echo '<h5 class="modal-title" id="product-modal-' . $name . '-label">' . $name . '</h5>';
-  echo '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+  echo '<button type="button" class="m-close close" data-dismiss="modal" aria-label="Close">';
   echo '<span aria-hidden="true">×</span>';
   echo '</button>';
   echo '</div>';
   echo '<div class="modal-body">';
   // Navbar
-  echo '<nav class="navbar navbar-expand-lg navbar-light bg-light">';
-  echo '<div class="collapse navbar-collapse" id="navbarNav">';
+  echo '<nav class="m-nav navbar navbar-expand-sm navbar-light bg-light">';
+  echo '<div class="collapses navbar-collapse" id="navbarNav">';
   echo '<ul class="nav nav-tabs" id="myTab" role="tablist">';
   echo '<li class="nav-item">';
   echo '<a class="nav-link active" id="overview-tab-' . $name . '" data-toggle="tab" href="#overview-' . $name . '" role="tab" aria-controls="overview" aria-selected="true">Overview</a>';
