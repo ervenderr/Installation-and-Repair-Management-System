@@ -168,6 +168,8 @@ include_once('homeIncludes/header.php');
 
   <!-- Featured Products -->
 
+  <div class="container mt-5 values-section">
+  <h2 class="text-center mb-5">Featured Products </h2>
   <div class="row">
             <?php
             $sql = "SELECT * FROM products";
@@ -206,6 +208,7 @@ include_once('homeIncludes/header.php');
 
 
 
+        </div>
         </div>
 
   <!-- Footer -->

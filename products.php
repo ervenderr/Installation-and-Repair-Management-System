@@ -14,7 +14,7 @@ include_once('homeIncludes/header.php');
 
 
     <div class="container servicecon">
-        <h2 class="text-center mb-5">PRODUCTS</h2>
+        <h2 class="serv text-center mb-5">PRODUCTS</h2>
 
         <div class="row">
             <?php
@@ -38,10 +38,10 @@ include_once('homeIncludes/header.php');
                     echo '<div class="col-md-4">';
                     echo '<div class="product">';
                     echo '<img src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="' . $name . '" class="product-image" data-toggle="modal" data-target="#img-modal-' . $name . '">';
-                    echo '<h2>' . $name . '</h2>';
+                    echo '<h2 class="serv">' . $name . '</h2>';
                     echo '<p>' . $description . '</p>';
-                    echo '<div class="product-price">' . $price . '</div>';
-                    echo '<button type="button" class="btn btn-primary seemore" data-toggle="modal" data-target="#product-modal-' . $name . '">See More</button>';
+                    echo '<div class="product-price">₱ ' . $price . '</div>';
+                    echo '<button type="button" class="btn btn-primary seemore" data-toggle="modal" data-target="#img-modal-' . $name . '">See More</button>';
                     echo '</div>';
                     echo '</div>';
                 }
@@ -58,7 +58,6 @@ include_once('homeIncludes/header.php');
 
 
         <?php include_once('modals/img_modal.php'); ?>
-        <?php include_once('modals/product_modal.php'); ?>
 
 
         <!-- Include jQuery and Bootstrap JS -->

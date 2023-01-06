@@ -13,7 +13,7 @@ include_once('homeIncludes/header.php');
   <?php include_once('homeIncludes/homenav.php'); ?>
 
   <div class="container servicecon">
-    <h2 class="text-center mb-5">SERVICES</h2>
+    <h2 class="serv text-center mb-5">SERVICES</h2>
 
     <?php
 
@@ -38,7 +38,7 @@ include_once('homeIncludes/header.php');
         echo '</div>';
         echo '<div class="col-md-6 d-flex align-items-center">';
         echo '<div class="bg-light p-3 rounded shadow-lg destext">';
-        echo '<h3 class="text-left font-weight-bold mb-0 servname">' . $name . '</h3>';
+        echo '<h3 class="serv text-left font-weight-bold mb-0 servname">' . $name . '</h3>';
         echo '<p class="text-left font-italic text-secondary mt-1 mb-3">' . $description . '</p>';
         echo '<button class="btn btn-primary mt-3"><a href="/solar-panels" style="color: white;">Learn more</a></button>';
         echo '</div>';

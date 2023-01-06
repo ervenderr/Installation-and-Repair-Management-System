@@ -29,6 +29,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     echo '<div class="modal-body">';
     echo '<div class="productt">';
+    echo '<div class="productt-flex">';
     echo '    <div class="product-small-img">';
     echo '        <img class="img-responsive" src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="" onclick="myFunction(this,\'imgBox1\')">';
     echo '        <img class="img-responsive" src="data:image/jpeg;base64,' . base64_encode($image2) . '" alt="" onclick="myFunction(this,\'imgBox1\')">';
@@ -37,6 +38,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '    <div class="img-container">';
     echo '        <img class="img-responsive" id="imgBox1" src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="">';
     echo '    </div>';
+    echo '</div>';
     echo '</div>';
     echo '</div>';
 

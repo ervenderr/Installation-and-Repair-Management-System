@@ -29,7 +29,7 @@
 .log{
     gap: 10px;
     text-transform: uppercase;
-    
+    margin-bottom: 8px;
 }
 
 .log .log2{
@@ -60,7 +60,7 @@
 .log .log1:hover {
     background-color: #fff;
     color: #003566;
-    box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 .text{
@@ -82,12 +82,9 @@
     min-height: 300px;
 }
 
-
-
 .carousel-caption{
     bottom: 200px;
     z-index: 2;
-
 }
 
 .carousel-caption h5{
@@ -125,40 +122,52 @@
 .req .log2{
     width: 170px;
     height: 50px;
-    background-color: #015F6B;
+    background: rgba(1,95,107,0.75);
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
     color: white;
-    border-color: #015F6B;
+    border: 1px solid rgba(1,95,107,0.375);
     font-weight: bold;
-    box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+    box-shadow: rgba(0, 0, 0, 0.507) 0px 6px 12px -2px, rgba(5, 0, 0, 0.527) 0px 3px 7px -3px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
     border-radius: 2px;
+    border-radius: 30px;
 }
 
 .req .log2:hover{
     background-color: #407279;
+    border-color: #015F6B;
+}
+
+.req .log2:active {
+    box-shadow: rgba(0, 0, 0, 1) 0 0 2px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+    background-color: #015F6B;
+    border-color: #015F6B;
 }
 
 .req .log1{
     width: 170px;
     height: 50px;
-    color: #015F6B;
-    border: 1px solid;
-    border-color: #015F6B;
+    color: #ffffff;
     font-weight: bold;
-   
-    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.507) 0px 6px 12px -2px, rgba(5, 0, 0, 0.527) 0px 3px 7px -3px;
+    background: rgba(255,255,255,0.5);
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+    border-color: rgba(255,255,255,0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    border-radius: 2px;
+    border-radius: 30px;
 }
 
 .req .log1:hover {
     box-shadow: rgba(0, 0, 0, 1) 0 0 2px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+    border-color: rgba(255,255,255,0.5);
 }
 
 .req .log1:active {
@@ -184,6 +193,7 @@
 ul .actives{
     font-weight: 500;
 }
+
 
 @media only screen and (min-width: 768px) and (max-width: 991px){
 
@@ -336,7 +346,10 @@ ul .actives{
     background-color: #015F6B;
 }
 
-
+.f-row{
+    display: flex;
+    flex-direction: row;
+}
 
 .servicecon{
     margin-top: 100px;
@@ -564,7 +577,7 @@ margin: 0 auto;
   }
 
   .servicecon img{
-    width: 300px;
+    width: 100%;
     height: 250px;
     margin: 0 auto;
   }
@@ -591,5 +604,22 @@ margin: 0 auto;
         width: 20px;
         height: 20px;
         
+    }
+    .servicecon img{
+        width: 336px;
+        height: 200px;
+        margin: 0 auto;
+    }
+
+      .servicecon .serv{
+        font-size: 35px;
+    }
+
+    .servicecon .product h2{
+        font-size: 30px;
+    }
+
+    .servicecon .product img{
+        width: auto;
     }
 }
