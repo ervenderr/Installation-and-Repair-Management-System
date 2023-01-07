@@ -75,7 +75,7 @@
     width: 100%;
     transform: translateY(-50%);
     background-color: #cdcdcd;
-    z-index: -1;
+    z-index: 1;
 }
 
 .progress{
@@ -93,6 +93,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
 }
 
 .progress-step::before{
@@ -124,7 +125,11 @@
     padding: 1.5rem;
     border-top: 5px solid #015F6B;
     border-bottom: 5px solid #015F6B;
+    background-color: #fff;
+    
 }
+
+
 
 .form .text-center{
     font-size: 30px;
@@ -152,6 +157,8 @@ option{
     background-color: #015F6B;
     color: #ffff;
     border: none;
+    border-radius: 20px;
+
 }
 
 .width-50{
@@ -177,18 +184,40 @@ option{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
 }
 
 .btns-group input{
     width: 25%;
     font-size: 13px;
+    border-radius: 20px;
 }   
 
-.repaircon{
-    margin-top: 50px;
+.repairbody{
+    background: #f0f2f1;
 }
 
 
+.repaircon{
+    margin-top: 60px;
+    padding: 0 20px;
+}
+
+@keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .form-step {
+    animation: fadeInOut 0.5s forwards;
+  }
 
 
 

@@ -13,6 +13,13 @@
     height: 60px;
     border-bottom: 1px solid #dddddd;
 }
+.navbar .container-fluid .navbar-collapse ul{
+    gap: 16px;
+}
+
+.navbar .container-fluid .navbar-collapse ul li a{
+    padding: 8px 0;
+}
 
 .navbar-nav a {
     font-weight: 500;

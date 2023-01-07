@@ -9,7 +9,7 @@ include_once('homeIncludes/header.php');
 
 ?>
 
-<body>
+<body class="repairbody">
 
     <?php include_once('homeIncludes/homenav.php'); ?>
 

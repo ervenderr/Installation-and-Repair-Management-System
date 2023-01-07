@@ -30,6 +30,8 @@ function updateFormSteps(){
 
 
   formSteps[formStepsNum].classList.add("form-step-active");
+  requestAnimationFrame(updateFormSteps);
+
 }
 
 function updateProgressBar(){
@@ -42,8 +44,9 @@ function updateProgressBar(){
   });
 
   const progressActive = document.querySelectorAll(".progress-step-active");
-
+  
   progress.style.width = 
     ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
+  
 }
 
