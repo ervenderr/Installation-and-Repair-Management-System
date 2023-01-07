@@ -22,7 +22,7 @@
                     <a class="nav-link <?php echo $job; ?>" href="jobs.php">Job Order</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?php echo $repair; ?>" href="#">Repair Request</a>
+                    <a class="nav-link <?php echo $repair; ?>" href="repair.php">Repair Request</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"

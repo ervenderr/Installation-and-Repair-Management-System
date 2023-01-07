@@ -58,9 +58,135 @@
     margin-top: 20px;
 }
 
+.progressbar{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    counter-reset: step;
+    margin: 2rem 0 3rem 0;
+}
+
+.progressbar::before, .progress{
+    content: '';
+    position: absolute;
+    top: 50%;
+    height: 4px;
+    width: 100%;
+    transform: translateY(-50%);
+    background-color: #cdcdcd;
+    z-index: -1;
+}
+
+.progress{
+    background-color: #015F6B;
+    width: 0%;
+    transition: .3s;
+}
 
 
+.progress-step{
+    width: 35px;
+    height: 35px;
+    background-color: #cdcdcd;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.progress-step::before{
+    counter-increment: step;
+    content: counter(step);
+}
+
+.progress-step::after{
+    content: attr(data-title);
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.progress-step-active{
+    background-color: #015F6B;
+    color: #fff;
+    animation: animate .5s;
+    transition: .4s;
+}
+
+
+.form{
+    max-width: 500px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 0.35rem;
+    padding: 1.5rem;
+    border-top: 5px solid #015F6B;
+    border-bottom: 5px solid #015F6B;
+}
+
+.form .text-center{
+    font-size: 30px;
+}
+
+.form-step input,select{
+    display: block;
+    width: 100%;
+}
+
+option{
+    font-size: inherit;
+}
+
+.form-step{
+    display: none;
+}
+
+.form-step-active{
+    display: block;
+}
+
+.btn{
+    display: block;
+    background-color: #015F6B;
+    color: #ffff;
+    border: none;
+}
+
+.width-50{
+    width: 25%;
+    height: 30px;
+}
+.ml-auto{
+    margin-left: auto;
+}
+
+.btn:hover{
+    background-color: #015F6B;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 1) 0 0 1px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+    color: #ffff;
+}
+
+.text-center{
+    margin-bottom: 15px;
+}
+
+.btns-group{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btns-group input{
+    width: 25%;
+    font-size: 13px;
+}   
+
+.repaircon{
+    margin-top: 50px;
+}
 
 
 
@@ -75,6 +201,10 @@
 /* responsive */
 
 @media ((min-width: 365px) and (max-width: 500px)) {
+
+    .form-step input,select,label{
+        font-size: 13px;
+    }
 
     .productt{
         margin: 0 auto;
@@ -96,7 +226,7 @@
       .img-container img {
         height: 250px;
         width: 250px;
-        
+        margin-bottom: 10px;
         order: 1;
         margin-top: 10px;
     }
@@ -166,6 +296,7 @@
 }
 
 @media (max-width: 364px){
+
 
     .modal{
         height: 98%;
@@ -340,6 +471,161 @@
 
     .tab-pane ul li{
         font-size: 15px;
+    }
+
+    .tab-content{
+        float: none;
+        width: auto;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px){
+
+    .modal{
+        height: 98%;
+    }
+
+    .modal-dialog{
+        max-width: 991px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .productt{
+        margin: 25px auto;
+        padding: 0 20px;
+        max-width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .img-container {
+        order: -1;
+        float: none;
+        padding: 1px;
+        margin: 0 auto;
+      }
+
+      .img-container img {
+        height: 400px;
+        width: 400px;
+        margin-bottom: 10px;
+        order: 1;
+    }
+
+      .product-small-img {
+        float: none;
+        margin: 0 auto;
+      }
+
+    .product-small-img img {
+        height: 80px;
+        width: 80px;
+        margin: 5px 0;
+        display: inline-block;
+        cursor: pointer;
+        opacity: .7;
+    }
+
+    .m-nav{
+        height: 40px;
+        max-width: auto;
+        padding-bottom: 50px;
+    }
+
+    
+    .m-nav .m-collapses .nav{
+        height: auto;
+        max-width: 4500px;
+        font-size: 20px;
+    }
+    
+    .tab-pane h4, .product-price{
+        font-size: 25px;
+        width: auto;
+    }
+
+    .tab-pane ul li{
+        font-size: 20px;
+    }
+
+    .tab-content{
+        float: none;
+        width: auto;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px){
+
+    .modal{
+        height: 98%;
+    }
+
+    .modal-dialog{
+        max-width: 1199px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .productt{
+        margin: 25px auto;
+        padding: 0 20px;
+        max-width: 100%;
+        height: auto;
+        display: flex;  
+        flex-direction: column;
+    }
+
+    .img-container {
+        order: -1;
+        float: none;
+        padding: 1px;
+        margin: 0 auto;
+      }
+
+      .img-container img {
+        height: 400px;
+        width: 400px;
+        margin-bottom: 10px;
+        order: 1;
+    }
+    
+
+      .product-small-img {
+        float: none;
+        margin: 0 auto;
+      }
+
+    .product-small-img img {
+        height: 80px;
+        width: 80px;
+        margin: 5px 0;
+        display: inline-block;
+        cursor: pointer;
+        opacity: .7;
+    }
+
+    .m-nav{
+        height: 40px;
+        max-width: auto;
+        padding-bottom: 50px;
+    }
+
+    
+    .m-nav .m-collapses .nav{
+        height: auto;
+        max-width: 4500px;
+        font-size: 20px;
+    }
+    
+    .tab-pane h4, .product-price{
+        font-size: 25px;
+        width: auto;
+    }
+
+    .tab-pane ul li{
+        font-size: 20px;
     }
 
     .tab-content{
