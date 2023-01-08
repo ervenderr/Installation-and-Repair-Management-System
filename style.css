@@ -37,14 +37,15 @@
     gap: 10px;
     text-transform: uppercase;
     margin-bottom: 8px;
-
-
+    align-items: center;
+    
 }
 
 .log .log2 {
-    background-color: #003566;
+    background-color: #015F6B;
     color: white;
-    border-color: #003566;
+    border-color: #015F6B;
+    border-radius: 5px;
     font-weight: bold;
     width: auto;
     font-size: 13px;
@@ -52,19 +53,20 @@
 }
 
 .log .log2:hover {
-    background-color: #365f85;
+    background-color: #407279;
     box-shadow: none;
 }
 
 .log .log2:active {
-    background-color: #003566;
-    border-color: #003566;
+    background-color: #015F6B;
+    border-color: #015F6B;
 }
 
 .log .log1 {
-    color: #003566;
-    border: 1px solid #003566;
-    border-color: #003566;
+    color: #015F6B;
+    border: 1px solid #015F6B;
+    border-color: #015F6B;
+    border-radius: 5px;
     background-color: #fff;
     font-weight: bold;
     width: auto;
@@ -73,13 +75,13 @@
 
 .log .log1:hover {
     background-color: #fff;
-    color: #003566;
-    border: 1px solid #003566;
+    color: #015F6B;
+    border: 1px solid #015F6B;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 .text {
-    color: #003566;
+    color: #015F6B;
 }
 
 .logo {
@@ -130,7 +132,6 @@
 
 .req {
     display: inline-flex;
-    ;
     gap: 15px;
     margin-top: 30px;
 }
@@ -211,7 +212,50 @@ ul .actives {
 }
 
 
+
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+    
+
+    .navbar{
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0 15px 0;
+    }
+
+    .navbar .container-fluid{
+        margin: 0;
+
+    }
+
+    .navbar-toggler {
+        width: 50px;
+        height: 35px;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+        outline: none;
+    }
+
+    button.navbar-toggler:focus {
+        box-shadow: none;
+      }
+      
+
+    .navbar-toggler span{
+        width: 25px;
+        height: 20px    
+    }
+
+    .navbar .container-fluid .navbar-collapse{
+        margin: 0;
+        
+    }
+
+    .navbar .container-fluid .navbar-collapse ul{
+        gap: 0;
+    }
+
+    
 
     .carousel-caption {
         background: 350px;
@@ -224,6 +268,7 @@ ul .actives {
     .navbar-collapse {
         background-color: #fff;
         padding: 10px;
+        margin-top: 10px;
     }
 
     .navbar-brand {
@@ -245,22 +290,90 @@ ul .actives {
     }
 
     .nav-link:hover {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
         border: none;
     }
 
     .actives {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
         border: none;
+    }
+
+    .servicecon .serv{
+        font-size: 40px;
+    }
+
+    .servicecon .product h2{
+        font-size: 20px;
+    }
+
+    .servicecon .product .product-price{
+        font-size: 20px;
     }
 
 }
 
 @media only screen and (max-width: 767px) {
+
+    .navbar{
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0 15px 0;
+    }
+
+    .servicecon{
+        max-width: 450px;
+    }
+
+    .servicecon .serv{
+        font-size: 40px;
+    }
+
+    .servicecon .product h2{
+        font-size: 20px;
+    }
+
+    .servicecon .product .product-price{
+        font-size: 20px;
+    }
+
+    .navbar .container-fluid .navbar-collapse ul{
+        gap: 0;
+    }
     .navbar {
         text-align: center;
+    }
+
+    .navbar{
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0 15px 0;
+    }
+
+    .navbar .container-fluid{
+        margin: 0;
+
+    }
+
+    .navbar-toggler {
+        width: 50px;
+        height: 35px;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+        outline: none;
+    }
+
+    button.navbar-toggler:focus {
+        box-shadow: none;
+      }
+      
+
+    .navbar-toggler span{
+        width: 25px;
+        height: 20px    
     }
 
     .navbar-nav a {
@@ -269,13 +382,13 @@ ul .actives {
     }
 
     .nav-link:hover {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
         border: none;
     }
 
     .actives {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
         border: none;
     }
@@ -313,12 +426,12 @@ ul .actives {
     }
 
     .nav-link:hover {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
     }
 
     .actives {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
     }
 }
@@ -516,19 +629,28 @@ a {
 
 @media ((max-width: 500px) and (min-width: 365px)) {
 
-    .container-fluid {
-        margin-top: 5px;
-
-    }
-
-    .navbar {
-        flex-direction: column;
+    .navbar{
+        display: flex;
         align-items: center;
+        padding: 15px;
+    }
+    
+    .servicecon{
+        max-width: 350px;
+    }
+    
+    .navbar .container-fluid{
+        padding: 0;
+        
     }
 
 
     .navbar-nav {
         flex-direction: column;
+    }
+
+    .navbar-nav .nav-item{
+        margin: 0;
     }
 
     .navbar-nav a {
@@ -537,13 +659,13 @@ a {
     }
 
     .nav-link:hover {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
         border: none;
     }
 
     .actives {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
         border: none;
     }
@@ -556,17 +678,20 @@ a {
     .navbar-brand span {
         font-size: 25px;
     }
+    
 
     .navbar-toggler {
         width: 40px;
         height: 30px;
         padding: 0;
         margin: 0;
+        align-items: center;
+        justify-content: center;
     }
 
     .navbar-toggler-icon {
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
 
     }
 
@@ -578,10 +703,6 @@ a {
         padding: 5px 0;
     }
 
-    .log {
-        flex-direction: column;
-    }
-
     .d-flex,
     p {
         display: flex;
@@ -589,11 +710,16 @@ a {
         margin: 0;
     }
 
-    .d-flex .log1,
-    .log2 {
-        width: 100%;
+    .d-flex .log1{
+        width: auto;
         margin-bottom: 10px;
     }
+
+    .d-flex .log2{
+        width: auto;
+        margin-bottom: 10px;
+    }
+    
 
     .carousel-caption {
         bottom: 200px;
@@ -659,15 +785,36 @@ a {
 
 @media (max-width: 364px) {
 
+    .navbar{
+        display: flex;
+        padding: 15px;
+    }
+    
+    .navbar .container-fluid{
+        padding: 0;
+    }
+
     .navbar-brand span {
-        font-size: 20px;
+        font-size: 21px;
+    }
+
+    .navbar-brand span img{
+        width: 24px;
+        height: 21px;
     }
 
     .navbar-toggler {
-        width: 40px;
-        height: 30px;
+        width: 26px;
+        height: 21px;
         padding: 0;
         margin: 0;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navbar-toggler span{
+        width: 15px;
+        height: 10px    
     }
 
     .navbar-nav a {
@@ -676,13 +823,13 @@ a {
     }
 
     .nav-link:hover {
-        background-color: #003566;
-        color: #fff;
+        background-color: #015F6B;
+        color: #015F6B;
         border: none;
     }
 
     .actives {
-        background-color: #003566;
+        background-color: #015F6B;
         color: #fff;
         border: none;
     }
@@ -690,7 +837,6 @@ a {
     .navbar-toggler-icon {
         width: 20px;
         height: 20px;
-
     }
 
     .servicecon img {
