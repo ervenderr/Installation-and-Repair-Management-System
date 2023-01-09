@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300&display=swap');
+
 * {
-    font-family: motserrat;
+    font-family: "Poppins", Sans-serif;
 }
 
 .container-fluid {
@@ -38,7 +40,7 @@
     text-transform: uppercase;
     margin-bottom: 8px;
     align-items: center;
-    
+    z-index: 999;
 }
 
 .log .log2 {
@@ -94,73 +96,74 @@
     padding: 100px 0;
 }
 
-.carousel-item {
+.showcase-area{
     height: 100vh;
-    min-height: 300px;
+    background-image: url(./img/cool-background.png);
 }
 
-.carousel-caption {
-    bottom: 200px;
-    z-index: 2;
-}
-
-.carousel-caption h5 {
-    font-size: 45px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-top: 25px;
-}
-
-.carousel-caption p {
-    width: 60%;
-    margin: auto;
-    font-size: 15px;
-    line-height: 1.9;
-}
-
-.carousel-inners::before {
-    content: '';
-    position: absolute;
-    width: 100%;
+.showcase-area .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
     height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background: rgba(0, 0, 0, 0.7);
 }
+
+  
+  .big-title {
+    font-size: 1.4rem;
+    color: #312f3a;
+    text-transform: capitalize;
+    line-height: 1.4;
+  }
+  
+  .texts {
+    color: #919191;
+    font-size: 1.1rem;
+    margin: 1.9rem 0 2.5rem;
+    max-width: 600px;
+    line-height: 2.3;
+  }
+  
+  
+  .person {
+    width: 450;
+    height: 400;
+    float: right;
+  }
+
 
 
 .req {
     display: inline-flex;
     gap: 15px;
     margin-top: 30px;
+    text-transform: uppercase;
 }
 
 .req .log2 {
     width: 170px;
     height: 50px;
-    background: rgba(1, 95, 107, 0.75);
-    -webkit-backdrop-filter: blur(1px);
-    backdrop-filter: blur(1px);
+    background: #015F6B;
     color: white;
     border: 1px solid rgba(1, 95, 107, 0.375);
     font-weight: bold;
-    box-shadow: rgba(0, 0, 0, 0.507) 0px 6px 12px -2px, rgba(5, 0, 0, 0.527) 0px 3px 7px -3px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    border-radius: 2px;
-    border-radius: 30px;
+    font-size: 15px;
+    border-radius: 20px;
+    box-shadow: rgba(1, 95, 107, 1) 0 1px 2px inset, rgba(1, 95, 107, 1) 0 1px 2px;
 }
 
 .req .log2:hover {
     background-color: #407279;
-    border-color: #015F6B;
+    border-color: #407279;
+    box-shadow: none;
 }
 
 .req .log2:active {
-    box-shadow: rgba(0, 0, 0, 1) 0 0 2px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+    box-shadow: rgba(1, 95, 107, 1) 0 1px 2px inset, rgba(1, 95, 107, 1) 0 1px 2px;
     background-color: #015F6B;
     border-color: #015F6B;
 }
@@ -168,23 +171,23 @@
 .req .log1 {
     width: 170px;
     height: 50px;
-    color: #ffffff;
+    color: #015F6B;
     font-weight: bold;
-    box-shadow: rgba(0, 0, 0, 0.507) 0px 6px 12px -2px, rgba(5, 0, 0, 0.527) 0px 3px 7px -3px;
     background: rgba(255, 255, 255, 0.5);
-    -webkit-backdrop-filter: blur(1px);
-    backdrop-filter: blur(1px);
-    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: rgba(1, 95, 107, 1) 0 1px 2px inset, rgba(1, 95, 107, 1) 0 1px 2px;
+    border: 1px solid #015F6B;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    border-radius: 30px;
+    font-size: 15px;
+    border-radius: 20px;
 }
 
 .req .log1:hover {
-    box-shadow: rgba(0, 0, 0, 1) 0 0 2px inset, rgba(0, 0, 0, 1) 0 1px 2px;
-    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.5);
+    color: #015F6B;
+    border: 1px solid #015F6B;
 }
 
 .req .log1:active {
@@ -214,6 +217,39 @@ ul .actives {
 
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
+    .showcase-area{
+        padding: auto;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .showcase-area .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+      
+      .big-title {
+        font-size: 1.1rem;
+      }
+      
+      .texts {
+        font-size: 0.95rem;
+        margin: 1.4rem 0 1.5rem;
+      }
+      
+      .right{
+        max-height: 532;
+        padding-bottom: auto;
+      }
+
+      .right .person {
+        width: 450;
+        height: 400;
+        float: none;
+      }
     
 
     .navbar{
@@ -256,14 +292,6 @@ ul .actives {
     }
 
     
-
-    .carousel-caption {
-        background: 350px;
-    }
-
-    .carousel-caption p {
-        width: 100%;
-    }
 
     .navbar-collapse {
         background-color: #fff;
@@ -316,6 +344,80 @@ ul .actives {
 }
 
 @media only screen and (max-width: 767px) {
+
+    .showcase-area{
+        padding: auto;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .showcase-area .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 50px;
+    }
+    
+    .left{
+        margin-top: 100px;
+    }
+      
+      .big-title {
+        font-size: 1.1rem;
+      }
+      
+      .texts {
+        font-size: 1rem;
+        margin: 1rem 0 1rem;
+      }
+      
+      .right{
+        height: 500px;
+        padding-bottom: auto;
+        display: grid;
+        align-items: center;
+      }
+
+      .right .person {
+        width: 400;
+        height: 350;
+        float: none;
+      }
+
+      .req {
+        display: inline-flex;
+        gap: 15px;
+        margin-top: 30px;
+        text-transform: uppercase;
+    }
+    
+    .req .log2 {
+        width: 140px;
+        height: 40px;
+        background: #015F6B;
+        color: white;
+        border: 1px solid rgba(1, 95, 107, 0.375);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        border-radius: 20px;
+    }
+    .req .log1 {
+        width: 140px;
+        height: 40px;
+        color: #015F6B;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: rgba(1, 95, 107, 1) 0 1px 1px inset, rgba(1, 95, 107, 1) 0 1px 0px;
+        border: 1px solid #015F6B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        border-radius: 20px;
+    }
 
     .navbar{
         align-items: center;
@@ -393,23 +495,7 @@ ul .actives {
         border: none;
     }
 
-    .carousel-caption {
-        bottom: 335px;
-    }
 
-    .carousel-caption h5 {
-        font-size: 30px;
-    }
-
-    .carousel-caption a {
-        padding: 10px 15px;
-    }
-
-    .carousel-caption p {
-        width: 100%;
-        line-height: 1.6;
-        font-size: 15px;
-    }
 
     .navbar-collapse {
         background-color: #fff;
@@ -629,6 +715,81 @@ a {
 
 @media ((max-width: 500px) and (min-width: 365px)) {
 
+
+    .showcase-area{
+        padding: auto;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .showcase-area .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 15px;
+    }
+    
+    .left{
+        margin-top: 100px;
+    }
+      
+      .big-title {
+        font-size: 1.1rem;
+      }
+      
+      .texts {
+        font-size: 0.95rem;
+        margin: 1.4rem 0 1.5rem;
+      }
+      
+      .right{
+        height: 500px;
+        padding-bottom: auto;
+        display: grid;
+        align-items: center;
+      }
+
+      .right .person {
+        width: 370;
+        height: 320;
+        float: none;
+      }
+
+      .req {
+        display: inline-flex;
+        gap: 15px;
+        margin-top: 30px;
+        text-transform: uppercase;
+    }
+    
+    .req .log2 {
+        width: 132px;
+        height: 35px;
+        background: #015F6B;
+        color: white;
+        border: 1px solid rgba(1, 95, 107, 0.375);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        border-radius: 20px;
+    }
+    .req .log1 {
+        width: 132px;
+        height: 35px;
+        color: #015F6B;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: rgba(1, 95, 107, 1) 0 1px 1px inset, rgba(1, 95, 107, 1) 0 1px 0px;
+        border: 1px solid #015F6B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        border-radius: 20px;
+    }
+
     .navbar{
         display: flex;
         align-items: center;
@@ -721,42 +882,7 @@ a {
     }
     
 
-    .carousel-caption {
-        bottom: 200px;
-    }
 
-    .carousel-caption h5 {
-        font-size: 1.5rem;
-    }
-
-    .carousel-caption p {
-        font-size: 1rem;
-    }
-
-    .req {
-        display: flex;
-        flex-direction: column;
-        gap: 1px;
-    }
-
-    .req .log2 {
-        width: 120px;
-        height: 40px;
-        font-size: 12px;
-
-    }
-
-    .req .log1 {
-        width: 120px;
-        height: 40px;
-        font-size: 12px;
-    }
-
-
-    .req p {
-        width: 100%;
-        margin-bottom: 10px;
-    }
 
     .title-text {
         font-size: 1.5rem;
@@ -784,6 +910,81 @@ a {
 }
 
 @media (max-width: 364px) {
+
+    .showcase-area{
+        padding: auto;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .showcase-area .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 15px;
+    }
+    
+    .left{
+        margin-top: 100px;
+    }
+      
+      .big-title {
+        font-size: 1.1rem;
+      }
+      
+      .texts {
+        font-size: 0.95rem;
+        margin: 1.4rem 0 1.5rem;
+      }
+      
+      .right{
+        height: 500px;
+        padding-bottom: auto;
+        display: grid;
+        align-items: center;
+      }
+
+      .right .person {
+        width: 350;
+        height: 300;
+        float: none;
+      }
+
+      .req {
+        display: inline-flex;
+        gap: 5px;
+        margin-top: 30px;
+        text-transform: uppercase;
+    }
+
+    
+    .req .log2 {
+        width: 120px;
+        height: 40px;
+        background: #015F6B;
+        color: white;
+        border: 1px solid rgba(1, 95, 107, 0.375);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        border-radius: 20px;
+    }
+    .req .log1 {
+        width: 120px;
+        height: 40px;
+        color: #015F6B;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: rgba(1, 95, 107, 1) 0 1px 1px inset, rgba(1, 95, 107, 1) 0 1px 0px;
+        border: 1px solid #015F6B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        border-radius: 20px;
+    }
 
     .navbar{
         display: flex;

@@ -396,39 +396,7 @@ option{
         font-size: 12px;
     }
 
-    .req {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1px;
-    }
 
-    .req .log2{
-        width: 120px;
-        height: 40px;
-        font-size: 12px;
-
-    }
-    
-    .req .log1{
-        width: 120px;
-        height: 40px;
-        font-size: 12px;
-    }
-
-    .req p {
-        width: 100%;
-    }
-
-    .carousel-caption{
-        bottom: 200px;
-        z-index: 2;
-    }
-
-    .carousel-item{
-        height: auto;
-        min-height: 300px;
-    }
 }
 
 
