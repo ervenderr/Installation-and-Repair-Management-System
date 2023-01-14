@@ -27,16 +27,16 @@ include_once('homeIncludes/header.php');
                 </p>
                 <div class="req">
                     <p>
-                        <a class="btn btn-outline-success log1" role="submit" href="#">Job Order</a>
+                        <a class="btn btn-outline-success log1" role="submit" href="#">Request a repair</a>
                     </p>
                     <p>
-                        <a class="btn btn-outline-success log2" role="submit" href="#">Repair Request</a>
+                        <a class="btn btn-outline-success log2" role="submit" href="#">Request a service</a>
                     </p>
                 </div>
             </div>
 
             <div class="right">
-                <img src="./img/prot7.jpg" alt="Person Image" class="person" />
+                <img src="./img/proton-logo.png" alt="Person Image" class="person" />
             </div>
         </div>
     </div>

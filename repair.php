@@ -104,6 +104,14 @@ include_once('homeIncludes/header.php');
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+$(document).ready(function(){
+  $("input[type='submit']").click(function(){
+    alert("Request submitted");
+  });
+});
+</script>
 </body>
 
 </html>

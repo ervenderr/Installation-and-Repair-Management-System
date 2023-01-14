@@ -172,7 +172,7 @@ option{
 .btn:hover{
     background-color: #015F6B;
     border: none;
-    box-shadow: rgba(0, 0, 0, 1) 0 0 1px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+    box-shadow: rgba(255, 255, 255, 1) 0 0 1px inset, rgba(255, 255, 255, 1) 0 1px 2px;
     color: #ffff;
 }
 
@@ -629,4 +629,63 @@ option{
         float: none;
         width: auto;
     }
+}
+
+.ctr{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.cal-container{
+    width: 300px;
+    height: auto;
+    background: #015F6B;
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    color: #f0f2f1;
+}
+
+.cal-container .dis{
+    width: 100%;
+    min-width: 260px;
+    height: auto;
+    min-height: 50px;
+    padding: 10px;
+    background: #f0f2f1;
+    border: 1px solid #f0f2f1;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    
+    font-size: 16px;
+}
+
+
+.cal-container .inner-cal{
+    width: 100%;
+    display: grid;
+}
+
+.cal-container .inner-cal .dis{
+    text-align: right;
+}
+
+
+.cal-container .inner-cal .bbtn-row{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.cal-container .inner-cal .bbtn-row button{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
 }
