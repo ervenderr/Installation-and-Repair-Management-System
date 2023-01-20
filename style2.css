@@ -153,17 +153,21 @@ option{
 }
 
 .btn{
-    display: block;
+    display: grid;
     background-color: #015F6B;
     color: #ffff;
     border: none;
-    border-radius: 20px;
+    border-radius: 50%;
+    align-items: center;
+}
 
+.btn i{
+    font-size: 20px;
 }
 
 .width-50{
-    width: 25%;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
 .ml-auto{
     margin-left: auto;
@@ -201,6 +205,33 @@ option{
 .repaircon{
     margin-top: 60px;
     padding: 0 20px;
+}
+
+.hidden{
+    opacity: 0;
+    filter: blur(2px);
+    transform: translateY(-100px);
+    transition: all 1s;
+}
+
+.show{
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px);
+}
+
+.logoss:nth-child(2){
+    transition-delay: 100ms;
+}
+
+.logoss:nth-child(3){
+    transition-delay: 400ms;
+}
+
+@media(prefers-reduce-motion){
+    .hidden{
+        opacity: none;
+    }
 }
 
 @keyframes fadeInOut {
@@ -473,6 +504,12 @@ option{
     .tab-content{
         float: none;
         width: auto;
+    }
+
+    .servicecon img {
+        width: 436px;
+        height: 300px;
+        margin: 0 auto;
     }
 }
 
