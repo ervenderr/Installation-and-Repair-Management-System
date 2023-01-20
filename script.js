@@ -9,48 +9,44 @@ let formStepsNum = 0;
 
 nextBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-      formStepsNum++;
-      updateFormSteps();
-      updateProgressBar();
+    formStepsNum++;
+    updateFormSteps();
+    updateProgressBar();
   });
 });
 
 prevBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-      formStepsNum--;
-      updateFormSteps();
-      updateProgressBar();
+    formStepsNum--;
+    updateFormSteps();
+    updateProgressBar();
   });
 });
 
-function updateFormSteps(){
+function updateFormSteps() {
   formSteps.forEach((formSteps) => {
-    formSteps.classList.contains("form-step-active") && 
-    formSteps.classList.remove("form-step-active");
+    formSteps.classList.contains("form-step-active") &&
+      formSteps.classList.remove("form-step-active");
   });
-
 
   formSteps[formStepsNum].classList.add("form-step-active");
   requestAnimationFrame(updateFormSteps);
-
 }
 
-function updateProgressBar(){
-  progressSteps.forEach((progressStep, idx) =>{
-    if(idx < formStepsNum + 1){
-      progressStep.classList.add("progress-step-active")
-    }else{
-      progressStep.classList.remove("progress-step-active")
+function updateProgressBar() {
+  progressSteps.forEach((progressStep, idx) => {
+    if (idx < formStepsNum + 1) {
+      progressStep.classList.add("progress-step-active");
+    } else {
+      progressStep.classList.remove("progress-step-active");
     }
   });
 
   const progressActive = document.querySelectorAll(".progress-step-active");
-  
-  progress.style.width = 
-    ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
-  
-}
 
+  progress.style.width =
+    ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
+}
 
 // homepage
 // Select The Elements
@@ -102,5 +98,5 @@ function events() {
     big_wrapper.classList.toggle("active");
   });
 }
-
 events();
+

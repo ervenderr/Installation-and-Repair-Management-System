@@ -12,8 +12,8 @@ include_once('homeIncludes/header.php');
 <body>
     <?php include_once('homeIncludes/homenav.php');?>
 
-
-    <div class="showcase-area">
+    <div id="particles-js"></div>
+    <div class="showcase-area hidden" id="particles-js">
         <div class="container">
             <div class="left">
                 <div class="big-title">
@@ -36,7 +36,7 @@ include_once('homeIncludes/header.php');
             </div>
 
             <div class="right">
-                <img src="./img/proton-logo.png" alt="Person Image" class="person" />
+                <img src="./img/etc4.png" alt="Person Image" class="person" />
             </div>
         </div>
     </div>
@@ -49,7 +49,7 @@ include_once('homeIncludes/header.php');
             <div class="row">
                 <!-- Value 1 -->
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 text-center">
+                    <div class="card h-100 text-center logoss hidden">
                         <div class="card-body">
                             <i class="fas fa-thumbs-up fa-4x mb-4 value-icon-2"></i>
                             <h5 class="card-title">Customer Satisfaction</h5>
@@ -63,7 +63,7 @@ include_once('homeIncludes/header.php');
                 </div>
                 <!-- Value 2 -->
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 text-center">
+                    <div class="card h-100 text-center logoss hidden">
                         <div class="card-body">
                             <i class="fas fa-tools fa-4x mb-4 value-icon-2"></i>
                             <h5 class="card-title">Quality Workmanship</h5>
@@ -78,7 +78,7 @@ include_once('homeIncludes/header.php');
                 </div>
                 <!-- Value 3 -->
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 text-center">
+                    <div class="card h-100 text-center logoss hidden">
                         <div class="card-body">
                             <i class="fas fa-shield-alt fa-4x mb-4 value-icon-2"></i>
                             <h5 class="card-title">Integrity</h5>
@@ -101,7 +101,7 @@ include_once('homeIncludes/header.php');
             <div class="row">
                 <!-- Review 1 -->
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 logoss hidden">
                         <div class="card-body">
                             <!-- Rating -->
                             <div class="mb-3">
@@ -123,7 +123,7 @@ include_once('homeIncludes/header.php');
                 </div>
                 <!-- Review 2 -->
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 logoss hidden">
                         <div class="card-body">
                             <!-- Rating -->
                             <div class="mb-3">
@@ -145,7 +145,7 @@ include_once('homeIncludes/header.php');
                 </div>
                 <!-- Review 3 -->
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 logoss hidden">
                         <div class="card-body">
                             <!-- Rating -->
                             <div class="mb-3">
@@ -195,7 +195,7 @@ include_once('homeIncludes/header.php');
 
                     // Output the product information
                     echo '<div class="col-md-4">';
-                    echo '<div class="product">';
+                    echo '<div class="product logoss hidden">';
                     echo '<img src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="' . $name . '" class="product-image" data-toggle="modal" data-target="#img-modal-' . $name . '">';
                     echo '<h2>' . $name . '</h2>';
                     echo '<p>' . $description . '</p>';
@@ -220,9 +220,25 @@ include_once('homeIncludes/header.php');
     <?php include_once('homeIncludes/footer.php');?>
 
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="particles.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            console.log(entry)
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            } else {
+                entry.target.classList.remove('show');
+            }
+        });
+    });
+
+    const hiddenElements = document.querySelectorAll('.hidden');
+    hiddenElements.forEach((el) => observer.observe(el));
+    </script>
 </body>
 
 </html>
