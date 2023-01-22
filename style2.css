@@ -152,13 +152,27 @@ option{
     display: block;
 }
 
-.btn{
+
+.repaircon .form .btn{
     display: grid;
     background-color: #015F6B;
     color: #ffff;
     border: none;
     border-radius: 50%;
     align-items: center;
+}
+
+.repaircon .form .btn-submit{
+    background-color: #015F6B;
+    color: #ffff;
+    border: none;
+    border-radius: 50px;
+    align-items: center;
+    height: 40px;
+}
+
+.serbtn{
+    border-radius: 50px;
 }
 
 .btn i{

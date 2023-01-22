@@ -13,7 +13,7 @@ include_once('homeIncludes/header.php');
     <?php include_once('homeIncludes/homenav.php');?>
 
     <div id="particles-js"></div>
-    <div class="showcase-area hidden" id="particles-js">
+    <div class="showcase-area hidden">
         <div class="container">
             <div class="left">
                 <div class="big-title">
@@ -36,7 +36,7 @@ include_once('homeIncludes/header.php');
             </div>
 
             <div class="right">
-                <img src="./img/etc4.png" alt="Person Image" class="person" />
+                <img src="./img/seccam.png" alt="Person Image" class="person" />
             </div>
         </div>
     </div>

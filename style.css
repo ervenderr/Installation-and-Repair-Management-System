@@ -12,9 +12,17 @@
 .navbar {
     text-transform: uppercase;
     background-color: white;
-    height: 60px;
+    height: 50px;
     border-bottom: 1px solid #dddddd;
+    
 }
+
+
+.navbar .container-fluid .navbar-collapse{
+    width: 100%;
+    padding: 0;
+}
+
 .navbar .container-fluid .navbar-collapse ul{
     gap: 16px;
 }
@@ -33,53 +41,6 @@
     font-size: 1.7em;
     font-weight: 700;
     letter-spacing: 2px;
-}
-
-.log {
-    gap: 10px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    align-items: center;
-    z-index: 999;
-}
-
-.log .log2 {
-    background-color: #015F6B;
-    color: white;
-    border-color: #015F6B;
-    border-radius: 5px;
-    font-weight: bold;
-    width: auto;
-    font-size: 13px;
-    box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
-}
-
-.log .log2:hover {
-    background-color: #407279;
-    box-shadow: none;
-}
-
-.log .log2:active {
-    background-color: #015F6B;
-    border-color: #015F6B;
-}
-
-.log .log1 {
-    color: #015F6B;
-    border: 1px solid #015F6B;
-    border-color: #015F6B;
-    border-radius: 5px;
-    background-color: #fff;
-    font-weight: bold;
-    width: auto;
-    font-size: 13px;
-}
-
-.log .log1:hover {
-    background-color: #fff;
-    color: #015F6B;
-    border: 1px solid #015F6B;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 .text {
@@ -106,6 +67,10 @@
     left: 0;
 }
 
+.showcase-area{
+    background: rgb(1,95,107);
+background: linear-gradient(142deg, rgba(1,95,107,0.8379726890756303) 0%, rgba(17,110,81,1) 100%);
+}
 
 .showcase-area .container {
     display: grid;
@@ -118,23 +83,27 @@
   
   .big-title {
     font-size: 1.4rem;
-    color: #312f3a;
+    color: #fff;
     text-transform: capitalize;
     line-height: 1.4;
   }
+
+  .big-title h1{
+    font-weight: 700;
+  }
   
   .texts {
-    color: #919191;
+    color: #fff;
     font-size: 1.1rem;
     margin: 1.9rem 0 2.5rem;
     max-width: 600px;
-    line-height: 2.3;
+    line-height: 1.5;
   }
   
   
   .person {
-    width: 450;
-    height: 400;
+    width: 650;
+    height: 500;
     float: right;
   }
 
@@ -148,23 +117,42 @@
 }
 
 .req .log2 {
-    width: 170px;
-    height: 50px;
-    background: #015F6B;
-    color: white;
-    border: 1px solid rgba(1, 95, 107, 0.375);
-    font-weight: bold;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    appearance: none;
+    background-color: #fff;
+    border-radius: 24px;
+    border-style: none;
+    box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+    box-sizing: border-box;
+    color: #3c4043;
+    cursor: pointer;
+    display: inline-flex;
+    fill: currentcolor;
     font-size: 14px;
-    border-radius: 50px;
-    box-shadow: rgba(1, 95, 107, 1) 0 1px 2px inset, rgba(1, 95, 107, 1) 0 1px 2px;
+    font-weight: 700;
+    height: 48px;
+    justify-content: center;
+    letter-spacing: .25px;
+    line-height: normal;
+    max-width: 100%;
+    overflow: visible;
+    padding: 2px 24px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: auto;
+    min-width: 150px;
+    will-change: transform,opacity;
+    z-index: 0;
 }
 
 .req .log2:hover {
-    background-color: #407279;
-    border-color: #407279;
+    background-color:rgba(0, 0, 0, 0);
+    border: 1px solid #fff;
     box-shadow: none;
 }
 
@@ -175,32 +163,49 @@
 }
 
 .req .log1 {
-    width: 170px;
-    height: 50px;
-    color: #015F6B;
-    font-weight: bold;
-    background: rgba(255, 255, 255, 0.5);
-    box-shadow: rgba(1, 95, 107, 1) 0 1px 2px inset, rgba(1, 95, 107, 1) 0 1px 2px;
-    border: 1px solid #015F6B;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    appearance: none;
+    background-color: #fff;
+    border-radius: 24px;
+    border-style: none;
+    box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+    box-sizing: border-box;
+    color: #3c4043;
+    cursor: pointer;
+    display: inline-flex;
+    fill: currentcolor;
     font-size: 14px;
-    border-radius: 50px;
+    font-weight: 700;
+    height: 48px;
+    justify-content: center;
+    letter-spacing: .25px;
+    line-height: normal;
+    max-width: 100%;
+    overflow: visible;
+    padding: 2px 24px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: auto;
+    min-width: 150px;
+    will-change: transform,opacity;
+    z-index: 0;
 }
 
 .req .log1:hover {
+    background-color:rgba(0, 0, 0, 0);
+    border: 1px solid #fff;
     box-shadow: none;
-    background: rgba(255, 255, 255, 0.5);
-    color: #015F6B;
-    border: 1px solid #015F6B;
 }
 
 .req .log1:active {
-    box-shadow: rgba(0, 0, 0, 1) 0 0 2px inset, rgba(0, 0, 0, 1) 0 1px 2px;
+    box-shadow: rgba(1, 95, 107, 1) 0 1px 2px inset, rgba(1, 95, 107, 1) 0 1px 2px;
     background-color: #015F6B;
     border-color: #015F6B;
-    color: #fff;
 }
 
 .w-100 {
@@ -234,7 +239,8 @@ ul .actives {
 
     .showcase-area{
         padding: auto;
-        max-width: 700px;
+        width: 100%;
+        max-width: 100%;
         margin: 0 auto;
     }
     
@@ -253,14 +259,20 @@ ul .actives {
         font-size: 0.95rem;
         margin: 1.4rem 0 1.5rem;
       }
+
+      .left{
+        margin-top: 50px;
+    }
       
       .right{
-        max-height: 532;
+        height: 550px;
         padding-bottom: auto;
+        display: grid;
+        align-items: center;
       }
 
       .right .person {
-        width: 450;
+        width: 550;
         height: 400;
         float: none;
       }
@@ -361,7 +373,7 @@ ul .actives {
 
     .showcase-area{
         padding: auto;
-        max-width: 700px;
+        max-width: 100%;
         margin: 0 auto;
     }
     
@@ -369,11 +381,11 @@ ul .actives {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 0 50px;
+        padding: 12px 50px;
     }
     
     .left{
-        margin-top: 100px;
+        margin-top: 50px;
     }
       
       .big-title {
@@ -393,44 +405,20 @@ ul .actives {
       }
 
       .right .person {
-        width: 400;
+        width: 500;
         height: 350;
         float: none;
       }
 
       .req {
-        display: inline-flex;
-        gap: 15px;
-        margin-top: 30px;
-        text-transform: uppercase;
+        
     }
     
     .req .log2 {
-        width: 140px;
-        height: 40px;
-        background: #015F6B;
-        color: white;
-        border: 1px solid rgba(1, 95, 107, 0.375);
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 11px;
-        border-radius: 20px;
     }
     .req .log1 {
-        width: 140px;
-        height: 40px;
-        color: #015F6B;
-        font-weight: bold;
-        background: rgba(255, 255, 255, 0.5);
-        box-shadow: rgba(1, 95, 107, 1) 0 1px 1px inset, rgba(1, 95, 107, 1) 0 1px 0px;
-        border: 1px solid #015F6B;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 11px;
-        border-radius: 20px;
     }
 
     .navbar{
@@ -543,7 +531,7 @@ ul .actives {
 
 
 .value-icon-2 {
-    color: #003566;
+    color: #015F6B;
 }
 
 .card {
@@ -588,7 +576,7 @@ ul .actives {
 }
 
 .darks {
-    background-color: #f0f2f1;
+    background-color: #dfdada;
     padding-top: 10px;
     padding-bottom: 20px;
 }
@@ -764,44 +752,23 @@ a {
       }
 
       .right .person {
-        width: 370;
-        height: 320;
+        width: 350;
+        height: 250;
         float: none;
       }
 
       .req {
-        display: inline-flex;
+        display: flex;
         gap: 15px;
         margin-top: 30px;
         text-transform: uppercase;
     }
     
     .req .log2 {
-        width: 132px;
-        height: 35px;
-        background: #015F6B;
-        color: white;
-        border: 1px solid rgba(1, 95, 107, 0.375);
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 10px;
-        border-radius: 20px;
     }
     .req .log1 {
-        width: 132px;
-        height: 35px;
-        color: #015F6B;
-        font-weight: bold;
-        background: rgba(255, 255, 255, 0.5);
-        box-shadow: rgba(1, 95, 107, 1) 0 1px 1px inset, rgba(1, 95, 107, 1) 0 1px 0px;
-        border: 1px solid #015F6B;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 10px;
-        border-radius: 20px;
     }
 
     .navbar{
@@ -954,8 +921,8 @@ a {
       }
 
       .right .person {
-        width: 350;
-        height: 300;
+        width: 300;
+        height: 200;
         float: none;
       }
 
@@ -968,31 +935,10 @@ a {
 
     
     .req .log2 {
-        width: 120px;
-        height: 40px;
-        background: #015F6B;
-        color: white;
-        border: 1px solid rgba(1, 95, 107, 0.375);
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 11px;
-        border-radius: 20px;
     }
     .req .log1 {
-        width: 120px;
-        height: 40px;
-        color: #015F6B;
-        font-weight: bold;
-        background: rgba(255, 255, 255, 0.5);
-        box-shadow: rgba(1, 95, 107, 1) 0 1px 1px inset, rgba(1, 95, 107, 1) 0 1px 0px;
-        border: 1px solid #015F6B;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 12px;
-        border-radius: 20px;
     }
 
     .navbar{

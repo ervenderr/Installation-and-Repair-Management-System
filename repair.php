@@ -98,7 +98,7 @@ include_once('homeIncludes/header.php');
                     </div>
                     <div class="btns-group">
                         <a href="#" class="btn btn-primary width-50 btn-prev"><i class="fa fa-chevron-left"></i></a>
-                        <input type="submit" value="SUBMIT" class="btn btn-submit">
+                        <input type="submit" value="SUBMIT" class="btn-submit">
                     </div>
                 </div>
         </form>

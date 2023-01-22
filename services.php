@@ -40,7 +40,7 @@ include_once('homeIncludes/header.php');
         echo '<div class="bg-light p-3 rounded shadow-lg destext">';
         echo '<h3 class="serv text-left font-weight-bold mb-0 servname">' . $name . '</h3>';
         echo '<p class="text-left font-italic text-secondary mt-1 mb-3">' . $description . '</p>';
-        echo '<button class="btn btn-primary mt-3"><a href="/solar-panels" style="color: white;">Learn more</a></button>';
+        echo '<button class="btn btn-primary mt-3 serbtn"><a href="/solar-panels" style="color: white;">Learn more</a></button>';
         echo '</div>';
         echo '</div>';
         echo '</div>';

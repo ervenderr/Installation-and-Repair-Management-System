@@ -42,8 +42,7 @@
                 </li>
             </ul>
             <form class="d-flex log" role="search">
-                <a class="btn btn-outline-success log1" role="submit" href="#">Log In</a>
-                <a class="btn btn-outline-success log2" role="submit" href="#">Sign Up</a>
+                
             </form>
         </div>
     </div>
