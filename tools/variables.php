@@ -5,6 +5,8 @@
     $products = "";
     $job = "";
     $repair = "";
+    $about = "";
+    $contact = "";
 
 
 ?>

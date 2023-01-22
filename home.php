@@ -27,10 +27,10 @@ include_once('homeIncludes/header.php');
                 </p>
                 <div class="req">
                     <p>
-                        <a class="btn btn-outline-success log1" role="submit" href="#">Request a repair</a>
+                        <a class="btn btn-outline-success log1" role="submit" href="#">Request a Repair</a>
                     </p>
                     <p>
-                        <a class="btn btn-outline-success log2" role="submit" href="#">Request a service</a>
+                        <a class="btn btn-outline-success log2" role="submit" href="#">Request a custom service</a>
                     </p>
                 </div>
             </div>
@@ -229,9 +229,9 @@ include_once('homeIncludes/header.php');
         entries.forEach((entry) => {
             console.log(entry)
             if (entry.isIntersecting) {
-                entry.target.classList.add('show');
+                entry.target.classList.add('shows');
             } else {
-                entry.target.classList.remove('show');
+                entry.target.classList.remove('shows');
             }
         });
     });

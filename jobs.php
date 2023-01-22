@@ -3,7 +3,7 @@ require_once 'homeIncludes/dbconfig.php';
 
 require_once 'tools/variables.php';
 $page_title = 'ProtonTech | Repair Request';
-$job = 'actives';
+$job = 'actives activess';
 include_once('homeIncludes/header.php');
 
 

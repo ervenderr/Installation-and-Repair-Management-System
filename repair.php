@@ -1,9 +1,8 @@
 <?php
 require_once 'homeIncludes/dbconfig.php';
-
 require_once 'tools/variables.php';
 $page_title = 'ProtonTech | Repair Request';
-$repair = 'actives';
+$repair = 'actives activess';
 include_once('homeIncludes/header.php');
 
 
@@ -11,10 +10,13 @@ include_once('homeIncludes/header.php');
 
 <body class="repairbody">
 
-    <?php include_once('homeIncludes/homenav.php'); ?>
 
-    <div class="container servicecon repaircon">
-        <form action="#" class="form">
+
+    <?php include_once('homeIncludes/homenav.php'); ?>
+    <div id="particles-js"></div>
+    <div class="repaircon">
+
+        <form action="#" class="form" method="post">
             <h4 class="text-center">Repair Reqeust Form</h3>
 
                 <!-- progress bar -->
@@ -103,15 +105,10 @@ include_once('homeIncludes/header.php');
                 </div>
         </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-$(document).ready(function(){
-  $("input[type='submit']").click(function(){
-    alert("Request submitted");
-  });
-});
-</script>
+
+<script src="particles.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
