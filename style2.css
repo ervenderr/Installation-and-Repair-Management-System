@@ -117,7 +117,7 @@
 }
 
 .repairbody{
-    overflow: hidden;
+    
 }
 
 .repaircon{
@@ -167,6 +167,11 @@ option{
     display: block;
 }
 
+.mb-3>span{
+    color: red;
+    font-style: italic;
+}
+
 
 .repaircon .form .btn{
     display: grid;
@@ -188,6 +193,7 @@ option{
 
 .serbtn{
     border-radius: 50px;
+    background-color: #015F6B;
 }
 
 .btn i{

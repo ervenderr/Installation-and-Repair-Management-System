@@ -9,11 +9,14 @@ let formStepsNum = 0;
 
 nextBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    formStepsNum++;
-    updateFormSteps();
-    updateProgressBar();
+    if (validateFormStep()) {
+      formStepsNum++;
+      updateFormSteps();
+      updateProgressBar();
+    }
   });
 });
+
 
 prevBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -47,6 +50,23 @@ function updateProgressBar() {
   progress.style.width =
     ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
 }
+
+function validateFormStep() {
+  const inputs = formSteps[formStepsNum].querySelectorAll("input");
+  let isValid = true;
+
+  inputs.forEach((input) => {
+    if (!input.value) {
+      input.nextElementSibling.innerHTML = "This field is required.";
+      isValid = false;
+    } else {
+      input.nextElementSibling.innerHTML = "";
+    }
+  });
+
+  return isValid;
+}
+
 
 // homepage
 // Select The Elements
