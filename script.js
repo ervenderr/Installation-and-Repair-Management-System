@@ -9,14 +9,12 @@ let formStepsNum = 0;
 
 nextBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    if (validateFormStep()) {
       formStepsNum++;
       updateFormSteps();
       updateProgressBar();
-    }
+       
   });
 });
-
 
 prevBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -27,13 +25,12 @@ prevBtns.forEach((btn) => {
 });
 
 function updateFormSteps() {
-  formSteps.forEach((formSteps) => {
-    formSteps.classList.contains("form-step-active") &&
-      formSteps.classList.remove("form-step-active");
+  formSteps.forEach((formStep) => {
+    formStep.classList.contains("form-step-active") &&
+      formStep.classList.remove("form-step-active");
   });
 
   formSteps[formStepsNum].classList.add("form-step-active");
-  requestAnimationFrame(updateFormSteps);
 }
 
 function updateProgressBar() {
@@ -45,27 +42,14 @@ function updateProgressBar() {
     }
   });
 
-  const progressActive = document.querySelectorAll(".progress-step-active");
+  const progressActive = Array.from(document.querySelectorAll(".progress-step-active"));
 
   progress.style.width =
     ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
 }
 
-function validateFormStep() {
-  const inputs = formSteps[formStepsNum].querySelectorAll("input");
-  let isValid = true;
 
-  inputs.forEach((input) => {
-    if (!input.value) {
-      input.nextElementSibling.innerHTML = "This field is required.";
-      isValid = false;
-    } else {
-      input.nextElementSibling.innerHTML = "";
-    }
-  });
 
-  return isValid;
-}
 
 
 // homepage
