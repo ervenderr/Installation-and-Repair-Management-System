@@ -27,12 +27,5 @@ if(!empty($_FILES['eimg']['name'])){
 $query = "INSERT INTO repair_request (fname, mname, lname, email, phone, address, etype, defective, shipping, image) VALUES ('$fname', '$mname', '$lname', '$email', '$phone', '$address', '$etype', '$defective', '$shipping', '".$imgcontent."')";
 $result = mysqli_query($conn, $query);
 
-if($result){
-    $msg = "done";
-    return $msg;
-}else{
-    $msg = "fail";
-    return $msg;
-}
 
 ?>

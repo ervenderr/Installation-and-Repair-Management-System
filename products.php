@@ -16,7 +16,7 @@ include_once('homeIncludes/header.php');
     <div class="container servicecon">
         <h2 class="serv text-center mb-5">PRODUCTS</h2>
 
-        <div class="row">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
             <?php
             $sql = "SELECT * FROM products";
             $result = mysqli_query($conn, $sql);
@@ -35,7 +35,7 @@ include_once('homeIncludes/header.php');
                     $image3 = $row['img3'];
 
                     // Output the product information
-                    echo '<div class="col-md-4">';
+                    echo '<div class="col">';
                     echo '<div class="product">';
                     echo '<img src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="' . $name . '" class="product-image" data-toggle="modal" data-target="#img-modal-' . $name . '">';
                     echo '<h2 class="serv">' . $name . '</h2>';

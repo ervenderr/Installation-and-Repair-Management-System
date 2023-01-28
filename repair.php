@@ -5,11 +5,7 @@ $page_title = 'ProtonTech | Repair Request';
 $repair = 'actives activess';
 include_once('homeIncludes/header.php');
 
-session_start();
-$msg = "";
-if(isset($_SESSION['msg'])){
-    $msg = $_SESSION['msg'];
-}
+
 
 ?>
 
@@ -25,7 +21,12 @@ if(isset($_SESSION['msg'])){
         <form action="repair.php" class="form" method="POST" id="repair-form" enctype="multipart/form-data">
 
             <div id='msgs' class='msg'>
-                <p id='msgs'>You have registered successfully!</p>
+                <p id='msgs'>Request Submitted!</p>
+                <div class="msgbtn">
+                <a class="msgb" href="#" role="button">Get Information ID</a>
+                <a class="msgb" href="repair.php" role="button">Submit Another Request</a>
+
+                </div>
             </div>
    
             <h4 class="text-center">Repair Request Form</h3>
@@ -115,7 +116,7 @@ if(isset($_SESSION['msg'])){
                         <input type="file" class="form-control" id="eimg" name="eimg" />
                     </div>
                     <div class="btns-group">
-                        <a href="#" class="btn btn-primary width-50 btn-prev"><i class="fa fa-chevron-left"></i></a>
+                        <a href="#" class="btn btn-primary width-50 btn-prev" id="adis"><i class="fa fa-chevron-left"></i></a>
                         <input type="submit" value="SUBMIT" class="btn-submit confirm" name="submit" id="btn-submit">
 
                     </div>
@@ -126,8 +127,27 @@ if(isset($_SESSION['msg'])){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="particles.js"></script>
     <script src="app.js"></script>
-    <?php include('ajax.js'); ?>
 
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#btn-submit').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                method: "POST",
+                url: "insertdata.php",
+                data: $('#repair-form').serialize(),
+                dataType: "text",
+                success: function (response) {
+                    $('#msgs').css('display', 'block').fadeIn(300);
+                    $('#adis').css('pointer-events', 'none');
+                    $('#btn-submit').css('pointer-events', 'none');
+                    $('#eimg').css('pointer-events', 'none');
+                    $('#shipping').css('pointer-events', 'none');
+                }
+            })
+        })
+    });
+</script>
 </body>
 
 </html>

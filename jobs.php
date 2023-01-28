@@ -1,62 +1,166 @@
 <?php
+require_once 'homeIncludes/dbconfig.php';
+require_once 'tools/variables.php';
+$page_title = 'ProtonTech | Repair Request';
+$job = 'actives activess';
+include_once('homeIncludes/header.php');
 
-    session_start();
-    $msg = "";
-    if(isset($_SESSION['msg'])){
-        $msg = $_SESSION['msg'];
-    }
 
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <script src="scripts.js"></script>
-    <title>Multistep Form</title>
-</head>
-<body onload="showTab(current);hideMsg();">
-<?php
-
-    if($msg == "done"){
-    echo "<div id='msg' class='msg'>
-            <p>You have registered successfully!</p>
-          </div>";
-    }
 
 ?>
-    <div id="container" class="container">
-        <form id="regForm" method="post" action="process.php">
-            <ul id="progressbar">
-                <li class="active" id="account">Account Details</li>
-                <li id="personal">Personal Details</li>
-                <li id="contact">Contact Details</li>
-            </ul>
-            <div class="tab">
-                <input type="text" name="uname" placeholder="Enter Username" oninput="this.className=''">
-                <input type="password" name="pass1" placeholder="Enter Password" oninput="this.className=''">
-                <input type="password" name="pass2" placeholder="Confirm Password" oninput="this.className=''">
-            </div>
-            <div class="tab">
-                <input type="text" name="fname" placeholder="Enter First Name" oninput="this.className=''">
-                <input type="text" name="lname" placeholder="Enter Last Name" oninput="this.className=''">
-                <input type="date" name="dob" placeholder="Enter Date of Birth" oninput="this.className=''">
-            </div>
-            <div class="tab">
-                <input type="text" name="addr" placeholder="Enter Address" oninput="this.className=''">
-                <input type="email" name="email" placeholder="Enter Email" oninput="this.className=''">
-                <input type="text" name="mob" placeholder="Enter Mobile" oninput="this.className=''">
-            </div>
-            <div style="overflow: hidden;">
-                <div style="float: right;">
-                    <button onclick="nextPrev(-1);" type="button" id="prev">Previous</button>
-                    <button onclick="nextPrev(1);" type="button" id="next">Next</button>
+
+<body>
+    <?php
+    include_once('homeIncludes/homenav.php');
+    ?>
+
+    <div class="jobcon">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Active</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            </li>
+        </ul>
+        <div class="container">
+            <h4 class="pkgtext">CCTV packages</h4>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+                <div class="col pr">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col pr">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col pr">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col pr">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
-    </div>
+            <br>
+            <br>
+            <!-- Other -->
+
+            <div class="row">
+                <h4>Other packages</h4>
+                <div class="col-sm-4 mb-3 mb-sm-0 pr">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 pr">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 pr">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        var multipleCardCarousel = document.querySelector(
+            "#cctvpkg"
+        );
+        if (window.matchMedia("(min-width: 768px)").matches) {
+            var carousel = new bootstrap.Carousel(multipleCardCarousel, {
+                interval: false,
+            });
+            var carouselWidth = $(".carousel-inner")[0].scrollWidth;
+            var cardWidth = $(".carousel-item").width();
+            var scrollPosition = 0;
+            $("#cctvpkg .carousel-control-next").on("click", function() {
+                if (scrollPosition < carouselWidth - cardWidth * 4) {
+                    scrollPosition += cardWidth;
+                    $("#cctvpkg .carousel-inner").animate({
+                            scrollLeft: scrollPosition
+                        },
+                        600
+                    );
+                }
+            });
+            $("#cctvpkg .carousel-control-prev").on("click", function() {
+                if (scrollPosition > 0) {
+                    scrollPosition -= cardWidth;
+                    $("#cctvpkg .carousel-inner").animate({
+                            scrollLeft: scrollPosition
+                        },
+                        600
+                    );
+                }
+            });
+        } else {
+            $(multipleCardCarousel).addClass("slide");
+        }
+        </script>
+
 </body>
+
 </html>
