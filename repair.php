@@ -43,17 +43,17 @@ include_once('homeIncludes/header.php');
                     <div class="mb-3">
                         <label for="fname" class="form-label">First Name</label>
                         <input type="text" class="form-control" id="fname" name="fname">
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="mname" class="form-label">Middle Name</label>
                         <input type="text" class="form-control" id="mname" name="mname">
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="lname" class="form-label">Last Name</label>
                         <input type="text" class="form-control" id="lname" name="lname">
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="">
                         <a href="#" class="btn btn-primary btn-next width-50 ml-auto"><i
@@ -65,18 +65,18 @@ include_once('homeIncludes/header.php');
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email">
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
                         <input type="tel" class="form-control" id="phone" name="phone"
                             pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="address" name="address">
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="btns-group">
                         <a href="#" class="btn btn-primary width-50 btn-prev"><i class="fa fa-chevron-left"></i></a>
@@ -94,12 +94,12 @@ include_once('homeIncludes/header.php');
                             <option value="Microwave">Microwave</option>
                             <option value="Aircon">Aircon</option>
                         </select>
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="defective" class="form-label">Defective</label>
                         <input type="text" class="form-control" id="defective" name="defective">
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="shipping" class="form-label">Shipping option</label>
@@ -109,7 +109,7 @@ include_once('homeIncludes/header.php');
                             <option value="Deliver">Deliver</option>
                             <option value="Home Service">Home Service</option>
                         </select>
-                        <span></span>
+                        <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="eimg">Upload Image (optional)</label>
@@ -118,7 +118,6 @@ include_once('homeIncludes/header.php');
                     <div class="btns-group">
                         <a href="#" class="btn btn-primary width-50 btn-prev" id="adis"><i class="fa fa-chevron-left"></i></a>
                         <input type="submit" value="SUBMIT" class="btn-submit confirm" name="submit" id="btn-submit">
-
                     </div>
                 </div>
         </form>
@@ -132,22 +131,57 @@ include_once('homeIncludes/header.php');
     $(document).ready(function () {
         $('#btn-submit').click(function (e) {
             e.preventDefault();
-            $.ajax({
-                method: "POST",
-                url: "insertdata.php",
-                data: $('#repair-form').serialize(),
-                dataType: "text",
-                success: function (response) {
-                    $('#msgs').css('display', 'block').fadeIn(300);
-                    $('#adis').css('pointer-events', 'none');
-                    $('#btn-submit').css('pointer-events', 'none');
-                    $('#eimg').css('pointer-events', 'none');
-                    $('#shipping').css('pointer-events', 'none');
-                }
-            })
-        })
+
+            var etype = $('#etype').val();
+            var defective = $('#defective').val();
+            var shipping = $('#shipping').val();
+            var eimg = $('#eimg').val();
+            var valid = true;
+
+            // Electronic Type validation
+            if (etype == "None") {
+                $('#etype + .val-error').text('Please select an electronic type.');
+                valid = false;
+            } else {
+                $('#etype + .val-error').text('');
+            }
+
+            // Defective validation
+            if (defective == "") {
+                $('#defective + .val-error').text('Please enter the defect.');
+                valid = false;
+            } else {
+                $('#defective + .val-error').text('');
+            }
+
+            // Shipping option validation
+            if (shipping == "None") {
+                $('#shipping + .val-error').text('Please select a shipping option.');
+                valid = false;
+            } else {
+                $('#shipping + .val-error').text('');
+            }
+
+
+            if (valid) {
+                $.ajax({
+                    method: "POST",
+                    url: "repairProcess.php",
+                    data: $('#repair-form').serialize(),
+                    dataType: "text",
+                    success: function (response) {
+                        $('#msgs').css('display', 'block').fadeIn(300);
+                        $('#adis').css('pointer-events', 'none');
+                        $('#btn-submit').css('pointer-events', 'none');
+                        $('#eimg').css('pointer-events', 'none');
+                        $('#shipping').css('pointer-events', 'none');
+                    }
+                })
+            }
+        });
     });
 </script>
+
 </body>
 
 </html>

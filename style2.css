@@ -116,8 +116,32 @@
     transition: .4s;
 }
 
-.repairbody{
-    
+.val-error{
+    font-size: 12px;
+}
+
+.pkgcon{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+.pkgcon .form{
+    width: 500px;
+    max-height: auto;
+    min-height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 0.35rem;
+    padding: 1.5rem;
+    border-top: 5px solid #015F6B;
+    border-bottom: 5px solid #015F6B;
+    background-color: #fff;
+    flex-wrap: wrap;
+    margin: 10px auto; 
+    box-shadow:  5px 5px 6px #c3c3c3,
+             -5px -5px 6px #fdfdfd;
 }
 
 .repaircon{
@@ -141,7 +165,9 @@
     border-bottom: 5px solid #015F6B;
     background-color: #fff;
     flex-wrap: wrap;
-    margin-top: 50px;    
+    margin-top: 50px;  
+    box-shadow:  5px 5px 6px #015F6B,
+             -5px -5px 6px #015F6B;  
 }
 
 
@@ -239,6 +265,14 @@ box-shadow: inset 15px 15px 27px #01535d,
     border-radius: 50%;
     align-items: center;
 }
+.pkgcon .form .btn{
+    display: grid;
+    background-color: #015F6B;
+    color: #ffff;
+    border: none;
+    border-radius: 50%;
+    align-items: center;
+}
 
 .repaircon .form .btn-submit{
     background-color: #015F6B;
@@ -248,9 +282,17 @@ box-shadow: inset 15px 15px 27px #01535d,
     align-items: center;
     height: 40px;
 }
+.pkgcon .form .btn-submit{
+    background-color: #015F6B;
+    color: #ffff;
+    border: none;
+    border-radius: 50px;
+    align-items: center;
+    height: 40px;
+}
 
 .serbtn{
-    border-radius: 50px;
+    border-radius: 5px;
     background-color: #015F6B;
 }
 
@@ -336,7 +378,7 @@ box-shadow: inset 15px 15px 27px #01535d,
 
   .jobcon{
     width: 100%;
-    height: auto;
+    height: 100vh;
     padding: 25px 50px;
   }
 
@@ -347,7 +389,7 @@ box-shadow: inset 15px 15px 27px #01535d,
   }
 
   .jobcon .nav{
-    margin-top: 50px;
+    margin-top: 35px;
     gap: 10px;
     background-color: #015F6B;
   }
@@ -360,11 +402,10 @@ box-shadow: inset 15px 15px 27px #01535d,
 .carousel-inner {
     padding: 1em;
   }
-  .card {
-    margin: 0 0.5em;
-    box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
-    border: none;
-  }
+
+  
+
+  
   
   .card .img-wrapper {
       max-width: 100%;
@@ -372,6 +413,7 @@ box-shadow: inset 15px 15px 27px #01535d,
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 16px;
   }
   .card img {
       max-height: 100%;
@@ -386,6 +428,16 @@ box-shadow: inset 15px 15px 27px #01535d,
     margin-top: 25px;
   }
 
+
+  .jobcon .nav li .servactives{
+    color: #FFF;
+    font-weight: 700;
+  }
+
+  .pkgbtn{
+    background-color: #015F6B;
+    border: none;
+  }
 
 
 /* responsive */
@@ -491,6 +543,22 @@ box-shadow: inset 15px 15px 27px #01535d,
 }
 
 @media ((min-width: 320px) and (max-width: 364px)) {
+
+    .req {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+    .left {
+        margin-top: 100px;
+        max-width: 300px;
+        padding: 0;
+      }
+
+    .big-title h1 {
+        font-size: 2rem;
+      }
 
 
     .repaircon, .jobcon{

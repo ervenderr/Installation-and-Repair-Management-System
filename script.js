@@ -9,12 +9,49 @@ let formStepsNum = 0;
 
 nextBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
+    if (validateFormStep()) {
       formStepsNum++;
       updateFormSteps();
       updateProgressBar();
-       
+    }
   });
 });
+
+
+function validateFormStep() {
+  const inputs = formSteps[formStepsNum].querySelectorAll("input");
+  let isValid = true;
+
+  inputs.forEach((input) => {
+    if (input.name === "mname") {
+      return;
+    }
+    if (!input.value) {
+      input.nextElementSibling.innerHTML = "This field is required.";
+      isValid = false;
+    } else if (input.name === "email") {
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input.value)) {
+        input.nextElementSibling.innerHTML = "Please enter a valid email.";
+        isValid = false;
+      } else {
+        input.nextElementSibling.innerHTML = "";
+      }
+    } else if (input.name === "phone") {
+      if (!/^[0-9]{11}$/.test(input.value)) {
+        input.nextElementSibling.innerHTML = "Please enter a valid phone number in the format 09xxxxxxxxx";
+        isValid = false;
+      } else {
+        input.nextElementSibling.innerHTML = "";
+      }
+    } else {
+      input.nextElementSibling.innerHTML = "";
+    }
+  });
+
+  return isValid;
+}
+
+
 
 prevBtns.forEach((btn) => {
   btn.addEventListener("click", () => {

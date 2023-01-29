@@ -7,6 +7,8 @@
     $repair = "";
     $about = "";
     $contact = "";
+    $servpkgnav = "";
+    $servreqnav = "";
 
 
 ?>
