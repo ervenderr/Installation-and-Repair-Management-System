@@ -44,7 +44,8 @@ include_once('homeIncludes/header.php');
 
                     // Output the product information
                     if($service == 1){
-                        echo '<h4 class="pkgtext">CCTV packages</h4>';
+                        echo '<div class="pcon">';
+                        echo '<h4 class="pkgheadtext">CCTV packages</h4>';
                         echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">';
                         echo '<div class="col pr">';
                         echo '<div class="card pkgcard">';
@@ -57,9 +58,22 @@ include_once('homeIncludes/header.php');
                         echo '</div>';
                         echo '</div>';
                         echo '</div>';
+                        echo '</div>';
+                        echo '<div class="ftext">';
+                        echo '<div class="">';
+                        echo '<h6 class="pkgtext">Service Offered:</h6>';
+                        echo '<p class="ptext">Service Offered:</p>';
+                        echo '</div>';
+                        echo '<div class="">';
+                        echo '<h6 class="pkgtext">Add Ons:</h6>';
+                        echo '<p class="ptext">Service Offered</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
                     }
                     else{
-                        echo '<h4 class="pkgtext">Other packages</h4>';
+                        echo '<div class="pcon">';
+                        echo '<h4 class="pkgheadtext">CCTV packages</h4>';
                         echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">';
                         echo '<div class="col pr">';
                         echo '<div class="card pkgcard">';
@@ -68,8 +82,12 @@ include_once('homeIncludes/header.php');
                         echo '<h5 class="card-title">' . $name . '</h5>';
                         echo '<p class="card-text">₱ ' . $price . '</p>';
                         echo '<p class="card-text">' . $description . '</p>';
-                        echo '<a href="#" class="btn btn-primary pkgbtn">Avail now</a>';
+                        echo '<a href="servreq.php" class="btn btn-primary pkgbtn">Avail now</a>';
                         echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '<div class="ftext">';
+                        echo '<h6 class="pkgtext">Service Offered</h6>';
                         echo '</div>';
                         echo '</div>';
                     }

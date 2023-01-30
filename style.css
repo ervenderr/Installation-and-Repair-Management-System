@@ -54,7 +54,13 @@
 .logo {
     width: 33px;
     height: 30px;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
+}
+
+.logos{
+    width: 25px;
+    height: 22px;
+    margin-bottom: 3px;
 }
 
 .section-padding {
@@ -348,7 +354,7 @@ ul .actives {
     }
 
     .navbar .container-fluid{
-       
+        margin: 0;
         align-items: center;
     }
 
@@ -359,6 +365,7 @@ ul .actives {
         margin: 0;
         align-items: center;
         outline: none;
+        border: none;
     }
 
     button.navbar-toggler:focus {
@@ -367,8 +374,8 @@ ul .actives {
       
 
     .navbar-toggler span{
-        width: 25px;
-        height: 20px    
+        width: 30px;
+        height: 25px    
     }
 
     .navbar .container-fluid .navbar-collapse{

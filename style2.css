@@ -403,6 +403,12 @@ box-shadow: inset 15px 15px 27px #01535d,
     padding: 1em;
   }
 
+
+  .pcon{
+    height: auto;
+    background-color: #015F6B;
+    padding:  0 10px 10px 10px;
+  }
   
 
   
@@ -424,9 +430,37 @@ box-shadow: inset 15px 15px 27px #01535d,
     }
   }
   
-  .pkgtext{
+  .pkgheadtext{
     margin-top: 25px;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 0;
   }
+
+  .ftext{
+    
+    min-width: 250px;
+    max-width: 280px;
+    height: auto;
+    background-color: #fff;
+    margin: 15px auto 5px auto;
+    border-radius: 5px;
+    padding: 12px 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .ftext .pkgtext{
+    color: #015F6B;
+  }
+
+  .ftext .ptext{
+    margin: 0;
+    font-size: 12px;
+  }
+
+
 
 
   .jobcon .nav li .servactives{
