@@ -1,5 +1,5 @@
 <?php
-require_once 'homeIncludes/dbconfig.php';
+require_once '../homeIncludes/dbconfig.php';
 
 
 $fname = htmlentities($_POST['fname']);

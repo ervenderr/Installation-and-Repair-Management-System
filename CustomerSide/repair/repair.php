@@ -1,9 +1,9 @@
 <?php
-require_once 'homeIncludes/dbconfig.php';
-require_once 'tools/variables.php';
+require_once '../homeIncludes/dbconfig.php';
+require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Repair Request';
 $repair = 'actives activess';
-include_once('homeIncludes/header.php');
+include_once('../homeIncludes/header.php');
 
 
 
@@ -12,7 +12,7 @@ include_once('homeIncludes/header.php');
 <body class="repairbody">
 
     <?php
-    include_once('homeIncludes/homenav.php');
+    include_once('../homeIncludes/homenav.php');
     ?>
 
     <div id="particles-js"></div>

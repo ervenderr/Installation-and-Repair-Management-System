@@ -1,16 +1,16 @@
 <?php
-require_once 'homeIncludes/dbconfig.php';
+require_once '../homeIncludes/dbconfig.php';
 
-require_once 'tools/variables.php';
+require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Products';
 $products = 'actives';
-include_once('homeIncludes/header.php');
+include_once('../homeIncludes/header.php');
 
 
 ?>
 
 <body>
-    <?php include_once('homeIncludes/homenav.php'); ?>
+    <?php include_once('../homeIncludes/homenav.php'); ?>
 
 
     <div class="container servicecon">
@@ -57,7 +57,7 @@ include_once('homeIncludes/header.php');
         </div>
 
 
-        <?php include_once('modals/img_modal.php'); ?>
+        <?php include_once('../modals/img_modal.php'); ?>
 
 
         <!-- Include jQuery and Bootstrap JS -->
@@ -81,7 +81,7 @@ include_once('homeIncludes/header.php');
 
 
         <!-- Footer -->
-        <?php include_once('homeIncludes/footer.php'); ?>
+        <?php include_once('../homeIncludes/footer.php'); ?>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

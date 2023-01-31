@@ -1,16 +1,16 @@
 <?php
 
 
-require_once 'homeIncludes/dbconfig.php';
+require_once '../homeIncludes/dbconfig.php';
 
 $page_title = 'ProtonTech | Services';
 $services = 'actives';
-include_once('homeIncludes/header.php');
+include_once('../homeIncludes/header.php');
 
 ?>
 
 <body>
-  <?php include_once('homeIncludes/homenav.php'); ?>
+  <?php include_once('../homeIncludes/homenav.php'); ?>
 
   <div class="container servicecon">
     <h2 class="serv text-center mb-5">SERVICES</h2>
@@ -56,7 +56,7 @@ include_once('homeIncludes/header.php');
     <hr class="my-5">
   </div>
 
-  <?php include_once('homeIncludes/footer.php'); ?>
+  <?php include_once('../homeIncludes/footer.php'); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

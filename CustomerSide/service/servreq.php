@@ -1,10 +1,10 @@
 <?php
-require_once 'homeIncludes/dbconfig.php';
-require_once 'tools/variables.php';
+require_once '../homeIncludes/dbconfig.php';
+require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Repair Request';
 $job = 'actives activess';
 $servreqnav = 'servactives';
-include_once('homeIncludes/header.php');
+include_once('../homeIncludes/header.php');
 
 $sql = "SELECT * FROM services";
 $result = mysqli_query($conn, $sql);
@@ -27,7 +27,7 @@ if(!empty($_POST["service_id"])){
 
 <body>
     <?php
-    include_once('homeIncludes/homenav.php');
+    include_once('../homeIncludes/homenav.php');
     ?>
 
     <div class="jobcon">

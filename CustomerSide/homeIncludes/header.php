@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="style2.css" />
+    <script src="../js/script.js" defer></script>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/style2.css" />
     
     <title>
         <?php echo $page_title; ?>

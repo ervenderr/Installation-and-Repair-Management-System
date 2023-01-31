@@ -1,16 +1,16 @@
 <?php
-require_once 'homeIncludes/dbconfig.php';
-require_once 'tools/variables.php';
+require_once '../homeIncludes/dbconfig.php';
+require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Home';
 $home = 'actives';
-include_once('homeIncludes/header.php');
+include_once('../homeIncludes/header.php');
 
 
 ?>
 
 
 <body>
-    <?php include_once('homeIncludes/homenav.php');?>
+    <?php include_once('../homeIncludes/homenav.php');?>
 
     <div id="particles-js"></div>
     <div class="showcase-area hidden">
@@ -38,7 +38,7 @@ include_once('homeIncludes/header.php');
             </div>
 
             <div class="right">
-                <img src="./img/seccam.png" alt="Person Image" class="person" />
+                <img src="../img/seccam.png" alt="cctv Image" class="person" />
             </div>
         </div>
     </div>
@@ -219,12 +219,12 @@ include_once('homeIncludes/header.php');
     </div>
 
     <!-- Footer -->
-    <?php include_once('homeIncludes/footer.php');?>
+    <?php include_once('../homeIncludes/footer.php');?>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="particles.js"></script>
-    <script src="app.js"></script>
+    <script src="../js/particles.js"></script>
+    <script src="./js/app.js"></script>
 
     <script>
     const observer = new IntersectionObserver((entries) => {

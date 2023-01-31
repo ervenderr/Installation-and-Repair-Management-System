@@ -1,7 +1,7 @@
 <?php
 
 // Connect to the database
-require_once 'homeIncludes/dbconfig.php';
+require_once '../homeIncludes/dbconfig.php';
 
 // Query the database for all products
 $sql = "SELECT * FROM products";
