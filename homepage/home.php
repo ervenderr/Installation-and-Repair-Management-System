@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Home';
@@ -224,7 +225,7 @@ include_once('../homeIncludes/header.php');
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/particles.js"></script>
-    <script src="./js/app.js"></script>
+    <script src="../js/app.js"></script>
 
     <script>
     const observer = new IntersectionObserver((entries) => {

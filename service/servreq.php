@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['logged_id'])) {
+    header('location: ../login/login.php');
+}
+
+
 require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Repair Request';
@@ -50,6 +56,7 @@ if(!empty($_POST["service_id"])){
                         <div class="msgbtn">
                             <a class="msgb" href="#" role="button">Get Information ID</a>
                             <a class="msgb" href="repair.php" role="button">Submit Another Request</a>
+
                         </div>
                     </div>
 
@@ -66,9 +73,8 @@ if(!empty($_POST["service_id"])){
                         <div class="form-step form-step-active">
                             <div class="mb-3">
                                 <label for="fname" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="fname" name="fname">
+                                <input type="text" value="name" class="form-control" id="fname" name="fname">
                                 <span class="val-error"></span>
-
                             </div>
                             <div class="mb-3">
                                 <label for="mname" class="form-label">Middle Name</label>
@@ -77,7 +83,7 @@ if(!empty($_POST["service_id"])){
                             </div>
                             <div class="mb-3">
                                 <label for="lname" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lname" name="lname">
+                                <input type="text" value="last" class="form-control" id="lname" name="lname">
                                 <span class="val-error"></span>
                             </div>
                             <div class="">
@@ -89,18 +95,18 @@ if(!empty($_POST["service_id"])){
                         <div class="form-step">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email">
+                                <input type="email" value="email@dsds.com" class="form-control" id="email" name="email">
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="tel" class="form-control" id="phone" name="phone"
+                                <input type="tel" class="form-control" id="phone" value="09123456789" name="phone"
                                     pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" name="address">
+                                <input type="text" class="form-control" id="address" value="ADSDASA" name="address">
                                 <span class="val-error"></span>
                             </div>
                             <div class="btns-group">
@@ -133,16 +139,14 @@ if(!empty($_POST["service_id"])){
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
-                                <label for="other" class="form-label">Other concerns</label>
-                                <input type="text" class="form-control" id="other" name="other">
-                                <span class="val-error"></span>
+                                <label for="other" class="form-label">Other</label>
+                                <input type="text" class="form-control" id="other" value="ADSDASA" name="other">
                             </div>
                             <div class="btns-group">
                                 <a href="#" class="btn btn-primary width-50 btn-prev" id="adis"><i
                                         class="fa fa-chevron-left"></i></a>
                                 <input type="submit" value="SUBMIT" class="btn-submit confirm" name="submit"
                                     id="btn-submit">
-
                             </div>
                         </div>
                 </form>
@@ -157,26 +161,8 @@ if(!empty($_POST["service_id"])){
 
     <script type="text/javascript">
     $(document).ready(function() {
-        $('#stype').on('change', function(e) {
-            var stypeId = e.target.value;
-            if (stypeId) {
-                $.ajax({
-                    method: "POST",
-                    url: "servreq.php",
-                    data: 'service_id=' + stypeId,
-                    success: function(html) {
-                        $('#package').html(html);
-                    }
-                });
-            } else {
-                $('#package').html('<option value="">--Select--</option>');
-            }
-        });
-
-
         $('#btn-submit').click(function(e) {
             e.preventDefault();
-
             var stype = $('#stype').val();
 
             var valid = true;
@@ -200,17 +186,33 @@ if(!empty($_POST["service_id"])){
                         $('#msgs').css('display', 'block').fadeIn(300);
                         $('#adis').css('pointer-events', 'none');
                         $('#btn-submit').css('pointer-events', 'none');
-                        $('#package').css('pointer-events', 'none');
-                        $('#other').css('pointer-events', 'none');
-                        $('#stype').css('pointer-events', 'none');
+                        $('#eimg').css('pointer-events', 'none');
+                        $('#shipping').css('pointer-events', 'none');
                     }
                 })
             }
         });
+
+        $('#stype').on('change', function(e) {
+            var stypeId = e.target.value;
+            if (stypeId) {
+                $.ajax({
+                    method: "POST",
+                    url: "servreq.php",
+                    data: 'service_id=' + stypeId,
+                    success: function(html) {
+                        $('#package').html(html);
+                    }
+                });
+            } else {
+                $('#package').html('<option value="">--Select--</option>');
+            }
+        });
+
     });
     </script>
 
-    
+
 
 </body>
 

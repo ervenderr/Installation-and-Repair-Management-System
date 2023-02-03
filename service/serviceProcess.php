@@ -1,5 +1,5 @@
 <?php
-require_once 'homeIncludes/dbconfig.php';
+require_once '../homeIncludes/dbconfig.php';
 
 
 $fname = htmlentities($_POST['fname']);
@@ -14,11 +14,10 @@ if(isset($_POST['stype'])){
 if(isset($_POST['package'])){
     $package = $_POST['package'];
 }
-$other = htmlentities($_POST['other']);
+$other = $_POST['other'];
 
 
-$query = "INSERT INTO service_request (fname, mname, lname, email, phone, address, rqservice_id, pkg_id, other) VALUES 
-('$fname', '$mname', '$lname', '$email', '$phone', '$address', '$stype', '$package', '$other')";
+$query = "INSERT INTO `service_request`(`fname`, `mname`, `lname`, `email`, `phone`, `address`, `service_id`, `pkg_id`, `other`) VALUES ('$fname', '$mname', '$lname', '$email', '$phone', '$address', '$stype', '$package', '$other')";
 $result = mysqli_query($conn, $query);
 
 

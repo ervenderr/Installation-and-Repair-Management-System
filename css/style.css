@@ -91,9 +91,18 @@ background: linear-gradient(142deg, rgba(1,95,107,0.8379726890756303) 0%, rgba(1
     width: 100%;
 }
 
+.offcanvas-body{
+    align-items: center;
+}
+
 
 .track{
     text-transform: none;
+    align-items: center;
+}
+
+.fa-user-circle{
+    font-size: 25px;
 }
 
 .track a{

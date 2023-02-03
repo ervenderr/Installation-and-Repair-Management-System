@@ -1,9 +1,16 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['logged_id'])) {
+    header('location: ../login/login.php');
+}
+
 require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Repair Request';
 $repair = 'actives activess';
 include_once('../homeIncludes/header.php');
+
 
 
 
@@ -42,7 +49,7 @@ include_once('../homeIncludes/header.php');
                 <div class="form-step form-step-active">
                     <div class="mb-3">
                         <label for="fname" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="fname" name="fname">
+                        <input type="text" value="name" class="form-control" id="fname" name="fname">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
@@ -52,7 +59,7 @@ include_once('../homeIncludes/header.php');
                     </div>
                     <div class="mb-3">
                         <label for="lname" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lname" name="lname">
+                        <input type="text" value="last" class="form-control" id="lname" name="lname">
                         <span class="val-error"></span>
                     </div>
                     <div class="">
@@ -64,18 +71,18 @@ include_once('../homeIncludes/header.php');
                 <div class="form-step">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" value="email@dsds.com" class="form-control" id="email" name="email">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="tel" class="form-control" id="phone" name="phone"
+                        <input type="tel" class="form-control" id="phone" value="09123456789" name="phone"
                             pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" name="address">
+                        <input type="text" class="form-control" id="address" value="ADSDASA" name="address">
                         <span class="val-error"></span>
                     </div>
                     <div class="btns-group">

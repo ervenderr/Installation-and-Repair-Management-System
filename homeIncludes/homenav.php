@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-light fixed-top">
   <div class="container-fluid">
   <a class="navbar-brand" href="#">
-            <span class="text">Pr<img src="img/proton-logo.png" alt="" class="logo" />ton</span><span>Tech</span></a>
+            <span class="text">Pr<img src="../img/proton-logo.png" alt="" class="logo" />ton</span><span>Tech</span></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -38,7 +38,26 @@
                     <a class="nav-link nav-links <?php echo $contact; ?>" href="contact.php">contact</a>
                 </li>
             </ul>
-        <div class="track"><a href="">Request status <i class="fa fa-search"></i></a></div>
+            <?php
+                    if (!isset($_SESSION['logged_id'])) {
+                        echo '<ul class="nav-item signinup">
+                                            <li><a href="../login/login.php" class="nav-link nav-links signin" type="button">sign in</a></li>
+                                            <li><a href="../login/signup.php" class="nav-link nav-links signup" type="button">Sign up</a></li>
+                                        </ul>';
+                    } else {
+                        echo '<div class="btn-group accpc">
+                                        <a type="button" class="" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="far fa-user-circle"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="../accountsetting/account.php">Account setting</a></li>
+                                            <li><a href="../login/logout.php" class="dropdown-item" type="button">Logout</a></li>
+                                            
+                                        </ul>
+                                    </div>';
+                    }
+                    ?>
+        
       </div>
     </div>
   </div>

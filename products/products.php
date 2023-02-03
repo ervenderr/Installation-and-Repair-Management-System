@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../homeIncludes/dbconfig.php';
 
 require_once '../tools/variables.php';
