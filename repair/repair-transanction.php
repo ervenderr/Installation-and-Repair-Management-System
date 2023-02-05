@@ -137,6 +137,7 @@ $row = mysqli_fetch_assoc($result);
     </div>
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 <script>
   document.getElementById("download").addEventListener("click", function() {
     const ticket = document.querySelector(".ticket");
