@@ -9,6 +9,7 @@
     $contact = "";
     $servpkgnav = "";
     $servreqnav = "";
-
+    $accsetting = "";
+    $repairtransac = "";
 
 ?>

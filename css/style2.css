@@ -423,18 +423,71 @@ option {
     margin-top: 60px;
 }
 
-.accountcon .container-fluid .row .col-sm-3 {
-    background-color: lightgray;
+.accountcon .accheader{
+    width: 100%;
+    height: 50px;
+    background-color: #015F6B;
+    color: #fff;
+    padding: 15px;
+    align-items: center;
+}
+
+.accountcon .accheader h4{
+    font-size: 16px;
+}
+
+.accform-container .accform .accbtnsave{
+    background-color: #015F6B;
+    color: #fff;
+    border: none;
+}
+.accform-container .accform label{
+    color: #666;
+}
+
+.accountcon .container-fluid{
+    padding-bottom: 20px;
+}
+
+.accountcon .container-fluid .row .sidebar{
+    background-color: #fff;
     height: auto;
     padding: 15px;
+    
+}
+
+.accountcon .container-fluid .row .sidebar .accon{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #015F6B;
+}
+
+.accountcon .container-fluid .row .sidebar .accon .user-icon{
+    width: 50px;
+    height: 50px;
+}
+.accountcon .container-fluid .row .sidebar .accon h5{
+    font-size: 16px;
 }
 
 .accountcon .container-fluid .row .sidebar a {
     display: block;
     padding: 10px 0;
     font-size: 18px;
-    color: black;
+    color: #c3c3c3;
     text-decoration: none;
+    border-bottom: 1px solid #c3c3c3;
+}
+
+.accountcon .container-fluid .row .sidebar .account-active {
+    color: #015F6B;
+    font-weight: 500;
+    border-bottom: 2px solid #015F6B;
+}
+
+.rprq{
+    margin-top: 30px;
 }
 
 .left-column {
@@ -459,16 +512,34 @@ option {
 
 .form-group {
     margin-bottom: 20px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
-input[type="text"],
-input[type="email"] {
+.accountcon .container-fluid .row input[type="text"],
+input[type="password"], .email {
     padding: 10px;
     font-size: 16px;
-    width: 100%;
+    width: 400px;
     box-sizing: border-box;
     border-radius: 5px;
     border: 1px solid #ccc;
+}
+
+.accform{
+    margin-top: 20px;
+}
+
+.accforms{
+    margin-top: 83px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.accform .accform-header{
+    padding: 10px 0;
+    border-bottom: 1px solid #cdcdcd;
 }
 
 .accform .btn-primary {
@@ -482,6 +553,67 @@ input[type="email"] {
     cursor: pointer;
 }
 
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.accform-active{
+    color: #67D89e;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.n-active{
+    color: #c3c3c3;
+}
+
+.bold-text{
+    font-weight: 500;
+}
+
+.accforms .download{
+    margin: 10px auto;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.pending{
+    color: #337ab7;
+}
+.ticket{
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    border: 1px solid #c3c3c3;
+    margin: 0 auto;
+    padding: 20px 40px;
+    border-radius: 5px;
+}
+.ticket .ticket-header{
+    text-align: center;
+    border-bottom: 1px solid #c3c3c3;
+}
+
+.ticket .ticket-header span{
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.ticket .ticket-header p{
+    color: #c3c3c3;
+    font-size: 12px;
+}
+
+.ticket .ticket-body{
+    padding: 20px 0 0 0;
+}
+
+.ticket .ticket-body .nopad{
+    margin-bottom: 0;
+    color: #666;
+    font-size: 12px;
+}
+
+.green{
+    color: rgb(17, 110, 81);
+}
 
 .card .img-wrapper {
     max-width: 100%;
@@ -573,10 +705,24 @@ input[type="email"] {
     border: 1px solid #015F6B;
 }
 
-.accpc a .far {
-    color: #015F6B;
-    font-size: 30px;
+.accpc a .user-icon {
+    width: 40px;
+    height: 40px;
 }
+
+.navs .con-navs{
+    margin-top: 0;
+}
+
+.list-group{
+    width: 100%;
+}
+
+.list-group .list-group-item{
+    height: 40px;
+    width: 100%;
+}
+
 
 
 /* responsive */

@@ -11,6 +11,7 @@ $page_title = 'ProtonTech | Repair Request';
 $repair = 'actives activess';
 include_once('../homeIncludes/header.php');
 
+$cust_id = $_SESSION["cust_id"];
 
 
 
@@ -36,7 +37,7 @@ include_once('../homeIncludes/header.php');
                 </div>
             </div>
    
-            <h4 class="text-center">Repair Request Form</h3>
+            <h4 class="text-center">Repair Request Form <?php echo $cust_id ?></h3>
                 <!-- progress bar -->
 
                 <div class="progressbar">
@@ -130,7 +131,6 @@ include_once('../homeIncludes/header.php');
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="particles.js"></script>
     <script src="app.js"></script>
 

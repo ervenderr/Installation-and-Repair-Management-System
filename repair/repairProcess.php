@@ -1,7 +1,9 @@
 <?php
+session_start();
 require_once '../homeIncludes/dbconfig.php';
 
-
+$cust_id = $_SESSION["cust_id"];
+$transaction_code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 11);
 $fname = htmlentities($_POST['fname']);
 $mname = htmlentities($_POST['mname']);
 $lname = htmlentities($_POST['lname']);
@@ -24,8 +26,10 @@ if(!empty($_FILES['eimg']['name'])){
     }
 }
 
-$query = "INSERT INTO repair_request (fname, mname, lname, email, phone, address, etype, defective, shipping, image) VALUES ('$fname', '$mname', '$lname', '$email', '$phone', '$address', '$etype', '$defective', '$shipping', '".$imgcontent."')";
+$query = "INSERT INTO rprq (cust_id, transaction_code, etype, defective, shipping, image) VALUES ('$cust_id', '$transaction_code', '$etype', '$defective', '$shipping', '".$imgcontent."')";
 $result = mysqli_query($conn, $query);
+
+
 
 
 ?>

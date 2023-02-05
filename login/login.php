@@ -37,6 +37,7 @@ if (isset($_POST['submit'])){
         $_SESSION['email'] = $email;
         $_SESSION['logged_id'] = $row['account_id'];
         $_SESSION['user_type'] = $row['user_type'];
+        $_SESSION['cust_id'] = $row['cust_id'];
         if($_SESSION['user_type'] == 'customer' ){
           header("Location: ../homepage/home.php");
         }

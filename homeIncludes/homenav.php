@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg bg-body-light fixed-top">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg bg-body-light fixed-top navs">
+  <div class="container-fluid con-navs">
   <a class="navbar-brand" href="#">
             <span class="text">Pr<img src="../img/proton-logo.png" alt="" class="logo" />ton</span><span>Tech</span></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -47,10 +47,10 @@
                     } else {
                         echo '<div class="btn-group accpc">
                                         <a type="button" class="" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="far fa-user-circle"></i>
+                                        <img src="../img/usericon.png" alt="user icon" class="user-icon">
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="../accountsetting/account.php">Account setting</a></li>
+                                            <li><a class="dropdown-item" href="../mytransactions/account.php">Account setting</a></li>
                                             <li><a href="../login/logout.php" class="dropdown-item" type="button">Logout</a></li>
                                             
                                         </ul>
