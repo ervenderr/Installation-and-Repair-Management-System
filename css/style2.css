@@ -709,6 +709,23 @@ input[type="password"], .email {
     width: 40px;
     height: 40px;
 }
+.accpc a .user-iconn{
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.fa-sign-out-alt, .fa-sync, .fa-cog{
+    font-size: 15px;
+    color: #015F6B;
+    margin-right: 10px;
+}
+
+.logout-align a{
+    display: flex;
+    align-items: center;
+}
 
 .navs .con-navs{
     margin-top: 0;
@@ -723,7 +740,20 @@ input[type="password"], .email {
     width: 100%;
 }
 
+.accpc{
+    align-items: center;
+}
 
+.accpc a .fa-bell, .fa-envelope{
+    font-size: 20px;
+    margin-right: 20px;
+    color: #015F6B;
+}
+
+.dp-setting li a{
+    font-size: 12px;
+    text-transform: capitalize;
+}
 
 /* responsive */
 

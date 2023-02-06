@@ -26,6 +26,8 @@ if(!empty($_FILES['eimg']['name'])){
     }
 }
 
+$_SESSION['transaction_code'] = $transaction_code;
+
 $query = "INSERT INTO rprq (cust_id, transaction_code, etype, defective, shipping, image) VALUES ('$cust_id', '$transaction_code', '$etype', '$defective', '$shipping', '".$imgcontent."')";
 $result = mysqli_query($conn, $query);
 

@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-lg bg-body-light fixed-top navs">
   <div class="container-fluid con-navs">
   <a class="navbar-brand" href="#">
@@ -46,13 +47,20 @@
                                         </ul>';
                     } else {
                         echo '<div class="btn-group accpc">
+                                        <a type="button" class="bell" aria-expanded="false">
+                                        <i class="far fa-bell"></i>
+                                        </a>
+                                        <a type="button" class="bell envelop" aria-expanded="false">
+                                        <i class="far fa-envelope"></i>
+                                        </a>
                                         <a type="button" class="" data-bs-toggle="dropdown" aria-expanded="false">
                                         <img src="../img/usericon.png" alt="user icon" class="user-icon">
                                         </a>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="../mytransactions/account.php">Account setting</a></li>
-                                            <li><a href="../login/logout.php" class="dropdown-item" type="button">Logout</a></li>
-                                            
+                                        <ul class="dropdown-menu dropdown-menu-end dp-setting">
+                                            <li><a class="dropdown-item" href="../mytransactions/account.php"><img src="../img/usericon.png" alt="user icon" class="user-icon user-iconn">Manage Account</a></li>
+                                            <li class="logout-align"><a href="../login/logout.php" class="dropdown-item" type="button"><i class="fas fa-sync"></i>My Transactions</a></li>
+                                            <li class="logout-align"><a href="../login/logout.php" class="dropdown-item" type="button"><i class="fas fa-cog"></i>Setting</a></li>
+                                            <li class="logout-align"><a href="../login/logout.php" class="dropdown-item" type="button"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
                                         </ul>
                                     </div>';
                     }

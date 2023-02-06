@@ -12,8 +12,9 @@ $home = '';
 $repairtransac = 'account-active';
 include_once('../homeIncludes/header.php');
 
+$transaction_code = $_SESSION['transaction_code'];
 $user_id = $_SESSION['logged_id'];
-$query = "SELECT customer.cust_id, customer.account_id, customer.fname, customer.mname, customer.lname, customer.phone, customer.address, accounts.account_id, accounts.email, accounts.password, accounts.user_type, accounts.created_at, accounts.updated_at, rprq.id, rprq.cust_id, rprq.transaction_code, rprq.etype, rprq.defective, rprq.shipping, rprq.image, rprq.date_req, rprq.date_completed FROM customer LEFT JOIN accounts ON customer.account_id=accounts.account_id LEFT JOIN rprq ON rprq.cust_id=customer.cust_id WHERE accounts.account_id='{$user_id}'";
+$query = "SELECT customer.cust_id, customer.account_id, customer.fname, customer.mname, customer.lname, customer.phone, customer.address, accounts.account_id, accounts.email, accounts.password, accounts.user_type, accounts.created_at, accounts.updated_at, rprq.id, rprq.cust_id, rprq.transaction_code, rprq.etype, rprq.defective, rprq.shipping, rprq.image, rprq.date_req, rprq.date_completed FROM customer LEFT JOIN accounts ON customer.account_id=accounts.account_id LEFT JOIN rprq ON rprq.cust_id=customer.cust_id AND rprq.transaction_code='{$transaction_code}' WHERE accounts.account_id='{$user_id}'";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 
