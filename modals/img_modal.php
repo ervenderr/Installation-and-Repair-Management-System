@@ -30,14 +30,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '</button>';
     echo '</div>';
     echo '<div class="productt">';
+    echo '    <div class="img-container">';
+    echo '        <img class="img-responsive img-responsive-main" id="imgBox-' . htmlspecialchars($name) . '-1" src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="">';
     echo '    <div class="product-small-img">';
     echo '        <img class="img-responsive" src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="" onclick="myFunction(this,\'imgBox-' . htmlspecialchars($name) . '-1\')">';
     echo '        <img class="img-responsive" src="data:image/jpeg;base64,' . base64_encode($image2) . '" alt="" onclick="myFunction(this,\'imgBox-' . htmlspecialchars($name) . '-1\')">';
     echo '        <img class="img-responsive" src="data:image/jpeg;base64,' . base64_encode($image3) . '" alt="" onclick="myFunction(this,\'imgBox-' . htmlspecialchars($name) . '-1\')">';
     echo '    </div>';
-    echo '    <div class="img-container">';
-    echo '        <img class="img-responsive" id="imgBox-' . htmlspecialchars($name) . '-1" src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="">';
     echo '    </div>';
+    
       // Navbar
   echo '<nav class="m-nav navbar navbar-expand-sm navbar-light bg-light">';
   echo '<div class="m-collapses collapses navbar-collapse" id="navbarNav">';

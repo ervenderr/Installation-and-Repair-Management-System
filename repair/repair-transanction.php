@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+error_reporting(0);
 if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
@@ -11,6 +11,7 @@ $page_title = 'ProtonTech | Home';
 $home = '';
 $repairtransac = 'account-active';
 include_once('../homeIncludes/header.php');
+
 
 $transaction_code = $_SESSION['transaction_code'];
 $user_id = $_SESSION['logged_id'];
@@ -52,60 +53,6 @@ $row = mysqli_fetch_assoc($result);
                     <div>
                         <a href="../login/logout.php">Logout</a>
                     </div>
-                </div>
-                <div class="col-sm-6 accform">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link accform-active active" aria-current="page"
-                                href="repair_transaction.php">To Pay</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link n-active" href=".php">In-progress</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link n-active" href="#">Completed</a>
-                        </li>
-                    </ul>
-                    <div class="d-flex accform">
-                        <ul class="list-group rounded-0">
-                            <li class="list-group-item list-group-item-secondary border-right-0">Transaction Code:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Status:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Customer Name</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Address:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Contact</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Email:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Electronic Type:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Defective:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Date Requested:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Date Completed:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Assigned Technician:
-                            </li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Shipping Option:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Warranty:</li>
-                            <li class="list-group-item list-group-item-secondary border-right-0">Payment:</li>
-                        </ul>
-                        <ul class="list-group rounded-0">
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['transaction_code']?>
-                            </li>
-                            <li class="list-group-item border-left-0 bold-text pending">Pending</li>
-                            <li class="list-group-item border-left-0 bold-text">
-                                <?php echo $row['fname'] ." " .  $row['lname']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['address']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['phone']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['email']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['etype']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['defective']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['date_req']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['date_completed']?></li>
-                            <li class="list-group-item border-left-0 bold-text"></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['shipping']?></li>
-                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['account_id']?></li>
-                            <li class="list-group-item border-left-0 bold-text"></li>
-                        </ul>
-                    </div>
-
-                </div>
-                <div class="col-sm-3 accforms">
                     <div class="ticket">
                         <div class="ticket-header">
                             <span class="text">Proton</span><span class="green">Tech</span></a>
@@ -130,8 +77,63 @@ $row = mysqli_fetch_assoc($result);
                         <div class="ticket-footer"></div>
                     </div>
 
-                    <button id="download" class="download">Download</button>
+                    
                 </div>
+                <div class="col-sm-9 accform">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item nav-item-tab">
+                            <a class="nav-link accform-active active" aria-current="page"
+                                href="repair_transaction.php">To Pay</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link n-active" href=".php">In-progress</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link n-active" href="#">Completed</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex accform accform">
+                        <ul class="list-group rounded-0">
+                            <li class="list-group-item list-group-item-secondary border-right-0">Transaction Code:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Status:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Customer Name</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Address:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Contact</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Email:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Electronic Type:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Defective:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Date Requested:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Date Completed:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Assigned Technician:
+                            </li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Shipping Option:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Warranty:</li>
+                            <li class="list-group-item list-group-item-secondary border-right-0">Payment:</li>
+                        </ul>
+                        <ul class="list-group rounded-0 list-group2">
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['transaction_code']?>
+                            </li>
+                            <li class="list-group-item border-left-0 bold-text pending">Pending</li>
+                            <li class="list-group-item border-left-0 bold-text">
+                                <?php echo $row['fname'] ." " .  $row['lname']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['address']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['phone']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['email']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['etype']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['defective']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['date_req']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['date_completed']?></li>
+                            <li class="list-group-item border-left-0 bold-text"></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['shipping']?></li>
+                            <li class="list-group-item border-left-0 bold-text"><?php echo $row['account_id']?></li>
+                            <li class="list-group-item border-left-0 bold-text"></li>
+                        </ul>
+                        
+                    </div>
+                    <button id="download" class="download">Download Ticket</button>
+                    
+                </div>
+                
             </div>
         </div>
 

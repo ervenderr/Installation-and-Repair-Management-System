@@ -1,8 +1,12 @@
 .productt {
-    margin: 0 auto;
+    margin: 0 16px;
     padding: 0 5px;
-    width: 1000px;
+    width: auto;
     height: auto;
+}
+
+.product-small-img{
+    display: flex;
 }
 
 .product-small-img img {
@@ -28,8 +32,13 @@
     position: absolute;
 }
 
-.img-container img {
-    height: 300px;
+.img-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.img-container .img-responsive-main {
+    height: 400px;
     box-shadow: rgba(0, 0, 0, 0.507) 0px 6px 12px -2px, rgba(5, 0, 0, 0.527) 0px 3px 7px -3px;
 }
 
@@ -419,8 +428,8 @@ option {
     padding: 0 10px 10px 10px;
 }
 
-.accountcon {
-    margin-top: 60px;
+.accountcon{
+    margin-top: 50px;
 }
 
 .accountcon .accheader{
@@ -436,6 +445,13 @@ option {
     font-size: 16px;
 }
 
+.accform .accform-cons{
+}
+
+.accform .accform-cons ul{
+    width: auto;
+}
+
 .accform-container .accform .accbtnsave{
     background-color: #015F6B;
     color: #fff;
@@ -447,6 +463,8 @@ option {
 
 .accountcon .container-fluid{
     padding-bottom: 20px;
+    padding: 0 15px;
+    width: 100%;
 }
 
 .accountcon .container-fluid .row .sidebar{
@@ -520,7 +538,7 @@ option {
 input[type="password"], .email {
     padding: 10px;
     font-size: 16px;
-    width: 400px;
+    width: 100%;
     box-sizing: border-box;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -583,6 +601,7 @@ input[type="password"], .email {
     margin: 0 auto;
     padding: 20px 40px;
     border-radius: 5px;
+    display: none;
 }
 .ticket .ticket-header{
     text-align: center;
@@ -733,11 +752,17 @@ input[type="password"], .email {
 
 .list-group{
     width: 100%;
+    min-width:0;
 }
+
+
 
 .list-group .list-group-item{
     height: 40px;
     width: 100%;
+    word-break: break-all;
+    max-width: 100%;
+    white-space: normal;
 }
 
 .accpc{
@@ -759,6 +784,22 @@ input[type="password"], .email {
 
 @media ((min-width: 365px) and (max-width: 500px)) {
 
+    .list-group .list-group-item{
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+    }
+    .list-group2 .list-group-item{
+        justify-content: center;
+    }
+
+    .nav-item-tab{
+        padding: 0;
+    }
+    
+    .nav-tabs .nav-link{
+        padding: 8px 16px;
+    }
 
     .repaircon,
     .jobcon {
@@ -782,17 +823,15 @@ input[type="password"], .email {
     }
 
     .img-container {
-        order: -1;
         float: none;
         padding: 1px;
         margin: 0 auto;
     }
 
-    .img-container img {
+    .img-container .img-responsive-main {
         height: 250px;
         width: 250px;
         margin-bottom: 10px;
-        order: 1;
         margin-top: 10px;
     }
 
@@ -863,6 +902,24 @@ input[type="password"], .email {
 
 @media ((min-width: 320px) and (max-width: 364px)) {
 
+    .list-group .list-group-item{
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+    }
+    .list-group2 .list-group-item{
+        justify-content: center;
+    }
+
+    .nav-item-tab{
+        padding: 0;
+    }
+    
+    .nav-tabs .nav-link{
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
     .req {
         display: flex;
         flex-direction: column;
@@ -904,17 +961,14 @@ input[type="password"], .email {
     }
 
     .img-container {
-        order: -1;
         float: none;
         padding: 1px;
         margin: 0 auto;
     }
 
-    .img-container img {
+    .img-container .img-responsive-main {
         height: 250px;
         width: 250px;
-
-        order: 1;
     }
 
     .product-small-img {
@@ -934,6 +988,7 @@ input[type="password"], .email {
     .m-nav {
         height: 20px;
         padding-bottom: 50px;
+        
     }
 
     .m-nav .m-collapses .nav {
@@ -944,6 +999,7 @@ input[type="password"], .email {
     .tab-pane h4,
     .product-price {
         font-size: 15px;
+        padding: 0 5px;
     }
 
     .tab-pane ul li {
@@ -989,17 +1045,17 @@ input[type="password"], .email {
     }
 
     .img-container {
-        order: -1;
+
         float: none;
         padding: 1px;
         margin: 0 auto;
     }
 
-    .img-container img {
+    .img-container .img-responsive-main {
         height: 400px;
         width: 400px;
         margin-bottom: 10px;
-        order: 1;
+
     }
 
     .product-small-img {
@@ -1007,7 +1063,7 @@ input[type="password"], .email {
         margin: 0 auto;
     }
 
-    .product-small-img img {
+    .product-small-img .img-responsive {
         height: 80px;
         width: 80px;
         margin: 5px 0;
@@ -1019,7 +1075,7 @@ input[type="password"], .email {
     .m-nav {
         height: 40px;
         max-width: auto;
-        padding-bottom: 50px;
+
     }
 
 
@@ -1045,7 +1101,7 @@ input[type="password"], .email {
     }
 
     .servicecon img {
-        width: 436px;
+        width: 100%;
         height: 300px;
         margin: 0 auto;
     }
@@ -1083,17 +1139,15 @@ input[type="password"], .email {
     }
 
     .img-container {
-        order: -1;
         float: none;
         padding: 1px;
         margin: 0 auto;
     }
 
-    .img-container img {
+    .img-container .img-responsive-main {
         height: 400px;
         width: 400px;
         margin-bottom: 10px;
-        order: 1;
     }
 
     .product-small-img {
@@ -1113,7 +1167,7 @@ input[type="password"], .email {
     .m-nav {
         height: 40px;
         max-width: auto;
-        padding-bottom: 50px;
+        
     }
 
 
@@ -1161,17 +1215,15 @@ input[type="password"], .email {
     }
 
     .img-container {
-        order: -1;
         float: none;
         padding: 1px;
         margin: 0 auto;
     }
 
-    .img-container img {
+    .img-container .img-responsive-main {
         height: 400px;
         width: 400px;
         margin-bottom: 10px;
-        order: 1;
     }
 
 
