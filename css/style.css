@@ -504,7 +504,7 @@ ul .actives {
     .navbar{
         align-items: center;
         justify-content: center;
-        padding: 10px 0 15px 0;
+        padding: 0;
     }
 
     .servicecon{
@@ -533,7 +533,7 @@ ul .actives {
     .navbar{
         align-items: center;
         justify-content: center;
-        padding: 10px 0 15px 0;
+        padding: 0;
     }
 
     .navbar .container-fluid{
@@ -549,6 +549,7 @@ ul .actives {
         margin: 0;
         align-items: center;
         outline: none;
+        border: none;
     }
 
     button.navbar-toggler:focus {
@@ -855,7 +856,7 @@ a {
     .navbar{
         display: flex;
         align-items: center;
-        padding: 15px;
+        padding: 0;
     }
     
     .servicecon{
@@ -1024,7 +1025,7 @@ a {
 
     .navbar{
         display: flex;
-        padding: 15px;
+        padding: 0;
     }
     
     .navbar .container-fluid{

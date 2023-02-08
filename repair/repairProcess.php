@@ -2,8 +2,8 @@
 session_start();
 require_once '../homeIncludes/dbconfig.php';
 
-$cust_id = $_SESSION["cust_id"];
 $transaction_code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 11);
+$cust_id = $_SESSION["cust_id"];
 $fname = htmlentities($_POST['fname']);
 $mname = htmlentities($_POST['mname']);
 $lname = htmlentities($_POST['lname']);

@@ -21,7 +21,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 
     // Modal
-    echo '<div class="modal fade" id="img-modal-' . htmlspecialchars($name) . '" tabindex="-1" role="dialog" aria-labelledby="img-modal-' . htmlspecialchars($name) . '" aria-hidden="true">';    echo '<div class="modal-dialog modal-xl">';
+    echo '<div class="modal fade product-modal" id="img-modal-' . htmlspecialchars($name) . '" tabindex="-1" role="dialog" aria-labelledby="img-modal-' . htmlspecialchars($name) . '" aria-hidden="true">';    echo '<div class="modal-dialog modal-xl modal-dialog-prod">';
     echo '<div class="modal-content">';
     echo '<div class="modal-header">';
     echo '<h5 class="modal-title" id="product-modal-' . $name . '-label">' . $name . '</h5>';
@@ -82,7 +82,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '</div>';
     echo '</div>';
     
-    echo '<div class="modal-footer">';
+    echo '<div class="modal-footer modal-footer-prod">';
     echo '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
     echo '</div>';
     echo '</div>';

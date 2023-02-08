@@ -54,8 +54,8 @@ if(!empty($_POST["service_id"])){
                     <div id='msgs' class='msg'>
                         <p id='msgs'>Request Submitted!</p>
                         <div class="msgbtn">
-                            <a class="msgb" href="#" role="button">Get Information ID</a>
-                            <a class="msgb" href="repair.php" role="button">Submit Another Request</a>
+                            <a class="msgb" href="../service/service-transaction.php" role="button">Get Information ID</a>
+                            <a class="msgb" href="servreq.php" role="button">Submit Another Request</a>
 
                         </div>
                     </div>
@@ -125,7 +125,7 @@ if(!empty($_POST["service_id"])){
                                     <?php
                                         
                                         while($row = mysqli_fetch_assoc($result)) { 
-                                            echo "<option value='" . $row['service_id'] . "'>" . $row['name'] . "</option>";
+                                            echo "<option value='" . $row['service_id'] . "'>" . $row['service_name'] . "</option>";
                                         }
                                     ?>
                                 </select>

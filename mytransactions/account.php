@@ -39,7 +39,7 @@ $row = mysqli_fetch_assoc($result);
                         <a href="../repair/repair-transanction.php" class="<?php echo $repairtransac; ?>">Repair request</a>
                     </div>
                     <div>
-                        <a href="service-transaction.php" class="<?php echo $servicetransac; ?>">Service request</a>
+                        <a href="../service/service-transaction.php" class="<?php echo $servicetransac; ?>">Service request</a>
                     </div>
                     <div>
                         <a href="../mytransactions/account.php" class="<?php echo $accsetting; ?>">Account setting</a>

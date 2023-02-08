@@ -1,4 +1,5 @@
 
+
 <nav class="navbar navbar-expand-lg bg-body-light fixed-top navs">
   <div class="container-fluid con-navs">
   <a class="navbar-brand" href="#">
@@ -27,7 +28,7 @@
                         aria-expanded="false">
                         Make a request
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-req">
                         <li><a class="mrq <?php echo $job; ?>" href="../service/servpkg.php">Service Order</a></li>
                         <li><a class="mrq <?php echo $repair; ?>" href="../repair/repair.php">Repair Request</a></li>
                     </ul>
@@ -36,7 +37,7 @@
                     <a class="nav-link nav-links <?php echo $about; ?>" href="about.php">about</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-links <?php echo $contact; ?>" href="contact.php">contact</a>
+                    <a class="nav-link nav-links <?php echo $contact; ?>" href="" data-toggle="modal" data-target="#modalContactForm">contact</a>
                 </li>
             </ul>
             <?php

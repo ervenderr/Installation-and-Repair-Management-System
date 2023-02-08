@@ -25,12 +25,7 @@
     float: left;
 }
 
-.modal-body {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    position: absolute;
-}
+
 
 .img-container{
     display: flex;
@@ -584,7 +579,7 @@ input[type="password"], .email {
     font-weight: 500;
 }
 
-.accforms .download{
+.download{
     margin: 10px auto;
     background-color: #fff;
     border-radius: 5px;
@@ -704,6 +699,9 @@ input[type="password"], .email {
     list-style: none;
     margin-bottom: 0;
     gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 
 }
 
@@ -780,10 +778,33 @@ input[type="password"], .email {
     text-transform: capitalize;
 }
 
+.offcanvas-body .navbar-nav .nav-item .nav-link{
+    padding: 8px 0;
+    margin: 0 8px;
+}
+
+.dropdown-menu-req{
+    padding: 12px;
+}
+
+.contact-modal{
+    left: auto;
+    top: auto;
+    position: relative;
+    transform:inherit
+}
+
+.w-100-contact{
+    height: auto;
+}
+
+
+
 /* responsive */
 
 @media ((min-width: 365px) and (max-width: 500px)) {
 
+    
     .list-group .list-group-item{
         font-size: 12px;
         display: flex;
@@ -890,17 +911,29 @@ input[type="password"], .email {
         padding: 0 10px
     }
 
-    .modal-footer button {
+    .modal-footer-prod button {
         font-size: 12px;
     }
 
-    .modal {
+    .product-modal {
         height: 98%;
+    }
+    .navs .con-navs{
+        padding: 0 15px;
     }
 
 }
 
 @media ((min-width: 320px) and (max-width: 364px)) {
+
+    .navbar-toggler .navbar-toggler-icon{
+        width: 20px;
+        height: 15px;
+    }
+
+    .navs .con-navs{
+        padding: 0 15px;
+    }
 
     .list-group .list-group-item{
         font-size: 12px;
@@ -946,7 +979,7 @@ input[type="password"], .email {
         font-size: 23px;
     }
 
-    .modal {
+    .product-modal {
         height: 98%;
     }
 
@@ -1011,7 +1044,7 @@ input[type="password"], .email {
         width: 300px;
     }
 
-    .modal-footer button {
+    .modal-footer-prod button {
         font-size: 12px;
     }
 
@@ -1025,11 +1058,11 @@ input[type="password"], .email {
 
 
 
-    .modal {
+    .product-modal {
         height: 98%;
     }
 
-    .modal-dialog {
+    .modal-dialog-prod {
         max-width: 750px;
         margin: 0 auto;
         padding: 20px;
@@ -1123,7 +1156,7 @@ input[type="password"], .email {
         height: 98%;
     }
 
-    .modal-dialog {
+    .modal-dialog-prod {
         max-width: 991px;
         margin: 0 auto;
         padding: 20px;
@@ -1199,7 +1232,7 @@ input[type="password"], .email {
         height: 98%;
     }
 
-    .modal-dialog {
+    .modal-dialog-prod {
         max-width: 1199px;
         margin: 0 auto;
         padding: 20px;

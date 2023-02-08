@@ -18,13 +18,13 @@ include_once('../homeIncludes/header.php');
     <?php
 
     
-    $sql = "SELECT name, description, img FROM services";
+    $sql = "SELECT service_name, description, img FROM services";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0) {
       
       while ($row = mysqli_fetch_assoc($result)) {
-        $name = $row['name'];
+        $name = $row['service_name'];
         $description = $row['description'];
         $image = $row['img'];
 

@@ -1,7 +1,9 @@
 <?php
+session_start();
 require_once '../homeIncludes/dbconfig.php';
 
-
+$transaction_code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 11);
+$cust_id = $_SESSION["cust_id"];
 $fname = htmlentities($_POST['fname']);
 $mname = htmlentities($_POST['mname']);
 $lname = htmlentities($_POST['lname']);
@@ -16,8 +18,9 @@ if(isset($_POST['package'])){
 }
 $other = $_POST['other'];
 
+$_SESSION['transaction_code'] = $transaction_code;
 
-$query = "INSERT INTO `service_request`(`fname`, `mname`, `lname`, `email`, `phone`, `address`, `service_id`, `pkg_id`, `other`) VALUES ('$fname', '$mname', '$lname', '$email', '$phone', '$address', '$stype', '$package', '$other')";
+$query = "INSERT INTO service_request (`cust_id`, `transaction_code`, `service_id`, `pkg_id`, `other`) VALUES ('$cust_id', '$transaction_code', '$stype', '$package', '$other')";
 $result = mysqli_query($conn, $query);
 
 
