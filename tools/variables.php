@@ -12,5 +12,6 @@
     $accsetting = "";
     $repairtransac = "";
     $servicetransac = "";
+    $history = "";
 
 ?>

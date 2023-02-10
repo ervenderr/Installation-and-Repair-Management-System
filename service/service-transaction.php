@@ -1,6 +1,6 @@
 <?php
 session_start();
-// error_reporting(0);
+error_reporting(0);
 if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
@@ -75,6 +75,9 @@ $row = mysqli_fetch_assoc($result);
                     <div>
                         <a href="../service/service-transaction.php" class="<?php echo $servicetransac; ?>">Service
                             request</a>
+                    </div>
+                    <div>
+                        <a href="../mytransactions/transaction-history.php" class="<?php echo $history; ?>">Transaction History</a>
                     </div>
                     <div>
                         <a href="../mytransactions/account.php" class="<?php echo $accsetting; ?>">Account setting</a>

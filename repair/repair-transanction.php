@@ -48,6 +48,9 @@ $row = mysqli_fetch_assoc($result);
                             request</a>
                     </div>
                     <div>
+                        <a href="../mytransactions/transaction-history.php" class="<?php echo $history; ?>">Transaction History</a>
+                    </div>
+                    <div>
                         <a href="../mytransactions/account.php" class="<?php echo $accsetting; ?>">Account setting</a>
                     </div>
                     <div>

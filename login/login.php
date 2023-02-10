@@ -1,6 +1,7 @@
 <?php
 session_start();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,16 +9,8 @@ session_start();
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../js/script.js" defer></script>
-    <link rel="stylesheet" href="../css/login.css" />
-    
-    <title>
-        <?php echo $page_title; ?>
-    </title>
+    <title><?php echo $page_title; ?></title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <?php
@@ -49,30 +42,45 @@ if (isset($_POST['submit'])){
 }
 ?>
 
-
 <body>
-  
-  <div class="wrapper">
-    <h2>Log in</h2>
-    
-    <form action="login.php" method="POST">
-      <div class="input-box">
-        <input type="email" placeholder="Enter your email" name="email" required>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Create password" name="password" required>
-      </div>
-      <div class="policy">
-        <input type="checkbox">
-        <h3>Remember me</h3>
-      </div>
-      <div class="input-box button">
-        <input type="Submit" value="LOG IN" name="submit">
-      </div>
-      <div class="text">
-        <h3>Don't have an account? <a href="#">Register now</a></h3>
-      </div>
-    </form>
-  </div>
+    <!-- partial:index.partial.html -->
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <title>Slide Navbar</title>
+        <link rel="stylesheet" type="text/css" href="../css/login.css">
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="main">
+            <input type="checkbox" id="chk" aria-hidden="true">
+
+            <div class="signup">
+                <form action="login.php" method="POST">
+                    <label for="chk" aria-hidden="true">Sign up</label>
+                    <input type="text" name="txt" placeholder="User name" required="">
+                    <input type="email" name="email" placeholder="Email" required="">
+                    <input type="password" name="pswd" placeholder="Password" required="">
+                    <button>Sign up</button>
+                </form>
+            </div>
+
+            <div class="login">
+                <form action="login.php" method="POST">
+                    <label for="chk" aria-hidden="true">Login</label>
+                    <input type="email" name="email" placeholder="Email" required="">
+                    <input type="password" name="password" placeholder="Password" required="">
+                    <button name="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </body>
+
+    </html>
+    <!-- partial -->
+
 </body>
+
 </html>
