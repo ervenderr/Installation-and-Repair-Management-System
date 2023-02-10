@@ -19,7 +19,7 @@ include_once('../homeIncludes/header.php');
         <div class="container">
             <div class="left">
                 <div class="big-title">
-                    <h1>Start Exploring now PLEASE.</h1>
+                    <h1>Start Exploring now.</h1>
                 </div>
                 <p class="texts">
                     We offer a wide range of repair for most types of electronics and
