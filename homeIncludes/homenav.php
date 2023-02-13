@@ -44,7 +44,7 @@
                     if (!isset($_SESSION['logged_id'])) {
                         echo '<ul class="nav-item signinup">
                                             <li><a href="../login/login.php" class="nav-link nav-links signin" type="button">sign in</a></li>
-                                            <li><a href="../login/signup.php" class="nav-link nav-links signup" type="button">Sign up</a></li>
+                                            <li><a href="../login/login.php" class="nav-link nav-links signup" type="button">Sign up</a></li>
                                         </ul>';
                     } else {
                         echo '<div class="btn-group accpc">
