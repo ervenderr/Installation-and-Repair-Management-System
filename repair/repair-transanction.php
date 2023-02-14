@@ -131,7 +131,6 @@ $row = mysqli_fetch_assoc($result);
                             <li class="list-group-item border-left-0 bold-text"><?php echo $row['account_id']?></li>
                             <li class="list-group-item border-left-0 bold-text"></li>
                         </ul>
-                        
                     </div>
                     <button id="download" class="download">Download Ticket</button>
                     

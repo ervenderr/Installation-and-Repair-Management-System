@@ -13,5 +13,6 @@
     $repairtransac = "";
     $servicetransac = "";
     $history = "";
+    $uibasic = "";
 
 ?>
