@@ -50,12 +50,15 @@ include_once('../homeincludes/dbconfig.php');
                         <?php
                         // Perform the query
                         $query = "SELECT rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
-                                  FROM rprq
-                                  JOIN customer ON rprq.Cust_id = customer.Cust_id;";
+                        FROM rprq
+                        JOIN customer ON rprq.Cust_id = customer.Cust_id
+                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+
                         $result = mysqli_query($conn, $query);
                         $id = 1;
                         // Loop over the rows and output the data for each row
                         while ($row = mysqli_fetch_assoc($result)) {
+                          
                           echo "<tr>";
                           echo "<td>" . $id . "</td>";
                           echo "<td>" . $row['transaction_code'] . "</td>";
@@ -63,9 +66,9 @@ include_once('../homeincludes/dbconfig.php');
                           echo "<td>";
                           $statusClass = '';
                           if ($row['status'] == 'Pending') {
-                            $statusClass = 'badge-gradient-success';
+                            $statusClass = 'badge-gradient-warning';
                           } else if ($row['status'] == 'In-progress') {
-                            $statusClass = 'badge-gradient-primary';
+                            $statusClass = 'badge-gradient-info';
                           } else if ($row['status'] == 'Done') {
                             $statusClass = 'badge-gradient-success';
                           } else {
@@ -75,7 +78,7 @@ include_once('../homeincludes/dbconfig.php');
 
                           echo "<td>" . $row['date_req'] . "</td>";
                           echo "<td>
-                          <a href='view-transaction.php?rowid=" . $id . "'><i class='fas fa-eye text-primary view-account' data-rowid='" . $id . "'></i></a>
+                          <a href='view-transaction.php?transaction_code=" . $row['transaction_code'] . "&rowid=" . $id . "'><i class='fas fa-eye text-primary view-account' data-rowid='" . $id . "'></i></a>
                           <i class='fas fa-edit text-success'></i> 
                           <i class='fas fa-trash-alt text-danger'></i>
                           </td>";

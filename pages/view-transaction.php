@@ -3,14 +3,16 @@ include_once('../admin_includes/header.php');
 include_once('../homeincludes/dbconfig.php');
 
 $rowid = $_GET['rowid'];
+$tcode = $_GET['transaction_code'];
     
-    // Perform the query to retrieve the data for the selected row
-$query = "SELECT rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
-            FROM rprq
-            JOIN customer ON rprq.cust_id = customer.cust_id
-            JOIN accounts ON customer.account_id = accounts.account_id
-            WHERE rprq.cust_id = '" . $rowid . "';";
+// Perform the query to retrieve the data for the selected row
+$query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+          FROM rprq
+          JOIN customer ON rprq.cust_id = customer.cust_id
+          JOIN accounts ON customer.account_id = accounts.account_id
+          WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
+
 
 // Check if the query was successful and output the data
 if (mysqli_num_rows($result) > 0) {
@@ -40,7 +42,15 @@ if (mysqli_num_rows($result) > 0) {
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <a href="transaction.php">
+                                <?php
+                                $href = "";
+                                if ($row['status'] == 'Pending'){
+                                    $href = "pending.php";
+                                }else{
+                                    $href = "transaction.php";
+                                }
+                                ?>
+                                <a href="<?php echo $href; ?>">
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <span></span><i class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
                                     </i>
@@ -64,7 +74,7 @@ if (mysqli_num_rows($result) > 0) {
                                                 if ($row['status'] == 'Pending') {
                                                   $statusClass = 'badge-gradient-warning';
                                                 } else if ($row['status'] == 'In-progress') {
-                                                  $statusClass = 'badge-gradient-primary';
+                                                  $statusClass = 'badge-gradient-info';
                                                 } else if ($row['status'] == 'Done') {
                                                   $statusClass = 'badge-gradient-success';
                                                 } else {
