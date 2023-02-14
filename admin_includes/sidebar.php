@@ -21,6 +21,7 @@
               </a>
             </li>
             <li class="nav-item">
+<<<<<<< Updated upstream
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Basic UI Elements</span>
                 <i class="menu-arrow"></i>
@@ -30,6 +31,30 @@
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/buttons.html">Buttons</a></li>
                   <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/typography.html">Typography</a></li>
+=======
+              <a class="nav-link" data-bs-toggle="collapse" href="#uibasic" aria-expanded="false" aria-controls="uibasic">
+                <span class="menu-title">Repair request</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-clipboard-text menu-icon"></i>
+              </a>
+              <div class="collapse" id="uibasic">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="../pages/transaction.php">Transactions</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../pages/pending.php">Pending request</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+                <span class="menu-title">Service request</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-clipboard-text menu-icon"></i>
+              </a>
+              <div class="collapse" id="ui-basic2">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/buttons.html">Transactions</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/typography.html">Pending request</a></li>
+>>>>>>> Stashed changes
                 </ul>
               </div>
             </li>
@@ -39,6 +64,7 @@
                 <i class="mdi mdi-contacts menu-icon"></i>
               </a>
             </li>
+<<<<<<< Updated upstream
             <li class="nav-item">
               <a class="nav-link" href="../pages/forms/basic_elements.html">
                 <span class="menu-title">Forms</span>
@@ -90,5 +116,7 @@
                 </div>
               </span>
             </li>
+=======
+>>>>>>> Stashed changes
           </ul>
         </nav>

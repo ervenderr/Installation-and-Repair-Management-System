@@ -11294,6 +11294,11 @@ code {
     width: 36px;
     height: 36px;
     border-radius: 4px;
+<<<<<<< Updated upstream
+=======
+    background: linear-gradient(to bottom, #015F6B, #04bcd4);
+
+>>>>>>> Stashed changes
     text-align: center;
     -webkit-box-shadow: 0px 3px 8.3px 0.7px rgba(163, 93, 255, 0.35);
     box-shadow: 0px 3px 8.3px 0.7px rgba(163, 93, 255, 0.35); }
@@ -14204,11 +14209,22 @@ dl {
           color: #015F6B; }
       .sidebar .nav .nav-item:hover {
         background: #fcfcfc; }
+<<<<<<< Updated upstream
         .sidebar .nav .nav-item.hover > .nav-link .menu-icon {
           color: #015F6B; }
         .sidebar .nav .nav-item:hover > .nav-link .menu-title{
           color: #015F6B; }
           
+=======
+        .sidebar .nav .nav-item:hover > .nav-link .menu-title{
+          color: #015F6B; }
+       
+      .sidebar .nav .nav-item:hover {
+        background: #fcfcfc; }
+        .sidebar .nav .nav-item:hover > .nav-link .menu-icon{
+          color: #015F6B; }
+
+>>>>>>> Stashed changes
       .sidebar .nav .nav-item.nav-profile .nav-link {
         height: auto;
         line-height: 1;
@@ -14273,7 +14289,11 @@ dl {
               left: auto;
               right: 0; }
           .sidebar .nav.sub-menu .nav-item .nav-link.active {
+<<<<<<< Updated upstream
             color: #b66dff;
+=======
+            color: #015F6B;
+>>>>>>> Stashed changes
             background: transparent; }
           .sidebar .nav.sub-menu .nav-item .nav-link:hover {
             color: #5c615d; }
@@ -14459,4 +14479,30 @@ dl {
   -ms-flex-positive: 1;
   flex-grow: 1; }
 
+<<<<<<< Updated upstream
+=======
+
+  .list-group{
+    width: 100%;
+    min-width:0;
+}
+
+.list-group .list-group-item{
+    height: 40px;
+    width: 100%;
+    word-break: break-all;
+    max-width: 100%;
+    white-space: normal;
+}
+
+.red{
+  background-color: #C01E1E;
+}
+
+.btn-details{
+  gap: 15px;
+  padding-top: 20px;
+}
+
+>>>>>>> Stashed changes
 /*# sourceMappingURL=style.css.map */
