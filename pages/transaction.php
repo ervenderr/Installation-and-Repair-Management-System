@@ -72,8 +72,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                error_reporting(E_ALL);
-ini_set('display_errors', 1);
                                                     // Perform the query
                                                     $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
                                                         FROM rprq
