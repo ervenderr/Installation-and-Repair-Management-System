@@ -83,13 +83,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
                                                     while ($row = mysqli_fetch_assoc($result)) {
                                                         $modalId = 'editTransactionModal-' . $id;
-                                                    ?>
-                                                <tr>
-                                                    <td><?= $id ?></td>
-                                                    <td><?= $row['transaction_code'] ?></td>
-                                                    <td><?= $row['fname'] . ", " . $row['lname'] ?></td>
-                                                    <td>
-                                                        <?php
+                                                        echo '<tr>';
+                                                        echo '<td>' . $id . '</td>';
+                                                        echo '<td>' . $row['transaction_code'] . '</td>';
+                                                        echo '<td>' . $row['fname'] . ', ' . $row['lname'] . '</td>';
+                                                    
                                                         $statusClass = '';
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
@@ -100,70 +98,24 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         } else {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         }
-                                                    ?>
-                                                        <label
-                                                            class="badge <?= $statusClass ?>"><?= $row['status'] ?></label>
-                                                    </td>
-                                                    <td><?= $row['date_req'] ?></td>
-                                                    <td>
-                                                        <a
-                                                            href="view-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
-                                                            <i class="fas fa-eye text-primary view-account"
-                                                                data-rowid="<?= $id ?>"></i></a>
-                                                        <a
-                                                            href="edit-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                            <i class="fas fa-edit text-primary view-account"
-                                                                data-rowid="<?= $id?>"></i></a>
-                                                        <a
-                                                            href="delete-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                            <i class="fas fa-trash-alt text-danger view-account"
-                                                                data-rowid="<?= $id?>"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td><?= $id ?></td>
-                                                    <td><?= $row['transaction_code'] ?></td>
-                                                    <td><?= $row['fname'] . ", " . $row['lname'] ?></td>
-                                                    <td>
-                                                        <?php
-                                                    $statusClass = '';
-                                                    if ($row['status'] == 'Pending') {
-                                                        $statusClass = 'badge-gradient-warning';
-                                                    } else if ($row['status'] == 'In-progress') {
-                                                        $statusClass = 'badge-gradient-info';
-                                                    } else if ($row['status'] == 'Done') {
-                                                        $statusClass = 'badge-gradient-success';
-                                                    } else {
-                                                        $statusClass = 'badge-gradient-secondary';
+                                                    
+                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
+                                                        echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td>';
+                                                        echo '<a href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-edit text-primary view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '</td>';
+                                                        echo '</tr>';
+                                                        $id++;
                                                     }
                                                     ?>
-                                                        <label
-                                                            class="badge <?= $statusClass ?>"><?= $row['status'] ?></label>
-                                                    </td>
-                                                    <td><?= $row['date_req'] ?></td>
-                                                    <td>
-                                                        <a
-                                                            href="view-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
-                                                            <i class="fas fa-eye text-primary view-account"
-                                                                data-rowid="<?= $id ?>"></i>
-                                                        </a>
-                                                        <a
-                                                            href="edit-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
-                                                            <i class="fas fa-edit text-primary view-account"
-                                                                data-rowid="<?= $id ?>"></i>
-                                                        </a>
-                                                        <a
-                                                            href="delete-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
-                                                            <i class="fas fa-trash-alt text-danger view-account"
-                                                                data-rowid="<?= $id ?>"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <?php
-                                            $id++;
-                                        }
-                                        ?>
-
                                             </tbody>
                                         </table>
                                     </div>
