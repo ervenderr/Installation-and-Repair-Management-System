@@ -7,14 +7,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 include_once('../admin_includes/header.php');
 include_once('../homeincludes/dbconfig.php');
-
- $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
-        FROM rprq
-        JOIN customer ON rprq.Cust_id = customer.Cust_id
-        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
-
-    $result = mysqli_query($conn, $query);
-    $id = 1;
 ?>
 
 <body>
@@ -82,7 +74,13 @@ include_once('../homeincludes/dbconfig.php');
                                             <tbody>
                                                 <?php
                                                     // Perform the query
-                                                   
+                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
+                                                        FROM rprq
+                                                        JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+
+                                                    $result = mysqli_query($conn, $query);
+                                                    $id = 1;
                                                     while ($row = mysqli_fetch_assoc($result)) {
                                                         $modalId = 'editTransactionModal-' . $id;
                                                         echo '<tr>';
