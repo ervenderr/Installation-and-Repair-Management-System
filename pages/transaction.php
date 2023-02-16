@@ -26,22 +26,22 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </span> Repair Transaction
                         </h3>
                         <?php
-            if (isset($_GET['msg'])) {
-                $msg = $_GET['msg'];
-                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                '. $msg .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
+                            if (isset($_GET['msg'])) {
+                                $msg = $_GET['msg'];
+                                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                '. $msg .'
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                            }
 
-            if (isset($_GET['msg2'])) {
-                $msg2 = $_GET['msg2'];
-                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                '. $msg2 .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-        ?>
+                            if (isset($_GET['msg2'])) {
+                                $msg2 = $_GET['msg2'];
+                                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                '. $msg2 .'
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                            }
+                        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
@@ -81,9 +81,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
-                                                    while ($row = mysqli_fetch_assoc($result)) :
+                                                    while ($row = mysqli_fetch_assoc($result)) {
                                                         $modalId = 'editTransactionModal-' . $id;
-                                                ?>
+                                                    ?>
                                                 <tr>
                                                     <td><?= $id ?></td>
                                                     <td><?= $row['transaction_code'] ?></td>
@@ -106,18 +106,62 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     </td>
                                                     <td><?= $row['date_req'] ?></td>
                                                     <td>
-                                                        <a href="view-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
-                                                            <i class="fas fa-eye text-primary view-account" data-rowid="<?= $id ?>"></i></a>
-                                                        <a href="edit-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                        <i class="fas fa-edit text-primary view-account" data-rowid="<?= $id?>"></i></a>
-                                                        <a href="delete-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                        <i class="fas fa-trash-alt text-danger view-account" data-rowid="<?= $id?>"></i></a>
+                                                        <a
+                                                            href="view-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
+                                                            <i class="fas fa-eye text-primary view-account"
+                                                                data-rowid="<?= $id ?>"></i></a>
+                                                        <a
+                                                            href="edit-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
+                                                            <i class="fas fa-edit text-primary view-account"
+                                                                data-rowid="<?= $id?>"></i></a>
+                                                        <a
+                                                            href="delete-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
+                                                            <i class="fas fa-trash-alt text-danger view-account"
+                                                                data-rowid="<?= $id?>"></i></a>
                                                     </td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td><?= $id ?></td>
+                                                    <td><?= $row['transaction_code'] ?></td>
+                                                    <td><?= $row['fname'] . ", " . $row['lname'] ?></td>
+                                                    <td>
+                                                        <?php
+                                                    $statusClass = '';
+                                                    if ($row['status'] == 'Pending') {
+                                                        $statusClass = 'badge-gradient-warning';
+                                                    } else if ($row['status'] == 'In-progress') {
+                                                        $statusClass = 'badge-gradient-info';
+                                                    } else if ($row['status'] == 'Done') {
+                                                        $statusClass = 'badge-gradient-success';
+                                                    } else {
+                                                        $statusClass = 'badge-gradient-secondary';
+                                                    }
+                                                    ?>
+                                                        <label
+                                                            class="badge <?= $statusClass ?>"><?= $row['status'] ?></label>
+                                                    </td>
+                                                    <td><?= $row['date_req'] ?></td>
+                                                    <td>
+                                                        <a
+                                                            href="view-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
+                                                            <i class="fas fa-eye text-primary view-account"
+                                                                data-rowid="<?= $id ?>"></i>
+                                                        </a>
+                                                        <a
+                                                            href="edit-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
+                                                            <i class="fas fa-edit text-primary view-account"
+                                                                data-rowid="<?= $id ?>"></i>
+                                                        </a>
+                                                        <a
+                                                            href="delete-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
+                                                            <i class="fas fa-trash-alt text-danger view-account"
+                                                                data-rowid="<?= $id ?>"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                                 <?php
                                             $id++;
-                                            endwhile;
+                                        }
                                         ?>
 
                                             </tbody>
@@ -297,7 +341,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             // You can use AJAX to submit the form asynchronously, or just let it submit normally
         }
     });
-</script>
+    </script>
 
 </body>
 
