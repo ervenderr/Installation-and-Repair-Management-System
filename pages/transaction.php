@@ -1,150 +1,125 @@
 <?php
-include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
-
 session_start();
+include_once('../admin_includes/header.php');
+
+
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
-  }
+}
+
 ?>
 
-<body>
+  <body>
     <div class="container-scroller">
-        <!-- partial:partials/_navbar.html -->
-        <?php include_once('../admin_includes/navbar.php'); ?>
+      <!-- partial:partials/_navbar.html -->
+      <?php include_once('../admin_includes/navbar.php'); ?>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <?php include_once('../admin_includes/sidebar.php'); ?>
         <!-- partial -->
-        <div class="container-fluid page-body-wrapper">
-            <!-- partial:partials/_sidebar.html -->
-            <?php include_once('../admin_includes/sidebar.php'); ?>
-            <!-- partial -->
-            <div class="main-panel">
-                <div class="content-wrapper">
-                    <div class="page-header">
-                        <h3 class="page-title">
-                            <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-clipboard-text"></i>
-                            </span> Repair Transaction
-                        </h3>
-                        <?php
-            if (isset($_GET['msg'])) {
-                $msg = $_GET['msg'];
-                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                '. $msg .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-
-            if (isset($_GET['msg2'])) {
-                $msg2 = $_GET['msg2'];
-                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                '. $msg2 .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-        ?>
-                        <nav aria-label="breadcrumb">
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item active btn-group-sm" aria-current="page">
-                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addTransactionModal">
-                                        Add New Transaction <i class=" mdi mdi-plus "></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">List of Repair Transaction</h4>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th> # </th>
-                                                    <th> Transaction Code </th>
-                                                    <th> Customer </th>
-                                                    <th> Status </th>
-                                                    <th> Date </th>
-                                                    <th> Action </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                    // Perform the query
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
-                                                        FROM rprq
-                                                        JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
-
-                                                    $result = mysqli_query($conn, $query);
-                                                    $id = 1;
-
-                                                    while ($row = mysqli_fetch_assoc($result)) :
-                                                        $modalId = 'editTransactionModal-' . $id;
-                                                ?>
-                                                <tr>
-                                                    <td><?= $id ?></td>
-                                                    <td><?= $row['transaction_code'] ?></td>
-                                                    <td><?= $row['fname'] . ", " . $row['lname'] ?></td>
-                                                    <td>
-                                                        <?php
-                                                        $statusClass = '';
-                                                        if ($row['status'] == 'Pending') {
-                                                            $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
-                                                            $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-success';
-                                                        } else {
-                                                            $statusClass = 'badge-gradient-secondary';
-                                                        }
-                                                    ?>
-                                                        <label
-                                                            class="badge <?= $statusClass ?>"><?= $row['status'] ?></label>
-                                                    </td>
-                                                    <td><?= $row['date_req'] ?></td>
-                                                    <td>
-                                                        <a href="view-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
-                                                            <i class="fas fa-eye text-primary view-account" data-rowid="<?= $id ?>"></i></a>
-                                                        <a href="edit-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                        <i class="fas fa-edit text-primary view-account" data-rowid="<?= $id?>"></i></a>
-                                                        <a href="delete-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                        <i class="fas fa-trash-alt text-danger view-account" data-rowid="<?= $id?>"></i></a>
-                                                    </td>
-                                                </tr>
-
-                                                <?php
-                                            $id++;
-                                            endwhile;
-                                        ?>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <?php include_once('../modals/add-repair-modal.php') ?>
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
-                <footer class="footer">
-                    <div class="container-fluid d-flex justify-content-between">
-                        <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright ©
-                            protontech.com 2023</span>
-                        <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"><a
-                                href="https://www.proton-tech.online/" target="_blank">ProtonTech</a></span>
-                    </div>
-                </footer>
-                <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">
+                <span class="page-title-icon text-white me-2">
+                  <i class="mdi mdi-home"></i>
+                </span> Dashboard
+              </h3>
+              <nav aria-label="breadcrumb">
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item active" aria-current="page">
+                    <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+                  </li>
+                </ul>
+              </nav>
             </div>
-            <!-- main-panel ends -->
+            <div class="row">
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-danger card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Weekly Repair Request <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5">91</h2>
+                    <h6 class="card-text">Increased by 60%</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-info card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Weekly Service Request <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5">45</h2>
+                    <h6 class="card-text">Decreased by 10%</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-success card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Total Sales <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5">$ 95,5741</h2>
+                    <h6 class="card-text">Increased by 5%</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-warning card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Pending Repair Request <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5">2</h2>
+                    <h6 class="card-text">Increased by 60%</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-primary card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Pending Service Request <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5">2</h2>
+                    <h6 class="card-text">Decreased by 10%</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="clearfix">
+                      <h4 class="card-title float-left">Sales</h4>
+                      <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-right"></div>
+                    </div>
+                    <canvas id="visit-sale-chart" class="mt-4"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+              <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © protontech.com 2023</span>
+              <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"><a href="https://www.proton-tech.online/" target="_blank">ProtonTech</a></span>
+            </div>
+          </footer>
+          <!-- partial -->
         </div>
-        <!-- page-body-wrapper ends -->
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
@@ -163,142 +138,5 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     <script src="../assets/js/dashboard.js"></script>
     <script src="../assets/js/todolist.js"></script>
     <!-- End custom js for this page -->
-    <script>
-    // Add an event listener to the eye icon to show the modal window
-    const viewAccountIcons = document.querySelectorAll('.view-account');
-    viewAccountIcons.forEach(icon => {
-        icon.addEventListener('click', () => {
-            const rowid = icon.getAttribute('data-rowid');
-            const modal = new bootstrap.Modal(document.getElementById('accountModal'));
-            modal.show();
-            // TODO: Populate the account form with data from the rowid
-        });
-    });
-    </script>
-
-    <script>
-    const form = document.querySelector('.form-sample');
-    const fname = form.querySelector('input[name="fname"]');
-    const lname = form.querySelector('input[name="lname"]');
-    // const email = form.querySelector('input[name="email"]');
-    const phone = form.querySelector('input[name="phone"]');
-    const address = form.querySelector('input[name="address"]');
-    const etype = form.querySelector('select[name="etype"]');
-    // const electrician = form.querySelector('select[name="electrician"]');
-    const defective = form.querySelector('input[name="defective"]');
-    const shipping = form.querySelector('select[name="shipping"]');
-    const date = form.querySelector('input[name="date"]');
-    const completed = form.querySelector('input[name="completed"]');
-    const payment = form.querySelector('input[name="payment"]');
-
-    form.addEventListener('submit', (event) => {
-        let error = false;
-
-        if (fname.value === '') {
-            fname.nextElementSibling.innerText = 'Please enter first name';
-            error = true;
-        } else if (!/^[A-Z][a-z]*$/.test(fname.value)) {
-            fname.nextElementSibling.innerText = 'First name should be capitalized';
-            error = true;
-        } else {
-            fname.nextElementSibling.innerText = '';
-        }
-
-        if (lname.value === '') {
-            lname.nextElementSibling.innerText = 'Please enter last name';
-            error = true;
-        } else if (!/^[A-Z][a-z]*$/.test(lname.value)) {
-            lname.nextElementSibling.innerText = 'Last name should be capitalized';
-            error = true;
-        } else {
-            lname.nextElementSibling.innerText = '';
-        }
-
-        // if (email.value === '') {
-        //     email.nextElementSibling.innerText = 'Please enter your email';
-        //     error = true;
-        // } else {
-        //     email.nextElementSibling.innerText = '';
-        // }
-
-        if (phone.value === '') {
-            phone.nextElementSibling.innerText = 'Please enter phone number';
-            error = true;
-        } else if (!/^\d{11}$/.test(phone.value)) {
-            phone.nextElementSibling.innerText = 'Please enter a valid 11-digit phone number';
-            error = true;
-        } else {
-            phone.nextElementSibling.innerText = '';
-        }
-
-        if (address.value === '') {
-            address.nextElementSibling.innerText = 'Please enter address';
-            error = true;
-        } else if (!/^[a-zA-Z0-9\s,'-]*$/.test(address.value)) {
-            address.nextElementSibling.innerText = 'Please enter a valid address';
-            error = true;
-        } else {
-            address.nextElementSibling.innerText = '';
-        }
-
-        if (etype.value === 'None') {
-            etype.nextElementSibling.innerText = 'Please select an electronic type';
-            error = true;
-        } else {
-            etype.nextElementSibling.innerText = '';
-        }
-
-        // if (electrician.value === 'None') {
-        //     electrician.nextElementSibling.innerText = 'Please select an electrician';
-        //     error = true;
-        // } else {
-        //     electrician.nextElementSibling.innerText = '';
-        // }
-
-        if (defective.value === '') {
-            defective.nextElementSibling.innerText = 'Please enter your defective';
-            error = true;
-        } else {
-            defective.nextElementSibling.innerText = '';
-        }
-
-        if (shipping.value === 'None') {
-            shipping.nextElementSibling.innerText = 'Please select a shipping option';
-            error = true;
-        } else {
-            shipping.nextElementSibling.innerText = '';
-        }
-
-        if (date.value === '') {
-            date.nextElementSibling.innerText = 'Please select a date';
-            error = true;
-        } else {
-            date.nextElementSibling.innerText = '';
-        }
-
-        if (completed.value === '') {
-            completed.nextElementSibling.innerText = 'Please select a completion date';
-            error = true;
-        } else {
-            completed.nextElementSibling.innerText = '';
-        }
-
-        if (payment.value === '') {
-            payment.nextElementSibling.innerText = 'Please enter a payment amount';
-            error = true;
-        } else {
-            payment.nextElementSibling.innerText = '';
-        }
-
-        if (error) {
-            event.preventDefault(); // Prevent form submission if there are errors
-        } else {
-            // Submit form to server if there are no errors
-            // You can use AJAX to submit the form asynchronously, or just let it submit normally
-        }
-    });
-</script>
-
-</body>
-
+  </body>
 </html>
