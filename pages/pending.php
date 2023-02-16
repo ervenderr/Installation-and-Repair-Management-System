@@ -1,6 +1,11 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
 include_once('../homeincludes/dbconfig.php');
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
+  header('location: ../login/login.php');
+}
 
 ?>
 

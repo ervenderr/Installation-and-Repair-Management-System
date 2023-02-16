@@ -13305,10 +13305,10 @@ code {
     outline: none; }
 
 select.form-control {
-  padding: .4375rem .75rem;
+  
   border: 0;
   outline: 1px solid #ebedf2;
-  color: #c9c8c8; }
+  color: #2f2f2f; }
   select.form-control:focus {
     outline: 1px solid #ebedf2; }
   select.form-control.border-primary {
@@ -13348,6 +13348,7 @@ select.form-control {
   font-size: 0.875rem;
   line-height: 1;
   vertical-align: top;
+  color: #76838f;
   margin-bottom: .5rem; }
 
 .form-group.has-danger .form-control {
@@ -14487,4 +14488,18 @@ dl {
   padding-top: 20px;
 }
 
+.addnew{
+  background: linear-gradient(to bottom, #015F6B, #04bcd4);
+  color: #fff;
+  border: none;
+}
+
+.bread{
+  color: #868e96;
+}
+
+.error-input{
+  font-style: italic;
+  color: #a01a1f;
+}
 /*# sourceMappingURL=style.css.map */

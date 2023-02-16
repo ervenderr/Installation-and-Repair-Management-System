@@ -49,12 +49,13 @@ if (isset($_POST['submit-signup'])){
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $sql = "INSERT INTO `accounts`(`username`, `email`, `password`) VALUES ('$username','$email','$password')";
+    $user_type = "customer";
+    $sql = "INSERT INTO `accounts`(`username`, `email`, `password`, `user_type`) VALUES ('$username','$email','$password', '$user_type')";
     $result = mysqli_query($conn, $sql);
           //signup successful
         $_SESSION['email'] = $email;
         $_SESSION['logged_id'] = $_POST['account_id'];
-          header("Location: ../login/signup.php");
+          header("Location: ../login/signin.php");
         }else {
         //login failed
         $error = "Invalid email or password";

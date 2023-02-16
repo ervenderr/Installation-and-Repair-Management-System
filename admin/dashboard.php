@@ -1,5 +1,12 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
+    header('location: ../login/login.php');
+}
+
 ?>
 
   <body>
