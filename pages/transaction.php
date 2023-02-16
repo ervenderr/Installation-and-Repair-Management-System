@@ -74,10 +74,7 @@ include_once('../homeincludes/dbconfig.php');
                                             <tbody>
                                                 <?php
                                                     // Perform the query
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
-                                                        FROM rprq
-                                                        JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+                                                    
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
