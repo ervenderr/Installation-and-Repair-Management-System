@@ -1,0 +1,221 @@
+<!-- Update repair Transaction - The modal -->
+
+<?php
+
+?>
+
+<div class="modal fade" id="editTransactionModal" tabindex="-1" aria-labelledby="editTransactionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTransactionModalLabel">Update Transaction</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-sample" action="update-transaction.php" method="POST" enctype="multipart/form-data">
+                    <?php
+                    $query6 = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+                    FROM rprq
+                    JOIN customer ON rprq.cust_id = customer.cust_id
+                    JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE rprq.transaction_code = '" . $tcode . "';";
+                    $result6 = mysqli_query($conn, $query6);
+                    
+                    // Check if the query was successful and output the data
+                    if (mysqli_num_rows($result6) > 0) {
+                        $row6 = mysqli_fetch_assoc($result6);
+                    }
+                    ?>
+                    <p class="card-description"> Personal info </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-form-label" for="fname">First Name</label>
+                                <div class="">
+                                    <input type="text" name="fname" class="form-control"
+                                        value="<?php echo $row6['fname']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-form-label" for="lname">Last Name</label>
+                                <div class="">
+                                    <input type="text" name="lname" class="form-control"
+                                        value="<?php echo $row6['lname']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="sex" class="col-form-label">Sex</label>
+                                <div class="">
+                                    <select name="sex" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                        <option value="Male" <?php if ($row6['sex'] == 'Male') echo 'selected'; ?>>Male
+                                        </option>
+                                        <option value="Female" <?php if ($row6['sex'] == 'Female') echo 'selected'; ?>>
+                                            Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="birth" class="col-form-label">Date of Birth</label>
+                                <div class="">
+                                    <input name="birth" type="date" class="form-control" placeholder="dd/mm/yyyy"
+                                        value="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="email" class="col-form-label">Email</label>
+                                <div class="">
+                                    <input name="email" class="form-control" type="email"
+                                        value="<?php echo $row6['email']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="phone" class="col-form-label">Phone</label>
+                                <div class="">
+                                    <input name="phone" class="form-control" type="tel"
+                                        value="<?php echo $row6['phone']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label for="address" class="col-form-label">Address</label>
+                                <div class="">
+                                    <input name="address" class="form-control" type="text"
+                                        value="<?php echo $row6['address']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="etype" class="col-form-label">Electronic Type</label>
+                                <div class="">
+                                    <select name="etype" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                        <option value="TV" <?php if ($row6['etype'] == 'TV') echo 'selected'; ?>>TV
+                                        </option>
+                                        <option value="Refrigerator"
+                                            <?php if ($row6['etype'] == 'Refrigerator') echo 'selected'; ?>>Refrigerator
+                                        </option>
+                                        <option value="Microwave"
+                                            <?php if ($row6['etype'] == 'Microwave') echo 'selected'; ?>>Microwave
+                                        </option>
+                                        <option value="Aircon"
+                                            <?php if ($row6['etype'] == 'Aircon') echo 'selected'; ?>>
+                                            Aircon</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="electrician" class="col-form-label">Assigned Electrician</label>
+                                <div class="">
+                                    <select name="electrician" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                        <option value="John Kevin"
+                                            <?php if ($row6['electrician'] == 'John Kevin') echo 'selected'; ?>>John
+                                            Kevin</option>
+                                        <option value="Robin Junior"
+                                            <?php if ($row6['electrician'] == 'Robin Junior') echo 'selected'; ?>>Robin
+                                            Junior</option>
+                                        <option value="Aming Alyasher"
+                                            <?php if ($row6['electrician'] == 'Aming Alyasher') echo 'selected'; ?>>
+                                            Aming
+                                            Alyasher</option>
+                                        <option value="Farren Smith"
+                                            <?php if ($row6['electrician'] == 'Farren Smith') echo 'selected'; ?>>Farren
+                                            Smith</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="defective" class="col-form-label">Defective</label>
+                                <div class="">
+                                    <input name="defective" type="text" class="form-control"
+                                        value="<?php echo $row6['defective']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="shipping" class="col-form-label">Shipping option</label>
+                                <div class="">
+                                    <select name="shipping" class="form-control">
+                                        <option value="None">--Select--</option>
+                                        <option value="Pickup"
+                                            <?php if ($row6['shipping'] == 'Pickup') echo 'selected'; ?>>Pickup</option>
+                                        <option value="Deliver"
+                                            <?php if ($row6['shipping'] == 'Deliver') echo 'selected'; ?>>Deliver
+                                        </option>
+                                        <option value="Home Service"
+                                            <?php if ($row['shipping'] == 'Home Service') echo 'selected'; ?>>Home
+                                            Service</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="date" class="col-form-label">Date</label>
+                                <div class="">
+                                    <input name="date" type="date" class="form-control" placeholder="dd/mm/yyyy"
+                                        value="<?php echo $row6['date_req']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="completed" class="col-form-label">Date Completed</label>
+                                <div class="">
+                                    <input name="group" type="date" class="form-control" placeholder="dd/mm/yyyy"
+                                        value="<?php echo $row6['date_req']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="payment" class="col-form-label">Payment</label>
+                                <div class="">
+                                    <input name="payment" class="form-control" type="text" value="$ " />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <input name="submit" type="submit" class="btn btn-primary" value="Add Transaction" />
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

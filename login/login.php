@@ -9,7 +9,7 @@ session_start();
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php echo $page_title; ?></title>
+    <title> ProtonTech | Signin/Signup</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -22,7 +22,7 @@ if (isset($_POST['submit'])){
     //check email and password from db
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $sql = "SELECT * FROM accounts, customer WHERE email='$email' AND password='$password' AND customer.account_id=accounts.account_id AND user_type='customer'";
+    $sql = "SELECT * FROM accounts, customer WHERE email='$email' AND password='$password' AND customer.account_id=accounts.account_id";
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) > 0){
       while($row = mysqli_fetch_assoc($result)) {
@@ -33,6 +33,8 @@ if (isset($_POST['submit'])){
         $_SESSION['cust_id'] = $row['cust_id'];
         if($_SESSION['user_type'] == 'customer' ){
           header("Location: ../homepage/home.php");
+        }elseif($_SESSION['user_type'] == 'admin' ){
+            header("Location: ../admin/dashboard.php");
         }
       }
   }else {
@@ -40,6 +42,27 @@ if (isset($_POST['submit'])){
         $error = "Invalid email or password";
     }
 }
+
+
+if (isset($_POST['submit-signup'])){
+    //check email and password from db
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $user_type = "customer";
+    $sql = "INSERT INTO `accounts`(`username`, `email`, `password`, `user_type`) VALUES ('$username','$email','$password', '$user_type')";
+    $result = mysqli_query($conn, $sql);
+          //signup successful
+        $_SESSION['email'] = $email;
+        $_SESSION['logged_id'] = $_POST['account_id'];
+          header("Location: ../login/signin.php");
+        }else {
+        //login failed
+        $error = "Invalid email or password";
+    }
+
+
+
 ?>
 
 <body>
@@ -60,10 +83,11 @@ if (isset($_POST['submit'])){
             <div class="signup">
                 <form action="login.php" method="POST">
                     <label for="chk" aria-hidden="true">Sign up</label>
-                    <input type="text" name="txt" placeholder="User name" required="">
+                    <input type="text" name="username" placeholder="User name" required="">
                     <input type="email" name="email" placeholder="Email" required="">
-                    <input type="password" name="pswd" placeholder="Password" required="">
-                    <button>Sign up</button>
+                    <input type="password" name="password" placeholder="Password" required="">
+                    <button name="submit-signup">Sign In</button>
+
                 </form>
             </div>
 
@@ -72,7 +96,7 @@ if (isset($_POST['submit'])){
                     <label for="chk" aria-hidden="true">Login</label>
                     <input type="email" name="email" placeholder="Email" required="">
                     <input type="password" name="password" placeholder="Password" required="">
-                    <button name="submit">Login</button>
+                    <button name="submit">Log In</button>
                 </form>
             </div>
         </div>

@@ -6,5 +6,4 @@
     session_start();
     header('location: homepage/home.php');
     
-
 ?>
