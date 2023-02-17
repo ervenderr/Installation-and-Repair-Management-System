@@ -105,7 +105,7 @@ include_once('../homeIncludes/dbconfig.php');
                                                         echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
                                                         echo '</a>';
                                                         echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-edit text-info view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $id . '"></i>';
                                                         echo '</a>';
                                                         echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
