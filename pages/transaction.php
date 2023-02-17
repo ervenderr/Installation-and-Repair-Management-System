@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 
 include_once('../admin_includes/header.php');
-ini_set('display_errors', 1); error_reporting(E_ALL);
+include_once('../homeIncludes/dbconfig.php');
 ?>
 
 <body>
@@ -73,7 +73,6 @@ ini_set('display_errors', 1); error_reporting(E_ALL);
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                    include_once('../homeIncludes/dbconfig.php');
                                                     $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
