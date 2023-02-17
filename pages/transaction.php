@@ -1,11 +1,12 @@
 <?php
 session_start();
-include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
-
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
   }
+
+
+include_once('../admin_includes/header.php');
+include_once('../homeincludes/dbconfig.php');
 ?>
 
 <body>
@@ -79,7 +80,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
-
                                                     while ($row = mysqli_fetch_assoc($result)) {
                                                         $modalId = 'editTransactionModal-' . $id;
                                                         echo '<tr>';
