@@ -81,15 +81,13 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
-                                                    while ($row = mysqli_fetch_assoc($result)) :
+                                                    while ($row = mysqli_fetch_assoc($result)) {
                                                         $modalId = 'editTransactionModal-' . $id;
-                                                ?>
-                                                <tr>
-                                                    <td><?= $id ?></td>
-                                                    <td><?= $row['transaction_code'] ?></td>
-                                                    <td><?= $row['fname'] . ", " . $row['lname'] ?></td>
-                                                    <td>
-                                                        <?php
+                                                        echo '<tr>';
+                                                        echo '<td>' . $id . '</td>';
+                                                        echo '<td>' . $row['transaction_code'] . '</td>';
+                                                        echo '<td>' . $row['fname'] . ', ' . $row['lname'] . '</td>';
+                                                    
                                                         $statusClass = '';
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
@@ -100,25 +98,24 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         } else {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         }
-                                                    ?>
-                                                        <label
-                                                            class="badge <?= $statusClass ?>"><?= $row['status'] ?></label>
-                                                    </td>
-                                                    <td><?= $row['date_req'] ?></td>
-                                                    <td>
-                                                        <a href="view-transaction.php?transaction_code=<?= $row['transaction_code'] ?>&rowid=<?= $id ?>">
-                                                            <i class="fas fa-eye text-primary view-account" data-rowid="<?= $id ?>"></i></a>
-                                                        <a href="edit-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                        <i class="fas fa-edit text-primary view-account" data-rowid="<?= $id?>"></i></a>
-                                                        <a href="delete-transaction.php?transaction_code=<?=$row['transaction_code']?>&rowid=<?= $id?>">
-                                                        <i class="fas fa-trash-alt text-danger view-account" data-rowid="<?= $id?>"></i></a>
-                                                    </td>
-                                                </tr>
-
-                                                <?php
-                                            $id++;
-                                            endwhile;
-                                        ?>
+                                                    
+                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
+                                                        echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td>';
+                                                        echo '<a href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '</td>';
+                                                        echo '</tr>';
+                                                        $id++;
+                                                    }
+                                                ?>
 
                                             </tbody>
                                         </table>
@@ -300,7 +297,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             // You can use AJAX to submit the form asynchronously, or just let it submit normally
         }
     });
-</script>
+    </script>
 
 </body>
 
