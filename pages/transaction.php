@@ -80,14 +80,7 @@ include_once('../admin_includes/header.php');
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
-                                                    while ($row = mysqli_fetch_assoc($result)) {
-                                                        $modalId = 'editTransactionModal-' . $id;
-                                                        echo '<tr>';
-                                                        echo '<td>' . $id . '</td>';
-                                                        echo '<td>' . $row['transaction_code'] . '</td>';
-                                                        echo '</tr>';
-                                                        $id++;
-                                                    }
+                                                    
                                                     ?>
                                             </tbody>
                                         </table>
