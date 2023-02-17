@@ -6,7 +6,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
 ?>
 
 <body>
@@ -73,6 +72,7 @@ include_once('../homeincludes/dbconfig.php');
                                             </thead>
                                             <tbody>
                                                 <?php
+                                                include_once('../homeincludes/dbconfig.php');
                                                     $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
