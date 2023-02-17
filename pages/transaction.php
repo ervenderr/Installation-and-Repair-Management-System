@@ -6,6 +6,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 
 include_once('../admin_includes/header.php');
+ini_set('display_errors', 1); error_reporting(E_ALL);
 ?>
 
 <body>
