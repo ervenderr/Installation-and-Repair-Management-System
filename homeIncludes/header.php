@@ -12,6 +12,7 @@
     <script src="../js/script.js" defer></script>
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/style2.css" />
+    <link rel="shortcut icon" href="../img/proton-logo.png" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <title>
