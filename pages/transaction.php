@@ -73,7 +73,7 @@ ini_set('display_errors', 1); error_reporting(E_ALL);
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                    include_once('../homeincludes/dbconfig.php');
+                                                    include_once('../homeIncludes/dbconfig.php');
                                                     $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
