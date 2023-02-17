@@ -1,6 +1,6 @@
 <?php
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
+include_once('../homeIncludes/dbconfig.php');
 
 $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
