@@ -72,7 +72,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                    // Perform the query
                                                     $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id

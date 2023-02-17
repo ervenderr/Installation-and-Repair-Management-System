@@ -41,16 +41,10 @@
               </a>
               <div class="collapse" id="ui-basic2">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/buttons.html">Transactions</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/typography.html">Pending request</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="#">Transactions</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="#">Pending request</a></li>
                 </ul>
               </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../pages/icons/mdi.html">
-                <span class="menu-title">Icons</span>
-                <i class="mdi mdi-contacts menu-icon"></i>
-              </a>
             </li>
           </ul>
         </nav>
