@@ -6,7 +6,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 
 include_once('../admin_includes/header.php');
-include_once('../homeIncludes/dbconfig.php');
+require_once '../homeIncludes/dbconfig.php';
+
 ?>
 
 <body>
