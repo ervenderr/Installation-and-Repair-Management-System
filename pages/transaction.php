@@ -79,7 +79,41 @@ include_once('../admin_includes/header.php');
                                                         WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
 
                                                     
+                                                    $id = 1;
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        $modalId = 'editTransactionModal-' . $id;
+                                                        echo '<tr>';
+                                                        echo '<td>' . $id . '</td>';
+                                                        echo '<td>' . $row['transaction_code'] . '</td>';
+                                                        echo '<td>' . $row['fname'] . ', ' . $row['lname'] . '</td>';
                                                     
+                                                        $statusClass = '';
+                                                        if ($row['status'] == 'Pending') {
+                                                            $statusClass = 'badge-gradient-warning';
+                                                        } else if ($row['status'] == 'In-progress') {
+                                                            $statusClass = 'badge-gradient-info';
+                                                        } else if ($row['status'] == 'Done') {
+                                                            $statusClass = 'badge-gradient-success';
+                                                        } else {
+                                                            $statusClass = 'badge-gradient-secondary';
+                                                        }
+                                                    
+                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
+                                                        echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td>';
+                                                        echo '<a href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-edit text-primary view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '</a>';
+                                                        echo '</td>';
+                                                        echo '</tr>';
+                                                        $id++;
+                                                    }
                                                     ?>
                                             </tbody>
                                         </table>
