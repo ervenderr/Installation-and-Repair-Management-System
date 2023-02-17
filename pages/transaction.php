@@ -78,8 +78,7 @@ include_once('../admin_includes/header.php');
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
                                                         WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
 
-                                                    $result = mysqli_query($conn, $query);
-                                                    $id = 1;
+                                                    
                                                     
                                                     ?>
                                             </tbody>
