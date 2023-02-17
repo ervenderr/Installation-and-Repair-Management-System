@@ -71,16 +71,26 @@ include_once('../admin_includes/header.php');
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php
-                                                    include_once('../homeincludes/dbconfig.php');
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
-                                                        FROM rprq
-                                                        JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+<?php
+    include_once('../homeincludes/dbconfig.php');
+    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
+              FROM rprq
+              JOIN customer ON rprq.Cust_id = customer.Cust_id
+              WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+    $result = mysqli_query($conn, $query);
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo '<tr>';
+        echo '<td>' . $row['id'] . '</td>';
+        echo '<td>' . $row['transaction_code'] . '</td>';
+        echo '<td>' . $row['fname'] . ' ' . $row['lname'] . '</td>';
+        echo '<td>' . $row['status'] . '</td>';
+        echo '<td>' . $row['date_req'] . '</td>';
+        echo '<td><a href="view_transaction.php?id=' . $row['id'] . '">View</a></td>';
+        echo '</tr>';
+    }
+?>
+</tbody>
 
-                                                    
-                                                    ?>
-                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
