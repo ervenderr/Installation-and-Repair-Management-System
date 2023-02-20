@@ -8,12 +8,13 @@
             <span class="mdi mdi-menu"></span>
           </button>
           <div class="search-field d-none d-md-block">
-            <form class="d-flex align-items-center h-100" action="#">
-              <div class="input-group">
-                <div class="input-group-prepend bg-transparent">
+            <form class="d-flex align-items-center h-100" method="GET" action="<?php echo $search; ?>">
+              <div class="input-group btn-group-sm">
+                <div class="input-group-prepend bg-light">
                   <i class="input-group-text border-0 mdi mdi-magnify"></i>
                 </div>
-                <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+                <input type="text" name="keyword" class="form-control bg-light border-0" placeholder="Search...">
+                <button type="submit" class="btn btn-info srch bg-secondary">Search</button>
               </div>
             </form>
           </div>

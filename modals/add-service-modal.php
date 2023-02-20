@@ -1,14 +1,21 @@
 <!-- Add service Transaction - The modal -->
-<div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel"
+<?php
+
+$sql = "SELECT * FROM services";
+$result = mysqli_query($conn, $sql);
+
+?>
+
+<div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addTransactionModalLabel">Add New Transaction</h5>
+                <h5 class="modal-title" id="addServiceModalLabel">Create Service Transaction</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="form-sample" action="add-transaction.php" method="POST" enctype="multipart/form-data">
+            <form class="form-sample" name="myForm" action="add-transactions.php" method="POST" enctype="multipart/form-data">
                     <p class="card-description"> Personal info </p>
                     <div class="row">
                         <div class="col-md-6">
@@ -16,7 +23,7 @@
                                 <label class="col-form-label" for="fname">First Name</label>
                                 <div class="">
                                     <input type="text" name="fname" class="form-control" placeholder="ex. Erven" />
-                                    <span class="error-input"></span>
+                                    <span id="fname_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -25,7 +32,7 @@
                                 <label class="col-form-label" for="lname">Last Name</label>
                                 <div class="">
                                     <input type="text" name="lname" class="form-control" placeholder="ex. Idjad"/>
-                                    <span class="error-input"></span>
+                                    <span id="lname_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +43,7 @@
                                 <label for="email" class="col-form-label">Email</label>
                                 <div class="">
                                     <input name="email" class="form-control" type="email" placeholder="ex. ervenidjad12@gmail.com">
-                                    <span class="error-input"></span>
+                                    <span id="email_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -45,7 +52,7 @@
                                 <label for="phone" class="col-form-label">Phone</label>
                                 <div class="">
                                     <input name="phone" class="form-control" type="tel" placeholder="ex. 09123456789"/>
-                                    <span class="error-input"></span>
+                                    <span id="phone_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +63,7 @@
                                 <label for="address" class="col-form-label">Address</label>
                                 <div class="">
                                     <input name="address" class="form-control" type="text" placeholder="ex. Recodo, Zamboanga City">
-                                    <span class="error-input"></span>
+                                    <span id="address_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -64,16 +71,40 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <label for="etype" class="col-form-label">Electronic Type</label>
+                                <label for="stype" class="col-form-label">Service Type</label>
                                 <div class="">
-                                    <select name="etype" class="form-control">
+                                <select name="stype" id="stype" class="form-control" onchange="getPackageType(this.value)">
                                         <option value="None">--- Select ---</option>
-                                        <option value="TV">TV</option>
-                                        <option value="Refrigerator">Refrigerator</option>
-                                        <option value="Microwave">Microwave</option>
-                                        <option value="Aircon">Aircon</option>
+                                        <?php
+                                        
+                                        while($row = mysqli_fetch_assoc($result)) { 
+                                            echo "<option value='" . $row['service_id'] . "'>" . $row['service_name'] . "</option>";
+                                        }
+                                    ?>
                                     </select>
-                                    <span class="error-input"></span>
+                                    <span id="stype_error" class="error"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="package" class="col-form-label">Package Type</label>
+                                <div class="">
+                                    <select name="package" id="package" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                    </select>
+                                    <span id="package_error" class="error"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="other" class="col-form-label">Other concern</label>
+                                <div class="">
+                                    <input name="other" id="other" type="text" class="form-control" />
+                                    <span id="other_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -88,32 +119,7 @@
                                         <option value="Aming Alyasher">Aming Alyasher</option>
                                         <option value="Farren Smith">Farren Smith</option>
                                     </select>
-                                    <span class="error-input"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label for="defective" class="col-form-label">Defective</label>
-                                <div class="">
-                                    <input name="defective" type="text" class="form-control" />
-                                    <span class="error-input"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label for="shipping" class="col-form-label">Shipping option</label>
-                                <div class="">
-                                    <select name="shipping" class="form-control">
-                                        <option value="None">--Select--</option>
-                                        <option value="Pickup">Pickup</option>
-                                        <option value="Deliver">Deliver</option>
-                                        <option value="Home Service">Home Service</option>
-                                    </select>
-                                    <span class="error-input"></span>
+                                    <span id="electrician_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +130,7 @@
                                 <label for="date" class="col-form-label">Date</label>
                                 <div class="">
                                     <input name="date" type="date" class="form-control" placeholder="dd/mm/yyyy" />
-                                    <span class="error-input"></span>
+                                    <span id="date_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +139,7 @@
                                 <label for="completed" class="col-form-label">Date Completed</label>
                                 <div class="">
                                     <input name="completed" type="date" class="form-control" placeholder="dd/mm/yyyy" />
-                                    <span class="error-input"></span>
+                                    <span id="completed_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +150,7 @@
                                 <label for="payment" class="col-form-label">Payment</label>
                                 <div class="">
                                     <input name="payment" class="form-control" type="text" value="$ " />
-                                    <span class="error-input"></span>
+                                    <span id="payment_error" class="error"></span>
                                 </div>
                             </div>
                         </div>
@@ -160,3 +166,31 @@
         </div>
     </div>
 </div>
+
+<script>
+function getPackageType(serviceId) {
+    if (serviceId !== "None") {
+        $.ajax({
+            type: "POST",
+            url: "get-packages.php",
+            data: { service_id: serviceId },
+            dataType: "json",
+            success: function (response) {
+                var len = response.length;
+                $("#package").empty();
+                $("#package").append("<option value='None'>--- Select ---</option>"); // add default option
+                for (var i = 0; i < len; i++) {
+                    var id = response[i]["pkg_id"];
+                    var name = response[i]["name"];
+                    $("#package").append("<option value='" + id + "'>" + name + "</option>");
+                }
+            },
+        });
+    } else {
+        $("#package").empty();
+        $("#package").append("<option value='None'>--Select--</option>");
+    }
+}
+
+</script>
+

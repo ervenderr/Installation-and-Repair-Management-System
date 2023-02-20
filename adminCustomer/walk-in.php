@@ -2,6 +2,9 @@
 session_start();
 include_once('../admin_includes/header.php');
 include_once('../homeincludes/dbconfig.php');
+include_once('../tools/variables.php');
+
+$search = "walk-in.php";
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
@@ -22,13 +25,13 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-clipboard-text"></i>
-                            </span> Repair Transaction
+                                <i class="mdi mdi-account-multiple"></i>
+                            </span> Walk-in Customer
                         </h3>
                         <?php
             if (isset($_GET['msg'])) {
                 $msg = $_GET['msg'];
-                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
                 '. $msg .'
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>';
@@ -36,7 +39,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
             if (isset($_GET['msg2'])) {
                 $msg2 = $_GET['msg2'];
-                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 '. $msg2 .'
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>';
@@ -47,7 +50,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
                                         data-bs-target="#addTransactionModal">
-                                        Add New Transaction <i class=" mdi mdi-plus "></i>
+                                        Create New Customer <i class=" mdi mdi-plus "></i>
                                     </button>
                                 </li>
                             </ul>
@@ -57,64 +60,94 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">List of Repair Transaction</h4>
+                                    <h4 class="card-title">List of Walk-in Customer</h4>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th> # </th>
-                                                    <th> Transaction Code </th>
-                                                    <th> Customer </th>
-                                                    <th> Status </th>
-                                                    <th> Date </th>
+                                                    <th> Email </th>
+                                                    <th> Name </th>
+                                                    <th> Contact </th>
+                                                    <th> Address </th>
                                                     <th> Action </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
+                                                if(!isset($_GET['keyword'])){
+                                                    
+                                                
                                                     // Perform the query
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
-                                                        FROM rprq
-                                                        JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+                                                    $query = "SELECT customer.cust_id, customer.fname, customer.lname, customer.phone, customer.address, customer.cust_type, accounts.email, accounts.user_type
+                                                        FROM customer
+                                                        JOIN accounts ON customer.account_id = accounts.account_id
+                                                        WHERE customer.cust_type = 'walk-in'
+                                                        AND accounts.user_type = 'customer'";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
                                                     while ($row = mysqli_fetch_assoc($result)) {
-                                                        $modalId = 'editTransactionModal-' . $id;
+                                                        $modalId = 'editCustomerModal-' . $id;
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
-                                                        echo '<td>' . $row['transaction_code'] . '</td>';
-                                                        echo '<td>' . $row['fname'] . ', ' . $row['lname'] . '</td>';
-                                                    
-                                                        $statusClass = '';
-                                                        if ($row['status'] == 'Pending') {
-                                                            $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
-                                                            $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-success';
-                                                        } else {
-                                                            $statusClass = 'badge-gradient-secondary';
-                                                        }
-                                                    
-                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
-                                                        echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td>' . $row['email'] . '</td>';
+                                                        echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
+                                                        echo '<td>' . $row['phone'] . '</td>';
+                                                        echo '<td>' . $row['address'] . '</td>';
                                                         echo '<td>';
-                                                        echo '<a href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<a class="icns" href="view-customer.php?&rowid=' .  $row['cust_id'] . '">';
+                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['cust_id'] . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a class="icns" href="edit-customer.php?&rowid=' .  $row['cust_id'] . '">';
+                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['cust_id'] . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a class="icns" href="delete-customer.php?&rowid=' .  $row['cust_id'] . '">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['cust_id'] . '"></i>';
+                                                        echo '</a>';
+                                                        echo '</td>';
+                                                        echo '</tr>';
+                                                        $id++;
+                                                    }
+                                                }else{
+                                                    $keyword = $_GET['keyword'];
+
+                                                    // Perform the query
+                                                    $query = "SELECT customer.cust_id, customer.fname, customer.lname, customer.phone, customer.address, customer.cust_type, accounts.email, accounts.user_type
+                                                                FROM customer
+                                                                JOIN accounts ON customer.cust_id = customer.cust_id
+                                                                WHERE (accounts.email LIKE '%$keyword%' AND customer.cust_type = 'walk-in' AND accounts.user_type = 'customer'
+                                                                OR customer.fname LIKE '%$keyword%' AND customer.cust_type = 'walk-in' AND accounts.user_type = 'customer'
+                                                                OR customer.lname LIKE '%$keyword%' AND customer.cust_type = 'walk-in' AND accounts.user_type = 'customer'
+                                                                )";
+
+                                                    $result = mysqli_query($conn, $query);
+                                                    $id = 1;
+
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        $modalId = 'editCustomerModal-' . $id;
+                                                        echo '<tr>';
+                                                        echo '<td>' . $id . '</td>';
+                                                        echo '<td>' . $row['email'] . '</td>';
+                                                        echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
+                                                        echo '<td>' . $row['phone'] . '</td>';
+                                                        echo '<td>' . $row['address'] . '</td>';
+                                                        echo '<td>';
+                                                        echo '<a class="icns" href="view-customer.php?&rowid=' . $id . '">';
                                                         echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<a class="icns" href="edit-customer.php?&rowid=' . $id . '">';
                                                         echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $id . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
+                                                        echo '<a class="icns" href="delete-customer.php?&rowid=' . $id . '">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
                                                         $id++;
                                                     }
+                                                }
                                                 ?>
 
                                             </tbody>
@@ -126,7 +159,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     </div>
                 </div>
 
-                <?php include_once('../modals/add-repair-modal.php') ?>
+                <?php include_once('../modals/add-customer-modal.php') ?>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">

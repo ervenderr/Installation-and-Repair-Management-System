@@ -28,6 +28,6 @@ $result6 = mysqli_query($conn, $query6);
 
 if ($result6) {
     $msg2 = "Record Successfully deleted";
-    header("location: transaction.php?msg2=" . urlencode($msg2));
+    header("location: walk-in.php?msg2=" . urlencode($msg2));
 }
 ?>

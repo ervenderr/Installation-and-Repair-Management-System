@@ -16,10 +16,7 @@ if(isset($_POST['submit'])) {
     $date = htmlentities($_POST['date']);
     $completed = htmlentities($_POST['completed']);
     $payment = htmlentities($_POST['payment']);
-
-    // generate transaction code
-    $transaction_code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 11);
-    $status = htmlentities("In-progress");
+    $transaction_code = htmlentities($_POST['transaction_code']);
 
     // check if email already exists in accounts table
     $query = "SELECT account_id FROM accounts WHERE email = '$email'";
@@ -32,6 +29,9 @@ if(isset($_POST['submit'])) {
         if(mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
             $customer_id = $row2['cust_id'];
+            // update customer record
+            $query3 = "UPDATE customer SET fname='$fname', lname='$lname', phone='$phone', address='$address' WHERE cust_id = '$customer_id'";
+            $result3 = mysqli_query($conn, $query3);
         } else {
             // insert into customer table and get customer_id
             $query3 = "INSERT INTO customer (fname, lname, phone, address, account_id) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id')";
@@ -50,14 +50,14 @@ if(isset($_POST['submit'])) {
         $customer_id = mysqli_insert_id($conn);
     }
 
-    // insert into rprq table with customer_id
-    $query4 = "INSERT INTO rprq (transaction_code, etype, defective, shipping, status, cust_id) VALUES ('$transaction_code', '$etype', '$defective', '$shipping', '$status', '$customer_id')";
+    // update rprq table with new values
+    $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', cust_id='$customer_id' WHERE transaction_code='$transaction_code'";
     $result4 = mysqli_query($conn, $query4);
 
     if ($result4) {
-        header("location: transaction.php?msg=Record Added Successfully");
+        header("location: transaction.php?msg=Record Updated Successfully");
     } else {
-       echo "FAILED: " . mysqli_error($conn);
+        echo "FAILED: " . mysqli_error($conn);
     }
 }
 

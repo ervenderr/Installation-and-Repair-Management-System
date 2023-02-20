@@ -4,13 +4,19 @@ include_once('../homeincludes/dbconfig.php');
 
 $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
+
+
+$rpactive = "active";
+$rpshow = "show";
+$rptrue = "true";
+
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
-          FROM rprq
-          JOIN customer ON rprq.cust_id = customer.cust_id
+$query = "SELECT service_request.service_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, service_request.cust_id, service_request.pkg_id, service_request.date_req, service_request.date_completed, service_request.other
+          FROM service_request
+          JOIN customer ON service_request.cust_id = customer.cust_id
           JOIN accounts ON customer.account_id = accounts.account_id
-          WHERE rprq.transaction_code = '" . $tcode . "';";
+          WHERE service_request.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -37,7 +43,7 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-clipboard-text"></i>
+                                <i class="mdi mdi-settings-box"></i>
                             </span> Repair Transaction <span class="bread">/ Update transaction</span>
                         </h3>
                         <nav aria-label="breadcrumb">
@@ -45,9 +51,9 @@ if (mysqli_num_rows($result) > 0) {
                                 <?php
                                 $href = "";
                                 if ($row['status'] == 'Pending'){
-                                    $href = "pending.php";
+                                    $href = "pendings.php";
                                 }else{
-                                    $href = "transaction.php";
+                                    $href = "transactions.php";
                                 }
                                 ?>
                                 <a href="<?php echo $href; ?>">
@@ -64,14 +70,14 @@ if (mysqli_num_rows($result) > 0) {
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    <form class="form-sample" action="update-transaction.php" method="POST"
+                                    <form class="form-sample" action="edit-processs.php" method="POST"
                                         enctype="multipart/form-data">
                                         <?php
-                                        $query6 = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
-                                        FROM rprq
-                                        JOIN customer ON rprq.cust_id = customer.cust_id
+                                        $query6 = "SELECT service_request.service_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, service_request.cust_id, service_request.pkg_id, service_request.date_req, service_request.date_completed, service_request.other
+                                        FROM service_request
+                                        JOIN customer ON service_request.cust_id = customer.cust_id
                                         JOIN accounts ON customer.account_id = accounts.account_id
-                                        WHERE rprq.transaction_code = '" . $tcode . "';";
+                                        WHERE service_request.transaction_code = '" . $tcode . "';";
                                         $result6 = mysqli_query($conn, $query6);
                                         
                                         // Check if the query was successful and output the data
@@ -134,25 +140,49 @@ if (mysqli_num_rows($result) > 0) {
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="etype" class="col-form-label">Electronic Type</label>
+                                                    <label for="etype" class="col-form-label">Service Type</label>
                                                     <div class="">
                                                         <select name="etype" class="form-control">
                                                             <option value="None">--- Select ---</option>
-                                                            <option value="TV"
-                                                                <?php if ($row6['etype'] == 'TV') echo 'selected'; ?>>TV
-                                                            </option>
-                                                            <option value="Refrigerator"
-                                                                <?php if ($row6['etype'] == 'Refrigerator') echo 'selected'; ?>>
-                                                                Refrigerator
-                                                            </option>
-                                                            <option value="Microwave"
-                                                                <?php if ($row6['etype'] == 'Microwave') echo 'selected'; ?>>
-                                                                Microwave
-                                                            </option>
-                                                            <option value="Aircon"
-                                                                <?php if ($row6['etype'] == 'Aircon') echo 'selected'; ?>>
-                                                                Aircon</option>
+                                                            <?php
+                                                                $query = "SELECT * FROM services";
+                                                                $result = mysqli_query($conn, $query);
+                                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                                    $selected = ($row6['service_id'] == $row['service_id']) ? "selected" : "";
+                                                                    echo "<option value='{$row['service_id']}' {$selected}>{$row['service_name']}</option>";
+                                                                }
+                                                                ?>
                                                         </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="package" class="col-form-label">Package Type</label>
+                                                    <div class="">
+                                                        <select name="package" id="package" class="form-control">
+                                                            <option value="None">--- Select ---</option>
+                                                            <?php
+                                                                $query = "SELECT * FROM package";
+                                                                $result = mysqli_query($conn, $query);
+                                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                                    $selected = ($row6['pkg_id'] == $row['pkg_id']) ? "selected" : "";
+                                                                    echo "<option value='{$row['pkg_id']}' {$selected}>{$row['name']}</option>";
+                                                                }
+                                                                ?>
+                                                        </select>
+                                                        <span id="package_error" class="error"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="other" class="col-form-label">Defective</label>
+                                                    <div class="">
+                                                        <input name="other" type="text" class="form-control"
+                                                            value="<?php echo $row6['other']; ?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -187,38 +217,6 @@ if (mysqli_num_rows($result) > 0) {
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="defective" class="col-form-label">Defective</label>
-                                                    <div class="">
-                                                        <input name="defective" type="text" class="form-control"
-                                                            value="<?php echo $row6['defective']; ?>" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label for="shipping" class="col-form-label">Shipping option</label>
-                                                    <div class="">
-                                                        <select name="shipping" class="form-control">
-                                                            <option value="None">--Select--</option>
-                                                            <option value="Pickup"
-                                                                <?php if ($row6['shipping'] == 'Pickup') echo 'selected'; ?>>
-                                                                Pickup</option>
-                                                            <option value="Deliver"
-                                                                <?php if ($row6['shipping'] == 'Deliver') echo 'selected'; ?>>
-                                                                Deliver
-                                                            </option>
-                                                            <option value="Home Service"
-                                                                <?php if ($row['shipping'] == 'Home Service') echo 'selected'; ?>>
-                                                                Home
-                                                                Service</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
                                                     <label for="date" class="col-form-label">Date</label>
                                                     <div class="">
                                                         <input name="date" type="date" class="form-control"
@@ -233,7 +231,7 @@ if (mysqli_num_rows($result) > 0) {
                                                     <div class="">
                                                         <input name="group" type="date" class="form-control"
                                                             placeholder="dd/mm/yyyy"
-                                                            value="<?php echo $row6['date_req']; ?>" />
+                                                            value="<?php echo $row6['date_completed']; ?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -304,6 +302,8 @@ if (mysqli_num_rows($result) > 0) {
             });
         });
         </script>
+
+        
 </body>
 
 </html>

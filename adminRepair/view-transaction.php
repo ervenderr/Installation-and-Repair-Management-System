@@ -1,6 +1,11 @@
 <?php
 include_once('../admin_includes/header.php');
 include_once('../homeincludes/dbconfig.php');
+require_once '../tools/variables.php';
+
+$rpactive = "active";
+$rpshow = "show";
+$rptrue = "true";
 
 $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
@@ -37,7 +42,7 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-clipboard-text"></i>
+                                <i class="mdi mdi-wrench"></i>
                             </span> Repair Transaction
                         </h3>
                         <nav aria-label="breadcrumb">

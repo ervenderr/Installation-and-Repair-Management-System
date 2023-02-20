@@ -20,9 +20,9 @@ require_once '../homeIncludes/dbconfig.php';
 //process login
 if (isset($_POST['submit'])){
     //check email and password from db
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $sql = "SELECT * FROM accounts, customer WHERE email='$email' AND password='$password' AND customer.account_id=accounts.account_id";
+    $email = htmlentities($_POST['email']);
+    $password = htmlentities($_POST['password']);
+    $sql = "SELECT * FROM accounts, admin, customer WHERE email='$email' AND password='$password'";
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) > 0){
       while($row = mysqli_fetch_assoc($result)) {
@@ -46,10 +46,10 @@ if (isset($_POST['submit'])){
 
 if (isset($_POST['submit-signup'])){
     //check email and password from db
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $user_type = "customer";
+    $username = htmlentities($_POST['username']);
+    $email = htmlentities($_POST['email']);
+    $password = htmlentities($_POST['password']);
+    $user_type = htmlentities("customer");
     $sql = "INSERT INTO `accounts`(`username`, `email`, `password`, `user_type`) VALUES ('$username','$email','$password', '$user_type')";
     $result = mysqli_query($conn, $sql);
           //signup successful

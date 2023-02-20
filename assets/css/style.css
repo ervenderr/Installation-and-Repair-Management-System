@@ -14496,10 +14496,19 @@ dl {
 
 .bread{
   color: #868e96;
+  font-size: 12px;
 }
 
-.error-input{
+.error-input, .error{
   font-style: italic;
   color: #a01a1f;
+}
+
+.icns{
+  margin-right: 2px;
+}
+
+.srch{
+  border: none;
 }
 /*# sourceMappingURL=style.css.map */

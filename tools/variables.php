@@ -14,5 +14,19 @@
     $servicetransac = "";
     $history = "";
     $uibasic = "";
+    $rpcollapse = "";
+    $rptrue = "";
+    $rpshow = "";
+    $rpactive = "";
+    $rpactive2 = "";
+    $sercollapse = "";
+    $sertrue = "";
+    $sershow = "";
+    $seractive = "";
+    $seractive2 = "";
+    $search = "";
+    $custactive = "";
+    $custactive2 = "";
+    $custshow = "";
 
 ?>
