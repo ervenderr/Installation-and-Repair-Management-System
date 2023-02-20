@@ -45,7 +45,7 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-wrench"></i>
+                                <i class="fas fa-tools menu-icon"></i>
                             </span> Repair Transaction <span class="bread">/ Update transaction</span>
                         </h3>
                         <nav aria-label="breadcrumb">

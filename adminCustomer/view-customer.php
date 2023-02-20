@@ -40,24 +40,28 @@ $custshow = "show";
             
             <!-- partial -->
             <div class="main-panel">
+            <?php
+            $type = "";
+            $href = "";
+            if ($row['cust_type'] == 'walk-in'){
+                $href = "walk-in.php";
+                $type = "/ Walk-in customer";
+
+            }elseif($row['cust_type'] == 'online'){
+                $href = "online.php";
+                $type = "/ Online customer";
+            }
+            ?>
                 <div class="content-wrapper">
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-wrench"></i>
-                            </span> Repair Transaction
+                            <i class="fas fa-users menu-icon"></i>
+                            </span> Customer<span class="bread"><?php echo $type; ?></span>
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <?php
-                                $href = "";
-                                if ($row['cust_type'] == 'walk-in'){
-                                    $href = "walk-in.php";
-
-                                }elseif($row['cust_type'] == 'online'){
-                                    $href = "online.php";
-                                }
-                                ?>
+                                
                                 <a href="<?php echo $href; ?>">
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <span></span><i class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
@@ -73,22 +77,22 @@ $custshow = "show";
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th>Customer Name:</th>
+                                                <th class="bg-gryy">Customer Name:</th>
                                                 <td><?php echo $row['fname'] ." " .  $row['lname']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Address:</th>
+                                                <th class="bg-gryy">Address:</th>
                                                 <td><?php echo $row['address']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Contact:</th>
+                                                <th class="bg-gryy">Contact:</th>
                                                 <td><?php echo $row['phone']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Email:</th>
+                                                <th class="bg-gryy">Email:</th>
                                                 <td><?php echo $row['email']?></td>
                                             </tr><tr>
-                                                <th>Customer type:</th>
+                                                <th class="bg-gryy">Customer type:</th>
                                                 <td><?php echo $row['cust_type']?></td>
                                             </tr>
                                         </table>

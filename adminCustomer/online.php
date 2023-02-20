@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-account-multiple"></i>
+                            <i class="fas fa-users menu-icon"></i>
                             </span> Online Customer
                         </h3>
                         <?php
@@ -272,55 +272,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             error = true;
         } else {
             address.nextElementSibling.innerText = '';
-        }
-
-        if (etype.value === 'None') {
-            etype.nextElementSibling.innerText = 'Please select an electronic type';
-            error = true;
-        } else {
-            etype.nextElementSibling.innerText = '';
-        }
-
-        // if (electrician.value === 'None') {
-        //     electrician.nextElementSibling.innerText = 'Please select an electrician';
-        //     error = true;
-        // } else {
-        //     electrician.nextElementSibling.innerText = '';
-        // }
-
-        if (defective.value === '') {
-            defective.nextElementSibling.innerText = 'Please enter your defective';
-            error = true;
-        } else {
-            defective.nextElementSibling.innerText = '';
-        }
-
-        if (shipping.value === 'None') {
-            shipping.nextElementSibling.innerText = 'Please select a shipping option';
-            error = true;
-        } else {
-            shipping.nextElementSibling.innerText = '';
-        }
-
-        if (date.value === '') {
-            date.nextElementSibling.innerText = 'Please select a date';
-            error = true;
-        } else {
-            date.nextElementSibling.innerText = '';
-        }
-
-        if (completed.value === '') {
-            completed.nextElementSibling.innerText = 'Please select a completion date';
-            error = true;
-        } else {
-            completed.nextElementSibling.innerText = '';
-        }
-
-        if (payment.value === '') {
-            payment.nextElementSibling.innerText = 'Please enter a payment amount';
-            error = true;
-        } else {
-            payment.nextElementSibling.innerText = '';
         }
 
         if (error) {

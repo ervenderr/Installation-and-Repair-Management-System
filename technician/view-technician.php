@@ -3,21 +3,17 @@ include_once('../admin_includes/header.php');
 include_once('../homeincludes/dbconfig.php');
 require_once '../tools/variables.php';
 
-$seractive = "active";
-$sershow = "show";
-$sertrue = "true";
+
+
+
 
 $rowid = $_GET['rowid'];
-$tcode = $_GET['transaction_code'];
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT service_request.sreq_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, services.service_name, package.name, service_request.date_req, service_request.date_completed, service_request.other
-          FROM service_request
-          JOIN customer ON service_request.cust_id = customer.cust_id
-          JOIN accounts ON customer.account_id = accounts.account_id
-          JOIN services ON service_request.service_id = services.service_id
-          JOIN package ON service_request.pkg_id = package.pkg_id
-          WHERE service_request.transaction_code = '" . $tcode . "';";
+$query = "SELECT technician.tech_id, technician.fname, technician.lname, technician.phone, technician.address, technician.status, technician.assign, accounts.email, accounts.user_type
+            FROM technician
+            JOIN accounts ON technician.account_id = accounts.account_id
+            WHERE technician.tech_id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -26,6 +22,10 @@ if (mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
 
 }
+
+$custactive = "active";
+$custshow = "show";
+
 
 ?>
 
@@ -44,20 +44,13 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                            <i class="fas fa-cogs menu-icon"></i>
-                            </span> Service Transaction
+                            <i class="fas fa-users menu-icon"></i>
+                            </span> Technician<span class="bread"></span>
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <?php
-                                $href = "";
-                                if ($row['status'] == 'Pending'){
-                                    $href = "pendings.php";
-                                }else{
-                                    $href = "transactions.php";
-                                }
-                                ?>
-                                <a href="<?php echo $href; ?>">
+                                
+                                <a href="technicians.php">
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <span></span><i class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
                                     </i>
@@ -72,72 +65,41 @@ if (mysqli_num_rows($result) > 0) {
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th>Transaction Code:</th>
-                                                <td><?php echo $row['transaction_code']?></td>
-                                            </tr>
-                                            <tr>
-                                                <?php
-                                                $statusClass = '';
-                                                if ($row['status'] == 'Pending') {
-                                                  $statusClass = 'badge-gradient-warning';
-                                                } else if ($row['status'] == 'In-progress') {
-                                                  $statusClass = 'badge-gradient-info';
-                                                } else if ($row['status'] == 'Done') {
-                                                  $statusClass = 'badge-gradient-success';
-                                                } else {
-                                                  $statusClass = 'badge-gradient-secondary';
-                                                }      
-                                                echo "<th>Status:</th>";
-                                                echo "<td><span class='badge " . $statusClass . "'>" . $row['status'] . "</span></td>";
-                                                ?>
-                                            </tr>
-                                            <tr>
-                                                <th>Customer Name:</th>
+                                                <th class="bg-gryy">Technician Name:</th>
                                                 <td><?php echo $row['fname'] ." " .  $row['lname']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Address:</th>
+                                                <th class="bg-gryy">Address:</th>
                                                 <td><?php echo $row['address']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Contact:</th>
+                                                <th class="bg-gryy">Contact:</th>
                                                 <td><?php echo $row['phone']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Email:</th>
+                                                <th class="bg-gryy">Email:</th>
                                                 <td><?php echo $row['email']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Service Type:</th>
-                                                <td><?php echo $row['service_name']?></td>
+                                                <?php
+                                                 $statusClass = '';
+                                                 if ($row['status'] == 'Working') {
+                                                     $statusClass = 'badge-gradient-warning';
+                                                 } else if ($row['status'] == 'Inactive') {
+                                                     $statusClass = 'badge-gradient-danger';
+                                                 } else if ($row['status'] == 'Active') {
+                                                     $statusClass = 'badge-gradient-success';
+                                                 } else {
+                                                     $statusClass = 'badge-gradient-secondary';
+                                                 }
+                                                
+                                                echo'<th class="bg-gryy">Status:</th>';
+                                                echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
+                                                ?>
                                             </tr>
-                                            <tr>
-                                                <th>Package:</th>
-                                                <td><?php echo $row['name']?></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Other concern:</th>
-                                                <td><?php echo $row['other']?></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Date Requested:</th>
-                                                <td><?php echo $row['date_req']?></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Date Completed:</th>
-                                                <td><?php echo $row['date_completed']?></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Assigned Technician:</th>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Warranty:</th>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Payment:</th>
-                                                <td></td>
+                                            </tr><tr>
+                                                <th class="bg-gryy">Assigned:</th>
+                                                <td><?php echo $row['assign']?></td>
                                             </tr>
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">

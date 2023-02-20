@@ -43,10 +43,27 @@ if(isset($_POST['submit'])) {
     }
 
     if ($result3) {
-        header("location: walk-in.php?msg=Record Updated Successfully");
+        // retrieve the cust_type for the updated/inserted customer record
+        $query4 = "SELECT cust_type FROM customer WHERE cust_id = '$customer_id'";
+        $result4 = mysqli_query($conn, $query4);
+        if(mysqli_num_rows($result4) > 0) {
+            $row4 = mysqli_fetch_assoc($result4);
+            $cust_type = $row4['cust_type'];
+
+            // Check the customer type and set the $href variable accordingly
+            if ($cust_type == 'walk-in') {
+                $href = "walk-in.php";
+            } elseif ($cust_type == 'online') {
+                $href = "online.php";
+            }
+
+            // Redirect to the appropriate page with a success message
+            header("location: $href?msg=Record Updated Successfully");
+        } else {
+            echo "Failed to retrieve cust_type from the database.";
+        }
     } else {
         echo "FAILED: " . mysqli_error($conn);
-    }
+    }    
 }
-
 ?>

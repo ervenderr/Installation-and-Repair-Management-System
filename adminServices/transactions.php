@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="mdi mdi-settings-box"></i>
+                                <i class="fas fa-cogs menu-icon"></i>
                             </span> Service Transaction
                         </h3>
                         <?php
