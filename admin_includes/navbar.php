@@ -7,17 +7,6 @@
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-menu"></span>
           </button>
-          <div class="search-field d-none d-md-block">
-            <form class="d-flex align-items-center h-100" method="GET" action="<?php echo $search; ?>">
-              <div class="input-group btn-group-sm">
-                <div class="input-group-prepend bg-light">
-                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
-                </div>
-                <input type="text" name="keyword" class="form-control bg-light border-0" placeholder="Search...">
-                <button type="submit" class="btn btn-info srch bg-secondary">Search</button>
-              </div>
-            </form>
-          </div>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">

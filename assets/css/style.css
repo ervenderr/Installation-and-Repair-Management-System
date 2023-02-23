@@ -5945,12 +5945,14 @@ textarea.form-control-lg {
   display: -ms-flexbox;
   display: flex;
   padding-left: 0;
+  color: #015F6B;
   list-style: none; }
 
 .page-link {
   position: relative;
   display: block;
   color: #0d6efd;
+  cursor: pointer;
   text-decoration: none;
   background-color: #fff;
   border: 1px solid #dee2e6;
@@ -6081,6 +6083,7 @@ textarea.form-control-lg {
 
 .alert-success {
   color: #0b5348;
+  margin: 0;
   background-color: #d1f5f0;
   border-color: #bbf1e9; }
   .alert-success .alert-link {
@@ -14459,7 +14462,7 @@ dl {
 
 .content-wrapper {
   background: #f2edf3;
-  padding: 2.75rem 2.25rem;
+  padding: 2.75rem 2.25rem 2.75rem 2.25rem;
   width: 100%;
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;
@@ -14514,5 +14517,67 @@ dl {
 
 .bg-gryy{
   background-color: #c5c9ce;
+}
+
+.flex{
+  display: flex;
+  align-items: center;
+}
+
+.flex .dataTables_length label{
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.flex .dataTables_filter label{
+  display: flex;
+  align-items: center;
+  width: auto;
+  float: right;
+}
+
+.flex .dataTables_filter label input{
+  padding: 10px;
+}
+
+.flexm{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  
+}
+
+.bg-our{
+  background-color: #015F6B;
+  color: #fff;
+}
+
+.mg-btm{
+  margin-bottom: 12px;
+}
+
+.pagination > li > a
+{
+    color: #015F6B;
+}
+.pagination > .active > a{
+  background-color: #015F6B !Important;
+  border: solid 1px #015F6B !Important;
+}
+
+.pagination > li > a:hover
+{
+    color: #015F6B;
+}
+
+.flexmm nav .pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.oneofone{
+  margin-right: 5px;
 }
 /*# sourceMappingURL=style.css.map */

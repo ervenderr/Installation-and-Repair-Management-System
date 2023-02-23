@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                            <i class="fas fa-users menu-icon"></i>
+                                <i class="fas fa-users menu-icon"></i>
                             </span> Walk-in Customer
                         </h3>
                         <?php
@@ -56,15 +56,24 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </ul>
                         </nav>
                     </div>
-                    <div class="row">
-                        <div class="col-12 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">List of Walk-in Customer</h4>
+                    <div class="card">
+                        <div class="card-body">
+                        <div class="row mg-btm">
+                                <div class="col-sm-12 col-md-6 flex">
+                                <h4 class="card-title">List of Walk-in Customer</h4>
+
+                                </div>
+                                <div class="col-sm-12 col-md-6 flex flexm">
+                                    <div id="example_filter" class="dataTables_filter"><label>Search:<input type="text"
+                                                placeholder="search" id="myInput" class="form-control"></label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 grid-margin">
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-hover">
+                                        <table class="table table-hover">
                                             <thead>
-                                                <tr>
+                                            <tr class="bg-our">
                                                     <th> # </th>
                                                     <th> Email </th>
                                                     <th> Name </th>
@@ -73,10 +82,29 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     <th> Action </th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="myTable">
                                                 <?php
-                                                if(!isset($_GET['keyword'])){
                                                     
+                                                    if(isset($_GET['page_no']) && $_GET['page_no'] !=''){
+                                                        $page_no = $_GET['page_no'];
+                                                    }else{
+                                                        $page_no = 1;
+                                                    }
+
+                                                    $total_record_per_page = 10;
+                                                    $offset = ($page_no-1) * $total_record_per_page;
+                                                    $previous_page = $page_no -1;
+                                                    $next_page = $page_no +1;
+                                                    $adjacent = "2";
+
+                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM customer
+                                                    JOIN accounts ON customer.account_id = accounts.account_id
+                                                    WHERE customer.cust_type = 'walk-in'
+                                                    AND accounts.user_type = 'customer'");
+                                                    $total_records = mysqli_fetch_array($result_count);
+                                                    $total_records = $total_records['total_records'];
+                                                    $total_no_of_page = ceil($total_records / $total_record_per_page);
+                                                    $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
                                                     $query = "SELECT customer.cust_id, customer.fname, customer.lname, customer.phone, customer.address, customer.cust_type, accounts.email, accounts.user_type
@@ -110,49 +138,86 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '</tr>';
                                                         $id++;
                                                     }
-                                                }else{
-                                                    $keyword = $_GET['keyword'];
-
-                                                    // Perform the query
-                                                    $query = "SELECT customer.cust_id, customer.fname, customer.lname, customer.phone, customer.address, customer.cust_type, accounts.email, accounts.user_type
-                                                                FROM customer
-                                                                JOIN accounts ON customer.cust_id = customer.cust_id
-                                                                WHERE (accounts.email LIKE '%$keyword%' AND customer.cust_type = 'walk-in' AND accounts.user_type = 'customer'
-                                                                OR customer.fname LIKE '%$keyword%' AND customer.cust_type = 'walk-in' AND accounts.user_type = 'customer'
-                                                                OR customer.lname LIKE '%$keyword%' AND customer.cust_type = 'walk-in' AND accounts.user_type = 'customer'
-                                                                )";
-
-                                                    $result = mysqli_query($conn, $query);
-                                                    $id = 1;
-
-                                                    while ($row = mysqli_fetch_assoc($result)) {
-                                                        $modalId = 'editCustomerModal-' . $id;
-                                                        echo '<tr>';
-                                                        echo '<td>' . $id . '</td>';
-                                                        echo '<td>' . $row['email'] . '</td>';
-                                                        echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
-                                                        echo '<td>' . $row['phone'] . '</td>';
-                                                        echo '<td>' . $row['address'] . '</td>';
-                                                        echo '<td>';
-                                                        echo '<a class="icns" href="view-customer.php?&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="edit-customer.php?&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $id . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="delete-customer.php?&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
-                                                        echo '</a>';
-                                                        echo '</td>';
-                                                        echo '</tr>';
-                                                        $id++;
-                                                    }
-                                                }
                                                 ?>
 
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 flex">
+
+                                </div>
+                                <div class="col-sm-12 col-md-6 flex flexm flexmm">
+                                    <nav aria-label="...">
+                                        <ul class="pagination pagination-sm">
+                                            <li class="page-item disabled oneofone"><?php echo $page_no. "of". $total_no_of_page; ?>
+                                            </li>
+                                            <li class="page-item" <?php if($page_no <= 1) {echo "class='page-item disabled'";} ?>>
+                                            <a class="page-link" <?php if($page_no > 1) {echo "href='?page_no=$previous_page'";} ?>>Previous</a>
+                                            </li>
+
+                                            <?php
+                                                if($total_no_of_page <= 10){
+                                                    for($counter = 1; $counter <= $total_no_of_page; $counter++){
+                                                        if($counter == $page_no){
+                                                            echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
+                                                        }else{
+                                                            echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
+                                                        }
+                                                    }
+
+                                                }elseif($total_no_of_page > 10){
+                                                    if($page_no <=4){
+
+                                                        for($counter = 1; $counter < 8; $counter++){
+                                                            if($counter == $page_no){
+                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
+                                                            }else{
+                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
+                                                            }
+                                                        }
+                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$second_last'>$second_last</a></li>";
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>$total_no_of_page</a></li>";
+                                                    }elseif($page_no > 4 && $page_no < $total_no_of_page - 4){
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=1'>1</a></li>";
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=2'>2</a></li>";
+                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
+
+                                                        for($counter = $page_no - $adjacent; $counter <= $page_no + $adjacent; $counter++){
+                                                            if($counter == $page_no){
+                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
+                                                            }else{
+                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
+                                                            }
+                                                        }
+                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$second_last'>$second_last</a></li>";
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>$total_no_of_page</a></li>";
+                                                    }else{
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=1'>1</a></li>";
+                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=2'>2</a></li>";
+                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
+                                                        for($counter = $total_no_of_page - 6; $counter <= $total_no_of_page; $counter++){
+                                                            if($counter == $page_no){
+                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
+                                                            }else{
+                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ?>
+                                            <li class="page-item" <?php if($page_no >= $total_no_of_page) {echo "class='page-item disabled'";} ?>>
+                                            <a class="page-link" <?php if($page_no < $total_no_of_page) {echo "href='?page_no=$next_page'";} ?>>Next</a>
+                                            </li>
+                                            <?php
+                                                if($page_no < $total_no_of_page) {echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>Last &rsaqou; &rsaqou;</a></li>";}
+                                            ?>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -208,6 +273,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    </script>
 
     <script>
     const form = document.querySelector('.form-sample');
