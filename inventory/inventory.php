@@ -4,12 +4,13 @@ include_once('../admin_includes/header.php');
 include_once('../homeincludes/dbconfig.php');
 include_once('../tools/variables.php');
 
-$search = "transaction.php";
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
   }
 ?>
+
+
 
 <body>
     <div class="container-scroller">
@@ -25,8 +26,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="fas fa-tools menu-icon"></i>
-                            </span> Repair Transaction
+                            <i class="fas fa-warehouse menu-icon"></i>
+                            </span> Inventory
                         </h3>
                         <?php
             if (isset($_GET['msg'])) {
@@ -49,8 +50,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addTransactionModal">
-                                        Add New Transaction <i class=" mdi mdi-plus "></i>
+                                        data-bs-target="#addInventoryModal">
+                                        Create New<i class=" mdi mdi-plus "></i>
                                     </button>
                                 </li>
                             </ul>
@@ -58,9 +59,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <div class="row mg-btm">
+                        <div class="row mg-btm">
                                 <div class="col-sm-12 col-md-6 flex">
-                                    <h4 class="card-title">List of Repair Transaction</h4>
+                                <h4 class="card-title">List of Products</h4>
 
                                 </div>
                                 <div class="col-sm-12 col-md-6 flex flexm">
@@ -73,18 +74,19 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
-                                                <tr class="bg-our">
+                                            <tr class="bg-our">
                                                     <th> # </th>
-                                                    <th> Transaction Code </th>
-                                                    <th> Customer </th>
-                                                    <th> Status </th>
-                                                    <th> Date </th>
+                                                    <th> SKU </th>
+                                                    <th> Name </th>
+                                                    <th> Available Stock </th>
+                                                    <th> Sold </th>
+                                                    <th> Supplier/s </th>
+                                                    <th> Stock-in Date </th>
                                                     <th> Action </th>
                                                 </tr>
                                             </thead>
                                             <tbody id="myTable">
                                                 <?php
-
                                                     if(isset($_GET['page_no']) && $_GET['page_no'] !=''){
                                                         $page_no = $_GET['page_no'];
                                                     }else{
@@ -97,50 +99,42 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $next_page = $page_no +1;
                                                     $adjacent = "2";
 
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM rprq WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'");
+                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM products");
                                                     $total_records = mysqli_fetch_array($result_count);
                                                     $total_records = $total_records['total_records'];
                                                     $total_no_of_page = ceil($total_records / $total_record_per_page);
                                                     $second_last = $total_no_of_page - 1;
-
+                                                
                                                     // Perform the query
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
-                                                        FROM rprq
-                                                        JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+                                                    $query = "SELECT *, products.product_id, products.name FROM inventory
+                                                    JOIN products ON products.product_id = inventory.product_id";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
                                                     while ($row = mysqli_fetch_assoc($result)) {
-                                                        $modalId = 'editTransactionModal-' . $id;
+                                                        $modalId = 'edittechnicianModal-' . $id;
+                                                        $image = $row['img1'];
+                                                        $image_data = base64_encode($image);
+                                                        $image_src = "data:image/jpeg;base64,{$image_data}";
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
-                                                        echo '<td>' . $row['transaction_code'] . '</td>';
-                                                        echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
-                                                    
-                                                        $statusClass = '';
-                                                        if ($row['status'] == 'Pending') {
-                                                            $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
-                                                            $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-success';
-                                                        } else {
-                                                            $statusClass = 'badge-gradient-secondary';
-                                                        }
-                                                    
-                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
-                                                        echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td>' . $row['sku'] . '</td>';
+                                                        echo '<td>₱ ' . $row['name'] . '</td>';
+                                                        echo '<td>' . $row['available_stock'] . '</td>';
+                                                        echo '<td>' . $row['sold'] . '</td>';
+                                                        echo '<td>' . $row['suppliers'] . '</td>';
+                                                        echo '<td>' . $row['stock-_in_date'] . '</td>';
+                                                        
                                                         echo '<td>';
-                                                        echo '<a class="icns" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<a class="icns" href="view-inventory.php?&rowid=' .  $row['inv_id'] . '">';
+                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<a class="icns" href="edit-inventory.php?&rowid=' .  $row['inv_id'] . '">';
+                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<a class="icns" href="delete-inventory.php?&rowid=' .  $row['inv_id'] . '">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
@@ -232,7 +226,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     </div>
                 </div>
 
-                <?php include_once('../modals/add-repair-modal.php') ?>
+                <?php include_once('../modals/add-product-modal.php') ?>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">
@@ -292,45 +286,38 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         });
     });
     </script>
-    
-    
 
     <script>
     const form = document.querySelector('.form-sample');
-    const fname = form.querySelector('input[name="fname"]');
-    const lname = form.querySelector('input[name="lname"]');
+    const pname = form.querySelector('input[name="pname"]');
+    const price = form.querySelector('input[name="price"]');
     // const email = form.querySelector('input[name="email"]');
-    const phone = form.querySelector('input[name="phone"]');
-    const address = form.querySelector('input[name="address"]');
-    const etype = form.querySelector('select[name="etype"]');
-    // const electrician = form.querySelector('select[name="electrician"]');
-    const defective = form.querySelector('input[name="defective"]');
-    const shipping = form.querySelector('select[name="shipping"]');
-    const date = form.querySelector('input[name="date"]');
-    const completed = form.querySelector('input[name="completed"]');
-    const payment = form.querySelector('input[name="payment"]');
+    const description = form.querySelector('input[name="description"]');
+    const img1 = form.querySelector('input[name="img1"]');
+    const img2 = form.querySelector('input[name="img2"]');
+    const img3 = form.querySelector('input[name="img3"]');
+    const full = form.querySelector('textarea[name="full"]');
+    const features = form.querySelector('textarea[name="features"]');
+
 
     form.addEventListener('submit', (event) => {
         let error = false;
 
-        if (fname.value === '') {
-            fname.nextElementSibling.innerText = 'Please enter first name';
+        if (pname.value === '') {
+            pname.nextElementSibling.innerText = 'Please enter a Product name';
             error = true;
-        } else if (!/^[A-Z][a-z]*$/.test(fname.value)) {
-            fname.nextElementSibling.innerText = 'First name should be capitalized';
+        } else if (!/^[A-Z][a-z]*$/.test(pname.value)) {
+            pname.nextElementSibling.innerText = 'First Letter of Product name should be capitalized';
             error = true;
         } else {
-            fname.nextElementSibling.innerText = '';
+            pname.nextElementSibling.innerText = '';
         }
 
-        if (lname.value === '') {
-            lname.nextElementSibling.innerText = 'Please enter last name';
-            error = true;
-        } else if (!/^[A-Z][a-z]*$/.test(lname.value)) {
-            lname.nextElementSibling.innerText = 'Last name should be capitalized';
+        if (price.value === '') {
+            price.nextElementSibling.innerText = 'Please enter a price';
             error = true;
         } else {
-            lname.nextElementSibling.innerText = '';
+            price.nextElementSibling.innerText = '';
         }
 
         // if (email.value === '') {
@@ -340,73 +327,46 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         //     email.nextElementSibling.innerText = '';
         // }
 
-        if (phone.value === '') {
-            phone.nextElementSibling.innerText = 'Please enter phone number';
+        if (description.value === '') {
+            description.nextElementSibling.innerText = 'Please enter a description';
             error = true;
-        } else if (!/^\d{11}$/.test(phone.value)) {
-            phone.nextElementSibling.innerText = 'Please enter a valid 11-digit phone number';
-            error = true;
-        } else {
-            phone.nextElementSibling.innerText = '';
+        }else {
+            description.nextElementSibling.innerText = '';
         }
 
-        if (address.value === '') {
-            address.nextElementSibling.innerText = 'Please enter address';
+        if (img1.value === '') {
+            img1.nextElementSibling.innerText = 'Please select main image';
             error = true;
-        } else if (!/^[a-zA-Z0-9\s,'-]*$/.test(address.value)) {
-            address.nextElementSibling.innerText = 'Please enter a valid address';
+        }else {
+            img1.nextElementSibling.innerText = '';
+        }
+        
+        if (img2.value === '') {
+            img2.nextElementSibling.innerText = 'Please select 2nd image';
             error = true;
-        } else {
-            address.nextElementSibling.innerText = '';
+        }else {
+            img2.nextElementSibling.innerText = '';
         }
 
-        if (etype.value === 'None') {
-            etype.nextElementSibling.innerText = 'Please select an electronic type';
+        if (img3.value === '') {
+            img3.nextElementSibling.innerText = 'Please select 3rd image';
             error = true;
-        } else {
-            etype.nextElementSibling.innerText = '';
+        }else {
+            img3.nextElementSibling.innerText = '';
         }
 
-        // if (electrician.value === 'None') {
-        //     electrician.nextElementSibling.innerText = 'Please select an electrician';
-        //     error = true;
-        // } else {
-        //     electrician.nextElementSibling.innerText = '';
-        // }
-
-        if (defective.value === '') {
-            defective.nextElementSibling.innerText = 'Please enter your defective';
+        if (full.value === '') {
+            full.nextElementSibling.innerText = 'Please enter the full descriptions of the product';
             error = true;
-        } else {
-            defective.nextElementSibling.innerText = '';
+        }else {
+            full.nextElementSibling.innerText = '';
         }
 
-        if (shipping.value === 'None') {
-            shipping.nextElementSibling.innerText = 'Please select a shipping option';
+        if (features.value === '') {
+            features.nextElementSibling.innerText = 'Please enter the features of the product';
             error = true;
-        } else {
-            shipping.nextElementSibling.innerText = '';
-        }
-
-        if (date.value === '') {
-            date.nextElementSibling.innerText = 'Please select a date';
-            error = true;
-        } else {
-            date.nextElementSibling.innerText = '';
-        }
-
-        if (completed.value === '') {
-            completed.nextElementSibling.innerText = 'Please select a completion date';
-            error = true;
-        } else {
-            completed.nextElementSibling.innerText = '';
-        }
-
-        if (payment.value === '') {
-            payment.nextElementSibling.innerText = 'Please enter a payment amount';
-            error = true;
-        } else {
-            payment.nextElementSibling.innerText = '';
+        }else {
+            features.nextElementSibling.innerText = '';
         }
 
         if (error) {

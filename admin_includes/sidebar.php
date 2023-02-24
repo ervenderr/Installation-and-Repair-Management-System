@@ -20,6 +20,7 @@
                 <i class="fas fa-home menu-icon"></i>
               </a>
             </li>
+            <p class="text-secondary paragh">Transactions</p>
             <li class="nav-item <?php echo $rpactive; ?>">
               <a class="nav-link" data-bs-toggle="collapse" href="#uibasic" aria-expanded="false" aria-controls="uibasic">
                 <span class="menu-title">Repair request</span>
@@ -45,6 +46,19 @@
                   <li class="nav-item"> <a class="nav-link" href="../adminServices/pendings.php">Pending request</a></li>
                 </ul>
               </div>
+            </li>
+            <p class="text-secondary paragh">Maintenance</p>
+            <li class="nav-item <?php echo $prodactive; ?>">
+              <a class="nav-link" href="../admin_products/products.php">
+                <span class="menu-title">Products</span>
+                <i class="fas fa-box menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $invactive; ?>">
+              <a class="nav-link" href="../inventory/inventory.php">
+                <span class="menu-title">Inventory</span>
+                <i class="fas fa-warehouse menu-icon"></i>
+              </a>
             </li>
             <li class="nav-item <?php echo $custactive; ?>">
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic3" aria-expanded="false" aria-controls="ui-basic3">

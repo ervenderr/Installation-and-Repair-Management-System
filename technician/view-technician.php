@@ -103,8 +103,10 @@ $custshow = "show";
                                             </tr>
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">
-                                            <button type="button" class="btn btn-success btn-fw">Update Details   <i class='fas fa-edit text-white'></i></button>
-                                            <button type="button" class="btn btn-danger btn-fw red">Delete Details   <i class='fas fa-trash-alt text-white'></i></button>
+                                        <?php
+                                            echo '<a href="edit-technician.php?&rowid=' .  $row['tech_id'] . '" class="btn btn-success btn-fw">Update Details   <i class="fas fa-edit text-white"></i></a>';
+                                            echo '<a href="delete-technician.php&rowid=' .  $row['tech_id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
+                                            ?>
                                         </div>
                                     </div>
                                 </div>

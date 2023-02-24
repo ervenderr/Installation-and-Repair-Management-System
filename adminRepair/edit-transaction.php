@@ -16,8 +16,6 @@ $query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, cu
           FROM rprq
           JOIN customer ON rprq.cust_id = customer.cust_id
           JOIN accounts ON customer.account_id = accounts.account_id
-          JOIN services ON service_request.service_id = services.service_id
-          JOIN package ON service_request.pkg_id = package.pkg_id
           WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
@@ -79,8 +77,6 @@ if (mysqli_num_rows($result) > 0) {
                                         FROM rprq
                                         JOIN customer ON rprq.cust_id = customer.cust_id
                                         JOIN accounts ON customer.account_id = accounts.account_id
-                                        JOIN services ON service_request.service_id = services.service_id
-                                        JOIN package ON service_request.pkg_id = package.pkg_id
                                         WHERE rprq.transaction_code = '" . $tcode . "';";
                                         $result6 = mysqli_query($conn, $query6);
                                         

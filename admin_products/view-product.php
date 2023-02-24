@@ -10,10 +10,7 @@ require_once '../tools/variables.php';
 $rowid = $_GET['rowid'];
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT customer.cust_id, customer.fname, customer.lname, customer.phone, customer.address, customer.cust_type, accounts.email, accounts.user_type
-            FROM customer
-            JOIN accounts ON customer.account_id = accounts.account_id
-            WHERE customer.cust_id = '" . $rowid . "';";
+$query = "SELECT * FROM products WHERE products.product_id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -23,8 +20,8 @@ if (mysqli_num_rows($result) > 0) {
 
 }
 
-$custactive = "active";
-$custshow = "show";
+$prodactive = "active";
+
 
 
 ?>
@@ -40,29 +37,17 @@ $custshow = "show";
             
             <!-- partial -->
             <div class="main-panel">
-            <?php
-            $type = "";
-            $href = "";
-            if ($row['cust_type'] == 'walk-in'){
-                $href = "walk-in.php";
-                $type = "/ Walk-in customer";
-
-            }elseif($row['cust_type'] == 'online'){
-                $href = "online.php";
-                $type = "/ Online customer";
-            }
-            ?>
                 <div class="content-wrapper">
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                            <i class="fas fa-users menu-icon"></i>
-                            </span> Customer<span class="bread"><?php echo $type; ?></span>
+                            <i class="fas fa-box menu-icon"></i>
+                            </span> Products<span class="bread"> / <?php echo $row['name']; ?></span>
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 
-                                <a href="<?php echo $href; ?>">
+                                <a href="products.php">
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <span></span><i class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
                                     </i>
@@ -77,29 +62,64 @@ $custshow = "show";
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th class="bg-gryy">Customer Name:</th>
-                                                <td><?php echo $row['fname'] ." " .  $row['lname']?></td>
+                                                <th class="bg-gryy">Product Name:</th>
+                                                <td><?php echo $row['name']?></td>
                                             </tr>
                                             <tr>
-                                                <th class="bg-gryy">Address:</th>
-                                                <td><?php echo $row['address']?></td>
+                                                <th class="bg-gryy">Price:</th>
+                                                <td>₱ <?php echo $row['price']?></td>
                                             </tr>
                                             <tr>
-                                                <th class="bg-gryy">Contact:</th>
-                                                <td><?php echo $row['phone']?></td>
+                                                <th class="bg-gryy">Featured Description:</th>
+                                                <td><?php echo $row['description']?></td>
+                                            </tr>
+                                            <tr class="fulldesc">
+                                                <th class="bg-gryy">Full Description:</th>
+                                                <td class="" style="white-space: normal; word-wrap: break-word;"><?php echo nl2br($row['full_descriptions'])?></td>
+                                            </tr>
+                                            <tr class="fulldesc">
+                                                <th class="bg-gryy">Features:</th>
+                                                <td class="" style="white-space: normal; word-wrap: break-word;"><?php echo nl2br($row['features'])?></td>
                                             </tr>
                                             <tr>
-                                                <th class="bg-gryy">Email:</th>
-                                                <td><?php echo $row['email']?></td>
-                                            </tr><tr>
-                                                <th class="bg-gryy">Customer type:</th>
-                                                <td><?php echo $row['cust_type']?></td>
+                                                <th class="bg-gryy">Images:</th>
+                                                <td class="maxwidth"><?php
+                                                $image1 = $row['img1'];
+                                                $image2 = $row['img2'];
+                                                $image3 = $row['img3'];
+                                                $image_data1 = base64_encode($image1);
+                                                $image_data2 = base64_encode($image2);
+                                                $image_data3 = base64_encode($image3);
+                                                $image_src1 = "data:image/jpeg;base64,{$image_data1}";
+                                                $image_src2 = "data:image/jpeg;base64,{$image_data2}";
+                                                $image_src3 = "data:image/jpeg;base64,{$image_data3}";
+                                                echo 
+                                                '<img class="imgsz" src="' . $image_src1 . '" alt="img1" class="">
+                                                <img class="imgsz" src="' . $image_src3 . '" alt="img2" class="">
+                                                <img class="imgsz" src="' . $image_src2 . '" alt="img3" class="">';
+                                                ?></td>
+                                            </tr>
+                                            <tr>
+                                                <?php
+                                                $statusClass = '';
+                                                if ($row['status'] == 'Backordered') {
+                                                    $statusClass = 'badge-gradient-warning';
+                                                } else if ($row['status'] == 'Inactive') {
+                                                    $statusClass = 'badge-gradient-danger';
+                                                } else if ($row['status'] == 'In-Stock') {
+                                                    $statusClass = 'badge-gradient-success';
+                                                } else {
+                                                    $statusClass = 'badge-gradient-secondary';
+                                                }
+                                                echo '<th class="bg-gryy">Status:</th>';
+                                                echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
+                                                ?>
                                             </tr>
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">
-                                        <?php
-                                            echo '<a href="edit-customer.php?&rowid=' .  $row['cust_id'] . '" class="btn btn-success btn-fw">Update Details   <i class="fas fa-edit text-white"></i></a>';
-                                            echo '<a href="delete-customer.php&rowid=' .  $row['cust_id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
+                                            <?php
+                                            echo '<a href="edit-product.php?&rowid=' .  $row['product_id'] . '" class="btn btn-success btn-fw">Update Details   <i class="fas fa-edit text-white"></i></a>';
+                                            echo '<a href="delete-product.php&rowid=' .  $row['product_id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
                                             ?>
                                         </div>
                                     </div>

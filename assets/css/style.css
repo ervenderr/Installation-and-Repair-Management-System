@@ -14163,7 +14163,7 @@ dl {
         .sidebar .nav .nav-item .nav-link i {
           color: inherit; }
           .sidebar .nav .nav-item .nav-link i.menu-icon {
-            font-size: 1.125rem;
+            font-size: 1rem;
             line-height: 1;
             margin-left: auto;
             color: #ded9d9; }
@@ -14579,5 +14579,14 @@ dl {
 
 .oneofone{
   margin-right: 5px;
+}
+
+.paragh{
+  margin: 10px 10px;
+}
+
+.table td .imgsz{
+  width: auto;
+  height: 100px;
 }
 /*# sourceMappingURL=style.css.map */

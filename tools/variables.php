@@ -29,5 +29,6 @@
     $custactive2 = "";
     $custshow = "";
     $techactive = "";
+    $prodactive = "";
 
 ?>
