@@ -14589,4 +14589,14 @@ dl {
   width: auto;
   height: 100px;
 }
+
+.supp{
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.supp h4{
+  margin-bottom: 0;
+}
 /*# sourceMappingURL=style.css.map */

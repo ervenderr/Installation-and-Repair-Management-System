@@ -46,16 +46,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
               </div>';
             }
         ?>
-                        <nav aria-label="breadcrumb">
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item active btn-group-sm" aria-current="page">
-                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addInventoryModal">
-                                        Create New<i class=" mdi mdi-plus "></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                     <div class="card">
                         <div class="card-body">
@@ -80,7 +70,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     <th> Name </th>
                                                     <th> Available Stock </th>
                                                     <th> Sold </th>
-                                                    <th> Supplier/s </th>
                                                     <th> Stock-in Date </th>
                                                     <th> Action </th>
                                                 </tr>
@@ -99,42 +88,43 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $next_page = $page_no +1;
                                                     $adjacent = "2";
 
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM products");
+                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM inventory
+                                                    JOIN products ON products.product_id = inventory.product_id");
                                                     $total_records = mysqli_fetch_array($result_count);
                                                     $total_records = $total_records['total_records'];
                                                     $total_no_of_page = ceil($total_records / $total_record_per_page);
                                                     $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
-                                                    $query = "SELECT *, products.product_id, products.name FROM inventory
-                                                    JOIN products ON products.product_id = inventory.product_id";
+                                                    $query = "SELECT 
+                                                        products.name, 
+                                                        products.sku,
+                                                        products.product_id,
+                                                        inventory.sold,
+                                                        inventory.inv_id,
+                                                        COALESCE(SUM(inventory.stock_in), 0) AS total_qty, 
+                                                        COALESCE(MAX(inventory.stock_in_date), NULL) AS stock_in_date 
+                                                    FROM products 
+                                                    LEFT JOIN inventory ON products.product_id = inventory.product_id 
+                                                    GROUP BY products.product_id";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
                                                     while ($row = mysqli_fetch_assoc($result)) {
-                                                        $modalId = 'edittechnicianModal-' . $id;
-                                                        $image = $row['img1'];
-                                                        $image_data = base64_encode($image);
-                                                        $image_src = "data:image/jpeg;base64,{$image_data}";
+                                                        $modalId = 'editInventoryModal-' . $id;
+                                                        $qtySoldRatio = ($row['total_qty'] - $row['sold']);
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
                                                         echo '<td>' . $row['sku'] . '</td>';
-                                                        echo '<td>₱ ' . $row['name'] . '</td>';
-                                                        echo '<td>' . $row['available_stock'] . '</td>';
+                                                        echo '<td>' . $row['name'] . '</td>';
+                                                        echo '<td>' . $qtySoldRatio . ' <span class="text-secondary">/ ' . $row['total_qty'] . '</span></td>';
                                                         echo '<td>' . $row['sold'] . '</td>';
-                                                        echo '<td>' . $row['suppliers'] . '</td>';
-                                                        echo '<td>' . $row['stock-_in_date'] . '</td>';
+                                                        echo '<td>' . $row['stock_in_date'] . '</td>';
                                                         
-                                                        echo '<td>';
-                                                        echo '<a class="icns" href="view-inventory.php?&rowid=' .  $row['inv_id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="edit-inventory.php?&rowid=' .  $row['inv_id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="delete-inventory.php?&rowid=' .  $row['inv_id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
+                                                        echo '<td class="btn-group-sm">';
+                                                        echo '<a class="icns btn btn-info" href="view-inventory.php?&rowid=' .  $row['product_id'] . '">';
+                                                        echo 'View <i class="fas fa-eye view-account" data-rowid="' .  $row['product_id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
