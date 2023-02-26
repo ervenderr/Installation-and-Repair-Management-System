@@ -1,4 +1,4 @@
-<!-- Add repair Transaction - The modal -->
+<!-- Add service Transaction - The modal -->
 <div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-xl">

@@ -9,18 +9,23 @@ require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Repair Request';
 $repair = 'actives activess';
-include_once('../homeIncludes/header.php');
+require_once '../homeIncludes/header.php';
 
 $cust_id = $_SESSION["cust_id"];
 
-
+$user_id = $_SESSION['logged_id'];
+$sql = "SELECT * FROM accounts, customer, rprq 
+WHERE accounts.account_id = $user_id
+AND customer.account_id=accounts.account_id";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
 
 ?>
 
 <body class="repairbody">
 
     <?php
-    include_once('../homeIncludes/homenav.php');
+    require_once '../homeIncludes/homenav.php';
     ?>
 
     <div id="particles-js"></div>
@@ -37,7 +42,7 @@ $cust_id = $_SESSION["cust_id"];
                 </div>
             </div>
    
-            <h4 class="text-center">Repair Request Form <?php echo $cust_id ?></h3>
+            <h4 class="text-center">Repair Request Form</h3>
                 <!-- progress bar -->
 
                 <div class="progressbar">
@@ -49,18 +54,18 @@ $cust_id = $_SESSION["cust_id"];
 
                 <div class="form-step form-step-active">
                     <div class="mb-3">
-                        <label for="fname" class="form-label">First Name</label>
-                        <input type="text" value="name" class="form-control" id="fname" name="fname">
+                        <label for="fname" class="form-label labls">First Name</label>
+                        <input type="text" value="<?php echo isset($row['fname']) ? $row['fname'] : '' ?>" class="form-control" id="fname" name="fname">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="mname" class="form-label">Middle Name</label>
-                        <input type="text" class="form-control" id="mname" name="mname">
+                        <input type="text" class="form-control" id="mname" name="mname" value="<?php echo isset($row['mname']) ? $row['mname'] : '' ?>">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="lname" class="form-label">Last Name</label>
-                        <input type="text" value="last" class="form-control" id="lname" name="lname">
+                        <input type="text" value="<?php echo isset($row['lname']) ? $row['lname'] : '' ?>" class="form-control" id="lname" name="lname">
                         <span class="val-error"></span>
                     </div>
                     <div class="">
@@ -72,18 +77,18 @@ $cust_id = $_SESSION["cust_id"];
                 <div class="form-step">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" value="email@dsds.com" class="form-control" id="email" name="email">
+                        <input type="email" value="<?php echo isset($row['email']) ? $row['email'] : '' ?>" class="form-control" id="email" name="email">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="tel" class="form-control" id="phone" value="09123456789" name="phone"
+                        <input type="tel" class="form-control" id="phone" value="<?php echo isset($row['phone']) ? $row['phone'] : '' ?>" name="phone"
                             pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" value="ADSDASA" name="address">
+                        <input type="text" class="form-control" id="address" value="<?php echo isset($row['address']) ? $row['address'] : '' ?>" name="address">
                         <span class="val-error"></span>
                     </div>
                     <div class="btns-group">

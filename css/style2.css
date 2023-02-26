@@ -123,6 +123,8 @@
 
 .val-error {
     font-size: 12px;
+    color: red;
+    font-style: italic;
 }
 
 .pkgcon {
@@ -131,6 +133,7 @@
     display: flex;
     justify-content: center;
     padding: 0;
+    background-color: #f1f7fc;
 }
 
 .pkgcon .form {
@@ -155,8 +158,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgb(1, 95, 107);
-    background: linear-gradient(142deg, rgba(1, 95, 107, 0.8379726890756303) 0%, rgba(17, 110, 81, 1) 100%);
+    background: #f1f7fc;
     padding: 0 50px;
 }
 
@@ -171,8 +173,6 @@
     background-color: #fff;
     flex-wrap: wrap;
     margin-top: 50px;
-    box-shadow: 5px 5px 6px #015F6B,
-        -5px -5px 6px #015F6B;
 }
 
 
@@ -796,6 +796,118 @@ input[type="password"], .email {
     height: auto;
 }
 
+.register-photo {
+    background:#f1f7fc;
+    padding:80px 0;
+    height: 100vh;
+  }
+  
+  .register-photo .image-holder {
+    display:table-cell;
+    width:auto;
+    background:url(../img/qq.jpg);
+    background-size:cover;
+  }
+  
+  .register-photo .form-container {
+    display:table;
+    max-width:900px;
+    width:auto;
+    margin:0 auto;
+    box-shadow:1px 1px 5px rgba(0,0,0,0.1);
+  }
+  
+  .register-photo form {
+    display:table-cell;
+    width:400px;
+    background-color:#ffffff;
+    padding:40px 60px;
+    color:#505e6c;
+  }
+  
+  @media (max-width:991px) {
+    .register-photo form {
+      padding:40px;
+    }
+  }
+  
+  .register-photo form h2 {
+    font-size:24px;
+    line-height:1.5;
+    margin-bottom:30px;
+  }
+  
+  .register-photo form .form-control {
+    background:#f7f9fc;
+    border:none;
+    border-bottom:1px solid #dfe7f1;
+    border-radius:0;
+    box-shadow:none;
+    outline:none;
+    color:inherit;
+    text-indent:6px;
+    height:40px;
+  }
+  
+  .register-photo form .form-check {
+    font-size:13px;
+    line-height:20px;
+  }
+
+  .register-photo form .btn-submit {
+    background-color: #015F6B;
+    color: #ffff;
+    border: none;
+    border-radius: 50px;
+    align-items: center;
+    width: auto;
+}
+  
+  .register-photo form .btn-primary {
+    background:#015F6B;
+    border:none;
+    border-radius:20px;
+    padding:11px;
+    box-shadow:none;
+    text-shadow:none;
+    outline:none !important;
+  }
+  
+  .register-photo form .btn-primary:hover, .register-photo form .btn-primary:active {
+    background:#015F6B;
+  }
+
+  .btn-block2{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .register-photo form .btn-primary:active {
+    transform:translateY(1px);
+  }
+  
+  .register-photo form .already {
+    display:block;
+    text-align:center;
+    font-size:12px;
+    color:#015F6B;
+    opacity:0.9;
+    text-decoration:none;
+  }
+  .btn-block{
+width: 100%;
+  }
+
+  .register-photo .form-container form .lgns{
+    margin: 0;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .login-img{
+    width: 45px;
+  }
+
 
 
 /* responsive */
@@ -1359,3 +1471,4 @@ input[type="password"], .email {
     border-radius: 50%;
     border: none;
 }
+

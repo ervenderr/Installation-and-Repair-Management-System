@@ -2,7 +2,6 @@
 session_start();
 require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
-require_once '../modals/contactus.php';
 $page_title = 'ProtonTech | Home';
 $home = 'actives';
 include_once('../homeIncludes/header.php');
@@ -33,7 +32,7 @@ include_once('../homeIncludes/header.php');
 
                     </p>
                     <p>
-                    <a class="btn btn-outline-success log1" role="submit" href="#">Request a Repair</a>
+                        <a class="btn btn-outline-success log1" role="submit" href="#">Request a Repair</a>
 
                     </p>
                 </div>
@@ -45,6 +44,85 @@ include_once('../homeIncludes/header.php');
         </div>
     </div>
 
+    
+
+    <!-- Featured Services -->
+    <div class="container mt-5 values-section">
+        <h2 class="text-center mb-5">Featured Services </h2>
+        <div class="row">
+            <?php 
+                $sql = "SELECT service_name, description, img FROM services LIMIT 2";
+                $result = mysqli_query($conn, $sql);
+
+                if (mysqli_num_rows($result) > 0) {
+                
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $name = $row['service_name'];
+                    $description = $row['description'];
+                    $image = $row['img'];
+                    $image_data = base64_encode($image);
+                    $image_src = "data:image/jpeg;base64,{$image_data}";
+                    echo '<div class="row mt-5">';
+                    echo '<div class="col-md-6 serimg">';
+                    echo '<img src="' . $image_src . '" alt="' . $name . '" class="img-fluid rounded shadow-lg imgserv">';
+                    echo '</div>';
+                    echo '<div class="col-md-6 d-flex align-items-center">';
+                    echo '<div class="bg-light p-3 rounded shadow-lg destext">';
+                    echo '<h3 class="serv text-left font-weight-bold mb-0 servname">' . $name . '</h3>';
+                    echo '<p class="text-left font-italic text-secondary mt-1 mb-3">' . $description . '</p>';
+                    echo '<button class="btn btn-primary mt-3 serbtn"><a href="/solar-panels" style="color: white;">Learn more</a></button>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '<hr class="my-5">';
+                }
+                } else {
+                echo "No services found.";
+                }
+                
+                ?>
+        </div>
+        <hr class="hrhr">
+    </div>
+
+    <!-- Featured Products -->
+    <div class="container mt-5 values-section">
+        <h2 class="text-center mb-5">Featured Products </h2>
+        <div class="row">
+            <?php
+            $sql = "SELECT * FROM products LIMIT 3";
+            $result = mysqli_query($conn, $sql);
+            // Check if there are any rows in the table
+            if (mysqli_num_rows($result) > 0) {
+                // If there are rows, output the name, price, description, and image for each row
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $name = $row['name'];
+                    $price = $row['price'];
+                    $description = $row['description'];
+                    $full_description = $row['full_descriptions'];
+                    $features = $row['features'];
+                    $image1 = $row['img1'];
+                    $image2 = $row['img2'];
+                    $image3 = $row['img3'];
+
+                    // Output the product information
+                    echo '<div class="col-md-4">';
+                    echo '<div class="product logoss hidden">';
+                    echo '<img src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="' . $name . '" class="product-image" data-toggle="modal" data-target="#img-modal-' . $name . '">';
+                    echo '<h2>' . $name . '</h2>';
+                    echo '<p>' . $description . '</p>';
+                    echo '<div class="product-price">' . $price . '</div>';
+                    echo '<button type="button" class="btn btn-primary seemore" data-toggle="modal" data-target="#product-modal-' . $name . '">See More</button>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+            } else {
+                // If there are no rows in the table, display a message
+                echo "No products found.";
+            }
+            ?>
+        </div>
+    </div>
 
     <div class="darks">
         <!-- Values -->
@@ -97,6 +175,7 @@ include_once('../homeIncludes/header.php');
                 </div>
             </div>
         </div>
+        
 
 
         <!-- Reviews -->
@@ -175,64 +254,20 @@ include_once('../homeIncludes/header.php');
 
 
 
-    <!-- Featured Products -->
-
-    <div class="container mt-5 values-section">
-        <h2 class="text-center mb-5">Featured Products </h2>
-        <div class="row">
-            <?php
-            $sql = "SELECT * FROM products";
-            $result = mysqli_query($conn, $sql);
-
-            // Check if there are any rows in the table
-            if (mysqli_num_rows($result) > 0) {
-                // If there are rows, output the name, price, description, and image for each row
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $name = $row['name'];
-                    $price = $row['price'];
-                    $description = $row['description'];
-                    $full_description = $row['full_descriptions'];
-                    $features = $row['features'];
-                    $image1 = $row['img1'];
-                    $image2 = $row['img2'];
-                    $image3 = $row['img3'];
-
-                    // Output the product information
-                    echo '<div class="col-md-4">';
-                    echo '<div class="product logoss hidden">';
-                    echo '<img src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="' . $name . '" class="product-image" data-toggle="modal" data-target="#img-modal-' . $name . '">';
-                    echo '<h2>' . $name . '</h2>';
-                    echo '<p>' . $description . '</p>';
-                    echo '<div class="product-price">' . $price . '</div>';
-                    echo '<button type="button" class="btn btn-primary seemore" data-toggle="modal" data-target="#product-modal-' . $name . '">See More</button>';
-                    echo '</div>';
-                    echo '</div>';
-                }
-            } else {
-                // If there are no rows in the table, display a message
-                echo "No products found.";
-            }
-
-            ?>
-
-
-
-        </div>
-    </div>
 
     <!-- Footer -->
     <?php include_once('../homeIncludes/footer.php');?>
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
 
     <script src="../js/particles.js"></script>
     <script src="../js/app.js"></script>
