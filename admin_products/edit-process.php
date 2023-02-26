@@ -1,11 +1,12 @@
 <?php
 session_start();
 require_once '../homeIncludes/dbconfig.php';
-$rowid = $_GET['rowid'];
+
 
 
 if (isset($_POST['submit'])) {
     // assign form data to variables
+    $rowid = $_GET['rowid'];
     $pname = htmlentities($_POST['pname']);
     $price = htmlentities($_POST['price']);
     $description = htmlentities($_POST['description']);
@@ -54,7 +55,7 @@ if (isset($_POST['submit'])) {
     }
 
     $sql .= "status = '$status' ";
-    $sql .= "WHERE product_id = '$product_id'";
+    $sql .= "WHERE product_id = '$rowid'";
 
     // Execute the SQL query
     $result = mysqli_query($conn, $sql);
