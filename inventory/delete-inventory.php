@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('../homeincludes/dbconfig.php');
+require_once '../homeIncludes/dbconfig.php';
 
 if(isset($_POST['inv_id'])) {
     $output = '';

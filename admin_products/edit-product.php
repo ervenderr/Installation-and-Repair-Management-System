@@ -35,7 +35,7 @@ if (mysqli_num_rows($result) > 0) {
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
                                 <i class="fas fa-users menu-icon"></i>
-                            </span> Technicians <span class="bread">/ Update technician info</span>
+                            </span> Products <span class="bread">/ Update product info</span>
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
