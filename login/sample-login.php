@@ -1,10 +1,8 @@
 <?php
 session_start();
 require_once '../homeIncludes/dbconfig.php';
-require_once '../tools/variables.php';
-$page_title = 'ProtonTech | Sign Up';
 include_once('../homeIncludes/header.php');
-require_once '../modals/contactus.php';
+
 
 //process login
 if (isset($_POST['submit'])){
@@ -39,14 +37,13 @@ if (isset($_POST['submit'])){
         <div class="form-container">
             
             <form method="post">
-                <h2 class="text-center login-h4"><strong>Create</strong> an account<img class="login-img" src="../img/proton-logo.png" alt=""></h2>
+                <h2 class="text-center login-h4"><strong>Sign In</strong><img class="login-img" src="../img/proton-logo.png" alt=""></h2>
                 <div class="form-group lgns"><input class="form-control" type="email" name="email" placeholder="Email"></div>
                 <div class="form-group lgns"><input class="form-control" type="password" name="password" placeholder="Password"></div>
-                <div class="form-group lgns"><input class="form-control" type="password" name="password-repeat" placeholder="Repeat password"></div>
                 <div class="form-group lgns">
                     <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox">I agree to the license terms.</label></div>
                 </div>
-                <div class="form-group btn-block"><button class="btn btn-primary btn-block" name="submit" type="submit">Sign Up</button></div><a href="../login/login.php" class="already">You already have an account? Login here.</a>
+                <div class="form-group btn-block"><button class="btn btn-primary btn-block" type="submit">Sign In</button></div><a href="#" class="already">You already have an account? Login here.</a>
             </form>
             <div class="image-holder"></div>
         </div>

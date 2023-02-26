@@ -44,6 +44,23 @@ $invactive = "active";
                                 <i class="fas fa-box menu-icon"></i>
                             </span> Inventory<span class="bread"> / <?php echo $row['name']; ?></span>
                         </h3>
+                        <?php
+            if (isset($_GET['msg'])) {
+                $msg = $_GET['msg'];
+                echo '<div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                '. $msg .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+            }
+
+            if (isset($_GET['msg2'])) {
+                $msg2 = $_GET['msg2'];
+                echo '<div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+                '. $msg2 .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+            }
+        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
 
@@ -57,23 +74,6 @@ $invactive = "active";
                             </ul>
                         </nav>
                     </div>
-                    <?php
-            if (isset($_GET['msg'])) {
-                $msg = $_GET['msg'];
-                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                '. $msg .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-
-            if (isset($_GET['msg2'])) {
-                $msg2 = $_GET['msg2'];
-                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                '. $msg2 .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-        ?>
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -108,6 +108,15 @@ $invactive = "active";
                                             </tr>
                                             <tr>
                                                 <?php
+                                                $query2 = "SELECT * FROM inventory
+                                                JOIN products ON products.product_id = inventory.product_id
+                                                JOIN supplier ON supplier.supplier_id = inventory.supplier_id
+                                                WHERE products.product_id = '" . $rowid . "'";
+
+                                                $result2 = mysqli_query($conn, $query2);
+                                                $id = 1;
+                                                $row2 = mysqli_fetch_assoc($result2);
+                                                $qty = '';
                                                 $statusClass = '';
                                                 if ($row['status'] == 'Backordered') {
                                                     $statusClass = 'badge-gradient-warning';
@@ -193,12 +202,13 @@ $invactive = "active";
                                                             echo '<td>' . $row['stock_in_date'] . '</td>';
                                                             
                                                             echo '<td class="btn-group-sm">';
-                                                            echo '<a class="icns btn btn-info" href="edit-inventory.php?&rowid=' .  $row['inv_id'] . '">';
-                                                            echo 'Edit <i class="fas fa-edit view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
-                                                            echo '</a>';
-                                                            echo '<a class="icns btn btn-danger" href="delete-inventory.php?&rowid=' .  $row['inv_id'] . '">';
-                                                            echo 'Delete <i class="fas fa-trash-alt view-account" data-rowid="' .  $row['inv_id'] . '"></i>';
-                                                            echo '</a>';
+                                                            echo '<button class="icns btn btn-info edit" id="' .  $row['inv_id'] . '">';
+                                                            echo 'Edit <i class="fas fa-edit view-account" id="' .  $row['inv_id'] . '"></i>';
+                                                            echo '</button>';
+
+                                                            echo '<button class="icns btn btn-danger delete" id="' .  $row['inv_id'] . '">';
+                                                            echo 'Delete <i class="fas fa-trash-alt view-account" id="' .  $row['inv_id'] . '"></i>';
+                                                            echo '</button>';
                                                             echo '</td>';
                                                             echo '</tr>';
                                                             $row = mysqli_fetch_assoc($result);
@@ -224,7 +234,7 @@ $invactive = "active";
                     </div>
                 </div>
 
-                <!-- Modal -->
+                <!--Add Modal -->
 <div class="modal fade" id="addSuppModal" tabindex="-1" aria-labelledby="addSuppModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -267,6 +277,39 @@ $invactive = "active";
     </div>
   </div>
 </div>
+
+
+<!--edit Modal -->
+<div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSuppModalLabel">Edit record</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body suppbody">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--delete Modal -->
+<div class="modal fade" id="deleteSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSuppModalLabel">Delete record</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body delsupp">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
@@ -313,6 +356,59 @@ $invactive = "active";
         });
     });
     </script>
+
+<script>
+  $(document).ready(function(){
+    $('.edit').click(function(){
+
+        id =  $(this).attr('id');
+        $.ajax({
+        url: 'select.php',
+        method: 'post',
+        data: {inv_id:id},
+        success: function(result) {
+            // Handle successful response
+            $('.suppbody').html(result);
+        }
+        });
+
+
+      $('#editSuppModal').modal('show');
+    })
+  })
+</script>
+
+<script>
+$(document).ready(function(){
+    $('.delete').click(function(){
+
+        id =  $(this).attr('id');
+        $.ajax({
+        url: 'delete-inventory.php',
+        method: 'post',
+        data: {inv_id:id},
+        success: function(result) {
+            // Handle successful response
+            $('.delsupp').html(result);
+        }
+        });
+
+
+      $('#deleteSuppModal').modal('show');
+    })
+  })
+</script>
+
+<script>
+    // Set a timer to hide the alert after 3 seconds
+    const alert = document.querySelector("#alert");
+    if (alert) {
+        setTimeout(() => {
+            alert.style.display = "none";
+        }, 2000);
+    }
+</script>
+
 </body>
 
 </html>
