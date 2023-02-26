@@ -1,6 +1,6 @@
 <?php
-include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
+require_once '../admin_includes/header.php';
+require_once '../homeincludes/dbconfig.php';
 require_once '../tools/variables.php';
 
 $rpactive = "active";
@@ -30,11 +30,11 @@ if (mysqli_num_rows($result) > 0) {
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
-        <?php include_once('../admin_includes/navbar.php'); ?>
+        <?php require_once '../admin_includes/navbar.php'; ?>
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
-            <?php include_once('../admin_includes/sidebar.php'); ?>
+            <?php require_once '../admin_includes/sidebar.php'; ?>
             
             <!-- partial -->
             <div class="main-panel">
