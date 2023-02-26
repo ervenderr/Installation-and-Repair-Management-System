@@ -1,8 +1,8 @@
 <?php
 session_start();
 include_once('../admin_includes/header.php');
-require_once '../homeincludes/dbconfig.php';
 include_once('../tools/variables.php');
+require_once '../homeincludes/dbconfig.php';
 
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
