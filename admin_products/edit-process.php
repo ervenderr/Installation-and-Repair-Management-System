@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     }
 
     $sql .= "status = '$status' ";
-    $sql .= "WHERE product_id = '$rowid'";
+    $sql .= "WHERE product_id = '$product_id'";
 
     // Execute the SQL query
     $result = mysqli_query($conn, $sql);
