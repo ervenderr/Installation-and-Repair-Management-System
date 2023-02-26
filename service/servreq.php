@@ -28,7 +28,14 @@ if(!empty($_POST["service_id"])){
     }
 }
 
+$cust_id = $_SESSION["cust_id"];
 
+$user_id = $_SESSION['logged_id'];
+$sql2 = "SELECT * FROM accounts, customer, rprq 
+WHERE accounts.account_id = $user_id
+AND customer.account_id=accounts.account_id";
+$result2 = mysqli_query($conn, $sql2);
+$row2 = mysqli_fetch_assoc($result2);
 ?>
 
 <body>
@@ -54,7 +61,8 @@ if(!empty($_POST["service_id"])){
                     <div id='msgs' class='msg'>
                         <p id='msgs'>Request Submitted!</p>
                         <div class="msgbtn">
-                            <a class="msgb" href="../service/service-transaction.php" role="button">Get Information ID</a>
+                            <a class="msgb" href="../service/service-transaction.php" role="button">Get Information
+                                ID</a>
                             <a class="msgb" href="servreq.php" role="button">Submit Another Request</a>
 
                         </div>
@@ -72,18 +80,21 @@ if(!empty($_POST["service_id"])){
 
                         <div class="form-step form-step-active">
                             <div class="mb-3">
-                                <label for="fname" class="form-label">First Name</label>
-                                <input type="text" value="name" class="form-control" id="fname" name="fname">
+                                <label for="fname" class="form-label labls">First Name</label>
+                                <input type="text" value="<?php echo isset($row2['fname']) ? $row2['fname'] : '' ?>"
+                                    class="form-control" id="fname" name="fname">
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="mname" class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" id="mname" name="mname">
+                                <input type="text" class="form-control" id="mname" name="mname"
+                                    value="<?php echo isset($row2['mname']) ? $row2['mname'] : '' ?>">
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="lname" class="form-label">Last Name</label>
-                                <input type="text" value="last" class="form-control" id="lname" name="lname">
+                                <input type="text" value="<?php echo isset($row2['lname']) ? $row2['lname'] : '' ?>"
+                                    class="form-control" id="lname" name="lname">
                                 <span class="val-error"></span>
                             </div>
                             <div class="">
@@ -95,18 +106,21 @@ if(!empty($_POST["service_id"])){
                         <div class="form-step">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" value="email@dsds.com" class="form-control" id="email" name="email">
+                                <input type="email" value="<?php echo isset($row2['email']) ? $row2['email'] : '' ?>"
+                                    class="form-control" id="email" name="email">
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="tel" class="form-control" id="phone" value="09123456789" name="phone"
+                                <input type="tel" class="form-control" id="phone"
+                                    value="<?php echo isset($row2['phone']) ? $row2['phone'] : '' ?>" name="phone"
                                     pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" value="ADSDASA" name="address">
+                                <input type="text" class="form-control" id="address"
+                                    value="<?php echo isset($row2['address']) ? $row2['address'] : '' ?>" name="address">
                                 <span class="val-error"></span>
                             </div>
                             <div class="btns-group">

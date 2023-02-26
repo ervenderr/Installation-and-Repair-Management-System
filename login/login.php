@@ -4,7 +4,6 @@ require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Log In';
 include_once('../homeIncludes/header.php');
-require_once '../modals/contactus.php';
 
 //process login
 if (isset($_POST['submit'])){
@@ -38,7 +37,17 @@ if (isset($_POST['submit'])){
 <div class="register-photo">
         <div class="form-container">
             
-            <form method="post">
+            <form method="post" action="login.php">
+            <?php
+                if (isset($_SESSION['signup_success']) && $_SESSION['signup_success']) {
+                    echo '<div id="alert" class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                    "Sign up successful! Please log in."
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>';
+                    
+                    $_SESSION['signup_success'] = false;
+                }
+                ?>
                 <h2 class="text-center login-h4"><strong>Sign In Now</strong><img class="login-img" src="../img/proton-logo.png" alt=""></h2>
                 <div class="form-group lgns"><input class="form-control" type="email" name="email" placeholder="Email"></div>
                 <div class="form-group lgns"><input class="form-control" type="password" name="password" placeholder="Password"></div>
@@ -50,5 +59,15 @@ if (isset($_POST['submit'])){
             <div class="image-holder"></div>
         </div>
     </div>
+
+    <script>
+    // Set a timer to hide the alert after 3 seconds
+    const alert = document.querySelector("#alert");
+    if (alert) {
+        setTimeout(() => {
+            alert.style.display = "none";
+        }, 2000);
+    }
+</script>
 </body>
 </html>
