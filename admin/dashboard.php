@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../admin_includes/header.php';
-require_once '../homeincludes/dbconfig.php';
+require_once('../homeincludes/dbconfig.php');
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
@@ -12,11 +12,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
   <body>
     <div class="container-scroller">
       <!-- partial:partials/_navbar.html -->
-      <?php require_once '../admin_includes/navbar.php'; ?>
+      <?php include_once('../admin_includes/navbar.php'); ?>
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
-        <?php require_once '../admin_includes/sidebar.php'; ?>
+        <?php include_once('../admin_includes/sidebar.php'); ?>
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
