@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
+require_once '../homeincludes/dbconfig.php';
 include_once('../tools/variables.php');
 
 
