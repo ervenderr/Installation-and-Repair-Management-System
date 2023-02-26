@@ -1,6 +1,8 @@
 <?php
 session_start();
+include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
+require_once '../tools/variables.php';
 
 
 
