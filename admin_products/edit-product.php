@@ -1,7 +1,8 @@
 <?php
 session_start();
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
+require_once '../homeIncludes/dbconfig.php';
+include_once('../tools/variables.php');
 
 $prodactive = "active";
 $rowid = $_GET['rowid'];
