@@ -79,11 +79,5 @@
                 <i class="fas fa-user-cog menu-icon"></i>
               </a>
             </li>
-            <li class="nav-item ">
-              <a class="nav-link" href="../pages/icons/mdi.html">
-                <span class="menu-title">Icons</span>
-                <i class="mdi mdi-contacts menu-icon"></i>
-              </a>
-            </li>
           </ul>
         </nav>
