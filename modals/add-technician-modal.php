@@ -62,17 +62,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label for="etype" class="col-form-label">Assigned</label>
-                                <div class="">
-                                    <select name="etype" class="form-control">
-                                        <option value="None">--- Select ---</option>
-                                    </select>
-                                    <span class="error-input"></span>
-                                </div>
-                            </div>
-                        </div>
+                        
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <input name="submit" type="submit" class="btn btn-primary" value="Add Transaction" />
@@ -84,3 +74,4 @@
         </div>
     </div>
 </div>
+    </div>
