@@ -45,16 +45,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
               </div>';
             }
         ?>
-                        <nav aria-label="breadcrumb">
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item active btn-group-sm" aria-current="page">
-                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addTransactionModal">
-                                        Create New Customer <i class=" mdi mdi-plus "></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                     <div class="card">
                         <div class="card-body">

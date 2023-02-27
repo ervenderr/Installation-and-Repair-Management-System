@@ -99,7 +99,7 @@ $custshow = "show";
                                         <div class="btn-group-sm d-flex btn-details">
                                         <?php
                                             echo '<a href="edit-customer.php?&rowid=' .  $row['cust_id'] . '" class="btn btn-success btn-fw">Update Details   <i class="fas fa-edit text-white"></i></a>';
-                                            echo '<a href="delete-customer.php&rowid=' .  $row['cust_id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
+                                            echo '<a href="delete-customer.php?&rowid=' .  $row['cust_id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
                                             ?>
                                         </div>
                                     </div>

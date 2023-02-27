@@ -1,5 +1,5 @@
 <?php
-require_once '../homeincludes/dbconfig.php';
+include_once ('../homeIncludes/dbconfig.php');
 
 
 if(!empty($_POST["service_id"])) {
