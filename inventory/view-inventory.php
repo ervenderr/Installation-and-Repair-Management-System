@@ -1,22 +1,22 @@
 <?php
 session_start();
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
-require_once '../tools/variables.php';
+require_once '../homeIncludes/dbconfig.php';
+include_once('../tools/variables.php');
 
 
-$rowid = $_GET['rowid'];
-    
+$rowid = $_GET['prod_id'];
+$_SESSION['rowid'] = $rowid;
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT * FROM inventory
-JOIN products ON products.product_id = inventory.product_id
-WHERE inventory.inv_id = '" . $rowid . "';";
-$result = mysqli_query($conn, $query);
+$query2 = "SELECT * FROM products
+LEFT JOIN inventory ON products.product_id = inventory.product_id
+WHERE products.product_id = '" . $rowid . "';";
+$result2 = mysqli_query($conn, $query2);
 
 
 // Check if the query was successful and output the data
-if (mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_assoc($result);
+if (mysqli_num_rows($result2) > 0) {
+    $row2 = mysqli_fetch_assoc($result2);
 
 }
 
@@ -42,7 +42,7 @@ $invactive = "active";
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
                                 <i class="fas fa-box menu-icon"></i>
-                            </span> Inventory<span class="bread"> / <?php echo $row['name']; ?></span>
+                            </span> Inventory<span class="bread"> / <?php echo $row2['name']; ?></span>
                         </h3>
                         <?php
             if (isset($_GET['msg'])) {
@@ -82,18 +82,18 @@ $invactive = "active";
                                         <table class="table table-bordered">
                                             <tr>
                                                 <th class="bg-gryy">Product Name:</th>
-                                                <td><?php echo $row['name']?></td>
+                                                <td><?php echo $row2['name']?></td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-gryy">SKU:</th>
-                                                <td><?php echo $row['sku']?></td>
+                                                <td><?php echo $row2['sku']?></td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-gryy">Images:</th>
                                                 <td class="maxwidth"><?php
-                                                $image1 = $row['img1'];
-                                                $image2 = $row['img2'];
-                                                $image3 = $row['img3'];
+                                                $image1 = $row2['img1'];
+                                                $image2 = $row2['img2'];
+                                                $image3 = $row2['img3'];
                                                 $image_data1 = base64_encode($image1);
                                                 $image_data2 = base64_encode($image2);
                                                 $image_data3 = base64_encode($image3);
@@ -108,27 +108,19 @@ $invactive = "active";
                                             </tr>
                                             <tr>
                                                 <?php
-                                                $query2 = "SELECT * FROM inventory
-                                                JOIN products ON products.product_id = inventory.product_id
-                                                JOIN supplier ON supplier.supplier_id = inventory.supplier_id
-                                                WHERE products.product_id = '" . $rowid . "'";
-
-                                                $result2 = mysqli_query($conn, $query2);
-                                                $id = 1;
-                                                $row2 = mysqli_fetch_assoc($result2);
                                                 $qty = '';
                                                 $statusClass = '';
-                                                if ($row['status'] == 'Backordered') {
+                                                if ($row2['status'] == 'Backordered') {
                                                     $statusClass = 'badge-gradient-warning';
-                                                } else if ($row['status'] == 'Inactive') {
+                                                } else if ($row2['status'] == 'Inactive') {
                                                     $statusClass = 'badge-gradient-danger';
-                                                } else if ($row['status'] == 'In-Stock') {
+                                                } else if ($row2['status'] == 'In-Stock') {
                                                     $statusClass = 'badge-gradient-success';
                                                 } else {
                                                     $statusClass = 'badge-gradient-secondary';
                                                 }
                                                 echo '<th class="bg-gryy">Status:</th>';
-                                                echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
+                                                echo '<td><label class="badge ' . $statusClass . '">' . $row2['status'] . '</label></td>';
                                                 ?>
                                             </tr>
                                         </table>
@@ -181,43 +173,40 @@ $invactive = "active";
                                                 
                                                     // Perform the query
                                                     $query = "SELECT * FROM inventory
-                                                    JOIN products ON products.product_id = inventory.product_id
-                                                    JOIN supplier ON supplier.supplier_id = inventory.supplier_id
-                                                    WHERE products.product_id = '" . $rowid . "'
-                                                    ORDER BY inventory.stock_in_date DESC;";
-
-                                                    $result = mysqli_query($conn, $query);
-                                                    $id = 1;
-                                                    $row = mysqli_fetch_assoc($result);
-                                                    if($row){
-                                                        $_SESSION['productId'] = $row['product_id'];
-                                                        $_SESSION['invId'] = $row['inv_id'];
-                                                        while ($row) {
-                                                            $modalId = 'editInventoryModal-' . $id;
-
-                                                            echo '<tr>';
-                                                            echo '<td>' . $id . '</td>';
-                                                            echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
-                                                            echo '<td>' . $row['stock_in'] . '</td>';
-                                                            echo '<td>' . $row['stock_in_date'] . '</td>';
-                                                            
-                                                            echo '<td class="btn-group-sm">';
-                                                            echo '<button class="icns btn btn-info edit" id="' .  $row['inv_id'] . '">';
-                                                            echo 'Edit <i class="fas fa-edit view-account" id="' .  $row['inv_id'] . '"></i>';
-                                                            echo '</button>';
-
-                                                            echo '<button class="icns btn btn-danger delete" id="' .  $row['inv_id'] . '">';
-                                                            echo 'Delete <i class="fas fa-trash-alt view-account" id="' .  $row['inv_id'] . '"></i>';
-                                                            echo '</button>';
-                                                            echo '</td>';
-                                                            echo '</tr>';
+                                                            JOIN products ON products.product_id = inventory.product_id
+                                                            JOIN supplier ON supplier.supplier_id = inventory.supplier_id
+                                                            WHERE products.product_id = '" . $rowid . "'
+                                                            ORDER BY inventory.stock_in_date DESC;";
+                                                            $result = mysqli_query($conn, $query);
+                                                            $id = 1;
                                                             $row = mysqli_fetch_assoc($result);
-                                                            $id++;
+                                                            if($row){
+                                                                $_SESSION['invId'] = $row['inv_id'];
+                                                                while ($row) {
+                                                                    $modalId = 'editInventoryModal-' . $id;
+        
+                                                                    echo '<tr>';
+                                                                    echo '<td>' . $id . '</td>';
+                                                                    echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
+                                                                    echo '<td>' . $row['stock_in'] . '</td>';
+                                                                    echo '<td>' . $row['stock_in_date'] . '</td>';
+                                                                    
+                                                                    echo '<td class="btn-group-sm">';
+                                                                    echo '<button class="icns btn btn-info edit" id="' .  $row['inv_id'] . '">';
+                                                                    echo 'Edit <i class="fas fa-edit view-account" id="' .  $row['inv_id'] . '"></i>';
+                                                                    echo '</button>';
+                                                                    echo '<button class="icns btn btn-danger delete" id="' .  $row['inv_id'] . '">';
+                                                                    echo 'Delete <i class="fas fa-trash-alt view-account" id="' .  $row['inv_id'] . '"></i>';
+                                                                    echo '</button>';
+                                                                    echo '</td>';
+                                                                    echo '</tr>';
+                                                                    $row = mysqli_fetch_assoc($result);
+                                                                    $id++;
+                                                                }
+                                                        }else {
+                                                            echo "No rows found";
                                                         }
-                                                }else {
-                                                    echo "No rows found";
-                                                }
-                                                ?>
+                                                        ?>
 
                                             </tbody>
                                         </table>
@@ -363,7 +352,7 @@ $invactive = "active";
 
         id =  $(this).attr('id');
         $.ajax({
-        url: 'select.php',
+        url: 'edit-inventory.php',
         method: 'post',
         data: {inv_id:id},
         success: function(result) {

@@ -1,11 +1,13 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
+require_once '../homeIncludes/dbconfig.php';
+include_once('../tools/variables.php');
 
-$rowid = $_GET['rowid'];
+$product_id = $_SESSION['rowid'];
 
 // Perform the query to delete the row from the customer table
-$query = "DELETE FROM `products` WHERE products.product_id = '" . $rowid . "';";
+$query = "DELETE FROM `products` WHERE products.product_id = '" . $product_id . "';";
 $result = mysqli_query($conn, $query);
 
 if ($result) {

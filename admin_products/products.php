@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
+require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
 
@@ -76,9 +76,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             <thead>
                                             <tr class="bg-our">
                                                     <th> # </th>
+                                                    <th> SKU </th>
                                                     <th> Name </th>
                                                     <th> Price </th>
-                                                    <th> Description </th>
                                                     <th> Image </th>
                                                     <th> Status </th>
                                                     <th> Action </th>
@@ -117,9 +117,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         $image_src = "data:image/jpeg;base64,{$image_data}";
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
+                                                        echo '<td>' . $row['sku'] . '</td>';
                                                         echo '<td>' . $row['name'] . '</td>';
                                                         echo '<td>₱ ' . $row['price'] . '</td>';
-                                                        echo '<td>' . $row['description'] . '</td>';
                                                         echo '<td><img src="' . $image_src . '" alt="' . $row['name'] . '" class=""></td>';
 
                                                         $statusClass = '';
@@ -135,18 +135,22 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>';
-                                                        echo '<a class="icns" href="view-product.php?&rowid=' .  $row['product_id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['product_id'] . '"></i>';
+                                                        echo '<a class="icns" href="view-product.php?rowid=' .  $row['product_id'] . '">';
+                                                        echo '<i class="fas fa-eye text-primary view-account"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="edit-product.php?&rowid=' .  $row['product_id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['product_id'] . '"></i>';
+                                                        echo '<a class="icns" href="edit-product.php?rowid=' .  $row['product_id'] . '">';
+                                                        echo '<i class="fas fa-edit text-success view-account"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-product.php?&rowid=' .  $row['product_id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['product_id'] . '"></i>';
+                                                        echo '<a class="icns" href="delete-product.php?rowid=' .  $row['product_id'] . '">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
                                                         $id++;
+
+                                                        $product_id = $row['product_id'];
+                                                        $_SESSION['product_id'] = $product_id;
+
                                                     }
                                                 ?>
 

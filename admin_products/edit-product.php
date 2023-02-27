@@ -1,11 +1,12 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
-include_once('../homeincludes/dbconfig.php');
-
-
+require_once '../homeIncludes/dbconfig.php';
+include_once('../tools/variables.php');
 
 $prodactive = "active";
 $rowid = $_GET['rowid'];
+$_SESSION['rowid'] = $rowid;
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT * FROM products WHERE products.product_id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
@@ -16,7 +17,6 @@ if (mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
 
 }
-
 ?>
 
 <body>
@@ -34,8 +34,8 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="fas fa-users menu-icon"></i>
-                            </span> Technicians <span class="bread">/ Update technician info</span>
+                            <i class="fas fa-box menu-icon"></i>
+                            </span> Products <span class="bread">/ Update product info</span>
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
@@ -62,6 +62,7 @@ if (mysqli_num_rows($result) > 0) {
                                         // Check if the query was successful and output the data
                                         if (mysqli_num_rows($result6) > 0) {
                                             $row6 = mysqli_fetch_assoc($result6);
+
                                         }
                                         ?>
                                         <p class="card-description">Update Product info </p>
@@ -151,7 +152,7 @@ if (mysqli_num_rows($result) > 0) {
                                         <div class="row">
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
+                                                    data-bs-dismiss="modal"><a href="sample.php">Close</a> Close</button>
                                                 <input name="submit" type="submit" class="btn btn-primary"
                                                     value="Update Product" />
 

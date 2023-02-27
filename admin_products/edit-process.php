@@ -1,10 +1,11 @@
 <?php
 session_start();
 require_once '../homeIncludes/dbconfig.php';
-$rowid = $_GET['rowid'];
+
 
 
 if (isset($_POST['submit'])) {
+    $product_id = $_SESSION['rowid'];
     // assign form data to variables
     $pname = htmlentities($_POST['pname']);
     $price = htmlentities($_POST['price']);
@@ -19,7 +20,6 @@ if (isset($_POST['submit'])) {
     $query = "SELECT * FROM products";
     $result = mysqli_query($conn, $query);
     $row2 = mysqli_fetch_assoc($result);
-    $product_id = $row2['product_id'];
 
     // Loop over each file input field and process any uploaded images
     for ($i = 1; $i <= 3; $i++) {
