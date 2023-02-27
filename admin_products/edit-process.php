@@ -1,14 +1,12 @@
 <?php
 session_start();
-include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
-require_once '../tools/variables.php';
 
 
 
 if (isset($_POST['submit'])) {
+    $product_id = $_SESSION['rowid'];
     // assign form data to variables
-    $rowid = $_GET['rowid'];
     $pname = htmlentities($_POST['pname']);
     $price = htmlentities($_POST['price']);
     $description = htmlentities($_POST['description']);
@@ -22,7 +20,6 @@ if (isset($_POST['submit'])) {
     $query = "SELECT * FROM products";
     $result = mysqli_query($conn, $query);
     $row2 = mysqli_fetch_assoc($result);
-    $product_id = $row2['product_id'];
 
     // Loop over each file input field and process any uploaded images
     for ($i = 1; $i <= 3; $i++) {
@@ -57,7 +54,7 @@ if (isset($_POST['submit'])) {
     }
 
     $sql .= "status = '$status' ";
-    $sql .= "WHERE product_id = '$rowid'";
+    $sql .= "WHERE product_id = '$product_id'";
 
     // Execute the SQL query
     $result = mysqli_query($conn, $sql);
