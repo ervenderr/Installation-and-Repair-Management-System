@@ -1,5 +1,8 @@
 <?php
-require_once '../homeincludes/dbconfig.php';
+include_once('../admin_includes/header.php');
+require_once '../homeIncludes/dbconfig.php';
+include_once('../tools/variables.php');
+
 
 
 if(!empty($_POST["service_id"])) {
