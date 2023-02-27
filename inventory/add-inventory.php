@@ -4,8 +4,8 @@ session_start();
 require_once '../homeIncludes/dbconfig.php';
 
 if(isset($_POST['submit'])) {
-    $productId = htmlentities($_SESSION['productId']);
-    $invId = htmlentities($_SESSION['invId']);
+    $productId = htmlentities($_SESSION['rowid']);
+    $invId = htmlentities($_SESSION['invid']);
     $supplierId = htmlentities($_POST['supplierSelect']);
     $quantityInput = htmlentities($_POST['quantityInput']);
     $stockInDateInput = htmlentities($_POST['stockInDateInput']);
@@ -16,7 +16,7 @@ if(isset($_POST['submit'])) {
     
 
     if ($result) {
-        header("location: view-inventory.php?msg=Record Added Successfully.&rowid=" . $productId);
+        header("location: view-inventory.php?msg=Record Added Successfully.&prod_id=" . $productId);
     } else {
        echo "FAILED: " . mysqli_error($conn);
     }

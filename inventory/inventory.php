@@ -2,7 +2,7 @@
 session_start();
 include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
-require_once '../tools/variables.php';
+include_once('../tools/variables.php');
 
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
@@ -96,17 +96,15 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
-                                                    $query = "SELECT 
-                                                        products.name, 
-                                                        products.sku,
-                                                        products.product_id,
-                                                        inventory.sold,
-                                                        inventory.inv_id,
-                                                        COALESCE(SUM(inventory.stock_in), 0) AS total_qty, 
-                                                        COALESCE(MAX(inventory.stock_in_date), NULL) AS stock_in_date 
-                                                    FROM products 
-                                                    LEFT JOIN inventory ON products.product_id = inventory.product_id 
-                                                    GROUP BY products.product_id";
+                                                    $query = "SELECT COALESCE(products.product_id, 0) AS product_id,
+                                                                    COALESCE(products.sku, '') AS sku,
+                                                                    COALESCE(products.name, '') AS name,
+                                                                    COALESCE(SUM(inventory.stock_in), 0) AS total_qty,
+                                                                    COALESCE(MAX(inventory.stock_in_date), NULL) AS stock_in_date,
+                                                                    COALESCE(SUM(inventory.sold), 0) AS sold
+                                                            FROM products
+                                                            LEFT JOIN inventory ON products.product_id = inventory.product_id
+                                                            GROUP BY products.product_id";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -120,12 +118,13 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<td>' . $row['name'] . '</td>';
                                                         echo '<td>' . $qtySoldRatio . ' <span class="text-secondary">/ ' . $row['total_qty'] . '</span></td>';
                                                         echo '<td>' . $row['sold'] . '</td>';
-                                                        echo '<td>' . $row['stock_in_date'] . '</td>';
-                                                        
+                                                        echo '<td>' . $row['stock_in_date'] . '</td>';                
                                                         echo '<td class="btn-group-sm">';
-                                                        echo '<a class="icns btn btn-info" href="view-inventory.php?&rowid=' .  $row['product_id'] . '">';
-                                                        echo 'View <i class="fas fa-eye view-account" data-rowid="' .  $row['product_id'] . '"></i>';
-                                                        echo '</a>';
+                                                        if ($row['product_id'] != 0) {
+                                                            echo '<a class="icns btn btn-info" href="view-inventory.php?prod_id=' .  $row['product_id'] . '">';
+                                                            echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['product_id'] . '"></i>';
+                                                            echo '</a>';
+                                                        }
                                                         echo '</td>';
                                                         echo '</tr>';
                                                         $id++;
