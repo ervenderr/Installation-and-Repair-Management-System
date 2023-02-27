@@ -1,7 +1,6 @@
 <?php
-include_once('../admin_includes/header.php');
-require_once '../homeIncludes/dbconfig.php';
-include_once('../tools/variables.php');
+include_once ('../homeIncludes/dbconfig.php');
+
 
 
 
