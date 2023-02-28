@@ -73,6 +73,12 @@
                 </ul>
               </div>
             </li>
+            <li class="nav-item <?php echo $suppactive; ?>">
+              <a class="nav-link" href="../supplier/supplier.php">
+                <span class="menu-title">Supplier</span>
+                <i class="fas fa-user-tie menu-icon"></i>
+              </a>
+            </li>
             <li class="nav-item <?php echo $techactive; ?>">
               <a class="nav-link" href="../technician/technicians.php">
                 <span class="menu-title">Techninicians</span>

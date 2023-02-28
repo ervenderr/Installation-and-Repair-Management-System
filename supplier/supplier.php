@@ -4,8 +4,7 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
-$search = "transactions.php";
-
+$search = "walk-in.php";
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
@@ -26,8 +25,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="fas fa-cogs menu-icon"></i>
-                            </span> Service Transaction
+                                <i class="fas fa-user-tie menu-icon"></i>
+                            </span> Supplier
                         </h3>
                         <?php
             if (isset($_GET['msg'])) {
@@ -50,8 +49,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addServiceModal">
-                                        Create Transaction <i class=" mdi mdi-plus "></i>
+                                        data-bs-target="#addSupplierModal">
+                                        Create New<i class=" mdi mdi-plus "></i>
                                     </button>
                                 </li>
                             </ul>
@@ -61,7 +60,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <div class="card-body">
                         <div class="row mg-btm">
                                 <div class="col-sm-12 col-md-6 flex">
-                                    <h4 class="card-title">List of Service Transaction</h4>
+                                <h4 class="card-title">List of Suppliers</h4>
 
                                 </div>
                                 <div class="col-sm-12 col-md-6 flex flexm">
@@ -69,24 +68,22 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                 placeholder="search" id="myInput" class="form-control"></label></div>
                                 </div>
                             </div>
-                            
                             <div class="row">
-                                    <div class="col-12 grid-margin">
+                                <div class="col-12 grid-margin">
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
                                             <tr class="bg-our">
                                                     <th> # </th>
-                                                    <th> Transaction Code </th>
-                                                    <th> Customer </th>
-                                                    <th> Status </th>
-                                                    <th> Date </th>
+                                                    <th> Email </th>
+                                                    <th> Name </th>
+                                                    <th> Contact </th>
+                                                    <th> Address </th>
                                                     <th> Action </th>
                                                 </tr>
                                             </thead>
                                             <tbody id="myTable">
                                                 <?php
-
                                                     if(isset($_GET['page_no']) && $_GET['page_no'] !=''){
                                                         $page_no = $_GET['page_no'];
                                                     }else{
@@ -99,50 +96,35 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $next_page = $page_no +1;
                                                     $adjacent = "2";
 
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM service_request WHERE service_request.status = 'In-progress' OR service_request.status = 'Done'");
+                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM supplier");
                                                     $total_records = mysqli_fetch_array($result_count);
                                                     $total_records = $total_records['total_records'];
                                                     $total_no_of_page = ceil($total_records / $total_record_per_page);
                                                     $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
-                                                    $query = "SELECT service_request.sreq_id, service_request.transaction_code, customer.fname, customer.lname, service_request.status, service_request.date_req
-                                                        FROM service_request
-                                                        JOIN customer ON service_request.Cust_id = customer.Cust_id
-                                                        WHERE service_request.status = 'In-progress' OR service_request.status = 'Done'";
+                                                    $query = "SELECT * FROM supplier";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
                                                     while ($row = mysqli_fetch_assoc($result)) {
-                                                        $modalId = 'editTransactionModal-' . $id;
+                                                        $modalId = 'edittechnicianModal-' . $id;
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
-                                                        echo '<td>' . $row['transaction_code'] . '</td>';
-                                                        echo '<td>' . $row['fname'] . ', ' . $row['lname'] . '</td>';
-                                                    
-                                                        $statusClass = '';
-                                                        if ($row['status'] == 'Pending') {
-                                                            $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
-                                                            $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-success';
-                                                        } else {
-                                                            $statusClass = 'badge-gradient-secondary';
-                                                        }
-                                                    
-                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
-                                                        echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td>' . $row['email'] . '</td>';
+                                                        echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
+                                                        echo '<td>' . $row['phone'] . '</td>';
+                                                        echo '<td>' . $row['address'] . '</td>';
                                                         echo '<td>';
-                                                        echo '<a class="icns" href="view-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
+                                                        echo '<a class="icns" href="view-technician.php?&rowid=' .  $row['supplier_id'] . '">';
+                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['supplier_id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
+                                                        echo '<a class="icns" href="edit-technician.php?&rowid=' .  $row['supplier_id'] . '">';
+                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['supplier_id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
+                                                        echo '<a class="icns" href="delete-technician.php?&rowid=' .  $row['supplier_id'] . '">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['supplier_id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
@@ -233,7 +215,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         </div>
                     </div>
                 </div>
-                <?php include_once('../modals/add-service-modal.php') ?>
+
+                <?php include_once('../modals/add-technician-modal.php') ?>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">
@@ -301,13 +284,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     // const email = form.querySelector('input[name="email"]');
     const phone = form.querySelector('input[name="phone"]');
     const address = form.querySelector('input[name="address"]');
-    const stype = form.querySelector('select[name="stype"]');
-    const package = form.querySelector('select[name="package"]');
-    const electrician = form.querySelector('select[name="electrician"]');
-    // const other = form.querySelector('select[name="other"]');
-    const date = form.querySelector('input[name="date"]');
-    const completed = form.querySelector('input[name="completed"]');
-    const payment = form.querySelector('input[name="payment"]');
+
 
     form.addEventListener('submit', (event) => {
         let error = false;
@@ -357,55 +334,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             error = true;
         } else {
             address.nextElementSibling.innerText = '';
-        }
-
-        if (stype.value === 'None') {
-            stype.nextElementSibling.innerText = 'Please select an Service type';
-            error = true;
-        } else {
-            stype.nextElementSibling.innerText = '';
-        }
-
-        // if (electrician.value === 'None') {
-        //     electrician.nextElementSibling.innerText = 'Please select an electrician';
-        //     error = true;
-        // } else {
-        //     electrician.nextElementSibling.innerText = '';
-        // }
-
-        if (package.value === 'None') {
-            package.nextElementSibling.innerText = 'Please enter a package';
-            error = true;
-        } else {
-            package.nextElementSibling.innerText = '';
-        }
-
-        // if (other.value === '') {
-        //     other.nextElementSibling.innerText = 'Please select a other option';
-        //     error = true;
-        // } else {
-        //     other.nextElementSibling.innerText = '';
-        // }
-
-        if (date.value === '') {
-            date.nextElementSibling.innerText = 'Please select a date';
-            error = true;
-        } else {
-            date.nextElementSibling.innerText = '';
-        }
-
-        // if (completed.value === '') {
-        //     completed.nextElementSibling.innerText = 'Please select a completion date';
-        //     error = true;
-        // } else {
-        //     completed.nextElementSibling.innerText = '';
-        // }
-
-        if (payment.value === '') {
-            payment.nextElementSibling.innerText = 'Please enter a payment amount';
-            error = true;
-        } else {
-            payment.nextElementSibling.innerText = '';
         }
 
         if (error) {

@@ -9,17 +9,21 @@ if(isset($_POST['submit'])) {
     $email = htmlentities($_POST['email']);
     $phone = htmlentities($_POST['phone']);
     $address = htmlentities($_POST['address']);
+    $status = htmlentities($_POST['status']);
     $etype = htmlentities($_POST['etype']);
-    $electrician = htmlentities($_POST['electrician']);
+    $technician = htmlentities($_POST['technician']);
     $defective = htmlentities($_POST['defective']);
     $shipping = htmlentities($_POST['shipping']);
     $date = htmlentities($_POST['date']);
     $completed = htmlentities($_POST['completed']);
     $payment = htmlentities($_POST['payment']);
-    $transaction_code = htmlentities($_POST['transaction_code']);
+
+    $accountid = $_SESSION['account_id'];
+    $rowid = $_SESSION['rowid'];
+    $transaction_code = $_SESSION['transaction_code'];
 
     // check if email already exists in accounts table
-    $query = "SELECT account_id FROM accounts WHERE email = '$email'";
+    $query = "SELECT account_id FROM accounts WHERE account_id = '$accountid'";
     $result = mysqli_query($conn, $query);
     if(mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
@@ -51,11 +55,11 @@ if(isset($_POST['submit'])) {
     }
 
     // update rprq table with new values
-    $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', cust_id='$customer_id' WHERE transaction_code='$transaction_code'";
+    $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician' WHERE transaction_code='$transaction_code'";
     $result4 = mysqli_query($conn, $query4);
 
     if ($result4) {
-        header("location: transaction.php?msg=Record Updated Successfully");
+        header("location: view-transaction.php?msg=Record updated Successfully.&transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
     } else {
         echo "FAILED: " . mysqli_error($conn);
     }

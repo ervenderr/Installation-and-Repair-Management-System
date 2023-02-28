@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
@@ -13,7 +14,7 @@ $rptrue = "true";
 
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT service_request.service_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, service_request.cust_id, service_request.pkg_id, service_request.date_req, service_request.date_completed, service_request.other
+$query = "SELECT service_request.service_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, service_request.cust_id, service_request.pkg_id, service_request.date_req, service_request.date_completed, service_request.other
           FROM service_request
           JOIN customer ON service_request.cust_id = customer.cust_id
           JOIN accounts ON customer.account_id = accounts.account_id
@@ -26,7 +27,9 @@ if (mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
 
 }
-
+$_SESSION['account_id'] = $row['account_id'];
+$_SESSION['rowid'] = $_GET['rowid'];
+$_SESSION['transaction_code'] = $_GET['transaction_code'];
 ?>
 
 <body>
@@ -128,7 +131,7 @@ if (mysqli_num_rows($result) > 0) {
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12">
+                                        <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label for="address" class="col-form-label">Address</label>
                                                     <div class="">
@@ -137,13 +140,33 @@ if (mysqli_num_rows($result) > 0) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="status" class="col-form-label">Status</label>
+                                                    <div class="">
+                                                    <select name="status" class="form-control">
+                                                            <option value="Pending"
+                                                                <?php if ($row6['status'] == 'Pending') echo 'selected'; ?>>Pending
+                                                            </option>
+                                                            <option value="In-progress"
+                                                                <?php if ($row6['status'] == 'In-progress') echo 'selected'; ?>>
+                                                                In-progress
+                                                            </option>
+                                                            <option value="Done"
+                                                                <?php if ($row6['status'] == 'Done') echo 'selected'; ?>>
+                                                                Done
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="etype" class="col-form-label">Service Type</label>
+                                                    <label for="stype" class="col-form-label">Service Type</label>
                                                     <div class="">
-                                                        <select name="etype" class="form-control">
+                                                        <select name="stype" class="form-control">
                                                             <option value="None">--- Select ---</option>
                                                             <?php
                                                                 $query = "SELECT * FROM services";
@@ -189,27 +212,20 @@ if (mysqli_num_rows($result) > 0) {
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="electrician" class="col-form-label">Assigned
-                                                        Electrician</label>
+                                                    <label for="technician" class="col-form-label">Assigned
+                                                    Technician</label>
                                                     <div class="">
-                                                        <select name="electrician" class="form-control">
+                                                        <select name="technician" class="form-control">
                                                             <option value="None">--- Select ---</option>
-                                                            <option value="John Kevin"
-                                                                <?php if ($row6['electrician'] == 'John Kevin') echo 'selected'; ?>>
-                                                                John
-                                                                Kevin</option>
-                                                            <option value="Robin Junior"
-                                                                <?php if ($row6['electrician'] == 'Robin Junior') echo 'selected'; ?>>
-                                                                Robin
-                                                                Junior</option>
-                                                            <option value="Aming Alyasher"
-                                                                <?php if ($row6['electrician'] == 'Aming Alyasher') echo 'selected'; ?>>
-                                                                Aming
-                                                                Alyasher</option>
-                                                            <option value="Farren Smith"
-                                                                <?php if ($row6['electrician'] == 'Farren Smith') echo 'selected'; ?>>
-                                                                Farren
-                                                                Smith</option>
+                                                            <?php
+                                                                $sql2 = "SELECT * FROM technician";
+                                                                $result3 = mysqli_query($conn, $sql2);
+                                                                while ($technician = mysqli_fetch_assoc($result3)) {
+                                                                    $tech_id = mysqli_real_escape_string($conn, $technician['tech_id']);
+                                                                    $selected = ($tech_id == $selected_technician_id) ? "selected" : "";
+                                                                    echo "<option value='{$tech_id}' {$selected}>{$technician['fname']} {$technician['lname']}</option>";
+                                                                }                                                        
+                                                                ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -230,7 +246,7 @@ if (mysqli_num_rows($result) > 0) {
                                                 <div class="form-group row">
                                                     <label for="completed" class="col-form-label">Date Completed</label>
                                                     <div class="">
-                                                        <input name="group" type="date" class="form-control"
+                                                        <input name="completed" type="date" class="form-control"
                                                             placeholder="dd/mm/yyyy"
                                                             value="<?php echo $row6['date_completed']; ?>" />
                                                     </div>
