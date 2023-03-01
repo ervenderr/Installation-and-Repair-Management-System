@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-if (!isset($_SESSION['logged_id'])) {
+if (!isset($_SESSION['logged_id']) && !isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'customer') {
     header('location: ../login/login.php');
 }
 

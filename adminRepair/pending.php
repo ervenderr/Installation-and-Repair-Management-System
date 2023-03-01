@@ -114,15 +114,12 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
-                                                        echo '<td>';
-                                                        echo '<a class="icns" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '<td class="btn-group-sm">';
+                                                        echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
+                                                        echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $id . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '<a class="icns btn btn-danger" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
+                                                        echo 'Accept <i class="fas fa-check-square" Prod_id="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';

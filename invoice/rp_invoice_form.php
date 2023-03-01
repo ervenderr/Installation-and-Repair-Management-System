@@ -1,11 +1,35 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
 
 
-$techactive = "";
+$rpactive = "active";
+$rpshow = "show";
+$rptrue = "true";
+
+$rowid = $_GET['rowid'];
+$transaction_code = $_GET['transaction_code'];
+
+$query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+          FROM rprq
+          JOIN customer ON rprq.cust_id = customer.cust_id
+          JOIN accounts ON customer.account_id = accounts.account_id
+          WHERE rprq.transaction_code = '" . $transaction_code . "';";
+$result = mysqli_query($conn, $query);
+
+
+// Check if the query was successful and output the data
+if (mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+
+}
+$_SESSION['account_id'] = $row['account_id'];
+$_SESSION['rowid'] = $_GET['rowid'];
+$_SESSION['transaction_code'] = $_GET['transaction_code'];
+
 
 
 
@@ -27,11 +51,11 @@ $techactive = "";
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
                                 <i class="far fa-file-invoice menu-icon"></i>
-                            </span> Invoice form <span class="bread"></span>
+                            </span> Invoice form <span class="bread">/ Transaction code: <?php echo $_SESSION['transaction_code']; ?></span>
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <a href="#">
+                                <?php echo '<a class="icns" href="../adminRepair/view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';?>
                                     <li class="breadcrumb-item active" aria-current="page">
                                         <span></span><i
                                             class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
@@ -45,7 +69,7 @@ $techactive = "";
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    <?php
+                                    <?php                        
                                     function getNextInvoiceNumber() {
                                         $host = 'localhost';
                                         $user = 'root';
@@ -61,7 +85,7 @@ $techactive = "";
                                         $result = mysqli_query($conn, $sql);
                                     
                                         $row = mysqli_fetch_assoc($result);
-                                        $last_invoice_number = 100 . $row['last_invoice_number'] ?? 0;
+                                        $last_invoice_number = 1000 . $row['last_invoice_number'] ?? 0;
                                     
                                         $next_invoice_number = $last_invoice_number + 1;
                                     
@@ -72,40 +96,8 @@ $techactive = "";
                                     
                                     
                                     $invoice_number = getNextInvoiceNumber();
-
-                                    if(isset($_POST["submit"])){
-                                    $invoice_no=$_POST["invoice_no"];
-                                    $invoice_date=date("Y-m-d",strtotime($_POST["invoice_date"]));
-                                    $grand_total=mysqli_real_escape_string($conn,$_POST["grand_total"]);
-                                    
-                                    $sql="insert into invoice (invoice_no,invoice_date,grand_total) values ('{$invoice_no}','{$invoice_date}','{$grand_total}') ";
-                                    if($conn->query($sql)){
-                                        $sid=$conn->insert_id;
-                                        
-                                        $sql2="insert into invoice_desc (invoice_id,descname,descPrice,descQty,total) values ";
-                                        $rows=[];
-                                        for($i=0;$i<count($_POST["pname"]);$i++)
-                                        {
-                                        $pname=mysqli_real_escape_string($conn,$_POST["pname"][$i]);
-                                        $price=mysqli_real_escape_string($conn,$_POST["price"][$i]);
-                                        $qty=mysqli_real_escape_string($conn,$_POST["qty"][$i]);
-                                        $total=mysqli_real_escape_string($conn,$_POST["total"][$i]);
-                                        $rows[]="('{$sid}','{$pname}','{$price}','{$qty}','{$total}')";
-                                        }
-                                        $sql2.=implode(",",$rows);
-                                        if($conn->query($sql2)){
-                                        echo "<div class='alert alert-success'>Invoice Added Successfully. <a href='print.php?id={$sid}' target='_BLANK'>Click </a> here to Print Invoice </div> ";
-                                        header("location: invoice_form.php?msg=Record Added Successfully");
-                                        }else{
-                                        echo "<div class='alert alert-danger'>Invoice Added Failed.</div>";
-                                        }
-                                    }else{
-                                        echo "<div class='alert alert-danger'>Invoice Added Failed.</div>";
-                                    }
-                                    }
-                                    
                                 ?>
-                                    <form method='post' action='invoice_form.php' autocomplete='off'>
+                                    <form method='post' action='rp-invoice-process.php' autocomplete='off'>
                                         <div class='row'>
                                             <div class='col-md-4'>
                                                 <h5 class='text-success'>Invoice Details</h5>

@@ -41,7 +41,7 @@
                 </li>
             </ul>
             <?php
-                    if (!isset($_SESSION['logged_id'])) {
+                    if (!isset($_SESSION['logged_id']) && !isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'customer') {
                         echo '<ul class="nav-item signinup">
                                             <li><a href="../login/login.php" class="nav-link nav-links signin" type="button">sign in</a></li>
                                             <li><a href="../login/login.php" class="nav-link nav-links signup" type="button">Sign up</a></li>
