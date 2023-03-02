@@ -152,13 +152,13 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
 
                                             if (empty($row['invoice_id']) && $row['status'] == 'Done') {
-                                                echo '<a href="../invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
+                                                echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
                                                 Generate Invoice <i class="fas fa-file-invoice"></i></a>';
                                             }
 
                                             if (!empty($row['invoice_id'])) {
                                                 $invoice_id = $row['invoice_id'];
-                                                echo '<a href="../invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                                                echo '<a href="../repair-invoic/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
                                                 Download Invoice <i class="fas fa-download"></i></a>';
                                             }
                                             ?>
