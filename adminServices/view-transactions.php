@@ -12,7 +12,7 @@ $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT service_request.sreq_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, services.service_name, package.name, service_request.date_req, service_request.date_completed, service_request.other
+$query = "SELECT *
           FROM service_request
           JOIN customer ON service_request.cust_id = customer.cust_id
           JOIN accounts ON customer.account_id = accounts.account_id
@@ -97,7 +97,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </tr>
                                             <tr>
                                                 <th>Customer Name:</th>
-                                                <td><?php echo $row['invoice_id'] ." " .  $row['lname']?></td>
+                                                <td><?php echo $row['fname'] ." " .  $row['lname']?></td>
                                             </tr>
                                             <tr>
                                                 <th>Address:</th>
