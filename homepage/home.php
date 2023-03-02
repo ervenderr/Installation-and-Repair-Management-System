@@ -7,6 +7,8 @@ $home = 'actives';
 include_once('../homeIncludes/header.php');
 
 
+$cust_id = $_SESSION['cust_id'];
+
 ?>
 
 
@@ -18,7 +20,7 @@ include_once('../homeIncludes/header.php');
         <div class="container">
             <div class="left">
                 <div class="big-title">
-                    <h1>Start Exploring now.</h1>
+                    <h1>Start Exploring now. <?php echo $cust_id; ?></h1>
                 </div>
                 <p class="texts">
                     We offer a wide range of repair for most types of electronics and
@@ -271,7 +273,6 @@ include_once('../homeIncludes/header.php');
 
     <script src="../js/particles.js"></script>
     <script src="../js/app.js"></script>
-    <?php include_once('../login/login-modal.php');?>
 
 
     <script>

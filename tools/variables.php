@@ -30,5 +30,6 @@
     $custshow = "";
     $techactive = "";
     $prodactive = "";
+    $suppactive = "";
 
 ?>

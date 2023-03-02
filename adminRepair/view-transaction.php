@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
@@ -11,7 +12,7 @@ $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+$query = "SELECT rprq.id, rprq.invoice_id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
           FROM rprq
           JOIN customer ON rprq.cust_id = customer.cust_id
           JOIN accounts ON customer.account_id = accounts.account_id
@@ -25,6 +26,9 @@ if (mysqli_num_rows($result) > 0) {
 
 }
 
+$_SESSION['account_id'] = $row['account_id'];
+$_SESSION['rowid'] = $_GET['rowid'];
+$_SESSION['transaction_code'] = $_GET['transaction_code'];
 ?>
 
 <body>
@@ -44,6 +48,7 @@ if (mysqli_num_rows($result) > 0) {
                             <span class="page-title-icon text-white me-2">
                                 <i class="mdi mdi-wrench"></i>
                             </span> Repair Transaction
+                            
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
@@ -140,8 +145,22 @@ if (mysqli_num_rows($result) > 0) {
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">
                                         <?php
-                                            echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-success btn-fw">Update Details   <i class="fas fa-edit text-white"></i></a>';
-                                            echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
+                                            echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-success btn-fw">
+                                            Update Details   <i class="fas fa-edit text-white"></i></a>';
+
+                                            echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-danger btn-fw red">
+                                            Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
+
+                                            if (empty($row['invoice_id']) && $row['status'] == 'Done') {
+                                                echo '<a href="../invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
+                                                Generate Invoice <i class="fas fa-file-invoice"></i></a>';
+                                            }
+
+                                            if (!empty($row['invoice_id'])) {
+                                                $invoice_id = $row['invoice_id'];
+                                                echo '<a href="../invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                                                Download Invoice <i class="fas fa-download"></i></a>';
+                                            }
                                             ?>
                                         </div>
                                     </div>

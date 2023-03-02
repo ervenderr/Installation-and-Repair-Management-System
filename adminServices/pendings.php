@@ -6,7 +6,6 @@ include_once('../tools/variables.php');
 
 $search = "pendings.php";
 
-
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
   }
@@ -106,7 +105,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $second_last = $total_no_of_page - 1;
                                                
                                                     // Perform the query
-                                                    $query = "SELECT service_request.sreq_id, service_request.transaction_code, customer.fname, customer.lname, service_request.status, service_request.date_req
+                                                    $query = "SELECT *
                                                         FROM service_request
                                                         JOIN customer ON service_request.Cust_id = customer.Cust_id
                                                         WHERE service_request.status = 'Pending'";
@@ -134,15 +133,12 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
-                                                        echo '<td>';
-                                                        echo '<a class="icns" href="view-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '<td class="btn-group-sm">';
+                                                        echo '<a class="icns btn btn-info" href="view-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
+                                                        echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['sreq_id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $id . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $id . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
+                                                        echo '<a class="icns btn btn-danger" href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
+                                                        echo 'Accept <i class="fas fa-check-square" Prod_id="' .  $row['sreq_id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';

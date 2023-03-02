@@ -8,33 +8,37 @@ include_once('../homeIncludes/header.php');
 // Check if the form was submitted
 if (isset($_POST['submit'])) {
     // Get the form data and sanitize it
-    $fname = mysqli_real_escape_string($conn, $_POST['fname']);
-    $mname = mysqli_real_escape_string($conn, $_POST['mname']);
-    $lname = mysqli_real_escape_string($conn, $_POST['lname']);
-    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $usertype = htmlentities('customer');
-    
-    // Insert email and password into the accounts table
-    $sql = "INSERT INTO accounts (email, password, user_type) VALUES ('$email', '$password', '$usertype')";
-    mysqli_query($conn, $sql);
-    
+    $fname = $_POST['fname'];
+    $mname = $_POST['mname'];
+    $lname = $_POST['lname'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $usertype = 'customer';
+
+    // Prepare and execute the first SQL statement to insert email, password, and user type into the accounts table
+    $stmt = mysqli_prepare($conn, "INSERT INTO accounts (email, password, user_type) VALUES (?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "sss", $email, $password, $usertype);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
     // Get the ID of the newly inserted account
     $account_id = mysqli_insert_id($conn);
 
-    
-    // Insert the rest of the data into the customer table
-    $sql = "INSERT INTO customer (account_id, fname, mname, lname, phone, address) VALUES ('$account_id', '$fname', '$mname', '$lname', '$phone', '$address')";
-    mysqli_query($conn, $sql);
+    // Prepare and execute the second SQL statement to insert the rest of the data into the customer table
+    $stmt = mysqli_prepare($conn, "INSERT INTO customer (account_id, fname, mname, lname, phone, address) VALUES (?, ?, ?, ?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "isssss", $account_id, $fname, $mname, $lname, $phone, $address);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
     $_SESSION['signup_success'] = true;
-    
+
     header("Location: login.php");
     exit();
 }
 ?>
+
 
 <body>
     <?php include_once('../homeIncludes/homenav.php');?>

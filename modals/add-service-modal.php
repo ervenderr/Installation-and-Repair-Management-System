@@ -193,4 +193,3 @@ function getPackageType(serviceId) {
 }
 
 </script>
-

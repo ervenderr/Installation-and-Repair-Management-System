@@ -396,6 +396,7 @@ option {
     padding: 25px 50px;
 }
 
+
 .jobcon .container {
     max-width: inherit;
     margin: 0;
@@ -412,6 +413,8 @@ option {
     color: #ccc;
 }
 
+
+
 /*  */
 .carousel-inner {
     padding: 1em;
@@ -424,7 +427,7 @@ option {
 }
 
 .accountcon{
-    margin-top: 50px;
+    margin-top: 70px;
 }
 
 .accountcon .accheader{
@@ -458,7 +461,7 @@ option {
 
 .accountcon .container-fluid{
     padding-bottom: 20px;
-    padding: 0 15px;
+    padding: 0 50px;
     width: 100%;
 }
 

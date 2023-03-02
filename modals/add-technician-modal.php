@@ -24,7 +24,7 @@
                             <div class="form-group row">
                                 <label class="col-form-label" for="lname">Last Name</label>
                                 <div class="">
-                                    <input type="text" name="lname" class="form-control" placeholder="ex. Idjad"/>
+                                    <input type="text" name="lname" class="form-control" placeholder="ex. Idjad" />
                                     <span class="error-input"></span>
                                 </div>
                             </div>
@@ -35,7 +35,8 @@
                             <div class="form-group row">
                                 <label for="email" class="col-form-label">Email</label>
                                 <div class="">
-                                    <input name="email" class="form-control" type="email" placeholder="ex. ervenidjad12@gmail.com">
+                                    <input name="email" class="form-control" type="email"
+                                        placeholder="ex. ervenidjad12@gmail.com">
                                     <span class="error-input"></span>
                                 </div>
                             </div>
@@ -44,7 +45,7 @@
                             <div class="form-group row">
                                 <label for="phone" class="col-form-label">Phone</label>
                                 <div class="">
-                                    <input name="phone" class="form-control" type="tel" placeholder="ex. 09123456789"/>
+                                    <input name="phone" class="form-control" type="tel" placeholder="ex. 09123456789" />
                                     <span class="error-input"></span>
                                 </div>
                             </div>
@@ -55,22 +56,32 @@
                             <div class="form-group row">
                                 <label for="address" class="col-form-label">Address</label>
                                 <div class="">
-                                    <input name="address" class="form-control" type="text" placeholder="ex. Recodo, Zamboanga City">
+                                    <input name="address" class="form-control" type="text"
+                                        placeholder="ex. Recodo, Zamboanga City">
                                     <span class="error-input"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <input name="submit" type="submit" class="btn btn-primary" value="Add Technician" />
-                        
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="etype" class="col-form-label">Assigned</label>
+                                <div class="">
+                                    <select name="etype" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                    </select>
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input name="submit" type="submit" class="btn btn-primary" value="Add Technician" />
+                        </div>
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
