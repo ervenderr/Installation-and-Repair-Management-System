@@ -158,7 +158,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
                                             if (!empty($row['invoice_id'])) {
                                                 $invoice_id = $row['invoice_id'];
-                                                echo '<a href="../repair-invoic/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                                                echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
                                                 Download Invoice <i class="fas fa-download"></i></a>';
                                             }
                                             ?>
