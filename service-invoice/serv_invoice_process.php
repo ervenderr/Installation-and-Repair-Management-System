@@ -34,7 +34,7 @@ if(isset($_POST["submit"])){
         if($conn->query($sql2)){
             $_SESSION['invoice_id'] = $invoice_id;
             // Update service_request table with the new invoice ID
-            $sql3 = "UPDATE service_request SET invoice_id = '{$invoice_id}' WHERE id = '{$_SESSION['rowid']}'";
+            $sql3 = "UPDATE service_request SET invoice_id = '{$invoice_id}' WHERE sreq_id = '{$_SESSION['rowid']}'";
             if($conn->query($sql3)){
                 // Redirect to view-transaction.php with success message
 
