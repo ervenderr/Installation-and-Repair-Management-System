@@ -70,9 +70,9 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                     <?php                        
                                     function getNextInvoiceNumber() {
                                         $host = 'localhost';
-                                        $user = 'root';
-                                        $password = '';
-                                        $dbname = 'protontech';
+                                        $user = 'u721805960_protontech';
+                                        $password = 'KUWI&0Sz';
+                                        $dbname = 'u721805960_protontech';
                                         $conn = mysqli_connect($host, $user, $password, $dbname);
                                         if (!$conn) {
                                             die("Connection failed: " . mysqli_connect_error());
@@ -95,7 +95,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                     
                                     $invoice_number = getNextInvoiceNumber();
                                 ?>
-                                    <form method='post' action='rp-invoice-process.php' autocomplete='off'>
+                                    <form method='post' action='serv_invoice_process.php' autocomplete='off'>
                                         <div class='row'>
                                             <div class='col-md-4'>
                                                 <h5 class='text-success'>Invoice Details</h5>
