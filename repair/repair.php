@@ -11,12 +11,14 @@ $page_title = 'ProtonTech | Repair Request';
 $repair = 'actives activess';
 require_once '../homeIncludes/header.php';
 
-$cust_id = $_SESSION["cust_id"];
 
 $user_id = $_SESSION['logged_id'];
-$sql = "SELECT * FROM accounts, customer, rprq 
-WHERE accounts.account_id = $user_id
-AND customer.account_id=accounts.account_id";
+
+$sql = "SELECT *
+FROM accounts 
+INNER JOIN customer ON accounts.account_id = customer.account_id
+WHERE accounts.account_id = $user_id";
+
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 

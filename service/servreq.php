@@ -28,28 +28,36 @@ if(!empty($_POST["service_id"])){
     }
 }
 
-$cust_id = $_SESSION["cust_id"];
 
 $user_id = $_SESSION['logged_id'];
-$sql2 = "SELECT * FROM accounts, customer, rprq 
-WHERE accounts.account_id = $user_id
-AND customer.account_id=accounts.account_id";
+
+$sql2 = "SELECT *
+FROM accounts 
+INNER JOIN customer ON accounts.account_id = customer.account_id
+WHERE accounts.account_id = $user_id";
+
 $result2 = mysqli_query($conn, $sql2);
 $row2 = mysqli_fetch_assoc($result2);
+
+$_SESSION['cust_id'] = $row2['cust_id'];
+$_SESSION['logged_id'] = $row2['account_id'];
+
 ?>
+
+
 
 <body>
     <?php
     include_once('../homeIncludes/homenav.php');
     ?>
 
-    <div class="jobcon">
+    <div class="jobcon jobcons">
         <ul class="nav justify-content-center">
             <li class="nav-item">
                 <a class="nav-link <?php echo $servpkgnav; ?>" aria-current="page" href="servpkg.php">Packages</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?php echo $servreqnav; ?>" href="servreq">Service Request</a>
+                <a class="nav-link <?php echo $servreqnav; ?>" href="servreq">Service Request <?php echo $row2['account_id']; ?></a>
             </li>
             </li>
         </ul>

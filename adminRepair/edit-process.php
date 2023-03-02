@@ -55,7 +55,7 @@ if(isset($_POST['submit'])) {
     }
 
     // update rprq table with new values
-    $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician' WHERE transaction_code='$transaction_code'";
+    $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician' WHERE transaction_code='$transaction_code'";
     $result4 = mysqli_query($conn, $query4);
 
     if ($result4) {

@@ -29,38 +29,35 @@ if (isset($_POST['submit'])) {
 
 // if no errors, log in user
 if (count($errors) == 0) {
-    $stmt = $conn->prepare("SELECT * FROM accounts, admin, customer 
-    WHERE email=? AND password=? 
-    AND customer.account_id = accounts.account_id
-    OR admin.account_id = accounts.account_id");
+    $stmt = $conn->prepare("SELECT * FROM accounts
+    WHERE email=? AND password=?");
     $stmt->bind_param("ss", $email, $password);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {
-    // login successful
-    while ($row = $result->fetch_assoc()) {
-    $_SESSION['email'] = $email;
-    $_SESSION['logged_id'] = $row['account_id'];
-    $_SESSION['user_type'] = $row['user_type'];
-    if ($_SESSION['user_type'] == 'customer') {
-        $_SESSION['cust_id'] = $row['cust_id'];
-    header("Location: ../homepage/home.php");
-    } elseif ($_SESSION['user_type'] == 'admin') {
-    unset($_SESSION['cust_id']);
-    header("Location: ../admin/dashboard.php");
-    }
-    }
+        // login successful
+        while ($row = $result->fetch_assoc()) {
+            $_SESSION['logged_id'] = $row['account_id'];
+            $_SESSION['user_type'] = $row['user_type'];
+            if ($_SESSION['user_type'] == 'customer') {
+                header("Location: ../homepage/home.php");
+            } elseif ($_SESSION['user_type'] == 'admin') {
+                // unset($_SESSION['cust_id']);
+                header("Location: ../admin/dashboard.php");
+            }
+        }
     } else {
-    // add error message
-    $errors[] = "Incorrect email or password";
+        // add error message
+        $errors[] = "Incorrect email or password";
     }
     $stmt->close();
-    }
-    
-    // display errors
-    foreach ($errors as $error) {
+}
+
+// display errors
+foreach ($errors as $error) {
     echo "<span class='text-danger'>$error</span>";
-    }
+}
+
 }
 ?>
 
