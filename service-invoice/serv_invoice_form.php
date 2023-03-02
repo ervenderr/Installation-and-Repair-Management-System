@@ -70,9 +70,9 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                     <?php                        
                                     function getNextInvoiceNumber() {
                                         $host = 'localhost';
-                                        $user = 'u721805960_protontech';
-                                        $password = 'KUWI&0Sz';
-                                        $dbname = 'u721805960_protontech';
+                                        $user = 'root';
+                                        $password = '';
+                                        $dbname = 'protontech';
                                         $conn = mysqli_connect($host, $user, $password, $dbname);
                                         if (!$conn) {
                                             die("Connection failed: " . mysqli_connect_error());
