@@ -97,7 +97,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </tr>
                                             <tr>
                                                 <th>Customer Name:</th>
-                                                <td><?php echo $row['fname'] ." " .  $row['lname']?></td>
+                                                <td><?php echo $row['invoice_id'] ." " .  $row['lname']?></td>
                                             </tr>
                                             <tr>
                                                 <th>Address:</th>
