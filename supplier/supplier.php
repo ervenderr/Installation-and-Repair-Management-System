@@ -214,7 +214,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </div>
                         </div>
                     </div>
-                </div>
 
                 <?php include_once('../modals/add-technician-modal.php') ?>
                 <!-- content-wrapper ends -->

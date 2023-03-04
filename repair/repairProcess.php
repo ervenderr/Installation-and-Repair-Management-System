@@ -32,7 +32,4 @@ $status = htmlentities("Pending");
 $query = "INSERT INTO rprq (cust_id, transaction_code, etype, defective, shipping, image, status) VALUES ('$cust_id', '$transaction_code', '$etype', '$defective', '$shipping', '".$imgcontent."', '$status')";
 $result = mysqli_query($conn, $query);
 
-
-
-
 ?>

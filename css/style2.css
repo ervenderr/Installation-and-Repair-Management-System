@@ -443,6 +443,11 @@ option {
     font-size: 16px;
 }
 
+
+.nav-container{
+    overflow-x: auto;
+}
+
 .accform .accform-cons{
 }
 
@@ -489,17 +494,21 @@ option {
 
 .accountcon .container-fluid .row .sidebar a {
     display: block;
-    padding: 10px 0;
+    padding: 10px 10px;
     font-size: 18px;
     color: #c3c3c3;
     text-decoration: none;
     border-bottom: 1px solid #c3c3c3;
 }
 
+.accountcon .container-fluid .row .accform a{
+    padding: 10px 10px;
+}
+
 .accountcon .container-fluid .row .sidebar .account-active {
-    color: #015F6B;
+    background-color: #015F6B;
+    color: #fff;
     font-weight: 500;
-    border-bottom: 2px solid #015F6B;
 }
 
 .rprq{
@@ -1475,3 +1484,384 @@ width: 100%;
     border: none;
 }
 
+.nav-pills .nav-link{
+    color: #718096;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    color: #015F6B;
+    background-color: #fff;
+    border-radius: 0;
+    border-bottom: 2px solid #015F6B;
+    font-weight: 700;
+}
+
+
+
+.tracking-container .card {
+    z-index: 0;
+    background-color: #fff;
+    padding-bottom: 20px;
+    margin-top: 90px;
+    margin-bottom: 90px;
+    border-radius: 10px;
+    border: 1px solid #015F6B;
+}
+
+.tracking-container .card .top {
+    display: flex;
+    flex-direction: row;
+    padding-top: 40px;
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+}
+
+/*Icon progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: #455A64;
+    padding-left: 0px;
+    margin-top: 30px;
+} 
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 13px;
+    width: 25%;
+    float: left;
+    position: relative;
+    font-weight: 400;
+    text-align: center;
+}
+
+#progressbar li:before {
+    width: 40px;
+    height: 40px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    background: #C5CAE9;
+    border-radius: 50%;
+    margin: auto;
+    padding: 0px;
+    color: #fff;
+}
+
+/*ProgressBar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 12px;
+    background: #C5CAE9;
+    position: absolute;
+    left: 0;
+    top: 16px;
+    z-index: -1;
+}
+
+#progressbar li:last-child:after {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: absolute;
+    left: -50%;
+}
+
+#progressbar li:nth-child(2):after, #progressbar li:nth-child(3):after {
+    left: -50%;
+}
+
+#progressbar li:first-child:after {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: absolute;
+    left: 50%;
+}
+
+#progressbar li:last-child:after {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#progressbar li:first-child:after {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+/*Color number of the step and the connector before it*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: #015F6B;
+}
+
+#progressbar li.active:before {
+    font-family: FontAwesome;
+    content: "\f00c";
+    
+}
+
+#progressbar li:nth-child(1):before {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+
+}
+
+#progressbar li:nth-child(2):before {
+    content: "\f085";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+
+}
+
+#progressbar li:nth-child(3):before {
+    content: "\f0ad";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+#progressbar li:nth-child(4):before {
+    content: "\f058";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+#progressbar li:nth-child(1) {
+    color: #015F6B;
+    font-family: "Font Awesome 5 Free";
+}
+
+#progressbar li:nth-child(2) {
+    color: #015F6B;
+}
+
+#progressbar li:nth-child(3) {
+    color: #015F6B;
+}
+
+#progressbar li:nth-child(4) {
+    color: #015F6B;
+}
+
+
+.details-req {
+    margin-top: 30px;
+    display: flex;
+    }
+    
+    .details-req h6 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #015F6B;
+    }
+    
+    .details-req p {
+    margin-bottom: 5px;
+    font-size: 14px;
+    }
+    
+    .details-req .font-weight-bold {
+    font-weight: bold;
+    }
+    
+    .flxend{
+        align-items: end;
+    }
+
+.customer-info {
+    margin-top: 40px;
+    padding-left: 20px;
+}
+
+.customer-info h5 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.customer-info p {
+    margin-bottom: 5px;
+}
+
+.customer-info span {
+    font-weight: bold;
+    
+}
+
+.details-req{
+
+    margin: 20px auto 20px;
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+}
+
+.tracking-body{
+    background-color: #f1f7fc;
+}
+
+
+.tracking {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    margin-top: 50px;
+    max-width: 1500px;
+    background-color: #f1f7fc;
+}
+
+.search {
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+}
+
+.search input {
+    height: 60px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4;
+    width: 100%;
+}
+
+.search input:focus {
+    box-shadow: none;
+    border: 2px solid #015F6B;
+}
+
+.search .fa-search {
+    position: absolute;
+    top: 20px;
+    left: 16px;
+}
+
+.search button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 50px;
+    width: 110px;
+    background: #015F6B;
+}
+
+.height {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tracking-width {
+    width: 100%;
+    max-width: 600px;
+}
+
+@media (max-width: 767px) {
+    .search input {
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .search {
+      flex-direction: column;
+    }
+  
+    .search button {
+      margin-top: 10px;
+      position: static;
+      width: 100%;
+    }
+  }
+
+  .transaction-details-card {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1500px;
+}
+
+.transaction-details-card-header {
+  background-color: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.75rem;
+}
+
+.transaction-details-card-title {
+  color: #2d3748;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.transaction-details-card-body {
+  padding: 1rem;
+}
+
+.transaction-details-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.transaction-details-label {
+  color: #718096;
+  flex-basis: 50%;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.transaction-details-value {
+  color: #2d3748;
+  flex-basis: 50%;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.transaction-details-pending {
+  color: #f6ad55;
+}
+
+.transaction-details-none {
+  color: #fc8181;
+}
+
+.transaction-details-standard-shipping {
+  text-transform: uppercase;
+}
+
+ /* Styling for confirmation ticket PDF */
+ .download-ticket {
+    font-family: Arial;
+    font-size: 14px;
+}
+.download-ticket h1, .download-ticket h2, .download-ticket h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.download-ticket img {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    display: block;
+}
+.download-ticket table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+.download-ticket table td {
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+.download-ticket table td:first-child {
+    font-weight: bold;
+    background-color: #f7f7f7;
+}
+
+.pending-card{
+    margin-top: 10px;
+    background-color: #f7f7f7;
+}

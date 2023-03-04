@@ -12,10 +12,20 @@ $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT rprq.id, rprq.invoice_id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+$query = "SELECT rprq.*, 
+            customer.fname AS cust_fname, 
+            customer.lname AS cust_lname, 
+            technician.fname AS tech_fname, 
+            technician.lname AS tech_lname, 
+            technician.status AS tech_status_new_name, 
+            rprq.status AS rprq_status, 
+            accounts.*,
+            technician.*,
+            customer.*
           FROM rprq
-          JOIN customer ON rprq.cust_id = customer.cust_id
-          JOIN accounts ON customer.account_id = accounts.account_id
+          LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+          LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+          LEFT JOIN accounts ON customer.account_id = accounts.account_id
           WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
@@ -54,7 +64,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             <ul class="breadcrumb">
                                 <?php
                                 $href = "";
-                                if ($row['status'] == 'Pending'){
+                                if ($row['rprq_status'] == 'Pending'){
                                     $href = "pending.php";
                                 }else{
                                     $href = "transaction.php";
@@ -81,22 +91,22 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             <tr>
                                                 <?php
                                                 $statusClass = '';
-                                                if ($row['status'] == 'Pending') {
+                                                if ($row['rprq_status'] == 'Pending') {
                                                   $statusClass = 'badge-gradient-warning';
-                                                } else if ($row['status'] == 'In-progress') {
+                                                } else if ($row['rprq_status'] == 'In-progress') {
                                                   $statusClass = 'badge-gradient-info';
-                                                } else if ($row['status'] == 'Done') {
+                                                } else if ($row['rprq_status'] == 'Done') {
                                                   $statusClass = 'badge-gradient-success';
                                                 } else {
                                                   $statusClass = 'badge-gradient-secondary';
                                                 }      
                                                 echo "<th>Status:</th>";
-                                                echo "<td><span class='badge " . $statusClass . "'>" . $row['status'] . "</span></td>";
+                                                echo "<td><span class='badge " . $statusClass . "'>" . $row['rprq_status'] . "</span></td>";
                                                 ?>
                                             </tr>
                                             <tr>
                                                 <th>Customer Name:</th>
-                                                <td><?php echo $row['fname'] ." " .  $row['lname']?></td>
+                                                <td><?php echo $row['cust_fname'] ." " .  $row['cust_lname']?></td>
                                             </tr>
                                             <tr>
                                                 <th>Address:</th>
@@ -128,7 +138,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </tr>
                                             <tr>
                                                 <th>Assigned Technician:</th>
-                                                <td></td>
+                                                <td><?php echo $row['tech_fname'] . " " . $row['tech_lname']?></td>
                                             </tr>
                                             <tr>
                                                 <th>Shipping Option:</th>
@@ -151,7 +161,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-danger btn-fw red">
                                             Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
 
-                                            if (empty($row['invoice_id']) && $row['status'] == 'Done') {
+                                            if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
                                                 echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
                                                 Generate Invoice <i class="fas fa-file-invoice"></i></a>';
                                             }

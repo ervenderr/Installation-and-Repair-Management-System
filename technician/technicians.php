@@ -233,7 +233,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </div>
                         </div>
                     </div>
-                </div>
 
                 <?php include_once('../modals/add-technician-modal.php') ?>
                 <!-- content-wrapper ends -->
@@ -246,6 +245,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 href="https://www.proton-tech.online/" target="_blank">ProtonTech</a></span>
                     </div>
                 </footer>
+                
                 <!-- partial -->
             </div>
             <!-- main-panel ends -->
