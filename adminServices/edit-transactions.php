@@ -222,7 +222,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                                 $result3 = mysqli_query($conn, $sql2);
                                                                 while ($technician = mysqli_fetch_assoc($result3)) {
                                                                     $tech_id = mysqli_real_escape_string($conn, $technician['tech_id']);
-                                                                    $selected = ($tech_id == $selected_technician_id) ? "selected" : "";
+                                                                    $selected = ($row6['tech_id'] == $row['tech_id']) ? "selected" : "";
                                                                     echo "<option value='{$tech_id}' {$selected}>{$technician['fname']} {$technician['lname']}</option>";
                                                                 }                                                        
                                                                 ?>

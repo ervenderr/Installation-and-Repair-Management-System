@@ -27,9 +27,6 @@ WHERE accounts.account_id='{$user_id}'";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 
-
-
-
 ?>
 
 <body>
@@ -134,14 +131,14 @@ $row = mysqli_fetch_assoc($result);
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="pickup-transaction.php">To pickup
+                        <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">To pickup
                         <?php
                                 if($notification_style_done){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link" href="completed-transaction.php">Completed
+                        <a class="flex-sm-fill text-sm-center nav-link active" href="completed-transaction.php">Completed
                         <?php
                                 if($notification_count_completed){
                                     echo'<span class="count-symbol bg-danger"></span>';
@@ -155,7 +152,7 @@ $row = mysqli_fetch_assoc($result);
                     $query = "SELECT rprq.*, technician.status as technician_status
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-                    WHERE rprq.status = 'Done';";
+                    WHERE rprq.status = 'Completed';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>

@@ -27,9 +27,6 @@ WHERE accounts.account_id='{$user_id}'";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 
-
-
-
 ?>
 
 <body>
@@ -119,7 +116,7 @@ $row = mysqli_fetch_assoc($result);
                 </div>
                 <div class="col-sm-9 accform ">
                     <nav class="nav nav-pills flex-column flex-sm-row">
-                            <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
+                            <a class="flex-sm-fill text-sm-center nav-link active" aria-current="page"
                                 href="pending-transaction.php">Pending
                                 <?php
                                 if($notification_count_pending){
@@ -134,7 +131,7 @@ $row = mysqli_fetch_assoc($result);
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="pickup-transaction.php">To pickup
+                        <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">To pickup
                         <?php
                                 if($notification_style_done){
                                     echo'<span class="count-symbol bg-danger"></span>';
@@ -149,13 +146,9 @@ $row = mysqli_fetch_assoc($result);
                                 ?>
                         </a>
                     </nav>
-
                     <?php
 
-                    $query = "SELECT rprq.*, technician.status as technician_status
-                    FROM rprq
-                    LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-                    WHERE rprq.status = 'Done';";
+                    $query = "SELECT * FROM rprq WHERE status='pending'";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
@@ -195,22 +188,22 @@ $row = mysqli_fetch_assoc($result);
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Expected
                                                 Completion:</span>
-                                            <span><?php echo $row['date_completed']?></span>
+                                            <span></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
                                                 Technician:</span>
-                                            <span><?php echo $row['fname'] . " " . $row['lname']?></span>
+                                            <span></span>
                                         </div>
                                     </div>
                                     <div class="text-start">
-                                        <?php
-                                        if (!empty($row['invoice_id'])) {
-                                            $invoice_id = $row['invoice_id'];
-                                            echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-primary btn-fw ">
-                                            Download Invoice <i class="fas fa-download"></i></a>';
-                                        }
-                                        ?>
+                                        <form method="post" action="../repair-invoice/booking-repair-pdf.php"
+                                            target="_blank">
+                                            <button type="submit" name="download" value="<?php echo $row['id']; ?>"
+                                                class="btn btn-secondary">Download
+                                                Ticket <i class="fas fa-download"></i></button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -220,7 +213,7 @@ $row = mysqli_fetch_assoc($result);
                     </table>
                     <?php } else { ?>
                     <div class="alert alert-info" role="alert">
-                        <i class="fas fa-exclamation-circle"></i> No Transaction at the moment.
+                        <i class="fas fa-exclamation-circle"></i> No Pending Transaction at the moment.
                     </div>
                     <?php } ?>
 

@@ -1865,3 +1865,19 @@ width: 100%;
     margin-top: 10px;
     background-color: #f7f7f7;
 }
+
+.accform .nav a{
+    display: flex;
+    justify-content: center;
+}
+
+.accform .nav a .count-symbol {
+    
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    border: 2px solid #ffffff;
+    color: red;
+    top: 137px;
+}
+

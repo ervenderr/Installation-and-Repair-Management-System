@@ -48,16 +48,12 @@ $row = mysqli_fetch_assoc($result);
                         <h5 class="mb-0"><?php echo $row['fname'] ." " .  $row['lname']?></h5>
                     </div>
                     <div class="rprq">
-                        <a href="../repair/repair-transanction.php" class="<?php echo $repairtransac; ?>">Repair
+                        <a href="../repair/pending-transaction.php" class="<?php echo $repairtransac; ?>">Repair
                             request</a>
                     </div>
                     <div>
-                        <a href="../service/service-transaction.php" class="<?php echo $servicetransac; ?>">Service
+                        <a href="../service/pending-transaction.php" class="<?php echo $servicetransac; ?>">Service
                             request</a>
-                    </div>
-                    <div>
-                        <a href="../mytransactions/transaction-history.php" class="<?php echo $history; ?>">Transaction
-                            History</a>
                     </div>
                     <div>
                         <a href="../mytransactions/account.php" class="<?php echo $accsetting; ?>">Account setting</a>
@@ -88,21 +84,75 @@ $row = mysqli_fetch_assoc($result);
 
                         <div class="ticket-footer"></div>
                     </div>
+                    <?php
+                    // Get the counts for each status
+                    $query_pending = "SELECT * FROM rprq WHERE status='Pending'";
+                    $result_pending = mysqli_query($conn, $query_pending);
+                    $num_pending = mysqli_num_rows($result_pending);
 
+                    $query_in_progress = "SELECT * FROM rprq WHERE status='In-progress'";
+                    $result_in_progress = mysqli_query($conn, $query_in_progress);
+                    $num_in_progress = mysqli_num_rows($result_in_progress);
+
+                    $query_done = "SELECT * FROM rprq WHERE status='Done'";
+                    $result_done = mysqli_query($conn, $query_done);
+                    $num_done = mysqli_num_rows($result_done);
+
+                    $query_completed = "SELECT * FROM rprq WHERE status='Completed'";
+                    $result_completed = mysqli_query($conn, $query_completed);
+                    $num_completed = mysqli_num_rows($result_completed);
+
+                    // Set the notification count and style for each status
+                    $notification_count_pending = $num_pending > 0 ? $num_pending : "";
+                    $notification_style_pending = $num_pending > 0 ? "style='display: inline-block;'" : "";
+
+                    $notification_count_in_progress = $num_in_progress > 0 ? $num_in_progress : "";
+                    $notification_style_in_progress = $num_in_progress > 0 ? "style='display: inline-block;'" : "";
+
+                    $notification_count_done = $num_done > 0 ? $num_done : "";
+                    $notification_style_done = $num_done > 0 ? "style='display: inline-block;'" : "";
+
+                    $notification_count_completed = $num_completed > 0 ? $num_completed : "";
+                    $notification_style_completed = $num_completed > 0 ? "style='display: inline-block;'" : "";
+                    ?>
 
                 </div>
                 <div class="col-sm-9 accform ">
-                <nav class="nav nav-pills flex-column flex-sm-row">
-                        <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
-                            href="pending-transanction.php">Pending</a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="repairing-transaction.php">Repairing</a>
-                        <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">To pickup</a>
-                        <a class="flex-sm-fill text-sm-center nav-link" href="completed-transaction.php">Completed</a>
+                    <nav class="nav nav-pills flex-column flex-sm-row">
+                            <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
+                                href="pending-transaction.php">Pending
+                                <?php
+                                if($notification_count_pending){
+                                    echo'<span class="count-symbol bg-danger"></span>';
+                                }
+                                ?>
+                            </a>
+                        <a class="flex-sm-fill text-sm-center nav-link active" href="repairing-transaction.php">Repairing
+                        <?php
+                                if($notification_style_in_progress){
+                                    echo'<span class="count-symbol bg-danger"></span>';
+                                }
+                                ?>
+                        </a>
+                        <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">To pickup
+                        <?php
+                                if($notification_style_done){
+                                    echo'<span class="count-symbol bg-danger"></span>';
+                                }
+                                ?>
+                        </a>
+                        <a class="flex-sm-fill text-sm-center nav-link" href="completed-transaction.php">Completed
+                        <?php
+                                if($notification_count_completed){
+                                    echo'<span class="count-symbol bg-danger"></span>';
+                                }
+                                ?>
+                        </a>
                     </nav>
 
                     <?php
 
-                    $query = "SELECT *
+                    $query = "SELECT rprq.*, technician.status as technician_status
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
                     WHERE rprq.status = 'In-Progress'";

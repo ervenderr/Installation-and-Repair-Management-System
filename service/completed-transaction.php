@@ -9,7 +9,7 @@ require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Home';
 $home = '';
-$repairtransac = 'account-active';
+$servicetransac = 'account-active';
 include_once('../homeIncludes/header.php');
 
 
@@ -19,16 +19,13 @@ $user_id = $_SESSION['logged_id'];
 $query = "SELECT * 
 FROM customer 
 LEFT JOIN accounts ON customer.account_id=accounts.account_id 
-LEFT JOIN rprq 
-ON rprq.cust_id=customer.cust_id 
-AND rprq.transaction_code='{$transaction_code}' 
+LEFT JOIN service_request 
+ON service_request.cust_id=customer.cust_id 
+AND service_request.transaction_code='{$transaction_code}' 
 WHERE accounts.account_id='{$user_id}'";
 
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
-
-
-
 
 ?>
 
@@ -86,19 +83,19 @@ $row = mysqli_fetch_assoc($result);
                     </div>
                     <?php
                     // Get the counts for each status
-                    $query_pending = "SELECT * FROM rprq WHERE status='Pending'";
+                    $query_pending = "SELECT * FROM service_request WHERE status='Pending'";
                     $result_pending = mysqli_query($conn, $query_pending);
                     $num_pending = mysqli_num_rows($result_pending);
 
-                    $query_in_progress = "SELECT * FROM rprq WHERE status='In-progress'";
+                    $query_in_progress = "SELECT * FROM service_request WHERE status='In-progress'";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
 
-                    $query_done = "SELECT * FROM rprq WHERE status='Done'";
+                    $query_done = "SELECT * FROM service_request WHERE status='Done'";
                     $result_done = mysqli_query($conn, $query_done);
                     $num_done = mysqli_num_rows($result_done);
 
-                    $query_completed = "SELECT * FROM rprq WHERE status='Completed'";
+                    $query_completed = "SELECT * FROM service_request WHERE status='Completed'";
                     $result_completed = mysqli_query($conn, $query_completed);
                     $num_completed = mysqli_num_rows($result_completed);
 
@@ -134,14 +131,14 @@ $row = mysqli_fetch_assoc($result);
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="pickup-transaction.php">To pickup
+                        <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">To pickup
                         <?php
                                 if($notification_style_done){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link" href="completed-transaction.php">Completed
+                        <a class="flex-sm-fill text-sm-center nav-link active" href="completed-transaction.php">Completed
                         <?php
                                 if($notification_count_completed){
                                     echo'<span class="count-symbol bg-danger"></span>';
@@ -149,13 +146,17 @@ $row = mysqli_fetch_assoc($result);
                                 ?>
                         </a>
                     </nav>
-
                     <?php
-
-                    $query = "SELECT rprq.*, technician.status as technician_status
-                    FROM rprq
-                    LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-                    WHERE rprq.status = 'Done';";
+                    $query = "SELECT sr.*, 
+                    t.*,
+                    sr.status AS sr_status,
+                    s.*,
+                    p.*
+             FROM service_request sr
+             LEFT JOIN technician t ON sr.tech_id = t.tech_id
+             LEFT JOIN services s ON sr.service_id = s.service_id
+             LEFT JOIN package p ON sr.pkg_id = p.pkg_id
+             WHERE sr.status = 'Completed';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
@@ -171,22 +172,22 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Status:</span>
-                                            <span class="transaction-details-pending"><?php echo $row['status']?></span>
+                                            <span class="transaction-details-pending"><?php echo $row['sr_status']?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
-                                            <span><?php echo $row['etype']?></span>
+                                            <span class="fw-bold me-2 transaction-details-label">Service Type:</span>
+                                            <span><?php echo $row['service_name']?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Defects:</span>
-                                            <span class="transaction-details-none"><?php echo $row['defective']?></span>
+                                            <span class="fw-bold me-2 transaction-details-label">Package Type:</span>
+                                            <span class="transaction-details-none text-secondary"><?php echo $row['name']?></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Shipping:</span>
+                                            <span class="fw-bold me-2 transaction-details-label">Other concern:</span>
                                             <span
-                                                class="transaction-details-standard-shipping"><?php echo $row['shipping']?></span>
+                                                class="transaction-details-standard-shipping"><?php echo $row['other']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Date Requested:</span>
@@ -200,7 +201,7 @@ $row = mysqli_fetch_assoc($result);
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
                                                 Technician:</span>
-                                            <span><?php echo $row['fname'] . " " . $row['lname']?></span>
+                                            <span><?php echo $row['fname'] ." " .  $row['lname']?></span>
                                         </div>
                                     </div>
                                     <div class="text-start">
@@ -211,6 +212,7 @@ $row = mysqli_fetch_assoc($result);
                                             Download Invoice <i class="fas fa-download"></i></a>';
                                         }
                                         ?>
+                                </div>
                                 </div>
                             </div>
                         </div>
