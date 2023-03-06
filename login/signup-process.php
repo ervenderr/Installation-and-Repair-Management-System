@@ -74,7 +74,7 @@ function sendEmail_verify($fname, $email, $verify_token){
             <div class='container'>
                 <div class='header'>You have registered with Proton Electronics and Services</div>
                 <div class='message'>Please verify your email address by clicking the button below:</div>
-                <a href='http://localhost/Proton-Tech-Management-System/login/verify-email.php?token=$verify_token' class='button'>Verify Email Address</a>
+                <a href='https://proton-tech.online/login/verify-email.php?token=$verify_token' class='button'>Verify Email Address</a>
             </div>
         </body>
     </html>";
