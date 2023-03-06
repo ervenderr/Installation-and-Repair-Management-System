@@ -2,7 +2,7 @@
 
 $host = 'u721805960_protontech';
 $user = 'root';
-$password = '';
+$password = 'KUWI&0Sz';
 $dbname = 'u721805960_protontech';
 
 // Create connection
