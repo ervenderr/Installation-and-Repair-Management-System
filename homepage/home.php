@@ -68,7 +68,7 @@ $cust_id = $_SESSION['cust_id'];
                     echo '<div class="col-md-6 serimg hidden">';
                     echo '<img src="' . $image_src . '" alt="' . $name . '" class="img-fluid rounded shadow-lg imgserv">';
                     echo '</div>';
-                    echo '<div class="col-md-6 d-flex align-items-center">';
+                    echo '<div class="col-md-6 d-flex align-items-center hidden">';
                     echo '<div class="bg-light p-3 rounded shadow-lg destext">';
                     echo '<h3 class="serv text-left font-weight-bold mb-0 servname">' . $name . '</h3>';
                     echo '<p class="text-left font-italic text-secondary mt-1 mb-3">' . $description . '</p>';
