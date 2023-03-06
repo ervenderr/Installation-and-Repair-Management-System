@@ -65,7 +65,7 @@ $cust_id = $_SESSION['cust_id'];
                     $image_data = base64_encode($image);
                     $image_src = "data:image/jpeg;base64,{$image_data}";
                     echo '<div class="row mt-5">';
-                    echo '<div class="col-md-6 serimg">';
+                    echo '<div class="col-md-6 serimg hidden">';
                     echo '<img src="' . $image_src . '" alt="' . $name . '" class="img-fluid rounded shadow-lg imgserv">';
                     echo '</div>';
                     echo '<div class="col-md-6 d-flex align-items-center">';
