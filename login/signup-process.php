@@ -16,14 +16,14 @@ function sendEmail_verify($fname, $email, $verify_token){
     $mail->isSMTP();
     $mail->SMTPAuth = true;
 
-    $mail->Host = 'smtp.gmail.com';
-    $mail->Username = 'protontechonline@gmail.com';
-    $mail->Password = 'emehffhcrnwhzafe';
+    $mail->Host = 'smtp.hostinger.com';
+    $mail->Username = 'protontech@proton-tech.online';
+    $mail->Password = 'KUWI&0Sz';
 
     $mail->SMTPSecure = "ssl";
     $mail->Port = 465;
 
-    $mail->setFrom('protontechonline@gmail.com');
+    $mail->setFrom('protontech@proton-tech.online');
     $mail->addAddress($email);
 
     $mail->isHTML(true);
