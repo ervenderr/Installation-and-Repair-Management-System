@@ -1,10 +1,10 @@
 <?php
 session_start();
 require_once '../homeIncludes/dbconfig.php';
+include_once('../homeIncludes/header.php');
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Home';
 $home = 'actives';
-include_once('../homeIncludes/header.php');
 
 
 $cust_id = $_SESSION['cust_id'];
