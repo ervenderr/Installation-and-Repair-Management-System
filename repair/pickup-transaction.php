@@ -86,19 +86,31 @@ $row = mysqli_fetch_assoc($result);
                     </div>
                     <?php
                     // Get the counts for each status
-                    $query_pending = "SELECT * FROM rprq WHERE status='Pending'";
+                    $query_pending = "SELECT * FROM rprq 
+                    LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE status='Pending' AND accounts.account_id = '{$user_id}';";
                     $result_pending = mysqli_query($conn, $query_pending);
                     $num_pending = mysqli_num_rows($result_pending);
 
-                    $query_in_progress = "SELECT * FROM rprq WHERE status='In-progress'";
+                    $query_in_progress = "SELECT * FROM rprq 
+                    LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE status='In-progress' AND accounts.account_id = '{$user_id}';";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
 
-                    $query_done = "SELECT * FROM rprq WHERE status='Done'";
+                    $query_done = "SELECT * FROM rprq 
+                    LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE status='Done' AND accounts.account_id = '{$user_id}';";
                     $result_done = mysqli_query($conn, $query_done);
                     $num_done = mysqli_num_rows($result_done);
 
-                    $query_completed = "SELECT * FROM rprq WHERE status='Completed'";
+                    $query_completed = "SELECT * FROM rprq 
+                    LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE status='Completed' AND accounts.account_id = '{$user_id}';";
                     $result_completed = mysqli_query($conn, $query_completed);
                     $num_completed = mysqli_num_rows($result_completed);
 
@@ -151,11 +163,12 @@ $row = mysqli_fetch_assoc($result);
                     </nav>
 
                     <?php
-
-                    $query = "SELECT rprq.*, technician.status as technician_status
+                    $query = "SELECT rprq.*, technician.status as technician_status, customer.*, accounts.*
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-                    WHERE rprq.status = 'Done';";
+                    LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE rprq.status = 'Done' AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>

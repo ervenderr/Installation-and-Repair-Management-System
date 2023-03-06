@@ -69,7 +69,7 @@ $_SESSION['logged_id'] = $row2['account_id'];
                     <div id='msgs' class='msg'>
                         <p id='msgs'>Request Submitted!</p>
                         <div class="msgbtn">
-                            <a class="msgb" href="../service/service-transaction.php" role="button">Get Information
+                            <a class="msgb" href="../service/pending-transaction.php" role="button">Get Information
                                 ID</a>
                             <a class="msgb" href="servreq.php" role="button">Submit Another Request</a>
 

@@ -43,6 +43,8 @@ if (count($errors) == 0) {
                 header("Location: ../homepage/home.php");
             } elseif ($row['user_type'] == 'admin') {
                 // unset($_SESSION['cust_id']);
+                $_SESSION['logged_id'] = $row['account_id'];
+                $_SESSION['user_type'] = $row['user_type'];
                 header("Location: ../admin/dashboard.php");
             }elseif ($row['user_type'] == 'customer' && $row['verify_status'] != "1") {
                 $errors[] = "Email is not Verified";
