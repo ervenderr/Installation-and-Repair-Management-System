@@ -128,7 +128,7 @@ if (isset($_POST['submit'])) {
     if($stmt){
 
         sendEmail_verify("$fname", "$email", "$verify_token");
-        $_SESSION['msg'] = "Registration successful. Please verify your Email Address";
+        $_SESSION['msg'] = "Registration successful. Check your email to confirm your registration";
         $_SESSION['signup_success'] = true;
         header("Location: signup.php");
 
