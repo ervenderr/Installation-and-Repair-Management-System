@@ -1,7 +1,7 @@
 <?php
 
-$host = 'u721805960_protontech';
-$user = 'root';
+$host = 'root';
+$user = 'u721805960_protontech';
 $password = 'KUWI&0Sz';
 $dbname = 'u721805960_protontech';
 
