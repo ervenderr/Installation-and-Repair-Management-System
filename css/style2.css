@@ -1881,3 +1881,12 @@ width: 100%;
     top: 137px;
 }
 
+.login-alert{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 25px;
+    right: 25px;
+    top: 9%;
+}

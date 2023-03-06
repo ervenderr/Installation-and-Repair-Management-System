@@ -5,46 +5,27 @@ require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Sign Up';
 include_once('../homeIncludes/header.php');
 
-// Check if the form was submitted
-if (isset($_POST['submit'])) {
-    // Get the form data and sanitize it
-    $fname = $_POST['fname'];
-    $mname = $_POST['mname'];
-    $lname = $_POST['lname'];
-    $phone = $_POST['phone'];
-    $address = $_POST['address'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $usertype = 'customer';
-
-    // Prepare and execute the first SQL statement to insert email, password, and user type into the accounts table
-    $stmt = mysqli_prepare($conn, "INSERT INTO accounts (email, password, user_type) VALUES (?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "sss", $email, $password, $usertype);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    // Get the ID of the newly inserted account
-    $account_id = mysqli_insert_id($conn);
-
-    // Prepare and execute the second SQL statement to insert the rest of the data into the customer table
-    $stmt = mysqli_prepare($conn, "INSERT INTO customer (account_id, fname, mname, lname, phone, address) VALUES (?, ?, ?, ?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "isssss", $account_id, $fname, $mname, $lname, $phone, $address);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $_SESSION['signup_success'] = true;
-
-    header("Location: login.php");
-    exit();
-}
 ?>
 
 
 <body>
     <?php include_once('../homeIncludes/homenav.php');?>
     <div class="register-photo">
+        
+        <?php
+            if (isset($_SESSION['msg'])) {
+                $msg = $_SESSION['msg'];
+                echo '<div class="alert alert-success alert-dismissible fade show login-alert" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                '. $msg .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+              unset($_SESSION['msg']);
+            }
+        ?>
+
         <div class="form-container">
-            <form action="signup.php" class="form" method="POST" id="repair-form" enctype="multipart/form-data">
+            <form action="signup-process.php" class="form" method="POST" id="repair-form" enctype="multipart/form-data">
                 <h2 class="text-center login-h4"><strong>Sign Up</strong><img class="login-img"
                         src="../img/proton-logo.png" alt=""></h2>
                 <div class="progressbar">

@@ -30,20 +30,22 @@ if (isset($_POST['submit'])) {
 // if no errors, log in user
 if (count($errors) == 0) {
     $stmt = $conn->prepare("SELECT * FROM accounts
-    WHERE email=? AND password=?");
+    WHERE email=? AND password=? LIMIT 1");
     $stmt->bind_param("ss", $email, $password);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {
         // login successful
         while ($row = $result->fetch_assoc()) {
-            $_SESSION['logged_id'] = $row['account_id'];
-            $_SESSION['user_type'] = $row['user_type'];
-            if ($_SESSION['user_type'] == 'customer') {
+            if ($row['user_type'] == 'customer' && $row['verify_status'] == "1") {
+                $_SESSION['logged_id'] = $row['account_id'];
+                $_SESSION['user_type'] = $row['user_type'];
                 header("Location: ../homepage/home.php");
-            } elseif ($_SESSION['user_type'] == 'admin') {
+            } elseif ($row['user_type'] == 'admin') {
                 // unset($_SESSION['cust_id']);
                 header("Location: ../admin/dashboard.php");
+            }elseif ($row['user_type'] == 'customer' && $row['verify_status'] != "1") {
+                $errors[] = "Email is not Verified";
             }
         }
     } else {
@@ -51,19 +53,32 @@ if (count($errors) == 0) {
         $errors[] = "Incorrect email or password";
     }
     $stmt->close();
-}
+    }
 
-// display errors
-foreach ($errors as $error) {
-    echo "<span class='text-danger'>$error</span>";
-}
+    // display errors
+    foreach ($errors as $error) {
+        echo "<span class='text-danger'>$error</span>";
+    }
 
-}
+    }
 ?>
 
 <body>
     <?php include_once('../homeIncludes/homenav.php');?>
     <div class="register-photo">
+
+        <?php
+            if (isset($_SESSION['msg'])) {
+                $msg = $_SESSION['msg'];
+                echo '<div class="alert alert-success alert-dismissible fade show login-alert" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                '. $msg .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+              unset($_SESSION['msg']);
+            }
+        ?>
+
         <div class="form-container">
             <form method="post" action="login.php">
                 <?php
@@ -83,9 +98,12 @@ foreach ($errors as $error) {
                         value="<?php echo $email; ?>">
                     <span
                         class="val-error"><?php if (in_array("Email is required", $errors)) echo "<span class='text-danger'>Email is required</span>"; 
-                            elseif (in_array("Invalid email format", $errors)) echo "<span class='text-danger'>Invalid email format</span>"; 
-                            elseif (in_array("Incorrect email or password", $errors)) echo "<span class='text-danger'>Incorrect email or password</span>";?></span>
+                                elseif (in_array("Invalid email format", $errors)) echo "<span class='text-danger'>Invalid email format</span>"; 
+                                elseif (in_array("Incorrect email or password", $errors)) echo "<span class='text-danger'>Incorrect email or password</span>";
+                                elseif (in_array("Email is not Verified", $errors)) echo "<span class='text-danger'>Email is not verified</span>"; ?>
+                    </span>
                 </div>
+
                 <div class="form-group lgns">
                     <input class="form-control" type="password" name="password" placeholder="Password"
                         value="<?php echo $password; ?>">
