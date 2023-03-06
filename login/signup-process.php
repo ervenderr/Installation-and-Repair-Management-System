@@ -32,52 +32,54 @@ function sendEmail_verify($fname, $email, $verify_token){
     // Email Template
     $email_template = "
     <html>
-        <head>
-            <style>
-                .container {
-                    margin: 20px;
-                    padding: 20px;
-                    background-color: #F7F7F7;
-                    font-family: Arial, Helvetica, sans-serif;
-                }
+    <head>
+        <style>
+            .container {
+                margin: 20px;
+                padding: 20px;
+                background-color: #F7F7F7;
+                font-family: Arial, Helvetica, sans-serif;
+            }
 
-                .header {
-                    font-size: 24px;
-                    font-weight: bold;
-                    color: #333333;
-                    margin-bottom: 10px;
-                }
+            .header {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333333;
+                margin-bottom: 10px;
+            }
 
-                .message {
-                    font-size: 16px;
-                    color: #666666;
-                    margin-bottom: 20px;
-                }
+            .message {
+                font-size: 16px;
+                color: #666666;
+                margin-bottom: 20px;
+            }
 
-                .button {
-                    display: inline-block;
-                    background-color: #015F6B;
-                    color: #ffffff !important;
-                    text-decoration: none;
-                    padding: 10px 20px;
-                    border-radius: 5px;
-                }
+            .button {
+                display: inline-block;
+                background-color: #015F6B;
+                color: #ffffff;
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+            }
 
-                .button:hover {
-                    background-color: #015F6B;
-                    color: #ffffff;
-                }
-            </style>
-        </head>
+            .button:hover {
+                background-color: #015F6B;
+                color: #ffffff;
+            }
+        </style>
+    </head>
 
-        <body>
-            <div class='container'>
-                <div class='header'>You have registered with Proton Electronics and Services</div>
-                <div class='message'>Please verify your email address by clicking the button below:</div>
-                <a href='https://proton-tech.online/login/verify-email.php?token=$verify_token' class='button'>Verify Email Address</a>
-            </div>
-        </body>
-    </html>";
+    <body>
+        <div class='container'>
+            <div class='header'>Welcome to Proton Electronics and Services</div>
+            <div class='message'>Thank you for registering with us. To complete your registration, please verify your email address by clicking the button below:</div>
+            <a href='http://proton-tech.online/login/verify-email.php?token=$verify_token' class='button'>Verify Email Address</a>
+            <br><br>
+            <div class='message'>If you did not register for an account with Proton Electronics and Services, please disregard this email.</div>
+        </div>
+    </body>
+</html>";
 
     $mail->Body = $email_template;
     $mail->send();
