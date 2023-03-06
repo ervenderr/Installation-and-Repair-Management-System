@@ -59,7 +59,7 @@
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end dp-setting">
                                             <li><a class="dropdown-item" href="../mytransactions/account.php"><img src="../img/usericon.png" alt="user icon" class="user-icon user-iconn">Manage Account</a></li>
-                                            <li class="logout-align"><a href="../repair/pending-transanction.php" class="dropdown-item" type="button"><i class="fas fa-sync"></i>My Transactions</a></li>
+                                            <li class="logout-align"><a href="../repair/pending-transaction.php" class="dropdown-item" type="button"><i class="fas fa-sync"></i>My Transactions</a></li>
                                             <li class="logout-align"><a href="#" class="dropdown-item" type="button"><i class="fas fa-cog"></i>Setting</a></li>
                                             <li class="logout-align"><a href="../login/logout.php" class="dropdown-item" type="button"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
                                         </ul>
