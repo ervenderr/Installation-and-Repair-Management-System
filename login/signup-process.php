@@ -15,7 +15,7 @@ function sendEmail_verify($fname, $email, $verify_token){
 
     $mail->isSMTP();
     $mail->SMTPAuth = true;
-    
+
     $mail->Host = 'smtp.hostinger.com';
     $mail->Username = 'protontech@proton-tech.online';
     $mail->Password = 'KUWI&0Sz';
@@ -23,7 +23,7 @@ function sendEmail_verify($fname, $email, $verify_token){
     $mail->SMTPSecure = "ssl";
     $mail->Port = 465;
 
-    $mail->setFrom('protontech@proton-tech.online');
+    $mail->setFrom('protontechonline@gmail.com');
     $mail->addAddress($email);
 
     $mail->isHTML(true);
@@ -79,7 +79,8 @@ function sendEmail_verify($fname, $email, $verify_token){
             <div class='message'>If you did not register for an account with Proton Electronics and Services, please disregard this email.</div>
         </div>
     </body>
-</html>";
+</html>
+";
 
     $mail->Body = $email_template;
     $mail->send();
