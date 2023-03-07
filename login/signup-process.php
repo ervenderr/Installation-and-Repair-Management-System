@@ -13,7 +13,7 @@ function sendEmail_verify($fname, $email, $verify_token){
 
     $mail = new PHPMailer(true);
 
-    $mail->isSMTP();
+    
     $mail->SMTPAuth = true;
 
     $mail->Host = 'smtp.hostinger.com';
