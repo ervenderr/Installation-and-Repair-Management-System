@@ -15,7 +15,7 @@ function sendEmail_verify($fname, $email, $verify_token){
 
     
     $mail->SMTPAuth = true;
-
+    $mail->isSMTP();
     $mail->Host = 'smtp.hostinger.com';
     $mail->Username = 'protontech@proton-tech.online';
     $mail->Password = 'KUWI&0Sz';
