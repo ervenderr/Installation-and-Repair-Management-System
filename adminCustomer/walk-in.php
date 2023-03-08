@@ -97,9 +97,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
-                                                    $query = "SELECT customer.cust_id, customer.fname, customer.lname, customer.phone, customer.address, customer.cust_type, accounts.email, accounts.user_type
+                                                    $query = "SELECT *
                                                         FROM customer
-                                                        JOIN accounts ON customer.account_id = accounts.account_id
+                                                        INNER JOIN accounts ON customer.account_id = accounts.account_id
                                                         WHERE customer.cust_type = 'walk-in'
                                                         AND accounts.user_type = 'customer'";
 

@@ -11,7 +11,7 @@ include_once('../homeIncludes/header.php');
 <body>
     <?php include_once('../homeIncludes/homenav.php');?>
     <div class="register-photo">
-        
+
         <?php
             if (isset($_SESSION['msg'])) {
                 $msg = $_SESSION['msg'];
@@ -72,18 +72,23 @@ include_once('../homeIncludes/header.php');
                     </div>
                 </div>
                 <div class="form-step">
-                    <div class="form-group lgns"><input class="form-control" type="tel" name="phone"
+                    <div class="form-group lgns"><input class="form-control" id="phone" type="tel" name="phone"
                             placeholder="Phone">
                         <span class="val-error"></span>
                     </div>
-                    <div class="form-group lgns"><input class="form-control" type="text" name="address"
+                    <div class="form-group lgns"><input class="form-control" id="address" type="text" name="address"
                             placeholder="Address">
                         <span class="val-error"></span>
                     </div>
                     <div class="form-group lgns"><label class="form-label" for="eimg">Profile Image</label>
                         <input type="file" class="form-control" id="eimg" name="eimg" />
-                        <span class="val-error"></span>
                     </div>
+
+                    <div class="form-group lgns">
+                        <div class="g-recaptcha" data-sitekey="6LckLd4kAAAAAJfBV-ejZXs6CHcYls-rumZZavlU"></div>
+                        <span class="val-error"><?php echo isset($_SESSION['msg']) ? $_SESSION['msg'] : ''; ?></span>
+                    </div>
+
                     <div class="form-group btn-block btn-block2">
                         <a href="#" class="btn btn-primary width-50 btn-prev" id="adis"><i
                                 class="fa fa-chevron-left"></i></a>
@@ -96,6 +101,45 @@ include_once('../homeIncludes/header.php');
 
     </div>
     </div>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#btn-submit').click(function() {
+            var address = $('#address').val();
+            var phone = $('#phone').val();
+            var valid = true;
+
+            // Check if reCAPTCHA is checked
+            if (!$('.g-recaptcha-response').val()) {
+                $('.val-error').text('Please check the reCAPTCHA box');
+                valid = false;
+            } else {
+                $('.val-error').text('');
+            }
+
+            // Address validation
+            if (address == "") {
+                $('#address + .val-error').text('Please enter your address.');
+                valid = false;
+            } else {
+                $('#address + .val-error').text('');
+            }
+
+            // Phone number validation
+            if (phone == "") {
+                $('#phone + .val-error').text('Please enter your phone number.');
+                valid = false;
+            } else {
+                $('#phone + .val-error').text('');
+            }
+
+            // Submit the form if all fields are valid
+            if (valid) {
+                // The default form submission behavior will submit the form to "signup-process.php"
+            }
+        });
+    });
+    </script>
 </body>
 
 </html>
