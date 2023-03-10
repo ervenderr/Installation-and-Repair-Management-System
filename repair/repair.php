@@ -39,7 +39,7 @@ $_SESSION["cust_id"] = $row["cust_id"];
             <div id='msgs' class='msg'>
                 <p id='msgs'>Request Submitted!</p>
                 <div class="msgbtn">
-                <a class="msgb" href="../repair/pending-transanction.php" role="button">Get Information ID</a>
+                <a class="msgb" href="../repair/pending-transaction.php" role="button">Get Information ID</a>
                 <a class="msgb" href="repair.php" role="button">Submit Another Request</a>
 
                 </div>

@@ -30,22 +30,24 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </span> Products
                         </h3>
                         <?php
-            if (isset($_GET['msg'])) {
-                $msg = $_GET['msg'];
-                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                '. $msg .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
+                            if (isset($_SESSION['msg'])) {
+                                $msg = $_SESSION['msg'];
+                                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                '. $msg .'
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                            unset ($_SESSION['msg']);
+                            }
 
-            if (isset($_GET['msg2'])) {
-                $msg2 = $_GET['msg2'];
-                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                '. $msg2 .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-        ?>
+                            if (isset($_SESSION['msg2'])) {
+                                $msg2 = $_SESSION['msg2'];
+                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                '. $msg2 .'
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                            unset ($_SESSION['msg2']);
+                            }
+                        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
@@ -141,7 +143,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<a class="icns" href="edit-product.php?rowid=' .  $row['product_id'] . '">';
                                                         echo '<i class="fas fa-edit text-success view-account"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-product.php?rowid=' .  $row['product_id'] . '">';
+                                                        echo '<a class="icns" href="delete-product.php?rowid=' .  $row['product_id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
