@@ -19,7 +19,7 @@ function sendEmail_verify($fname, $email, $verify_token){
 
     $mail->Host = 'smtp.hostinger.com';
     $mail->Username = 'protontechonline@gmail.com';
-    $mail->Password = 'KUWI&0Sz';
+    $mail->Password = 'fjeooimiuiplafhe';
 
     $mail->SMTPSecure = "ssl";
     $mail->Port = 465;
