@@ -100,7 +100,25 @@ if (isset($_GET['search'])) {
                     <p><strong>Defects:</strong> <?php echo $row['defective']; ?></p>
                     <p><strong>Shipping:</strong> <?php echo $row['shipping']; ?></p>
                     <p><strong>Date Requested:</strong> <?php echo $row['date_req']; ?></p>
+                    
                 </div>
+                <?php
+                    if (!empty($row['invoice_id'])) {
+                    $invoice_id = $row['invoice_id'];
+                    echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                    Download Invoice <i class="fas fa-download"></i></a>';
+                    }
+
+                    if (($row['invoice_id'] == 0) && ($row['status'] == 'Pending')) {
+                        echo '<div class="text-center">
+                        <form method="post" action="../repair-invoice/booking-repair-pdf.php"
+                            target="_blank">
+                            <button type="submit" name="download" value="'.$row['id'].'" class="btn btn-warning text-white">Download Ticket <i class="fas fa-download"></i></button>
+                        </form>
+                    </div>';
+                    }
+                ?>
+
             </div>
         </div>
     </div>
