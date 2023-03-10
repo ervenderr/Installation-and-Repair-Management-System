@@ -23,7 +23,7 @@ function sendEmail_verify($fname, $email, $verify_token){
     $mail->SMTPSecure = "ssl";
     $mail->Port = 465;
 
-    $mail->setFrom('protontechonline@gmail.com');
+    $mail->setFrom('protontech@proton-tech.online');
     $mail->addAddress($email);
 
     $mail->isHTML(true);
