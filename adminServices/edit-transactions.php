@@ -215,14 +215,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <label for="technician" class="col-form-label">Assigned
                                                     Technician</label>
                                                     <div class="">
-                                                        <select name="technician" class="form-control">
+                                                    <select name="technician" class="form-control">
                                                             <option value="None">--- Select ---</option>
                                                             <?php
                                                                 $sql2 = "SELECT * FROM technician";
                                                                 $result3 = mysqli_query($conn, $sql2);
                                                                 while ($technician = mysqli_fetch_assoc($result3)) {
                                                                     $tech_id = mysqli_real_escape_string($conn, $technician['tech_id']);
-                                                                    $selected = ($row6['tech_id'] == $row['tech_id']) ? "selected" : "";
+                                                                    $selected = ($tech_id == $selected_technician_id) ? "selected" : "";
                                                                     echo "<option value='{$tech_id}' {$selected}>{$technician['fname']} {$technician['lname']}</option>";
                                                                 }                                                        
                                                                 ?>

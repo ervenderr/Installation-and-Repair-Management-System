@@ -745,8 +745,8 @@ input[type="password"], .email {
     margin-bottom: 10px;
 }
 
-.fa-sign-out-alt, .fa-sync, .fa-cog{
-    font-size: 15px;
+.navbar .fas{
+    font-size: 18px;
     color: #015F6B;
     margin-right: 10px;
 }
@@ -1496,14 +1496,16 @@ width: 100%;
     font-weight: 700;
 }
 
-
+.tracking-container{
+    height: 100%;
+    margin-top: 50px;
+    padding-top: 50px;
+}
 
 .tracking-container .card {
     z-index: 0;
     background-color: #fff;
-    padding-bottom: 20px;
-    margin-top: 90px;
-    margin-bottom: 90px;
+    padding-bottom: 40px;
     border-radius: 10px;
     border: 1px solid #015F6B;
 }
@@ -1511,6 +1513,7 @@ width: 100%;
 .tracking-container .card .top {
     display: flex;
     flex-direction: row;
+    
     padding-top: 40px;
     padding-left: 10% !important;
     padding-right: 10% !important;
@@ -1642,10 +1645,15 @@ width: 100%;
     color: #015F6B;
 }
 
+.width-auto{
+    width: auto;
+}
 
 .details-req {
     margin-top: 30px;
     display: flex;
+    justify-content: space-around;
+    padding: 0 111px;
     }
     
     .details-req h6 {
@@ -1690,15 +1698,19 @@ width: 100%;
 
 .details-req{
 
-    margin: 20px auto 20px;
+    /* margin: 20px auto 20px;
     padding-left: 10% !important;
-    padding-right: 10% !important;
+    padding-right: 10% !important; */
 }
 
 .tracking-body{
     background-color: #f1f7fc;
+    
 }
 
+.track{
+    overflow: hidden;
+}
 
 .tracking {
     width: 100%;
@@ -1706,7 +1718,6 @@ width: 100%;
     margin: 0;
     margin-top: 50px;
     max-width: 1500px;
-    background-color: #f1f7fc;
 }
 
 .search {
@@ -1719,6 +1730,11 @@ width: 100%;
     text-indent: 25px;
     border: 2px solid #d6d4d4;
     width: 100%;
+    border-radius: 50px;
+}
+
+.search .btn-search{
+    border-radius: 50px;
 }
 
 .search input:focus {
@@ -1889,4 +1905,17 @@ width: 100%;
     left: 25px;
     right: 25px;
     top: 9%;
+}
+
+.bg-search{
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+
+.statusBg{
+    padding: 4px 8px;
+    border-radius: 20px;
 }

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
@@ -44,6 +45,25 @@ $prodactive = "active";
                             <i class="fas fa-box menu-icon"></i>
                             </span> Products<span class="bread"> / <?php echo $row['name']; ?></span>
                         </h3>
+                        <?php
+                            if (isset($_SESSION['msg'])) {
+                                $msg = $_SESSION['msg'];
+                                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                '. $msg .'
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                            unset ($_SESSION['msg']);
+                            }
+
+                            if (isset($_SESSION['msg'])) {
+                                $msg2 = $_SESSION['msg'];
+                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                '. $msg2 .'
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                            unset ($_SESSION['msg']);
+                            }
+                        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 

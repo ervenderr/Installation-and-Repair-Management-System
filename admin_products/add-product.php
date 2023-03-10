@@ -4,13 +4,18 @@ require_once '../homeIncludes/dbconfig.php';
 
 if(isset($_POST['submit'])) {
     // assign form data to variables
-    $pname = htmlentities($_POST['pname']);
-    $price = htmlentities($_POST['price']);
-    $description = htmlentities($_POST['description']);
-    $full = htmlentities($_POST['full']);
-    $features = htmlentities($_POST['features']);
+    $pname = $_POST['pname'];
+    $price = $_POST['price'];
+    $description = $_POST['description'];
+    $full = $_POST['full'];
+    $features = $_POST['features'];
 
-    $status = htmlentities("In-Stock");
+    // Generate SKU based on product name and random number/letter
+    $prefix = substr($pname, 0, 6);
+    $suffix = mt_rand(1000, 9999) . chr(mt_rand(65, 90));
+    $sku = $prefix . $suffix;
+
+    $status = "In-Stock";
 
     $image_contents = array();
 
@@ -22,34 +27,28 @@ if(isset($_POST['submit'])) {
             $allowedtypes = array('png', 'jpg', 'jpeg', 'gif');
             if (in_array($filetype, $allowedtypes)) {
                 $image = $_FILES['img'.$i]['tmp_name'];
-                $image_contents[$i] = addslashes(file_get_contents($image));
+                $image_contents[$i] = file_get_contents($image);
             }
         }
     }
 
-    $sql = "INSERT INTO products (name, price, description, full_descriptions, features, img1, img2, img3, status) 
-        VALUES ('$pname', '$price', '$description', '$full', '$features', ";
+    $sql = "INSERT INTO products (sku, name, price, description, full_descriptions, features, img1, img2, img3, status) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    // Add binary data for each uploaded image
-    for ($i = 1; $i <= 3; $i++) {
-        if (!empty($image_contents[$i])) {
-            $sql .= "'" . $image_contents[$i] . "', ";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        // Handle error
+        exit();
+    } else {
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $sku, $pname, $price, $description, $full, $features, $image_contents[1], $image_contents[2], $image_contents[3], $status);
+        mysqli_stmt_execute($stmt);
+
+        if (mysqli_stmt_affected_rows($stmt) > 0) {
+            $_SESSION['msg'] = "Record Updated Successfully";
+            header("location: products.php");
         } else {
-            $sql .= "NULL, ";
+            echo "FAILED: " . mysqli_error($conn);
         }
     }
-
-    // Add the status field and complete the SQL statement
-    $sql .= "'$status')";
-
-$result = mysqli_query($conn, $sql);
-    
-if ($result) {
-    header("location: products.php?msg=Record Added Successfully");
-} else {
-   echo "FAILED: " . mysqli_error($conn);
 }
-}
-
-
 ?>

@@ -11,7 +11,8 @@ $password = '';
 $errors = array();
 
 // process login
-if (isset($_POST['submit'])) {
+if (isset($_POST['email']) && isset($_POST['password'])) {
+
     // get email and password
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
@@ -19,7 +20,7 @@ if (isset($_POST['submit'])) {
     // validate form inputs
     if (empty($email)) {
         $errors[] = "Email is required";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format";
     }
 
@@ -27,43 +28,60 @@ if (isset($_POST['submit'])) {
         $errors[] = "Password is required";
     }
 
-// if no errors, log in user
-if (count($errors) == 0) {
-    $stmt = $conn->prepare("SELECT * FROM accounts
-    WHERE email=? AND password=? LIMIT 1");
-    $stmt->bind_param("ss", $email, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
-        // login successful
-        while ($row = $result->fetch_assoc()) {
-            if ($row['user_type'] == 'customer' && $row['verify_status'] == "1") {
-                $_SESSION['logged_id'] = $row['account_id'];
-                $_SESSION['user_type'] = $row['user_type'];
-                header("Location: ../homepage/home.php");
-            } elseif ($row['user_type'] == 'admin') {
-                // unset($_SESSION['cust_id']);
-                $_SESSION['logged_id'] = $row['account_id'];
-                $_SESSION['user_type'] = $row['user_type'];
-                header("Location: ../admin/dashboard.php");
-            }elseif ($row['user_type'] == 'customer' && $row['verify_status'] != "1") {
-                $errors[] = "Email is not Verified";
-            }
-        }
+    // check captcha response
+    if (!isset($_POST['g-recaptcha-response'])) {
+        $errors[] = "Please check the reCAPTCHA box";
     } else {
-        // add error message
-        $errors[] = "Incorrect email or password";
-    }
-    $stmt->close();
+        $secretkey = "6LckLd4kAAAAAJyeMoi-eP6s4qaD82K-1m3XURGA";
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $response = $_POST['g-recaptcha-response'];
+        $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secretkey&response=$response&remoteip=$ip";
+        $fire = file_get_contents($url);
+        $data = json_decode($fire);
+
+        if (!$data->success) {
+            $errors[] = "Please check the reCAPTCHA box";
+        }
     }
 
-    // display errors
-    foreach ($errors as $error) {
-        echo "<span class='text-danger'>$error</span>";
-    }
+    // if no errors, log in user
+    if (count($errors) == 0) {
 
+        $stmt = $conn->prepare("SELECT * FROM accounts WHERE email=? AND password=? LIMIT 1");
+        $stmt->bind_param("ss", $email, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // login successful
+            while ($row = $result->fetch_assoc()) {
+                if ($row['user_type'] == 'customer' && $row['verify_status'] == "1") {
+                    $_SESSION['logged_id'] = $row['account_id'];
+                    $_SESSION['user_type'] = $row['user_type'];
+                    header("Location: ../homepage/home.php");
+                } elseif ($row['user_type'] == 'admin') {
+                    $_SESSION['logged_id'] = $row['account_id'];
+                    $_SESSION['user_type'] = $row['user_type'];
+                    header("Location: ../admin/dashboard.php");
+                } elseif ($row['user_type'] == 'customer' && $row['verify_status'] != "1") {
+                    $errors[] = "Email is not verified";
+                }
+            }
+        } else {
+            // add error message
+            $errors[] = "Incorrect email or password";
+        }
+        
+        $stmt->close();
     }
+}
+
+// display errors
+foreach ($errors as $error) {
+    echo "<span class='text-danger'>$error</span>";
+}
 ?>
+
 
 <body>
     <?php include_once('../homeIncludes/homenav.php');?>
@@ -122,6 +140,13 @@ if (count($errors) == 0) {
                         </label>
                     </div>
                 </div>
+
+                <div class="form-group lgns">
+                    <div class="g-recaptcha" data-sitekey="6LckLd4kAAAAAJfBV-ejZXs6CHcYls-rumZZavlU"></div>
+                    <span
+                        class="val-error"><?php if (in_array("Please check the reCAPTCHA box", $errors)) echo "<span class='text-danger'>Please check the reCAPTCHA box</span>";?></span>
+                </div>
+
                 <div class="form-group btn-block">
                     <button class="btn btn-primary btn-block" name="submit" type="submit">Sign In</button>
                 </div>

@@ -21,8 +21,9 @@ $other = $_POST['other'];
 $_SESSION['transaction_code'] = $transaction_code;
 $status = "Pending";
 
-$query = "INSERT INTO service_request (`cust_id`, `transaction_code`, `service_id`, `pkg_id`, `other`, `status`) VALUES ('$cust_id', '$transaction_code', '$stype', '$package', '$other', '$status')";
-$result = mysqli_query($conn, $query);
+$query = "INSERT INTO service_request (`cust_id`, `transaction_code`, `service_id`, `pkg_id`, `other`, `status`) VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = mysqli_prepare($conn, $query);
 
-
+mysqli_stmt_bind_param($stmt, "isssss", $cust_id, $transaction_code, $stype, $package, $other, $status);
+mysqli_stmt_execute($stmt);
 ?>

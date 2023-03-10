@@ -1,13 +1,12 @@
 <?php
 session_start();
 require_once '../homeIncludes/dbconfig.php';
+$page_title = 'ProtonTech | Home';
 include_once('../homeIncludes/header.php');
 require_once '../tools/variables.php';
-$page_title = 'ProtonTech | Home';
 $home = 'actives';
 
 
-$cust_id = $_SESSION['cust_id'];
 
 ?>
 
@@ -20,7 +19,7 @@ $cust_id = $_SESSION['cust_id'];
         <div class="container">
             <div class="left">
                 <div class="big-title">
-                    <h1>Start Exploring now. <?php echo $cust_id; ?></h1>
+                    <h1>Start Exploring now.</h1>
                 </div>
                 <p class="texts">
                     We offer a wide range of repair for most types of electronics and
@@ -51,7 +50,7 @@ $cust_id = $_SESSION['cust_id'];
     <!-- Featured Services -->
     <div class="container mt-5 values-section">
         <h2 class="text-center mb-5">Featured Services </h2>
-        <div class="row">
+        <div class="">
             <?php 
                 $sql = "SELECT service_name, description, img FROM services LIMIT 2";
                 $result = mysqli_query($conn, $sql);

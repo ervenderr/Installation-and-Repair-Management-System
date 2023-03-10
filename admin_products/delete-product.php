@@ -11,7 +11,7 @@ $query = "DELETE FROM `products` WHERE products.product_id = '" . $product_id . 
 $result = mysqli_query($conn, $query);
 
 if ($result) {
-    $msg2 = "Record Successfully deleted";
-    header("location: products.php?msg2=" . urlencode($msg2));
+    $_SESSION['msg2'] = "Record Updated Successfully";
+    header("location: products.php");
 }
 ?>
