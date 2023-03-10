@@ -13,6 +13,7 @@ require '../vendor/autoload.php';
 function sendEmail_verify($fname, $email, $verify_token){
 
     $mail = new PHPMailer(true);
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
     $mail->isSMTP();
     $mail->SMTPAuth = true;
 
