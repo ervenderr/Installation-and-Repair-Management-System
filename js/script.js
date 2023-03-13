@@ -1,4 +1,3 @@
-
 const prevBtns = document.querySelectorAll(".btn-prev");
 const nextBtns = document.querySelectorAll(".btn-next");
 const progress = document.getElementById("progress");
@@ -6,6 +5,24 @@ const formSteps = document.querySelectorAll(".form-step");
 const progressSteps = document.querySelectorAll(".progress-step");
 
 let formStepsNum = 0;
+
+// Check for existing values on form load
+window.onload = () => {
+  const inputs = formSteps[formStepsNum].querySelectorAll("input");
+  let hasValue = true;
+
+  inputs.forEach((input) => {
+    if (input.value === "") {
+      hasValue = false;
+    }
+  });
+
+  if (hasValue) {
+    formStepsNum++;
+    updateFormSteps();
+    updateProgressBar();
+  }
+};
 
 nextBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -16,7 +33,6 @@ nextBtns.forEach((btn) => {
     }
   });
 });
-
 
 function validateFormStep() {
   const inputs = formSteps[formStepsNum].querySelectorAll("input");
@@ -51,8 +67,6 @@ function validateFormStep() {
   return isValid;
 }
 
-
-
 prevBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     formStepsNum--;
@@ -68,6 +82,26 @@ function updateFormSteps() {
   });
 
   formSteps[formStepsNum].classList.add("form-step-active");
+
+  // Check for existing values on next form steps
+  if (formStepsNum < formSteps.length - 1) {
+    const inputs = formSteps[formStepsNum].querySelectorAll("input");
+    let hasValue = true;
+  
+    inputs.forEach((input) => {
+      if (input.id !== "mname" && input.value === "") {
+        hasValue = false;
+      }
+    });
+  
+    if (hasValue) {
+      formStepsNum++;
+      updateFormSteps();
+      updateProgressBar();
+    }
+  }
+  
+  
 }
 
 function updateProgressBar() {
@@ -84,6 +118,7 @@ function updateProgressBar() {
   progress.style.width =
     ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
 }
+
 
 
 

@@ -10,66 +10,66 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require '../vendor/autoload.php';
 
-function sendEmail_verify($fname, $email, $verify_token){
+    function sendEmail_verify($fname, $email, $verify_token){
 
-    $mail = new PHPMailer(true);
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-    $mail->isSMTP();
-    $mail->SMTPAuth = true;
+        $mail = new PHPMailer(true);
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->SMTPAuth = true;
 
     $mail->Host = 'smtp.hostinger.com';
     $mail->Username = 'protontech@proton-tech.online';
     $mail->Password = 'KUWI&0Sz';
 
-    $mail->SMTPSecure = "ssl";
-    $mail->Port = 465;
+        $mail->SMTPSecure = "ssl";
+        $mail->Port = 465;
 
     $mail->setFrom('protontech@proton-tech.online');
     $mail->addAddress($email);
 
-    $mail->isHTML(true);
-    $mail->Subject = 'Email verification from Proton Electronics and Services';
+        $mail->isHTML(true);
+        $mail->Subject = 'Email verification from Proton Electronics and Services';
 
-    // Email Template
-    $email_template = "
-    <html>
-    <head>
-        <style>
-            .container {
-                margin: 20px;
-                padding: 20px;
-                background-color: #F7F7F7;
-                font-family: Arial, Helvetica, sans-serif;
-            }
+        // Email Template
+        $email_template = "
+        <html>
+        <head>
+            <style>
+                .container {
+                    margin: 20px;
+                    padding: 20px;
+                    background-color: #F7F7F7;
+                    font-family: Arial, Helvetica, sans-serif;
+                }
 
-            .header {
-                font-size: 24px;
-                font-weight: bold;
-                color: #333333;
-                margin-bottom: 10px;
-            }
+                .header {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333333;
+                    margin-bottom: 10px;
+                }
 
-            .message {
-                font-size: 16px;
-                color: #666666;
-                margin-bottom: 20px;
-            }
+                .message {
+                    font-size: 16px;
+                    color: #666666;
+                    margin-bottom: 20px;
+                }
 
-            .button {
-                display: inline-block;
-                background-color: #015F6B;
-                color: #ffffff;
-                text-decoration: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-            }
+                .button {
+                    display: inline-block;
+                    background-color: #015F6B !important;
+                    color: #ffffff;
+                    text-decoration: none;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                }
 
-            .button:hover {
-                background-color: #015F6B;
-                color: #ffffff;
-            }
-        </style>
-    </head>
+                .button:hover {
+                    background-color: #015F6B;
+                    color: #ffffff;
+                }
+            </style>
+        </head>
 
     <body>
          <div class='container'>
@@ -84,11 +84,11 @@ function sendEmail_verify($fname, $email, $verify_token){
 </html>
 ";
 
-    $mail->Body = $email_template;
-    $mail->send();
-    // echo "Message sent";
+        $mail->Body = $email_template;
+        $mail->send();
+        // echo "Message sent";
 
-}
+    }
 
 
 

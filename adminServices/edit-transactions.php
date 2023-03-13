@@ -14,11 +14,23 @@ $rptrue = "true";
 
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT service_request.service_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, service_request.cust_id, service_request.pkg_id, service_request.date_req, service_request.date_completed, service_request.other
-          FROM service_request
-          JOIN customer ON service_request.cust_id = customer.cust_id
-          JOIN accounts ON customer.account_id = accounts.account_id
-          WHERE service_request.transaction_code = '" . $tcode . "';";
+$query = "SELECT sr.*, 
+       c.fname AS cust_fname, 
+       c.lname AS cust_lname, 
+       t.fname AS tech_fname, 
+       t.lname AS tech_lname, 
+       t.status AS tech_status,
+       a.*,
+       c.*,
+       s.*,
+       p.*
+FROM service_request sr
+LEFT JOIN customer c ON sr.cust_id = c.cust_id
+LEFT JOIN accounts a ON c.account_id = a.account_id
+LEFT JOIN services s ON sr.service_id = s.service_id
+LEFT JOIN package p ON sr.pkg_id = p.pkg_id
+LEFT JOIN technician t ON sr.tech_id = t.tech_id
+WHERE sr.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -77,17 +89,30 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                     <form class="form-sample" action="edit-processs.php" method="POST"
                                         enctype="multipart/form-data">
                                         <?php
-                                        $query6 = "SELECT service_request.service_id, service_request.transaction_code, service_request.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, service_request.cust_id, service_request.pkg_id, service_request.date_req, service_request.date_completed, service_request.other
-                                        FROM service_request
-                                        JOIN customer ON service_request.cust_id = customer.cust_id
-                                        JOIN accounts ON customer.account_id = accounts.account_id
-                                        WHERE service_request.transaction_code = '" . $tcode . "';";
+                                        $query6 = "SELECT sr.*, 
+                                        c.fname AS cust_fname, 
+                                        c.lname AS cust_lname, 
+                                        t.fname AS tech_fname, 
+                                        t.lname AS tech_lname, 
+                                        t.status AS tech_status,
+                                        a.*,
+                                        c.*,
+                                        s.*,
+                                        p.*
+                                 FROM service_request sr
+                                 LEFT JOIN customer c ON sr.cust_id = c.cust_id
+                                 LEFT JOIN accounts a ON c.account_id = a.account_id
+                                 LEFT JOIN services s ON sr.service_id = s.service_id
+                                 LEFT JOIN package p ON sr.pkg_id = p.pkg_id
+                                 LEFT JOIN technician t ON sr.tech_id = t.tech_id
+                                 WHERE sr.transaction_code = '" . $tcode . "';";
                                         $result6 = mysqli_query($conn, $query6);
                                         
                                         // Check if the query was successful and output the data
                                         if (mysqli_num_rows($result6) > 0) {
                                             $row6 = mysqli_fetch_assoc($result6);
                                         }
+                                        $selected_technician_id = $row6['tech_id'];
                                         ?>
                                         <p class="card-description">Update Personal info </p>
                                         <div class="row">

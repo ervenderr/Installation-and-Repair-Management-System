@@ -1,6 +1,5 @@
 <?php
 session_start();
-error_reporting(0);
 if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
@@ -13,7 +12,6 @@ $repairtransac = 'account-active';
 include_once('../homeIncludes/header.php');
 
 
-$transaction_code = $_SESSION['transaction_code'];
 $user_id = $_SESSION['logged_id'];
 
 $query = "SELECT * 
@@ -21,7 +19,6 @@ FROM customer
 LEFT JOIN accounts ON customer.account_id=accounts.account_id 
 LEFT JOIN rprq 
 ON rprq.cust_id=customer.cust_id 
-AND rprq.transaction_code='{$transaction_code}' 
 WHERE accounts.account_id='{$user_id}'";
 
 $result = mysqli_query($conn, $query);
@@ -60,29 +57,6 @@ $row = mysqli_fetch_assoc($result);
                     </div>
                     <div>
                         <a href="../login/logout.php">Logout</a>
-                    </div>
-                    <div class="ticket">
-                        <div class="ticket-header">
-                            <span class="text">Proton</span><span class="green">Tech</span></a>
-                            <p>Confirmation Ticket</p>
-                        </div>
-
-                        <div class="ticket-body">
-                            <div>
-                                <p class="nopad">Transaction Code:</p>
-                                <p><?php echo $row['transaction_code']?></p>
-                            </div>
-                            <div>
-                                <p class="nopad">Customer Name:</p>
-                                <p><?php echo $row['fname'] ." " .  $row['lname']?></p>
-                            </div>
-                            <div>
-                                <p class="nopad">Date:</p>
-                                <p><?php echo $row['date_req']?></p>
-                            </div>
-                        </div>
-
-                        <div class="ticket-footer"></div>
                     </div>
                     <?php
                     // Get the counts for each status
@@ -163,60 +137,76 @@ $row = mysqli_fetch_assoc($result);
                     </nav>
 
                     <?php
-
-                    $query = "SELECT rprq.*, technician.status as technician_status, customer.*, accounts.*
+                    $query2 = "SELECT rprq.*, 
+                    technician.fname AS tech_fname, 
+                    technician.lname AS tech_lname, 
+                    technician.phone AS tech_phone,
+                    technician.status AS tech_status, 
+                    customer.fname AS cust_fname, 
+                    customer.lname AS cust_lname, 
+                    customer.phone AS cust_phone,
+                    rprq.status AS rprq_status, 
+                    accounts.*,
+                    technician.*,
+                    customer.*
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
                     WHERE rprq.status = 'In-Progress' AND accounts.account_id = '{$user_id}';";
-                    $result = mysqli_query($conn, $query);
 
-                    if (mysqli_num_rows($result) > 0) { ?>
+                    $result2 = mysqli_query($conn, $query2);
+
+                    if (mysqli_num_rows($result2) > 0) { ?>
                     <div class="d-flex flex-wrap pending-card">
-                        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                        <?php while ($row2 = mysqli_fetch_assoc($result2)) { ?>
                         <div class="card mb-3 transaction-details-card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Transaction #:</span>
-                                            <span class="text-primary"><?php echo $row['transaction_code']?></span>
+                                            <span class="text-primary"><?php echo $row2['transaction_code']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Status:</span>
-                                            <span class="transaction-details-pending"><?php echo $row['status']?></span>
+                                            <span class="transaction-details-pending"><?php echo $row2['rprq_status']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
-                                            <span><?php echo $row['etype']?></span>
+                                            <span><?php echo $row2['etype']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Defects:</span>
-                                            <span class="transaction-details-none"><?php echo $row['defective']?></span>
+                                            <span class="transaction-details-none"><?php echo $row2['defective']?></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Shipping:</span>
                                             <span
-                                                class="transaction-details-standard-shipping"><?php echo $row['shipping']?></span>
+                                                class="transaction-details-standard-shipping"><?php echo $row2['shipping']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Date Requested:</span>
-                                            <span><?php echo $row['date_req']?></span>
+                                            <span><?php echo $row2['date_req']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Expected Completion:</span>
-                                            <span><?php echo $row['date_completed']?></span>
+                                            <span><?php echo $row2['date_completed']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned Technician:</span>
-                                            <span><?php echo $row['fname'] . " " . $row['lname']?></span>
+                                            <span><?php echo $row2['tech_fname'] . " " . $row2['tech_lname']?></span>
+                                        </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Technician's Contact:</span>
+                                            <span><?php echo $row2['tech_phone']?></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
                         <?php } ?>
                     </div>

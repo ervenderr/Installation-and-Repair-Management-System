@@ -156,8 +156,15 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">
                                         <?php
-                                            echo '<a href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" class="btn btn-success btn-fw">
+                                            if (($row['status'] == 'Pending')) {
+                                                echo '<button class="icns btn btn-danger edit" id="' .  $row['sreq_id'] . '">';
+                                                echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['sreq_id'] . '"></i>';
+                                                echo '</button>';
+                                            }
+                                            else{
+                                                echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" class="btn btn-success btn-fw">
                                             Update Details   <i class="fas fa-edit text-white"></i></a>';
+                                            }
 
                                             echo '<a href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" class="btn btn-danger btn-fw red">
                                             Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';

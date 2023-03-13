@@ -76,17 +76,28 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                     <form class="form-sample" action="edit-process.php" method="POST"
                                         enctype="multipart/form-data">
                                         <?php
-                                        $query6 = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
-                                        FROM rprq
-                                        JOIN customer ON rprq.cust_id = customer.cust_id
-                                        JOIN accounts ON customer.account_id = accounts.account_id
-                                        WHERE rprq.transaction_code = '" . $tcode . "';";
+                                        $query6 = "SELECT rprq.*, 
+                                        customer.fname AS cust_fname, 
+                                        customer.lname AS cust_lname, 
+                                        technician.fname AS tech_fname, 
+                                        technician.lname AS tech_lname, 
+                                        technician.status AS tech_status, 
+                                        rprq.status AS rprq_status, 
+                                        accounts.*,
+                                        technician.*,
+                                        customer.*
+                                      FROM rprq
+                                      LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+                                      LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                                      LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                                      WHERE rprq.transaction_code = '" . $tcode . "';";
                                         $result6 = mysqli_query($conn, $query6);
                                         
                                         // Check if the query was successful and output the data
                                         if (mysqli_num_rows($result6) > 0) {
                                             $row6 = mysqli_fetch_assoc($result6);
                                         }
+                                        $selected_technician_id = $row6['tech_id'];
                                         ?>
                                         <p class="card-description">Update Personal info </p>
                                         <div class="row">
@@ -95,7 +106,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <label class="col-form-label" for="fname">First Name</label>
                                                     <div class="">
                                                         <input type="text" name="fname" class="form-control"
-                                                            value="<?php echo $row6['fname']; ?>" />
+                                                            value="<?php echo $row6['cust_fname']; ?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,7 +115,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <label class="col-form-label" for="lname">Last Name</label>
                                                     <div class="">
                                                         <input type="text" name="lname" class="form-control"
-                                                            value="<?php echo $row6['lname']; ?>" />
+                                                            value="<?php echo $row6['cust_lname']; ?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -145,14 +156,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <div class="">
                                                     <select name="status" class="form-control">
                                                             <option value="Pending"
-                                                                <?php if ($row6['status'] == 'Pending') echo 'selected'; ?>>Pending
+                                                                <?php if ($row6['rprq_status'] == 'Pending') echo 'selected'; ?>>Pending
                                                             </option>
                                                             <option value="In-progress"
-                                                                <?php if ($row6['status'] == 'In-progress') echo 'selected'; ?>>
+                                                                <?php if ($row6['rprq_status'] == 'In-progress') echo 'selected'; ?>>
                                                                 In-progress
                                                             </option>
                                                             <option value="Done"
-                                                                <?php if ($row6['status'] == 'Done') echo 'selected'; ?>>
+                                                                <?php if ($row6['rprq_status'] == 'Done') echo 'selected'; ?>>
                                                                 Done
                                                             </option>
                                                         </select>
