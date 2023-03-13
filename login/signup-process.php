@@ -10,84 +10,85 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require '../vendor/autoload.php';
 
-function sendEmail_verify($fname, $email, $verify_token){
+    function sendEmail_verify($fname, $email, $verify_token){
 
-    $mail = new PHPMailer(true);
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-    $mail->isSMTP();
-    $mail->SMTPAuth = true;
+        $mail = new PHPMailer(true);
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->SMTPAuth = true;
 
-    $mail->Host = 'smtp.gmail.com';
-    $mail->Username = 'protontechonline@gmail.com';
-    $mail->Password = 'emehffhcrnwhzafe';
+        $mail->Host = 'smtp.gmail.com';
+        $mail->Username = 'protontechonline@gmail.com';
+        $mail->Password = 'emehffhcrnwhzafe';
 
-    $mail->SMTPSecure = "ssl";
-    $mail->Port = 465;
+        $mail->SMTPSecure = "ssl";
+        $mail->Port = 465;
 
-    $mail->setFrom('protontechonline@gmail.com');
-    $mail->addAddress($email);
+        $mail->setFrom('protontechonline@gmail.com');
+        $mail->addAddress($email);
 
-    $mail->isHTML(true);
-    $mail->Subject = 'Email verification from Proton Electronics and Services';
+        $mail->isHTML(true);
+        $mail->Subject = 'Email verification from Proton Electronics and Services';
 
-    // Email Template
-    $email_template = "
-    <html>
-    <head>
-        <style>
-            .container {
-                margin: 20px;
-                padding: 20px;
-                background-color: #F7F7F7;
-                font-family: Arial, Helvetica, sans-serif;
-            }
+        // Email Template
+        $email_template = "
+        <html>
+        <head>
+            <style>
+                .container {
+                    margin: 20px;
+                    padding: 20px;
+                    background-color: #F7F7F7;
+                    font-family: Arial, Helvetica, sans-serif;
+                }
 
-            .header {
-                font-size: 24px;
-                font-weight: bold;
-                color: #333333;
-                margin-bottom: 10px;
-            }
+                .header {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333333;
+                    margin-bottom: 10px;
+                }
 
-            .message {
-                font-size: 16px;
-                color: #666666;
-                margin-bottom: 20px;
-            }
+                .message {
+                    font-size: 16px;
+                    color: #666666;
+                    margin-bottom: 20px;
+                }
 
-            .button {
-                display: inline-block;
-                background-color: #015F6B;
-                color: #ffffff;
-                text-decoration: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-            }
+                .button {
+                    display: inline-block;
+                    background-color: #015F6B !important;
+                    color: #ffffff;
+                    text-decoration: none;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                }
 
-            .button:hover {
-                background-color: #015F6B;
-                color: #ffffff;
-            }
-        </style>
-    </head>
+                .button:hover {
+                    background-color: #015F6B;
+                    color: #ffffff;
+                }
+            </style>
+        </head>
 
-    <body>
-        <div class='container'>
-            <div class='header'>Welcome to Proton Electronics and Services</div>
-            <div class='message'>Thank you for registering with us. To complete your registration, please verify your email address by clicking the button below:</div>
-            <a href='http://localhost/Proton-Tech-Management-System/login/verify-email.php?token=$verify_token' class='button'>Verify Email Address</a>
-            <br><br>
-            <div class='message'>If you did not register for an account with Proton Electronics and Services, please disregard this email.</div>
-        </div>
-    </body>
-</html>
-";
+        <body>
+            <div class='container'>
+                <div class='header'>Welcome to Proton Electronics and Services</div>
+                <div class='message'>Thank you for registering with us. To complete your registration, please verify your email address by clicking the button below:</div>
+                <a href='http://localhost/Proton-Tech-Management-System/login/verify-email.php?token=$verify_token' class='button'>Verify Email Address</a>
+                <div class='message'>Or click this link https://proton-tech.online/login/verify-email.php?token=$verify_token</div>
+                <br><br>
+                <div class='message'>If you did not register for an account with Proton Electronics and Services, please disregard this email.</div>
+            </div>
+        </body>
+    </html>
+    ";
 
-    $mail->Body = $email_template;
-    $mail->send();
-    // echo "Message sent";
+        $mail->Body = $email_template;
+        $mail->send();
+        // echo "Message sent";
 
-}
+    }
 
 
 

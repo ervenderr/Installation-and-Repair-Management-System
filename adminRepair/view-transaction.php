@@ -155,11 +155,20 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">
                                         <?php
-                                            echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-success btn-fw">
+                                            
+                                            if (($row['rprq_status'] == 'Pending')) {
+                                                echo '<button class="icns btn btn-danger edit" id="' .  $row['id'] . '">';
+                                                echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '</button>';
+                                            }
+                                            else{
+                                                echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-success btn-fw">
                                             Update Details   <i class="fas fa-edit text-white"></i></a>';
-
+                                            }
+                                            
                                             echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-danger btn-fw red">
                                             Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
+
 
                                             if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
                                                 echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
@@ -197,6 +206,22 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+
+    <!-- Accept modal -->
+    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSuppModalLabel">Assign Technician</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body suppbody">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- plugins:js -->
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
@@ -225,6 +250,27 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         });
     });
     </script>
+
+<script>
+  $(document).ready(function(){
+    $('.edit').click(function(){
+
+        id =  $(this).attr('id');
+        $.ajax({
+        url: 'accept-pending.php',
+        method: 'post',
+        data: {id:id},
+        success: function(result) {
+            // Handle successful response
+            $('.suppbody').html(result);
+        }
+        });
+
+
+      $('#editSuppModal').modal('show');
+    })
+  })
+</script>
 </body>
 
 </html>

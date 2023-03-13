@@ -34,21 +34,23 @@ require_once '../homeIncludes/dbconfig.php';
                             </span> Repair Transaction
                         </h3>
                         <?php
-            if (isset($_GET['msg'])) {
-                $msg = $_GET['msg'];
+            if (isset($_SESSION['msg'])) {
+                $msg = $_SESSION['msg'];
                 echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
                 '. $msg .'
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>';
+              unset ($_SESSION['msg']);
             }
 
-            if (isset($_GET['msg2'])) {
-                $msg2 = $_GET['msg2'];
+            if (isset($_SESSION['msg2'])) {
+                $msg2 = $_SESSION['msg2'];
                 echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 '. $msg2 .'
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>';
             }
+            unset ($_SESSION['msg']);
         ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">

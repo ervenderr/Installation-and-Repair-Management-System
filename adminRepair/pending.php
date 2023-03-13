@@ -86,7 +86,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
+                                                    $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
                                                         WHERE rprq.status = 'Pending'";
@@ -118,9 +118,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
                                                         echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns btn btn-danger" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
-                                                        echo 'Accept <i class="fas fa-check-square" Prod_id="' .  $row['id'] . '"></i>';
-                                                        echo '</a>';
+                                                        echo '<button class="icns btn btn-danger edit" id="' .  $row['id'] . '">';
+                                                        echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                        echo '</button>';
                                                         echo '</td>';
                                                         echo '</tr>';
                                                         $id++;
@@ -228,6 +228,22 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+    
+    <!-- Accept modal -->
+    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSuppModalLabel">Assign Technician</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body suppbody">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- plugins:js -->
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
@@ -267,6 +283,27 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         });
     });
     </script>
+
+<script>
+  $(document).ready(function(){
+    $('.edit').click(function(){
+
+        id =  $(this).attr('id');
+        $.ajax({
+        url: 'accept-pending.php',
+        method: 'post',
+        data: {id:id},
+        success: function(result) {
+            // Handle successful response
+            $('.suppbody').html(result);
+        }
+        });
+
+
+      $('#editSuppModal').modal('show');
+    })
+  })
+</script>
 </body>
 
 </html>

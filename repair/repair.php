@@ -63,7 +63,7 @@ $_SESSION["cust_id"] = $row["cust_id"];
                     </div>
                     <div class="mb-3">
                         <label for="mname" class="form-label">Middle Name</label>
-                        <input type="text" class="form-control" id="mname" name="mname" value="<?php echo isset($row['mname']) ? $row['mname'] : '' ?>">
+                        <input type="text" class="form-control" style="color: lightgrey" id="mname" name="mname" value="<?php echo isset($row['mname']) ? $row['mname'] : ''; ?>(Optional)">
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
@@ -113,7 +113,7 @@ $_SESSION["cust_id"] = $row["cust_id"];
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="defective" class="form-label">Defective</label>
+                        <label for="defective" class="form-label">Defects</label>
                         <input type="text" class="form-control" id="defective" name="defective">
                         <span class="val-error"></span>
                     </div>

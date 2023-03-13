@@ -10,6 +10,7 @@ include_once('../homeIncludes/header.php');
 
 <body>
     <?php include_once('../homeIncludes/homenav.php');?>
+
     <div class="register-photo">
 
         <?php
@@ -31,10 +32,11 @@ include_once('../homeIncludes/header.php');
                 <div class="progressbar">
                     <div class="progress" id="progress"></div>
                     <div class="progress-step progress-step-active" data-title="Name"></div>
+                    <div class="progress-step" data-title="Login details"></div>
                     <div class="progress-step" data-title="Contact"></div>
-                    <div class="progress-step" data-title="Electronic"></div>
                 </div>
                 <div class="form-step form-step-active">
+                
                     <div class="form-group lgns"><input class="form-control" type="text" name="fname"
                             placeholder="First Name">
                         <span class="val-error"></span>
@@ -52,7 +54,7 @@ include_once('../homeIncludes/header.php');
                                 class="fa fa-chevron-right"></i></a>
                     </div><a href="../login/login.php" class="already">You already have an account? Login here.</a>
                 </div>
-
+        
                 <div class="form-step">
                     <div class="form-group lgns"><input class="form-control" type="email" name="email"
                             placeholder="Email">
