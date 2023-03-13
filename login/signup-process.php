@@ -74,11 +74,6 @@ require '../vendor/autoload.php';
         <body>
             <div class='container'>
                 <div class='header'>Welcome to Proton Electronics and Services</div>
-                <div class='message'>Thank you for registering with us. To complete your registration, please verify your email address by clicking the button below:</div>
-                <a href='http://localhost/Proton-Tech-Management-System/login/verify-email.php?token=$verify_token' class='button'>Verify Email Address</a>
-                <div class='message'>Or click this link https://proton-tech.online/login/verify-email.php?token=$verify_token</div>
-                <br><br>
-                <div class='message'>If you did not register for an account with Proton Electronics and Services, please disregard this email.</div>
             </div>
         </body>
     </html>
