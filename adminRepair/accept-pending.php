@@ -31,6 +31,10 @@ if(isset($_POST['id'])){
             </select>
           </div>
           <div class="mb-3">
+          <label for="payment" class="form-label">Initial Payment</label>
+          <input type="number" class="form-control" id="payment" name="payment">
+        </div>
+          <div class="mb-3">
           <label for="completed" class="form-label">Expected Completion</label>
           <input type="date" class="form-control" id="completed" name="completed">
         </div>
@@ -47,11 +51,12 @@ if(isset($_POST['id'])){
 if(isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
     $techId = htmlentities($_POST['tech']);
+    $payment = htmlentities($_POST['payment']);
     $completed = htmlentities($_POST['completed']);
     $status = "In-progress";
 
 
-    $query = "UPDATE rprq SET tech_id = '$techId', date_completed = '$completed', status = '$status' WHERE id = '$id'";
+    $query = "UPDATE rprq SET tech_id = '$techId', payment = '$payment', date_completed = '$completed', status = '$status' WHERE id = '$id'";
 
     $result = mysqli_query($conn, $query);
     

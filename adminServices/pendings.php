@@ -1,6 +1,8 @@
+
+
 <?php
 session_start();
-include_once('../admin_includes/header.php');
+require_once '../admin_includes/header.php';
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
@@ -132,6 +134,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
                                             </tbody>
                                         </table>
+
+
+
                                     </div>
                                 </div>
                             </div>
@@ -247,6 +252,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
   </div>
 </div>
 
+
+
     <!-- plugins:js -->
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
@@ -276,7 +283,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
     <script>
@@ -310,6 +316,15 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     })
   })
 </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2({});
+        });
+    </script>
+
 
 </body>
 

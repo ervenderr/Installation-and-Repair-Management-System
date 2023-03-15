@@ -159,14 +159,27 @@ $row = mysqli_fetch_assoc($result);
                         </a>
                     </nav>
                     <?php
-                    $query = "SELECT sr.*, sr.status AS sr_status, c.*, t.*, s.*, p.*, a.*
-                    FROM service_request sr
-                    LEFT JOIN customer c ON sr.cust_id = c.cust_id
-                    LEFT JOIN technician t ON sr.tech_id = t.tech_id
-                    LEFT JOIN accounts a ON c.account_id = a.account_id
-                    LEFT JOIN services s ON sr.service_id = s.service_id
-                    LEFT JOIN package p ON sr.pkg_id = p.pkg_id
-                    WHERE sr.status = 'In-progress' AND a.account_id = '{$user_id}';";
+                    $query = "SELECT service_request.*, 
+                    technician.fname AS tech_fname, 
+                    technician.lname AS tech_lname, 
+                    technician.phone AS tech_phone,
+                    technician.status AS tech_status, 
+                    customer.fname AS cust_fname, 
+                    customer.lname AS cust_lname, 
+                    customer.phone AS cust_phone,
+                    service_request.status AS sr_status, 
+                    accounts.*,
+                    technician.*,
+                    services.*,
+                    package.*,
+                    customer.*
+                    FROM service_request
+                    LEFT JOIN technician ON service_request.tech_id = technician.tech_id
+                    LEFT JOIN services ON service_request.service_id = services.service_id
+                    LEFT JOIN package ON service_request.pkg_id = package.pkg_id
+                    LEFT JOIN customer ON service_request.cust_id = customer.cust_id
+                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE service_request.status = 'In-Progress' AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
@@ -192,6 +205,10 @@ $row = mysqli_fetch_assoc($result);
                                             <span class="fw-bold me-2 transaction-details-label">Package Type:</span>
                                             <span class="transaction-details-none text-secondary"><?php echo $row['name']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Initial Payment:</span>
+                                            <span class="transaction-details-none"><?php echo $row['payment']?></span>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
@@ -210,8 +227,12 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
-                                                Technician:</span>
+                                                Technicians:</span>
                                             <span><?php echo $row['fname'] ." " .  $row['lname']?></span>
+                                        </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Technician's Contact:</span>
+                                            <span><?php echo $row2['tech_phone']?></span>
                                         </div>
                                     </div>
                                 </div>

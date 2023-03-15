@@ -151,7 +151,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </tr>
                                             <tr>
                                                 <th>Payment:</th>
-                                                <td></td>
+                                                <td><?php echo $row['Payment']?></td>
                                             </tr>
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">

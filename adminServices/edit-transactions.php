@@ -181,6 +181,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                                 <?php if ($row6['status'] == 'Done') echo 'selected'; ?>>
                                                                 Done
                                                             </option>
+                                                            <option value="Completed"
+                                                                <?php if ($row6['status'] == 'Completed') echo 'selected'; ?>>
+                                                                Completed
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>

@@ -111,7 +111,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $query = "SELECT service_request.sreq_id, service_request.transaction_code, customer.fname, customer.lname, service_request.status, service_request.date_req
                                                         FROM service_request
                                                         JOIN customer ON service_request.Cust_id = customer.Cust_id
-                                                        WHERE service_request.status = 'In-progress' OR service_request.status = 'Done'";
+                                                        WHERE service_request.status = 'In-progress' OR service_request.status = 'Done' OR service_request.status = 'Completed'";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;

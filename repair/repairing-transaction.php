@@ -180,6 +180,10 @@ $row = mysqli_fetch_assoc($result);
                                             <span class="fw-bold me-2 transaction-details-label">Defects:</span>
                                             <span class="transaction-details-none"><?php echo $row2['defective']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Initial Payment:</span>
+                                            <span class="transaction-details-none"><?php echo $row2['payment']?></span>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
