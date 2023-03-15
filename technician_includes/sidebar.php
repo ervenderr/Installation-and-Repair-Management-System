@@ -29,7 +29,7 @@
               <div class="collapse <?php echo $rpshow; ?>" id="uibasic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="../tech_repair/pending.php">Pending request</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../tech_repair/transaction.php">My Transactions</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../tech_repair/accept-pending.php">My Transactions</a></li>
                 </ul>
               </div>
             </li>
@@ -39,5 +39,6 @@
                 <i class="fas fa-cog menu-icon"></i>
               </a>
             </li>
+ 
           </ul>
         </nav>
