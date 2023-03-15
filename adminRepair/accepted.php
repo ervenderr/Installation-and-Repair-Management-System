@@ -290,7 +290,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
         id =  $(this).attr('id');
         $.ajax({
-        url: 'accept-pending.php',
+        url: 'accepted-pending.php',
         method: 'post',
         data: {id:id},
         success: function(result) {

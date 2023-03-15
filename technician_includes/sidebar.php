@@ -3,7 +3,7 @@
             <li class="nav-item nav-profile">
               <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                  <img src="../assets/images/faces/admin1.jpg" alt="profile">
+                <img src="../assets/images/faces/face1.jpg" alt="image">
                   <span class="login-status online"></span>
                   <!--change to offline or busy as needed-->
                 </div>
@@ -28,8 +28,8 @@
               </a>
               <div class="collapse <?php echo $rpshow; ?>" id="uibasic">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="../techRepair/pending.php">Pending request</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../techRepair/transaction.php">My Transactions</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="../tech_repair/pending.php">Pending request</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../tech_repair/transaction.php">My Transactions</a></li>
                 </ul>
               </div>
             </li>
