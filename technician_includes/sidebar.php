@@ -29,60 +29,15 @@
               <div class="collapse <?php echo $rpshow; ?>" id="uibasic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="../tech_repair/pending.php">Pending request</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../tech_repair/transaction.php">My Transactions</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../tech_repair/accept-pending.php">My Transactions</a></li>
                 </ul>
               </div>
             </li>
             <li class="nav-item <?php echo $seractive; ?>">
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
-                <span class="menu-title">Service request</span>
-                <i class="menu-arrow"></i>
-                <i class="fas fa-cogs menu-icon"></i>
-              </a>
-              <div class="collapse <?php echo $sershow; ?>" id="ui-basic2">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../adminServices/transactions.php">Transactions</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../adminServices/pendings.php">Pending request</a></li>
-                </ul>
-              </div>
-            </li>
-            <p class="text-secondary paragh">Maintenance</p>
-            <li class="nav-item <?php echo $prodactive; ?>">
-              <a class="nav-link" href="../admin_products/products.php">
-                <span class="menu-title">Products</span>
-                <i class="fas fa-box menu-icon"></i>
+                <span class="menu-title">Backjobs</span>
               </a>
             </li>
-            <li class="nav-item <?php echo $invactive; ?>">
-              <a class="nav-link" href="../inventory/inventory.php">
-                <span class="menu-title">Inventory</span>
-                <i class="fas fa-warehouse menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item <?php echo $custactive; ?>">
-              <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic3" aria-expanded="false" aria-controls="ui-basic3">
-                <span class="menu-title">Customer</span>
-                <i class="menu-arrow"></i>
-                <i class="fas fa-users menu-icon"></i>
-              </a>
-              <div class="collapse <?php echo $custshow; ?>" id="ui-basic3">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../adminCustomer/walk-in.php">Walk-in</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../adminCustomer/online.php">Online</a></li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item <?php echo $suppactive; ?>">
-              <a class="nav-link" href="../supplier/supplier.php">
-                <span class="menu-title">Supplier</span>
-                <i class="fas fa-user-tie menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item <?php echo $techactive; ?>">
-              <a class="nav-link" href="../technician/technicians.php">
-                <span class="menu-title">Techninicians</span>
-                <i class="fas fa-user-cog menu-icon"></i>
-              </a>
-            </li>
+ 
           </ul>
         </nav>
