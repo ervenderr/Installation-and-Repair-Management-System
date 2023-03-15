@@ -54,31 +54,55 @@ if(isset($_POST['sreq_id'])){
 }
 
 
-if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['sreq_id']);
-    $techId = htmlentities($_POST['tech']);
+    $techIds = $_POST['tech'];
     $completed = htmlentities($_POST['completed']);
     $payment = htmlentities($_POST['payment']);
     $status = "In-progress";
 
+    // Update the service_request table
+    $query = "UPDATE service_request SET payment = ?, date_completed = ?, status = ? WHERE sreq_id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'issi', $payment, $completed, $status, $id);
+    mysqli_stmt_execute($stmt);
 
-    $query = "UPDATE service_request SET tech_id = '$techId', payment = '$payment', date_completed = '$completed', status = '$status' WHERE sreq_id = '$id'";
+    // Remove any existing technicians assigned to this service request
+    $delete_query = "DELETE FROM service_request_technicians WHERE sreq_id = ?";
+    $delete_stmt = mysqli_prepare($conn, $delete_query);
+    mysqli_stmt_bind_param($delete_stmt, 'i', $id);
+    mysqli_stmt_execute($delete_stmt);
 
-    $result = mysqli_query($conn, $query);
-    
+    // Assign the new technicians to the service request and set their status to "Unavailable"
+    foreach ($techIds as $techId) {
+        $insert_query = "INSERT INTO service_request_technicians (sreq_id, tech_id) VALUES (?, ?)";
+        $insert_stmt = mysqli_prepare($conn, $insert_query);
+        mysqli_stmt_bind_param($insert_stmt, 'ii', $id, $techId);
+        mysqli_stmt_execute($insert_stmt);
 
-    if ($result) {
+        // Update the technician status
+        $tech_status = "Unavailable";
+        $tech_update_query = "UPDATE technician SET status = ? WHERE tech_id = ?";
+        $tech_update_stmt = mysqli_prepare($conn, $tech_update_query);
+        mysqli_stmt_bind_param($tech_update_stmt, 'si', $tech_status, $techId);
+        mysqli_stmt_execute($tech_update_stmt);
+    }
+
+    if (mysqli_stmt_affected_rows($stmt) > 0) {
         $_SESSION['msg'] = "Record Updated Successfully";
         header("location: transactions.php");
     } else {
-       echo "FAILED: " . mysqli_error($conn);
+        echo "FAILED: " . mysqli_error($conn);
     }
 }
 
+
+
 ?>
 
-    <script>
-        $(document).ready(function() {
-            $('.js-example-basic-multiple').select2({});
-        });
-    </script>
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
+</script>
+

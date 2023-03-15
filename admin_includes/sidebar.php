@@ -29,8 +29,9 @@
               </a>
               <div class="collapse <?php echo $rpshow; ?>" id="uibasic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../adminRepair/transaction.php">Transactions</a></li>
                   <li class="nav-item"> <a class="nav-link" href="../adminRepair/pending.php">Pending request</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../adminRepair/accepted.php">Accepted request</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../adminRepair/transaction.php">Transactions</a></li>
                 </ul>
               </div>
             </li>

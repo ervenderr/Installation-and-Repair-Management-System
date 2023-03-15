@@ -29,6 +29,25 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 <i class="fas fa-tools menu-icon"></i>
                             </span> Repair Transaction
                         </h3>
+                        <?php
+            if (isset($_SESSION['msg'])) {
+                $msg = $_SESSION['msg'];
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                '. $msg .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+              unset ($_SESSION['msg']);
+            }
+
+            if (isset($_SESSION['msg2'])) {
+                $msg2 = $_SESSION['msg2'];
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                '. $msg2 .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+            }
+            unset ($_SESSION['msg']);
+        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active" aria-current="page">
@@ -79,7 +98,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $next_page = $page_no +1;
                                                     $adjacent = "2";
 
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM rprq WHERE rprq.status = 'Pending'");
+                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM rprq WHERE rprq.status = 'Accepted'");
                                                     $total_records = mysqli_fetch_array($result_count);
                                                     $total_records = $total_records['total_records'];
                                                     $total_no_of_page = ceil($total_records / $total_record_per_page);
@@ -89,7 +108,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'Pending'";
+                                                        WHERE rprq.status = 'Accepted'";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -104,9 +123,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         $statusClass = '';
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
+                                                        } else if ($row['status'] == 'Accepted') {
+                                                            $statusClass = 'badge-gradient-danger';
                                                         } else if ($row['status'] == 'In-progress') {
                                                             $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done') {
+                                                        }else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';
                                                         } else {
                                                             $statusClass = 'badge-gradient-secondary';
@@ -234,7 +255,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editSuppModalLabel">Payment</h5>
+        <h5 class="modal-title" id="editSuppModalLabel">Assign Technician</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body suppbody">

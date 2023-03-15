@@ -281,7 +281,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <label for="payment" class="col-form-label">Payment</label>
                                                     <div class="">
                                                         <input name="payment" class="form-control" type="text"
-                                                            value="$ " />
+                                                            value="<?php echo $row6['payment']; ?>" />
                                                     </div>
                                                 </div>
                                             </div>

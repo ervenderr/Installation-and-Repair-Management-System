@@ -104,7 +104,9 @@ $user_id = $_SESSION['logged_id'];
                                                         $statusClass = '';
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
+                                                        } else if ($row['status'] == 'Accepted') {
+                                                            $statusClass = 'badge-gradient-danger';
+                                                        }else if ($row['status'] == 'In-progress') {
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';

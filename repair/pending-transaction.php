@@ -86,7 +86,7 @@ $row = mysqli_fetch_assoc($result);
                     $query_pending = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Pending' AND accounts.account_id = '{$user_id}';";
+                    WHERE status='Pending' OR status='Accepted' AND accounts.account_id = '{$user_id}';";
                     $result_pending = mysqli_query($conn, $query_pending);
                     $num_pending = mysqli_num_rows($result_pending);
 
@@ -164,7 +164,7 @@ $row = mysqli_fetch_assoc($result);
                     FROM customer
                     LEFT JOIN rprq ON customer.cust_id = rprq.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE rprq.status = 'pending' AND accounts.account_id='{$user_id}';";
+                    WHERE rprq.status = 'pending' OR status='Accepted' AND accounts.account_id='{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>

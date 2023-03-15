@@ -123,7 +123,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<a class="icns" href="edit-customer.php?&rowid=' . $id . '">';
                                                         echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $id . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-customer.php?&rowid=' . $id . '"onclick="return confirm(\'Are you sure you want to delete this product?\')">';
+                                                        echo '<a class="icns" href="delete-customer.php?&rowid=' . $id . '"onclick="return confirm(\'Are you sure you want to delete this record?\')">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $id . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
