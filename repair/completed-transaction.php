@@ -158,7 +158,18 @@ $row = mysqli_fetch_assoc($result);
                     </nav>
 
                     <?php
-                    $query = "SELECT rprq.*, technician.status as technician_status, customer.*, accounts.*
+                    $query = "SELECT rprq.*, 
+                    technician.fname AS tech_fname, 
+                    technician.lname AS tech_lname, 
+                    technician.phone AS tech_phone,
+                    technician.status AS tech_status, 
+                    customer.fname AS cust_fname, 
+                    customer.lname AS cust_lname, 
+                    customer.phone AS cust_phone,
+                    rprq.status AS rprq_status, 
+                    accounts.*,
+                    technician.*,
+                    customer.*
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
@@ -189,6 +200,10 @@ $row = mysqli_fetch_assoc($result);
                                             <span class="fw-bold me-2 transaction-details-label">Defects:</span>
                                             <span class="transaction-details-none"><?php echo $row['defective']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Total payment:</span>
+                                            <span class="transaction-details-none"><?php echo $row['payment']?></span>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
@@ -209,6 +224,10 @@ $row = mysqli_fetch_assoc($result);
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
                                                 Technician:</span>
                                             <span><?php echo $row['fname'] . " " . $row['lname']?></span>
+                                        </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Technician's Contact:</span>
+                                            <span><?php echo $row['tech_phone']?></span>
                                         </div>
                                     </div>
                                     <div class="text-start">

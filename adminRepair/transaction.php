@@ -114,7 +114,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                     $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'";
+                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed'";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;

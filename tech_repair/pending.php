@@ -4,57 +4,36 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
-$search = "transactions.php";
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
+$search = "pending.php";
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
     header('location: ../login/login.php');
-  }
+}
+
+$user_id = $_SESSION['logged_id'];
 ?>
 
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
-        <?php include_once('../admin_includes/navbar.php'); ?>
+        <?php include_once('../technician_includes/navbar.php'); ?>
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
-            <?php include_once('../admin_includes/sidebar.php'); ?>
+            <?php include_once('../technician_includes/sidebar.php'); ?>
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="fas fa-cogs menu-icon"></i>
-                            </span> Service Transaction
+                                <i class="fas fa-tools menu-icon"></i>
+                            </span> Repair Transaction
                         </h3>
-                        <?php
-            if (isset($_SESSION['msg'])) {
-                $msg = $_SESSION['msg'];
-                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                '. $msg .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-              unset ($_SESSION['msg']);
-            }
-
-            if (isset($_SESSION['msg2'])) {
-                $msg2 = $_SESSION['msg2'];
-                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                '. $msg2 .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-            unset ($_SESSION['msg']);
-        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item active btn-group-sm" aria-current="page">
-                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addServiceModal">
-                                        Create Transaction <i class=" mdi mdi-plus "></i>
-                                    </button>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <span></span>Overview <i
+                                        class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
                                 </li>
                             </ul>
                         </nav>
@@ -63,7 +42,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <div class="card-body">
                         <div class="row mg-btm">
                                 <div class="col-sm-12 col-md-6 flex">
-                                    <h4 class="card-title">List of Service Transaction</h4>
+                                    <h4 class="card-title">List of Pending Transaction</h4>
 
                                 </div>
                                 <div class="col-sm-12 col-md-6 flex flexm">
@@ -71,13 +50,12 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                 placeholder="search" id="myInput" class="form-control"></label></div>
                                 </div>
                             </div>
-                            
                             <div class="row">
-                                    <div class="col-12 grid-margin">
+                                <div class="col-12 grid-margin">
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
-                                            <tr class="bg-our">
+                                                <tr class="bg-our">
                                                     <th> # </th>
                                                     <th> Transaction Code </th>
                                                     <th> Customer </th>
@@ -88,7 +66,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             </thead>
                                             <tbody id="myTable">
                                                 <?php
-
+                                                    
                                                     if(isset($_GET['page_no']) && $_GET['page_no'] !=''){
                                                         $page_no = $_GET['page_no'];
                                                     }else{
@@ -101,17 +79,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $next_page = $page_no +1;
                                                     $adjacent = "2";
 
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM service_request WHERE service_request.status = 'In-progress' OR service_request.status = 'Done'");
+                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM rprq WHERE rprq.status = 'Accepted'");
                                                     $total_records = mysqli_fetch_array($result_count);
                                                     $total_records = $total_records['total_records'];
                                                     $total_no_of_page = ceil($total_records / $total_record_per_page);
                                                     $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
-                                                    $query = "SELECT service_request.sreq_id, service_request.transaction_code, customer.fname, customer.lname, service_request.status, service_request.date_req
-                                                        FROM service_request
-                                                        JOIN customer ON service_request.Cust_id = customer.Cust_id
-                                                        WHERE service_request.status = 'In-progress' OR service_request.status = 'Done' OR service_request.status = 'Completed'";
+                                                    $query = "SELECT *
+                                                        FROM rprq
+                                                        JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                        WHERE rprq.status = 'Accepted'";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -121,12 +99,14 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
                                                         echo '<td>' . $row['transaction_code'] . '</td>';
-                                                        echo '<td>' . $row['fname'] . ' ' . $row['lname'] . '</td>';
+                                                        echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
                                                     
                                                         $statusClass = '';
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
+                                                        } else if ($row['status'] == 'Accepted') {
+                                                            $statusClass = 'badge-gradient-danger';
+                                                        }else if ($row['status'] == 'In-progress') {
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';
@@ -136,23 +116,20 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
-                                                        echo '<td>';
-                                                        echo '<a class="icns" href="view-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
+                                                        echo '<td class="btn-group-sm">';
+                                                        echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
+                                                        echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
-                                                        echo '</a>';
+                                                        echo '<button class="icns btn btn-danger edit" id="' .  $row['id'] . '">';
+                                                        echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                        echo '</button>';
                                                         echo '</td>';
                                                         echo '</tr>';
                                                         $id++;
                                                     }
                                                 ?>
-
                                             </tbody>
+
                                         </table>
                                     </div>
                                 </div>
@@ -235,7 +212,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         </div>
                     </div>
                 </div>
-                <?php include_once('../modals/add-service-modal.php') ?>
+
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">
@@ -253,6 +230,22 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+    
+    <!-- Accept modal -->
+    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSuppModalLabel">Assign Technician</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body suppbody">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- plugins:js -->
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
@@ -282,10 +275,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-
-    <script>
+<script>
     $(document).ready(function() {
         $("#myInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
@@ -296,129 +286,26 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
     </script>
 
-    <script>
-    const form = document.querySelector('.form-sample');
-    const fname = form.querySelector('input[name="fname"]');
-    const lname = form.querySelector('input[name="lname"]');
-    // const email = form.querySelector('input[name="email"]');
-    const phone = form.querySelector('input[name="phone"]');
-    const address = form.querySelector('input[name="address"]');
-    const stype = form.querySelector('select[name="stype"]');
-    const package = form.querySelector('select[name="package"]');
-    const electrician = form.querySelector('select[name="electrician"]');
-    // const other = form.querySelector('select[name="other"]');
-    const date = form.querySelector('input[name="date"]');
-    const completed = form.querySelector('input[name="completed"]');
-    const payment = form.querySelector('input[name="payment"]');
+<script>
+  $(document).ready(function(){
+    $('.edit').click(function(){
 
-    form.addEventListener('submit', (event) => {
-        let error = false;
-
-        if (fname.value === '') {
-            fname.nextElementSibling.innerText = 'Please enter first name';
-            error = true;
-        } else if (!/^[A-Z][a-z]*$/.test(fname.value)) {
-            fname.nextElementSibling.innerText = 'First name should be capitalized';
-            error = true;
-        } else {
-            fname.nextElementSibling.innerText = '';
+        id =  $(this).attr('id');
+        $.ajax({
+        url: 'accept-pending.php',
+        method: 'post',
+        data: {id:id},
+        success: function(result) {
+            // Handle successful response
+            $('.suppbody').html(result);
         }
+        });
 
-        if (lname.value === '') {
-            lname.nextElementSibling.innerText = 'Please enter last name';
-            error = true;
-        } else if (!/^[A-Z][a-z]*$/.test(lname.value)) {
-            lname.nextElementSibling.innerText = 'Last name should be capitalized';
-            error = true;
-        } else {
-            lname.nextElementSibling.innerText = '';
-        }
 
-        // if (email.value === '') {
-        //     email.nextElementSibling.innerText = 'Please enter your email';
-        //     error = true;
-        // } else {
-        //     email.nextElementSibling.innerText = '';
-        // }
-
-        if (phone.value === '') {
-            phone.nextElementSibling.innerText = 'Please enter phone number';
-            error = true;
-        } else if (!/^\d{11}$/.test(phone.value)) {
-            phone.nextElementSibling.innerText = 'Please enter a valid 11-digit phone number';
-            error = true;
-        } else {
-            phone.nextElementSibling.innerText = '';
-        }
-
-        if (address.value === '') {
-            address.nextElementSibling.innerText = 'Please enter address';
-            error = true;
-        } else if (!/^[a-zA-Z0-9\s,'-]*$/.test(address.value)) {
-            address.nextElementSibling.innerText = 'Please enter a valid address';
-            error = true;
-        } else {
-            address.nextElementSibling.innerText = '';
-        }
-
-        if (stype.value === 'None') {
-            stype.nextElementSibling.innerText = 'Please select an Service type';
-            error = true;
-        } else {
-            stype.nextElementSibling.innerText = '';
-        }
-
-        // if (electrician.value === 'None') {
-        //     electrician.nextElementSibling.innerText = 'Please select an electrician';
-        //     error = true;
-        // } else {
-        //     electrician.nextElementSibling.innerText = '';
-        // }
-
-        if (package.value === 'None') {
-            package.nextElementSibling.innerText = 'Please enter a package';
-            error = true;
-        } else {
-            package.nextElementSibling.innerText = '';
-        }
-
-        // if (other.value === '') {
-        //     other.nextElementSibling.innerText = 'Please select a other option';
-        //     error = true;
-        // } else {
-        //     other.nextElementSibling.innerText = '';
-        // }
-
-        if (date.value === '') {
-            date.nextElementSibling.innerText = 'Please select a date';
-            error = true;
-        } else {
-            date.nextElementSibling.innerText = '';
-        }
-
-        // if (completed.value === '') {
-        //     completed.nextElementSibling.innerText = 'Please select a completion date';
-        //     error = true;
-        // } else {
-        //     completed.nextElementSibling.innerText = '';
-        // }
-
-        if (payment.value === '') {
-            payment.nextElementSibling.innerText = 'Please enter a payment amount';
-            error = true;
-        } else {
-            payment.nextElementSibling.innerText = '';
-        }
-
-        if (error) {
-            event.preventDefault(); // Prevent form submission if there are errors
-        } else {
-            // Submit form to server if there are no errors
-            // You can use AJAX to submit the form asynchronously, or just let it submit normally
-        }
-    });
-    </script>
-
+      $('#editSuppModal').modal('show');
+    })
+  })
+</script>
 </body>
 
 </html>

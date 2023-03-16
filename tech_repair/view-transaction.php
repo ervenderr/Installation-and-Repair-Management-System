@@ -4,33 +4,33 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
-$seractive = "active";
-$sershow = "show";
-$sertrue = "true";
+$rpactive = "active";
+$rpshow = "show";
+$rptrue = "true";
 
 $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
-    
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
+    header('location: ../login/login.php');
+}
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT sr.*, 
-       c.fname AS cust_fname, 
-       c.lname AS cust_lname, 
-       GROUP_CONCAT(CONCAT(t.fname, ' ', t.lname)) AS tech_names,
-       a.*,
-       c.*,
-       s.*,
-       p.*
-FROM service_request sr
-LEFT JOIN customer c ON sr.cust_id = c.cust_id
-LEFT JOIN accounts a ON c.account_id = a.account_id
-LEFT JOIN services s ON sr.service_id = s.service_id
-LEFT JOIN package p ON sr.pkg_id = p.pkg_id
-LEFT JOIN service_request_technicians srt ON sr.sreq_id = srt.sreq_id
-LEFT JOIN technician t ON srt.tech_id = t.tech_id
-WHERE sr.transaction_code = '" . $tcode . "'
-GROUP BY sr.sreq_id;";
-
-
+$query = "SELECT rprq.*, 
+            customer.fname AS cust_fname, 
+            customer.lname AS cust_lname, 
+            technician.fname AS tech_fname, 
+            technician.lname AS tech_lname, 
+            technician.status AS tech_status_new_name, 
+            rprq.status AS rprq_status, 
+            accounts.*,
+            technician.*,
+            customer.*
+          FROM rprq
+          LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+          LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+          LEFT JOIN accounts ON customer.account_id = accounts.account_id
+          WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -48,38 +48,37 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
-        <?php include_once('../admin_includes/navbar.php'); ?>
+        <?php include_once ('../admin_includes/navbar.php'); ?>
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
-            <?php include_once('../admin_includes/sidebar.php'); ?>
-
+            <?php include_once ('../admin_includes/sidebar.php'); ?>
+            
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                                <i class="fas fa-cogs menu-icon"></i>
-                            </span> Service Transaction
+                                <i class="mdi mdi-wrench"></i>
+                            </span> Repair Transaction
+                            
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <?php
                                 $href = "";
-                                if ($row['status'] == 'Pending'){
-                                    $href = "pendings.php";
+                                if ($row['rprq_status'] == 'Pending'){
+                                    $href = "pending.php";
                                 }else{
-                                    $href = "transactions.php";
+                                    $href = "transaction.php";
                                 }
                                 ?>
                                 <a href="<?php echo $href; ?>">
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        <span></span><i
-                                            class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
-                                        </i>
-                                    </li>
-                                </a>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <span></span><i class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
+                                    </i>
+                                </li></a>
                             </ul>
                         </nav>
                     </div>
@@ -96,22 +95,22 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             <tr>
                                                 <?php
                                                 $statusClass = '';
-                                                if ($row['status'] == 'Pending') {
+                                                if ($row['rprq_status'] == 'Pending') {
                                                   $statusClass = 'badge-gradient-warning';
-                                                } else if ($row['status'] == 'In-progress') {
+                                                } else if ($row['rprq_status'] == 'In-progress') {
                                                   $statusClass = 'badge-gradient-info';
-                                                } else if ($row['status'] == 'Done') {
+                                                } else if ($row['rprq_status'] == 'Done') {
                                                   $statusClass = 'badge-gradient-success';
                                                 } else {
                                                   $statusClass = 'badge-gradient-secondary';
                                                 }      
                                                 echo "<th>Status:</th>";
-                                                echo "<td><span class='badge " . $statusClass . "'>" . $row['status'] . "</span></td>";
+                                                echo "<td><span class='badge " . $statusClass . "'>" . $row['rprq_status'] . "</span></td>";
                                                 ?>
                                             </tr>
                                             <tr>
                                                 <th>Customer Name:</th>
-                                                <td><?php echo $row['cust_fname'] ." ".  $row['cust_lname']?></td>
+                                                <td><?php echo $row['cust_fname'] ." " .  $row['cust_lname']?></td>
                                             </tr>
                                             <tr>
                                                 <th>Address:</th>
@@ -126,16 +125,12 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <td><?php echo $row['email']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Service Type:</th>
-                                                <td><?php echo $row['service_name']?></td>
+                                                <th>Electronic Type:</th>
+                                                <td><?php echo $row['etype']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Package:</th>
-                                                <td><?php echo $row['name']?></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Other concern:</th>
-                                                <td><?php echo $row['other']?></td>
+                                                <th>Defective:</th>
+                                                <td><?php echo $row['defective']?></td>
                                             </tr>
                                             <tr>
                                                 <th>Date Requested:</th>
@@ -146,10 +141,13 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <td><?php echo $row['date_completed']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Assigned Technicians:</th>
-                                                <td><?php echo $row['tech_names']; ?></td>
+                                                <th>Assigned Technician:</th>
+                                                <td><?php echo $row['tech_fname'] . " " . $row['tech_lname']?></td>
                                             </tr>
-
+                                            <tr>
+                                                <th>Shipping Option:</th>
+                                                <td><?php echo $row['shipping']?></td>
+                                            </tr>
                                             <tr>
                                                 <th>Warranty:</th>
                                                 <td></td>
@@ -160,30 +158,27 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </tr>
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">
-                                            <?php
-                                            if (($row['status'] == 'Pending')) {
-                                                echo '<button class="icns btn btn-danger edit" id="' .  $row['sreq_id'] . '">';
-                                                echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['sreq_id'] . '"></i>';
+                                        <?php
+                                            
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-success edit" id="' .  $row['id'] . '">';
+                                                echo 'Update Status <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
-                                            }
-                                            else{
-                                                echo '<a href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" class="btn btn-success btn-fw">
-                                            Update Details   <i class="fas fa-edit text-white"></i></a>';
-                                            }
 
-                                            echo '<a href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" class="btn btn-danger btn-fw red">
-                                            Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
 
-                                            if (empty($row['invoice_id']) && $row['status'] == 'Done') {
-                                                echo '<a href="../service-invoice/serv_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" class="btn btn-primary btn-fw">
+
+                                            if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
+                                                echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
                                                 Generate Invoice <i class="fas fa-file-invoice"></i></a>';
                                             }
 
                                             if (!empty($row['invoice_id'])) {
                                                 $invoice_id = $row['invoice_id'];
-                                                echo '<a href="../service-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                                                echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
                                                 Download Invoice <i class="fas fa-download"></i></a>';
                                             }
+
+                                            
                                             ?>
                                         </div>
                                     </div>
@@ -210,6 +205,22 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+
+    <!-- Accept modal -->
+    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSuppModalLabel">Update Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body suppbody">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- plugins:js -->
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
@@ -238,6 +249,27 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         });
     });
     </script>
+
+<script>
+  $(document).ready(function(){
+    $('.edit').click(function(){
+
+        id =  $(this).attr('id');
+        $.ajax({
+        url: 'update-status.php',
+        method: 'post',
+        data: {id:id},
+        success: function(result) {
+            // Handle successful response
+            $('.suppbody').html(result);
+        }
+        });
+
+
+      $('#editSuppModal').modal('show');
+    })
+  })
+</script>
 </body>
 
 </html>

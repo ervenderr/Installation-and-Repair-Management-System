@@ -67,6 +67,7 @@ if (isset($_GET['search'])) {
                         $statusBg = "bg-success";
                         $Inprogress = "active";
                         $done = "active";
+                        $completed = "active";
                     }
                     
                     ?>
@@ -113,7 +114,7 @@ if (isset($_GET['search'])) {
                         echo '<div class="text-center">
                         <form method="post" action="../repair-invoice/booking-repair-pdf.php"
                             target="_blank">
-                            <button type="submit" name="download" value="'.$row['id'].'" class="btn btn-warning text-white">Download Ticket <i class="fas fa-download"></i></button>
+                            <button type="submit" name="download" value="'.$row['id'].'" class="btn btn-info text-white">Download Ticket <i class="fas fa-download"></i></button>
                         </form>
                     </div>';
                     }

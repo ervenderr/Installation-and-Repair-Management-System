@@ -8,29 +8,29 @@ $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
 
 
-$rpactive = "active";
-$rpshow = "show";
-$rptrue = "true";
+$seractive = "active";
+$sershow = "show";
+$sertrue = "true";
 
     
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT sr.*, 
-       c.fname AS cust_fname, 
-       c.lname AS cust_lname, 
-       t.fname AS tech_fname, 
-       t.lname AS tech_lname, 
-       t.status AS tech_status,
-       a.*,
-       c.*,
-       s.*,
-       p.*
+c.fname AS cust_fname, 
+c.lname AS cust_lname, 
+GROUP_CONCAT(CONCAT(t.fname, ' ', t.lname)) AS tech_names,
+a.*,
+c.*,
+s.*,
+p.*
 FROM service_request sr
 LEFT JOIN customer c ON sr.cust_id = c.cust_id
 LEFT JOIN accounts a ON c.account_id = a.account_id
 LEFT JOIN services s ON sr.service_id = s.service_id
 LEFT JOIN package p ON sr.pkg_id = p.pkg_id
-LEFT JOIN technician t ON sr.tech_id = t.tech_id
-WHERE sr.transaction_code = '" . $tcode . "';";
+LEFT JOIN service_request_technicians srt ON sr.sreq_id = srt.sreq_id
+LEFT JOIN technician t ON srt.tech_id = t.tech_id
+WHERE sr.transaction_code = '" . $tcode . "'
+GROUP BY sr.sreq_id;";
 $result = mysqli_query($conn, $query);
 
 
@@ -59,7 +59,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                            <i class="fas fa-cogs menu-icon"></i>
+                                <i class="fas fa-cogs menu-icon"></i>
                             </span> Repair Transaction <span class="bread">/ Update transaction</span>
                         </h3>
                         <nav aria-label="breadcrumb">
@@ -92,9 +92,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         $query6 = "SELECT sr.*, 
                                         c.fname AS cust_fname, 
                                         c.lname AS cust_lname, 
-                                        t.fname AS tech_fname, 
-                                        t.lname AS tech_lname, 
-                                        t.status AS tech_status,
+                                        GROUP_CONCAT(CONCAT(t.fname, ' ', t.lname)) AS tech_names,
                                         a.*,
                                         c.*,
                                         s.*,
@@ -104,8 +102,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                  LEFT JOIN accounts a ON c.account_id = a.account_id
                                  LEFT JOIN services s ON sr.service_id = s.service_id
                                  LEFT JOIN package p ON sr.pkg_id = p.pkg_id
-                                 LEFT JOIN technician t ON sr.tech_id = t.tech_id
-                                 WHERE sr.transaction_code = '" . $tcode . "';";
+                                 LEFT JOIN service_request_technicians srt ON sr.sreq_id = srt.sreq_id
+                                 LEFT JOIN technician t ON srt.tech_id = t.tech_id
+                                 WHERE sr.transaction_code = '" . $tcode . "'
+                                 GROUP BY sr.sreq_id;";
                                         $result6 = mysqli_query($conn, $query6);
                                         
                                         // Check if the query was successful and output the data
@@ -156,7 +156,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </div>
                                         </div>
                                         <div class="row">
-                                        <div class="col-md-6">
+                                            <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label for="address" class="col-form-label">Address</label>
                                                     <div class="">
@@ -169,9 +169,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <div class="form-group row">
                                                     <label for="status" class="col-form-label">Status</label>
                                                     <div class="">
-                                                    <select name="status" class="form-control">
+                                                        <select name="status" class="form-control">
                                                             <option value="Pending"
-                                                                <?php if ($row6['status'] == 'Pending') echo 'selected'; ?>>Pending
+                                                                <?php if ($row6['status'] == 'Pending') echo 'selected'; ?>>
+                                                                Pending
                                                             </option>
                                                             <option value="In-progress"
                                                                 <?php if ($row6['status'] == 'In-progress') echo 'selected'; ?>>
@@ -180,6 +181,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                             <option value="Done"
                                                                 <?php if ($row6['status'] == 'Done') echo 'selected'; ?>>
                                                                 Done
+                                                            </option>
+                                                            <option value="Completed"
+                                                                <?php if ($row6['status'] == 'Completed') echo 'selected'; ?>>
+                                                                Completed
                                                             </option>
                                                         </select>
                                                     </div>
@@ -228,7 +233,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="other" class="col-form-label">Defective</label>
+                                                    <label for="other" class="col-form-label">Other concern</label>
                                                     <div class="">
                                                         <input name="other" type="text" class="form-control"
                                                             value="<?php echo $row6['other']; ?>" />
@@ -238,21 +243,37 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label for="technician" class="col-form-label">Assigned
-                                                    Technician</label>
+                                                        Technician(s)</label>
                                                     <div class="">
-                                                    <select name="technician" class="form-control">
-                                                            <option value="None">--- Select ---</option>
+                                                        <select name="technician[]" class="form-control js-example-basic-multiple" multiple>
                                                             <?php
-                                                                $sql2 = "SELECT * FROM technician";
-                                                                $result3 = mysqli_query($conn, $sql2);
+                                                                $sql2 = "SELECT t.tech_id, t.fname, t.lname
+                                                                        FROM technician t
+                                                                        JOIN service_request_technicians srt ON t.tech_id = srt.tech_id
+                                                                        WHERE srt.sreq_id = ?";
+                                                                $stmt = mysqli_prepare($conn, $sql2);
+                                                                mysqli_stmt_bind_param($stmt, 'i', $id); // Assuming $id is the service request ID you want to check
+                                                                mysqli_stmt_execute($stmt);
+                                                                $result3 = mysqli_stmt_get_result($stmt);
+
+                                                                $selected_technicians = array();
                                                                 while ($technician = mysqli_fetch_assoc($result3)) {
-                                                                    $tech_id = mysqli_real_escape_string($conn, $technician['tech_id']);
-                                                                    $selected = ($tech_id == $selected_technician_id) ? "selected" : "";
+                                                                    $selected_technicians[] = $technician['tech_id'];
+                                                                }
+
+                                                                // Get all technicians
+                                                                $sql_all_techs = "SELECT * FROM technician";
+                                                                $result_all_techs = mysqli_query($conn, $sql_all_techs);
+                                                                while ($technician = mysqli_fetch_assoc($result_all_techs)) {
+                                                                    $tech_id = $technician['tech_id'];
+                                                                    $selected = in_array($tech_id, $selected_technicians) ? "selected" : "";
                                                                     echo "<option value='{$tech_id}' {$selected}>{$technician['fname']} {$technician['lname']}</option>";
-                                                                }                                                        
+                                                                }
                                                                 ?>
                                                         </select>
+                                                        
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -345,7 +366,15 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         });
         </script>
 
-        
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
+</script>
+
+
 </body>
 
 </html>

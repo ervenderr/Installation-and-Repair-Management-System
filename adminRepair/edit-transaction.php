@@ -166,6 +166,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                                 <?php if ($row6['rprq_status'] == 'Done') echo 'selected'; ?>>
                                                                 Done
                                                             </option>
+                                                            <option value="Completed"
+                                                                <?php if ($row6['rprq_status'] == 'Completed') echo 'selected'; ?>>
+                                                                Completed
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -277,7 +281,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <label for="payment" class="col-form-label">Payment</label>
                                                     <div class="">
                                                         <input name="payment" class="form-control" type="text"
-                                                            value="$ " />
+                                                            value="<?php echo $row6['payment']; ?>" />
                                                     </div>
                                                 </div>
                                             </div>

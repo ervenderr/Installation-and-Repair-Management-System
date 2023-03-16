@@ -95,8 +95,7 @@ $_SESSION['logged_id'] = $row2['account_id'];
                             </div>
                             <div class="mb-3">
                                 <label for="mname" class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" id="mname" name="mname"
-                                    value="<?php echo isset($row2['mname']) ? $row2['mname'] : '' ?>">
+                                <input type="text" class="form-control" style="color: lightgrey" id="mname" name="mname" value="<?php echo isset($row['mname']) ? $row['mname'] : ''; ?>(Optional)">
                                 <span class="val-error"></span>
                             </div>
                             <div class="mb-3">
@@ -162,7 +161,7 @@ $_SESSION['logged_id'] = $row2['account_id'];
                             </div>
                             <div class="mb-3">
                                 <label for="other" class="form-label">Other</label>
-                                <input type="text" class="form-control" id="other" value="ADSDASA" name="other">
+                                <input type="text" class="form-control" id="other" value="" name="other">
                             </div>
                             <div class="btns-group">
                                 <a href="#" class="btn btn-primary width-50 btn-prev" id="adis"><i

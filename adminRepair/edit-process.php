@@ -54,11 +54,23 @@ if(isset($_POST['submit'])) {
         $customer_id = mysqli_insert_id($conn);
     }
 
-    // update rprq table with new values
-    $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician' WHERE transaction_code='$transaction_code'";
-    $result4 = mysqli_query($conn, $query4);
+    if ($status == 'Pending' || $status == 'Done' || $status == 'Completed') {
+        // update rprq table with new values
+        $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician' WHERE transaction_code='$transaction_code'";
+        $result4 = mysqli_query($conn, $query4);
+        
+        // update technician status
+        if ($status == 'In-progress') {
+            $tech_status = 'Unavailable';
+        } else {
+            $tech_status = 'Active';
+        }
+        $query5 = "UPDATE technician SET status = '$tech_status' WHERE tech_id = '$technician'";
+        $result5 = mysqli_query($conn, $query5);
+    }
+    
 
-    if ($result4) {
+    if ($result5) {
         header("location: view-transaction.php?msg=Record updated Successfully.&transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
     } else {
         echo "FAILED: " . mysqli_error($conn);
