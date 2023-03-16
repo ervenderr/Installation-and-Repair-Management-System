@@ -200,6 +200,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                     <div class="clearfix">
                                         <h4 class="card-title float-left">Sales report</h4>
                                     </div>
+                                    <div class="btn-group-sm">
+                                    <button id="toggleData" class="btn btn-primary">Toggle Weekly/Monthly Data</button>
+                                    </div>
                                     <canvas id="salesChart" width="400" height="150"></canvas>
                                 </div>
                             </div>
