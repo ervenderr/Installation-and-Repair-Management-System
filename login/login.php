@@ -66,7 +66,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 }elseif ($row['user_type'] == 'technician') {
                     $_SESSION['logged_id'] = $row['account_id'];
                     $_SESSION['user_type'] = $row['user_type'];
-                    header("Location: ../homepage/home.php");
+                    header("Location: ../technician_dashboard/dashboard.php");
                 }elseif ($row['user_type'] == 'customer' && $row['verify_status'] != "1") {
                     $errors[] = "Email is not verified";
                 }
