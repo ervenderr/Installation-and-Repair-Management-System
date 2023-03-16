@@ -4,7 +4,7 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
+if (!isset($_SESSION['user_type'])){
     header('location: ../login/login.php');
 }
 
