@@ -204,6 +204,10 @@ $row = mysqli_fetch_assoc($result);
                                             <span class="fw-bold me-2 transaction-details-label">Total payment:</span>
                                             <span class="transaction-details-none"><?php echo $row['payment']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Warranty:</span>
+                                            <span class="">3 months</span>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
@@ -216,8 +220,7 @@ $row = mysqli_fetch_assoc($result);
                                             <span><?php echo $row['date_req']?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Expected
-                                                Completion:</span>
+                                            <span class="fw-bold me-2 transaction-details-label">Completion Date:</span>
                                             <span><?php echo $row['date_completed']?></span>
                                         </div>
                                         <div class="transaction-details-row">

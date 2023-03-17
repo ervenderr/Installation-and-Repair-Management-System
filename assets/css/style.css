@@ -22137,3 +22137,24 @@ option{
 .select2-container--classic.select2-container--open .select2-dropdown {
   border-color: #5897fb
 }
+
+.sales-filter{
+  width: auto;
+}
+
+.by{
+  margin: 0 8px 0 0;
+}
+
+.sales-report-header {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sales-report-title {
+  font-weight: bold;
+  margin-bottom: 0;
+}

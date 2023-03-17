@@ -37,7 +37,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 stretch-card grid-margin">
+                        <div class="col-md-5 stretch-card grid-margin">
                             <div class="card bg-gradient-danger card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -84,7 +84,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 stretch-card grid-margin">
+                        <div class="col-md-5 stretch-card grid-margin">
                             <div class="card bg-gradient-info card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -131,22 +131,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 stretch-card grid-margin">
-                            <div class="card bg-gradient-success card-img-holder text-white">
-                                <div class="card-body">
-                                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                        alt="circle-image" />
-                                    <h4 class="font-weight-normal mb-3">Total Sales <i
-                                            class="mdi mdi-diamond mdi-24px float-right"></i>
-                                    </h4>
-                                    <h2 class="mb-5">$ 95,5741</h2>
-                                    <h6 class="card-text">Increased by 5%</h6>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 stretch-card grid-margin">
+                        <div class="col-md-5 stretch-card grid-margin">
                             <div class="card bg-gradient-warning card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -169,7 +156,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 stretch-card grid-margin">
+                        <div class="col-md-5 stretch-card grid-margin">
                             <div class="card bg-gradient-primary card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -197,14 +184,24 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <div class="col-md-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="clearfix">
-                                        <h4 class="card-title float-left">Sales report</h4>
+                                    <div class="sales-report-header d-flex justify-content-between align-items-center">
+                                        <h4 class="sales-report-title">Sales report</h4>
+                                        <div class="filter d-flex align-items-center">
+                                            <span class="by">By: </span>
+                                            <select id="timeFilter" class="form-select sales-filter">
+                                                <option value="weekly">Weekly</option>
+                                                <option value="monthly">Monthly</option>
+                                                <option value="yearly">Yearly</option>
+                                            </select>
+                                        </div>
                                     </div>
+
                                     <canvas id="salesChart" width="400" height="150"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
+
 
                 </div>
                 <!-- content-wrapper ends -->
@@ -243,40 +240,47 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 
     <script>
-    async function fetchSalesData() {
-        const response = await fetch('fetch_sales_data.php');
+    async function fetchSalesData(timeFilter) {
+        const response = await fetch(`fetch_sales_data.php?timeFilter=${timeFilter}`);
         const salesData = await response.json();
         return salesData;
     }
 
-    async function renderSalesChart() {
-        const salesData = await fetchSalesData();
+    async function renderSalesChart(timeFilter) {
+        const salesData = await fetchSalesData(timeFilter);
 
-        const labels = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-        ];
+        const numPeriods = timeFilter === 'weekly' ? 7 : timeFilter === 'monthly' ? 12 : Object.keys(salesData)
+            .length;
+
+        const labels = {
+            weekly: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            monthly: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ],
+            yearly: Object.keys(salesData),
+        };
 
         const repairData = [];
         const serviceData = [];
 
-        for (let i = 1; i <= 12; i++) {
+        for (let i in salesData) {
             repairData.push(salesData[i].repair);
             serviceData.push(salesData[i].service);
         }
 
         const salesChartData = {
-            labels: labels,
+            labels: labels[timeFilter],
             datasets: [{
                     label: 'Repair Request Sales',
                     data: repairData,
@@ -308,8 +312,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         });
     }
 
-    renderSalesChart();
+    // Add an event listener for the time filter dropdown
+    document.getElementById('timeFilter').addEventListener('change', (event) => {
+        const timeFilter = event.target.value;
+        renderSalesChart(timeFilter);
+    });
+
+    // Call the initial render with the default time filter
+    renderSalesChart('monthly');
     </script>
+
+
 
 </body>
 

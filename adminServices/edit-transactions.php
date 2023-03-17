@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
@@ -113,8 +114,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             $row6 = mysqli_fetch_assoc($result6);
                                         }
                                         $selected_technician_id = $row6['tech_id'];
+                                        $_SESSION['cust_id'] = $row6['cust_id'];
                                         ?>
                                         <p class="card-description">Update Personal info </p>
+                                        <input type="hidden" name="sreq_id" value="<?php echo $row6['sreq_id']; ?>">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -252,7 +255,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                                         JOIN service_request_technicians srt ON t.tech_id = srt.tech_id
                                                                         WHERE srt.sreq_id = ?";
                                                                 $stmt = mysqli_prepare($conn, $sql2);
-                                                                mysqli_stmt_bind_param($stmt, 'i', $id); // Assuming $id is the service request ID you want to check
+                                                                mysqli_stmt_bind_param($stmt, 'i', $row6['sreq_id']); // Assuming $id is the service request ID you want to check
                                                                 mysqli_stmt_execute($stmt);
                                                                 $result3 = mysqli_stmt_get_result($stmt);
 
@@ -302,10 +305,19 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="payment" class="col-form-label">Payment</label>
+                                                    <label for="initial_payment" class="col-form-label">Initial Payment</label>
+                                                    <div class="">
+                                                        <input name="initial_payment" class="form-control" type="text"
+                                                            value="<?php echo $row6['initial_payment']; ?>" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="payment" class="col-form-label">Full Payment</label>
                                                     <div class="">
                                                         <input name="payment" class="form-control" type="text"
-                                                            value="$ " />
+                                                            value="<?php echo $row6['payment']; ?>" />
                                                     </div>
                                                 </div>
                                             </div>

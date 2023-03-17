@@ -132,6 +132,8 @@ require_once '../homeIncludes/dbconfig.php';
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';
+                                                        } else if ($row['status'] == 'Completed') {
+                                                            $statusClass = 'badge-gradient-success';
                                                         } else {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         }

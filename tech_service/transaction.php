@@ -5,6 +5,8 @@ require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
 $search = "transaction.php";
+$logged_id = $_SESSION['logged_id'];
+
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
     header('location: ../login/login.php');
@@ -132,8 +134,8 @@ require_once '../homeIncludes/dbconfig.php';
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
                                                         echo '<td class="btn-group-sm">';
-                                                        echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
-                                                        echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i>';
+                                                        echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
+                                                        echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['sreq_id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
