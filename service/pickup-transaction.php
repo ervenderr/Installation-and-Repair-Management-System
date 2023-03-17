@@ -128,30 +128,30 @@ $row = mysqli_fetch_assoc($result);
                 </div>
                 <div class="col-sm-9 accform ">
                     <nav class="nav nav-pills flex-column flex-sm-row">
-                            <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
-                                href="pending-transaction.php">Pending
-                                <?php
+                        <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
+                            href="pending-transaction.php">Pending
+                            <?php
                                 if($notification_count_pending){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
-                            </a>
-                        <a class="flex-sm-fill text-sm-center nav-link" href="repairing-transaction.php">Repairing
-                        <?php
+                        </a>
+                        <a class="flex-sm-fill text-sm-center nav-link" href="repairing-transaction.php">Installing
+                            <?php
                                 if($notification_style_in_progress){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="pickup-transaction.php">To pickup
-                        <?php
+                        <a class="flex-sm-fill text-sm-center nav-link active" href="pickup-transaction.php">Done
+                            <?php
                                 if($notification_style_done){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
                         <a class="flex-sm-fill text-sm-center nav-link" href="completed-transaction.php">Completed
-                        <?php
+                            <?php
                                 if($notification_count_completed){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
@@ -159,14 +159,25 @@ $row = mysqli_fetch_assoc($result);
                         </a>
                     </nav>
                     <?php
-                    $query = "SELECT sr.*, sr.status AS sr_status, c.*, t.*, s.*, p.*, a.*
-                    FROM service_request sr
-                    LEFT JOIN customer c ON sr.cust_id = c.cust_id
-                    LEFT JOIN technician t ON sr.tech_id = t.tech_id
-                    LEFT JOIN accounts a ON c.account_id = a.account_id
-                    LEFT JOIN services s ON sr.service_id = s.service_id
-                    LEFT JOIN package p ON sr.pkg_id = p.pkg_id
-                    WHERE sr.status = 'Done' AND a.account_id = '{$user_id}';";
+                    $query = "SELECT sr.*, 
+                    c.fname AS cust_fname, 
+                    c.lname AS cust_lname, 
+                    c.phone AS cust_phone,
+                    GROUP_CONCAT(CONCAT(t.fname, ' ', t.lname) SEPARATOR ', ') AS tech_names,
+                    GROUP_CONCAT(CONCAT(t.phone) SEPARATOR ', ') AS tech_phones,
+                    a.*,
+                    c.*,
+                    s.*,
+                    p.*
+                 FROM service_request sr
+                 LEFT JOIN customer c ON sr.cust_id = c.cust_id
+                 LEFT JOIN accounts a ON c.account_id = a.account_id
+                 LEFT JOIN services s ON sr.service_id = s.service_id
+                 LEFT JOIN package p ON sr.pkg_id = p.pkg_id
+                 LEFT JOIN service_request_technicians srt ON sr.sreq_id = srt.sreq_id
+                 LEFT JOIN technician t ON srt.tech_id = t.tech_id
+                 WHERE sr.status = 'Done' AND a.account_id = '{$user_id}'
+                 GROUP BY sr.sreq_id;";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
@@ -182,7 +193,7 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Status:</span>
-                                            <span class="transaction-details-pending"><?php echo $row['sr_status']?></span>
+                                            <span class="transaction-details-pending"><?php echo $row['status']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Service Type:</span>
@@ -190,7 +201,13 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Package Type:</span>
-                                            <span class="transaction-details-none text-secondary"><?php echo $row['name']?></span>
+                                            <span
+                                                class="transaction-details-none text-secondary"><?php echo $row['name']?></span>
+                                        </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Initial Payment:</span>
+                                            <span
+                                                class="transaction-details-none"><?php echo $row['initial_payment']?></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -210,8 +227,13 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
-                                                Technician:</span>
-                                            <span><?php echo $row['fname'] ." " .  $row['lname']?></span>
+                                                Technicians:</span>
+                                            <span><?php echo $row['tech_names']?></span>
+                                        </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Technician's
+                                                Contact:</span>
+                                            <span><?php echo $row['tech_phones']?></span>
                                         </div>
                                     </div>
                                     <div class="text-start">
@@ -222,7 +244,7 @@ $row = mysqli_fetch_assoc($result);
                                             Download Invoice <i class="fas fa-download"></i></a>';
                                         }
                                         ?>
-                                </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
