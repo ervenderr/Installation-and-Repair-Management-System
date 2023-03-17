@@ -190,7 +190,7 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Status:</span>
-                                            <span class="transaction-details-pending"><?php echo $row['status']?></span>
+                                            <span class="transaction-details-pending"><?php echo $row['rprq_status']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
