@@ -137,10 +137,10 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<td>' . $row['date_req'] . '</td>';
                                                         echo '<td class="btn-group-sm">';
                                                         echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
-                                                        echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i> View';
                                                         echo '</a>';
                                                         echo '<button class="icns btn btn-danger edit" id="' .  $row['id'] . '">';
-                                                        echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-calendar-check view-account" id="' .  $row['id'] . '"> </i> Assign';
                                                         echo '</button>';
                                                         echo '</td>';
                                                         echo '</tr>';
@@ -153,6 +153,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="row">
                                 <div class="col-sm-12 col-md-6 flex">
 

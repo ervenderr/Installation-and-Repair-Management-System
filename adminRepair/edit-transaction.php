@@ -158,6 +158,9 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                             <option value="Pending"
                                                                 <?php if ($row6['rprq_status'] == 'Pending') echo 'selected'; ?>>Pending
                                                             </option>
+                                                            <option value="Accepted"
+                                                                <?php if ($row6['rprq_status'] == 'Accepted') echo 'selected'; ?>>Accepted
+                                                            </option>
                                                             <option value="In-progress"
                                                                 <?php if ($row6['rprq_status'] == 'In-progress') echo 'selected'; ?>>
                                                                 In-progress
@@ -278,7 +281,16 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="payment" class="col-form-label">Payment</label>
+                                                    <label for="initial_payment" class="col-form-label">Initial Payment</label>
+                                                    <div class="">
+                                                        <input name="initial_payment" class="form-control" type="text"
+                                                            value="<?php echo $row6['initial_payment']; ?>" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="payment" class="col-form-label">Full Payment</label>
                                                     <div class="">
                                                         <input name="payment" class="form-control" type="text"
                                                             value="<?php echo $row6['payment']; ?>" />

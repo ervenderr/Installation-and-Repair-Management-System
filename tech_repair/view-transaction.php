@@ -25,11 +25,13 @@ $query = "SELECT rprq.*,
             rprq.status AS rprq_status, 
             accounts.*,
             technician.*,
+            invoice.*,
             customer.*
           FROM rprq
           LEFT JOIN technician ON rprq.tech_id = technician.tech_id
           LEFT JOIN customer ON rprq.cust_id = customer.cust_id
           LEFT JOIN accounts ON customer.account_id = accounts.account_id
+          LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
           WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
@@ -48,11 +50,11 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
-        <?php include_once ('../admin_includes/navbar.php'); ?>
+        <?php include_once ('../technician_includes/navbar.php'); ?>
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
-            <?php include_once ('../admin_includes/sidebar.php'); ?>
+            <?php include_once ('../technician_includes/sidebar.php'); ?>
             
             <!-- partial -->
             <div class="main-panel">
@@ -93,6 +95,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <td><?php echo $row['transaction_code']?></td>
                                             </tr>
                                             <tr>
+                                                <th>Invoice Number:</th>
+                                                <td><?php echo $row['invoice_no']?></td>
+                                            </tr>
+                                            <tr>
                                                 <?php
                                                 $statusClass = '';
                                                 if ($row['rprq_status'] == 'Pending') {
@@ -101,7 +107,9 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                   $statusClass = 'badge-gradient-info';
                                                 } else if ($row['rprq_status'] == 'Done') {
                                                   $statusClass = 'badge-gradient-success';
-                                                } else {
+                                                } else if ($row['rprq_status'] == 'Completed') {
+                                                    $statusClass = 'badge-gradient-success';
+                                                  } else {
                                                   $statusClass = 'badge-gradient-secondary';
                                                 }      
                                                 echo "<th>Status:</th>";
@@ -150,21 +158,25 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </tr>
                                             <tr>
                                                 <th>Warranty:</th>
-                                                <td></td>
+                                                <td>3 Months</td>
                                             </tr>
                                             <tr>
-                                                <th>Payment:</th>
+                                                <th>Initial Payment:</th>
+                                                <td><?php echo $row['initial_payment']?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Full Payment:</th>
                                                 <td><?php echo $row['payment']?></td>
                                             </tr>
                                         </table>
-                                        <div class="btn-group-sm d-flex btn-details">
+                                        <div class="d-flex btn-details">
                                         <?php
-                                            
+                                            if($row['rprq_status'] != 'Completed'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit" id="' .  $row['id'] . '">';
                                                 echo 'Update Status <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
-
+                                            }
 
 
                                             if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {

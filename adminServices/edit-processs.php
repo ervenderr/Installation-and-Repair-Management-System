@@ -2,8 +2,9 @@
 session_start();
 require_once '../homeIncludes/dbconfig.php';
 
-if(isset($_POST['submit'])) {
-    // assign form data to variables
+if (isset($_POST['submit'])) {
+    $id = htmlentities($_POST['sreq_id']);
+    $custid = htmlentities($_SESSION['cust_id']);
     $fname = htmlentities($_POST['fname']);
     $lname = htmlentities($_POST['lname']);
     $email = htmlentities($_POST['email']);
@@ -13,68 +14,46 @@ if(isset($_POST['submit'])) {
     $stype = htmlentities($_POST['stype']);
     $package = htmlentities($_POST['package']);
     $other = htmlentities($_POST['other']);
-    $technician = htmlentities($_POST['technician']);
     $date = htmlentities($_POST['date']);
     $completed = htmlentities($_POST['completed']);
+    $initial_payment = htmlentities($_POST['initial_payment']);
     $payment = htmlentities($_POST['payment']);
 
-    $accountid = $_SESSION['account_id'];
-    $rowid = $_SESSION['rowid'];
-    $transaction_code = $_SESSION['transaction_code'];
+    $techIds = $_POST['technician'];
 
-    // check if email already exists in accounts table
-    $query = "SELECT account_id FROM accounts WHERE account_id = '$accountid'";
-    $result = mysqli_query($conn, $query);
-    if(mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $account_id = $row['account_id'];
-        $query2 = "SELECT cust_id FROM customer WHERE account_id = '$account_id'";
-        $result2 = mysqli_query($conn, $query2);
-        if(mysqli_num_rows($result2) > 0) {
-            $row2 = mysqli_fetch_assoc($result2);
-            $customer_id = $row2['cust_id'];
-            // update customer record
-            $query3 = "UPDATE customer SET fname='$fname', lname='$lname', phone='$phone', address='$address' WHERE cust_id = '$customer_id'";
-            $result3 = mysqli_query($conn, $query3);
-        } else {
-            // insert into customer table and get customer_id
-            $query3 = "INSERT INTO customer (fname, lname, phone, address, account_id) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id')";
-            $result3 = mysqli_query($conn, $query3);
-            $customer_id = mysqli_insert_id($conn);
-        }
-    } else {
-        // insert new account and get account_id
-        $query = "INSERT INTO accounts (email) VALUES ('$email')";
-        $result = mysqli_query($conn, $query);
-        $account_id = mysqli_insert_id($conn);
+    // Update the service_request table with new values
+    $query = "UPDATE service_request SET service_id=?, pkg_id=?, other=?, date_req=?, date_completed=?, cust_id=?, status=?, payment=?, initial_payment=? WHERE sreq_id=?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'iisssisssi', $stype, $package, $other, $date, $completed, $custid, $status, $payment, $initial_payment, $id);
+    mysqli_stmt_execute($stmt);
 
-        // insert into customer table and get customer_id
-        $query3 = "INSERT INTO customer (fname, lname, phone, address, account_id) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id')";
-        $result3 = mysqli_query($conn, $query3);
-        $customer_id = mysqli_insert_id($conn);
+    // Remove any existing technicians assigned to this service request
+    $delete_query = "DELETE FROM service_request_technicians WHERE sreq_id = ?";
+    $delete_stmt = mysqli_prepare($conn, $delete_query);
+    mysqli_stmt_bind_param($delete_stmt, 'i', $id);
+    mysqli_stmt_execute($delete_stmt);
+
+    // Assign the new technicians to the service request and set their status to "Unavailable"
+    foreach ($techIds as $techId) {
+        $insert_query = "INSERT INTO service_request_technicians (sreq_id, tech_id) VALUES (?, ?)";
+        $insert_stmt = mysqli_prepare($conn, $insert_query);
+        mysqli_stmt_bind_param($insert_stmt, 'ii', $id, $techId);
+        mysqli_stmt_execute($insert_stmt);
+
+        // Update the technician status
+        $tech_status = "Unavailable";
+        $tech_update_query = "UPDATE technician SET status = ? WHERE tech_id = ?";
+        $tech_update_stmt = mysqli_prepare($conn, $tech_update_query);
+        mysqli_stmt_bind_param($tech_update_stmt, 'si', $tech_status, $techId);
+        mysqli_stmt_execute($tech_update_stmt);
     }
 
-    if ($status == 'Pending' || $status == 'Done' || $status == 'Completed') {
-    // update service_request table with new values
-    $query4 = "UPDATE service_request SET service_id='$stype', pkg_id='$package', other='$other', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician' WHERE transaction_code='$transaction_code'";
-    $result4 = mysqli_query($conn, $query4);
-
-    // update technician status
-    if ($status == 'In-progress') {
-        $tech_status = 'Unavailable';
-    } else {
-        $tech_status = 'Active';
-    }
-    $query5 = "UPDATE technician SET status = '$tech_status' WHERE tech_id = '$technician'";
-    $result5 = mysqli_query($conn, $query5);
-
-    }
-
-    if ($result5) {
-        header("location: view-transactions.php?msg=Record updated Successfully.&transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
+    if (mysqli_stmt_errno($stmt) == 0) {
+        $_SESSION['msg'] = "Record Updated Successfully";
+        header("location: transactions.php");
     } else {
         echo "FAILED: " . mysqli_error($conn);
     }
+    
 }
-
 ?>

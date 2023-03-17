@@ -15,7 +15,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../admin/dashboard.php">
+              <a class="nav-link" href="../technician_dashboard/dashboard.php">
                 <span class="menu-title">Dashboard</span>
                 <i class="fas fa-home menu-icon"></i>
               </a>
@@ -28,8 +28,8 @@
               </a>
               <div class="collapse <?php echo $rpshow; ?>" id="uibasic">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="../tech_repair/pending.php">Pending request</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../tech_repair/accept-pending.php">My Transactions</a></li>
+                    <li class="nav-item"> <a class="nav-link <?php echo $rppending; ?>" href="../tech_repair/pending.php">Pending request</a></li>
+                  <li class="nav-item"> <a class="nav-link <?php echo $rpactive; ?>" href="../tech_repair/transaction.php">My Transactions</a></li>
                 </ul>
               </div>
             </li>

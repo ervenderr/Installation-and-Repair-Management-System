@@ -133,7 +133,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                         echo '<td>' . $row['date_req'] . '</td>';
                                                         echo '<td class="btn-group-sm">';
                                                         echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
-                                                        echo 'View <i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i> View';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';

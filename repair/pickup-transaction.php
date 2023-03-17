@@ -206,7 +206,7 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Initial Payment:</span>
-                                            <span class="transaction-details-none"><?php echo $row2['payment']?></span>
+                                            <span class="transaction-details-none"><?php echo $row2['initial_payment']?></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">

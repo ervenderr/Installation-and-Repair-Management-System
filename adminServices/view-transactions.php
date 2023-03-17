@@ -19,6 +19,7 @@ $query = "SELECT sr.*,
        a.*,
        c.*,
        s.*,
+       invoice.*,
        p.*
 FROM service_request sr
 LEFT JOIN customer c ON sr.cust_id = c.cust_id
@@ -27,6 +28,7 @@ LEFT JOIN services s ON sr.service_id = s.service_id
 LEFT JOIN package p ON sr.pkg_id = p.pkg_id
 LEFT JOIN service_request_technicians srt ON sr.sreq_id = srt.sreq_id
 LEFT JOIN technician t ON srt.tech_id = t.tech_id
+LEFT JOIN invoice ON sr.invoice_id = invoice.invoice_id
 WHERE sr.transaction_code = '" . $tcode . "'
 GROUP BY sr.sreq_id;";
 
@@ -94,6 +96,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <td><?php echo $row['transaction_code']?></td>
                                             </tr>
                                             <tr>
+                                                <th>Invoice Number:</th>
+                                                <td><?php echo $row['invoice_no']?></td>
+                                            </tr>
+                                            <tr>
                                                 <?php
                                                 $statusClass = '';
                                                 if ($row['status'] == 'Pending') {
@@ -149,13 +155,16 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <th>Assigned Technicians:</th>
                                                 <td><?php echo $row['tech_names']; ?></td>
                                             </tr>
-
                                             <tr>
                                                 <th>Warranty:</th>
-                                                <td></td>
+                                                <td>3 Months</td>
                                             </tr>
                                             <tr>
-                                                <th>Payment:</th>
+                                                <th>Initial Payment:</th>
+                                                <td><?php echo $row['initial_payment']?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Full Payment:</th>
                                                 <td><?php echo $row['payment']?></td>
                                             </tr>
                                         </table>

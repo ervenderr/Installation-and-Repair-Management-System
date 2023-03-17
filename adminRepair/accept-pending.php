@@ -35,7 +35,7 @@ if(isset($_POST['submit'])) {
     $status = "Accepted";
 
 
-    $query = "UPDATE rprq SET payment = '$payment', status = '$status' WHERE id = '$id'";
+    $query = "UPDATE rprq SET initial_payment = '$payment', status = '$status' WHERE id = '$id'";
 
     $result = mysqli_query($conn, $query);
     

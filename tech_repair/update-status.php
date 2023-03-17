@@ -15,7 +15,7 @@ if (isset($_POST['id'])) {
   $output .= '
   <form method="POST" action="update-status.php" enctype="multipart/form-data">
         <div class="mb-3">
-          <label for="status" class="form-label">Technician</label>
+          <label for="status" class="form-label">Status</label>
           <select class="form-select" id="status" name="status">';
 
   // Query the supplier table
@@ -60,13 +60,16 @@ if (isset($_POST['id'])) {
           </select>
         </div>
         <div class="mb-3">
-        <label for="completed" class="form-label">Expected Completion</label>
+        <label for="completed" class="form-label">Completion Date</label>
         <input type="date" class="form-control" id="completed" name="completed">
+        
       </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <input name="submit" type="submit" class="btn btn-danger" value="Accept"/>
-        </div>
+          <input name="submit" type="submit" class="btn btn-success" value="Update"/>
+        </div>';
+        $output .= '<input type="hidden" id="hiddenInput" name="tech_id" value="' . $row6['tech_id'] . '">
+
   </form>';
 
   echo $output;
@@ -76,12 +79,11 @@ if (isset($_POST['id'])) {
 
 if (isset($_POST['submit'])) {
   $id = htmlentities($_SESSION['id']);
-  $techId = htmlentities($_POST['tech']);
-  $payment = htmlentities($_POST['payment']);
+  $techId =  htmlentities($_POST['tech_id']);
   $completed = htmlentities($_POST['completed']);
   $status = htmlentities($_POST['status']); // Get the value of the status
 
-  $query = "UPDATE rprq SET tech_id = '$techId', date_completed = '$completed', status = '$status' WHERE id = '$id'";
+  $query = "UPDATE rprq SET date_completed = '$completed', status = '$status' WHERE id = '$id'";
 
   $result = mysqli_query($conn, $query);
 
@@ -99,7 +101,7 @@ if (isset($_POST['submit'])) {
       $result2 = mysqli_query($conn, $query2);
   }
 
-  if ($result) {
+  if ($result2) {
       $_SESSION['msg'] = "Record Updated Successfully";
       header("location: transaction.php");
   } else {
