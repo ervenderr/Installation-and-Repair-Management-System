@@ -232,6 +232,15 @@ $row = mysqli_fetch_assoc($result);
                                             <span><?php echo $row2['tech_phone']?></span>
                                         </div>
                                     </div>
+                                    <div class="text-start">
+                                        <?php
+                                        if (!empty($row['invoice_id'])) {
+                                            $invoice_id = $row['invoice_id'];
+                                            echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-primary btn-fw ">
+                                            Download Invoice <i class="fas fa-download"></i></a>';
+                                        }
+                                        ?>
+                                </div>
                                 </div>
                             </div>
                             

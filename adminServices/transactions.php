@@ -130,7 +130,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';
-                                                        } else {
+                                                        } else if ($row['status'] == 'Completed') {
+                                                            $statusClass = 'badge-gradient-success';
+                                                        }else {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         }
                                                     
