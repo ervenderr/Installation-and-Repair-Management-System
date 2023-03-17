@@ -226,7 +226,7 @@ $row = mysqli_fetch_assoc($result);
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
                                                 Technician:</span>
-                                            <span><?php echo $row['fname'] . " " . $row['lname']?></span>
+                                            <span><?php echo $row['tech_fname'] . " " . $row['tech_lname']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Technician's Contact:</span>
