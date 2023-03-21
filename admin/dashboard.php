@@ -38,7 +38,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     </div>
                     <div class="row">
                         <div class="col-md-5 stretch-card grid-margin">
-                            <div class="card bg-gradient-danger card-img-holder text-white">
+                            <div class="card bg-c-pink card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
                     // Query for current week's count
@@ -72,8 +72,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         $percentage_change = 0;
                     }
                     ?>
-                                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                        alt="circle-image" />
                                     <h4 class="font-weight-normal mb-3">Weekly Repair Request <i
                                             class="mdi mdi-chart-line mdi-24px float-right"></i>
                                     </h4>
@@ -85,7 +83,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </div>
                         </div>
                         <div class="col-md-5 stretch-card grid-margin">
-                            <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card bg-c-blue card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
     $sql_current2 = "SELECT COUNT(*) AS count FROM service_request WHERE date_req >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
@@ -119,8 +117,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     }
 ?>
 
-                                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                        alt="circle-image" />
                                     <h4 class="font-weight-normal mb-3">Weekly Service Request <i
                                             class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                                     </h4>
@@ -134,7 +130,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     </div>
                     <div class="row">
                         <div class="col-md-5 stretch-card grid-margin">
-                            <div class="card bg-gradient-warning card-img-holder text-white">
+                            <div class="card bg-c-yellow card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
                     $sql = "SELECT COUNT(*) AS count FROM rprq WHERE status = 'Pending'";
@@ -147,8 +143,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                       $count = 0;
                   }
                     ?>
-                                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                        alt="circle-image" />
                                     <h4 class="font-weight-normal mb-3">Pending Repair Request <i
                                             class="mdi mdi-chart-line mdi-24px float-right"></i>
                                     </h4>
@@ -157,7 +151,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </div>
                         </div>
                         <div class="col-md-5 stretch-card grid-margin">
-                            <div class="card bg-gradient-primary card-img-holder text-white">
+                            <div class="card bg-c-green card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
                     $sql = "SELECT COUNT(*) AS count FROM service_request WHERE status = 'Pending'";
@@ -170,8 +164,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                       $count2 = 0;
                   }
                     ?>
-                                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                        alt="circle-image" />
                                     <h4 class="font-weight-normal mb-3">Pending Service Request <i
                                             class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                                     </h4>

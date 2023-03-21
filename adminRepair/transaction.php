@@ -68,7 +68,6 @@ require_once '../homeIncludes/dbconfig.php';
                             <div class="row mg-btm">
                                 <div class="col-sm-12 col-md-6 flex">
                                     <h4 class="card-title">List of Repair Transaction</h4>
-
                                 </div>
                                 <div class="col-sm-12 col-md-6 flex flexm">
                                     <div id="example_filter" class="dataTables_filter"><label>Search:<input type="text"
@@ -86,6 +85,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                     <th> Customer </th>
                                                     <th> Status </th>
                                                     <th> Date </th>
+                                                    <th> Backlog </th>
                                                     <th> Action </th>
                                                 </tr>
                                             </thead>
@@ -111,7 +111,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                     $second_last = $total_no_of_page - 1;
 
                                                     // Perform the query
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
+                                                    $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
                                                         WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed'";
@@ -126,29 +126,38 @@ require_once '../homeIncludes/dbconfig.php';
                                                         echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
                                                     
                                                         $statusClass = '';
+                                                        
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
                                                         } else if ($row['status'] == 'In-progress') {
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-success';
+                                                            $statusClass = 'badge-gradient-danger';
                                                         } else if ($row['status'] == 'Completed') {
                                                             $statusClass = 'badge-gradient-success';
                                                         } else {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         }
+
+                                                        $backlog = '';
+                                                        if ($row['backlog'] == '1') {
+                                                            $backlog = 'backlog-red';
+                                                        }else{
+                                                            $backlog = 'badge-gradient-success';
+                                                        }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td><span class="badge ' . $backlog . ' not-back"> </span></td>';
                                                         echo '<td>';
                                                         echo '<a class="icns" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '<a class="icns" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-edit text-white view-account edit" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-trash-alt text-white view-account delete" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';

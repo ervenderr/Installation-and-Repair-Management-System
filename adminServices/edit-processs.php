@@ -41,11 +41,21 @@ if (isset($_POST['submit'])) {
         mysqli_stmt_execute($insert_stmt);
 
         // Update the technician status
-        $tech_status = "Unavailable";
-        $tech_update_query = "UPDATE technician SET status = ? WHERE tech_id = ?";
-        $tech_update_stmt = mysqli_prepare($conn, $tech_update_query);
-        mysqli_stmt_bind_param($tech_update_stmt, 'si', $tech_status, $techId);
-        mysqli_stmt_execute($tech_update_stmt);
+        $techStatus = '';
+        if ($status == 'In-progress') {
+            $techStatus = 'Unavailable';
+        } else if (in_array($status, ['Pending', 'Accepted', 'Done', 'Completed'])) {
+            $techStatus = 'Active';
+        }
+
+        if (!empty($techStatus)) {
+            $tech_update_query = "UPDATE technician SET status = ? WHERE tech_id = ?";
+            $tech_update_stmt = mysqli_prepare($conn, $tech_update_query);
+            mysqli_stmt_bind_param($tech_update_stmt, 'si', $tech_status, $techId);
+            mysqli_stmt_execute($tech_update_stmt);
+        }
+
+
     }
 
     if (mysqli_stmt_errno($stmt) == 0) {
