@@ -5,6 +5,7 @@ require_once '../homeIncludes/dbconfig.php';
 if (isset($_POST['submit'])) {
     $product_id = $_SESSION['rowid'];
     // assign form data to variables
+    $category = $_POST['category'];
     $pname = $_POST['pname'];
     $price = $_POST['price'];
     $description = $_POST['description'];
@@ -34,6 +35,7 @@ if (isset($_POST['submit'])) {
 
     // Build the SQL query string
     $sql = "UPDATE products SET ";
+    $sql .= "categ_id = ?, ";
     $sql .= "name = ?, ";
     $sql .= "price = ?, ";
     $sql .= "description = ?, ";
@@ -59,21 +61,21 @@ if (isset($_POST['submit'])) {
 
     // Bind parameters to the statement
     if (!empty($image_contents[1]) && !empty($image_contents[2]) && !empty($image_contents[3])) {
-        mysqli_stmt_bind_param($stmt, "sdssssssssb", $pname, $price, $description, $full, $features, $image_contents[1], $image_contents[2], $image_contents[3], $status, $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdssssssssb", $category, $pname, $price, $description, $full, $features, $image_contents[1], $image_contents[2], $image_contents[3], $status, $product_id);
     } else if (!empty($image_contents[1]) && !empty($image_contents[2])) {
-        mysqli_stmt_bind_param($stmt, "sdsssssssb", $pname, $price, $description, $full, $features, $image_contents[1], $image_contents[2], $status, $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdsssssssb", $category, $pname, $price, $description, $full, $features, $image_contents[1], $image_contents[2], $status, $product_id);
     } else if (!empty($image_contents[1]) && !empty($image_contents[3])) {
-        mysqli_stmt_bind_param($stmt, "sdsssssbbs", $pname, $price, $description, $full, $features, $image_contents[1], $status, $image_contents[3], $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdsssssbbs", $category, $pname, $price, $description, $full, $features, $image_contents[1], $status, $image_contents[3], $product_id);
     } else if (!empty($image_contents[2]) && !empty($image_contents[3])) {
-        mysqli_stmt_bind_param($stmt, "sdssssbssb", $pname, $price, $description, $full, $features, $status, $image_contents[2], $image_contents[3], $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdssssbssb", $category, $pname, $price, $description, $full, $features, $status, $image_contents[2], $image_contents[3], $product_id);
     } else if (!empty($image_contents[1])) {
-        mysqli_stmt_bind_param($stmt, "sdsssssb", $pname, $price, $description, $full, $features, $image_contents[1], $status, $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdsssssb", $category, $pname, $price, $description, $full, $features, $image_contents[1], $status, $product_id);
     } else if (!empty($image_contents[2])) {
-        mysqli_stmt_bind_param($stmt, "sdssssb", $pname, $price, $description, $full, $features, $image_contents[2], $status, $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdssssb", $category, $pname, $price, $description, $full, $features, $image_contents[2], $status, $product_id);
     } else if (!empty($image_contents[3])) {
-        mysqli_stmt_bind_param($stmt, "sdsssb", $pname, $price, $description, $full, $features, $image_contents[3], $status, $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdsssb", $category, $pname, $price, $description, $full, $features, $image_contents[3], $status, $product_id);
     } else {
-        mysqli_stmt_bind_param($stmt, "sdssssi", $pname, $price, $description, $full, $features, $status, $product_id);
+        mysqli_stmt_bind_param($stmt, "ssdssssi", $category, $pname, $price, $description, $full, $features, $status, $product_id);
     }
 
     // Execute the statement

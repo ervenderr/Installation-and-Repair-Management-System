@@ -34,7 +34,7 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="page-header">
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
-                            <i class="fas fa-box menu-icon"></i>
+                                <i class="fas fa-box menu-icon"></i>
                             </span> Products <span class="bread">/ Update product info</span>
                         </h3>
                         <nav aria-label="breadcrumb">
@@ -56,7 +56,9 @@ if (mysqli_num_rows($result) > 0) {
                                     <form class="form-sample" action="edit-process.php" method="POST"
                                         enctype="multipart/form-data">
                                         <?php
-                                        $query6 = "SELECT * FROM products WHERE products.product_id = '" . $rowid . "';";
+                                        $query6 = "SELECT * FROM products 
+                                        LEFT JOIN category ON products.categ_id = category.categ_id
+                                        WHERE products.product_id = '" . $rowid . "';";
                                         $result6 = mysqli_query($conn, $query6);
                                         
                                         // Check if the query was successful and output the data
@@ -64,24 +66,47 @@ if (mysqli_num_rows($result) > 0) {
                                             $row6 = mysqli_fetch_assoc($result6);
 
                                         }
+                                        $selected_category_id = $row6['categ_id'];
                                         ?>
                                         <p class="card-description">Update Product info </p>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group row">
-                                                    <label class="col-form-label" for="pname">Product Name</label>
+                                                    <label class="col-form-label" for="category">Category</label>
                                                     <div class="">
-                                                        <input type="text" name="pname" class="form-control" value="<?php echo $row6['name']; ?>" />
+                                                        <select name="category" id="" class="form-control">
+                                                            <option value="None">--- Select ---</option>
+                                                            <?php
+                                                                $sql2 = "SELECT * FROM category";
+                                                                $result3 = mysqli_query($conn, $sql2);
+                                                                while ($category = mysqli_fetch_assoc($result3)) {
+                                                                    $categ_id = mysqli_real_escape_string($conn, $category['categ_id']);
+                                                                    $selected = ($categ_id == $selected_category_id) ? "selected" : "";
+                                                                    echo "<option value='{$categ_id}' {$selected}>{$category['categ_name']}</option>";
+                                                                }                                                        
+                                                                ?>
+                                                        </select>
                                                         <span class="error-input"></span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label class="col-form-label" for="pname">Product Name</label>
+                                                    <div class="">
+                                                        <input type="text" name="pname" class="form-control"
+                                                            value="<?php echo $row6['name']; ?>" />
+                                                        <span class="error-input"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <div class="form-group row">
                                                     <label class="col-form-label" for="price">Price</label>
                                                     <div class="">
-                                                        <input type="number" step=".01" name="price" class="form-control"
-                                                        value="<?php echo $row6['price']; ?>" />
+                                                        <input type="number" step=".01" name="price"
+                                                            class="form-control"
+                                                            value="<?php echo $row6['price']; ?>" />
                                                         <span class="error-input"></span>
                                                     </div>
                                                 </div>
@@ -93,7 +118,7 @@ if (mysqli_num_rows($result) > 0) {
                                                     <label for="description" class="col-form-label">Description</label>
                                                     <div class="">
                                                         <input name="description" class="form-control" type="text"
-                                                        value="<?php echo $row6['description']; ?>">
+                                                            value="<?php echo $row6['description']; ?>">
                                                         <span class="error-input"></span>
                                                     </div>
                                                 </div>
@@ -102,7 +127,8 @@ if (mysqli_num_rows($result) > 0) {
                                                 <div class="form-group row">
                                                     <label class="col-form-label" for="img1">Image 1</label>
                                                     <div class="">
-                                                        <input type="file" class="form-control" id="img1" name="img1" value=""/>
+                                                        <input type="file" class="form-control" id="img1" name="img1"
+                                                            value="" />
                                                         <span class="error-input"></span>
                                                     </div>
                                                 </div>
@@ -143,7 +169,8 @@ if (mysqli_num_rows($result) > 0) {
                                                 <div class="form-group row">
                                                     <label for="full" class="col-form-label">Full Descriptions</label>
                                                     <div class="">
-                                                        <textarea class="form-control" name="full" rows="10"><?php echo $row6['full_descriptions']; ?></textarea>
+                                                        <textarea class="form-control" name="full"
+                                                            rows="10"><?php echo $row6['full_descriptions']; ?></textarea>
                                                         <span class="error-input"></span>
                                                     </div>
                                                 </div>
@@ -152,7 +179,8 @@ if (mysqli_num_rows($result) > 0) {
                                         <div class="row">
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal"><a href="sample.php">Close</a> Close</button>
+                                                    data-bs-dismiss="modal"><a href="sample.php">Close</a>
+                                                    Close</button>
                                                 <input name="submit" type="submit" class="btn btn-primary"
                                                     value="Update Product" />
 
@@ -209,62 +237,62 @@ if (mysqli_num_rows($result) > 0) {
         });
         </script>
 
-<script>
-    const form = document.querySelector('.form-sample');
-    const pname = form.querySelector('input[name="pname"]');
-    const price = form.querySelector('input[name="price"]');
-    // const email = form.querySelector('input[name="email"]');
-    const description = form.querySelector('input[name="description"]');
-    const full = form.querySelector('textarea[name="full"]');
-    const features = form.querySelector('textarea[name="features"]');
+        <script>
+        const form = document.querySelector('.form-sample');
+        const pname = form.querySelector('input[name="pname"]');
+        const price = form.querySelector('input[name="price"]');
+        // const email = form.querySelector('input[name="email"]');
+        const description = form.querySelector('input[name="description"]');
+        const full = form.querySelector('textarea[name="full"]');
+        const features = form.querySelector('textarea[name="features"]');
 
 
-    form.addEventListener('submit', (event) => {
-        let error = false;
+        form.addEventListener('submit', (event) => {
+            let error = false;
 
-        if (pname.value === '') {
-            pname.nextElementSibling.innerText = 'Please enter a Product name';
-            error = true;
-        } else {
-            pname.nextElementSibling.innerText = '';
-        }
+            if (pname.value === '') {
+                pname.nextElementSibling.innerText = 'Please enter a Product name';
+                error = true;
+            } else {
+                pname.nextElementSibling.innerText = '';
+            }
 
-        if (price.value === '') {
-            price.nextElementSibling.innerText = 'Please enter a price';
-            error = true;
-        } else {
-            price.nextElementSibling.innerText = '';
-        }
+            if (price.value === '') {
+                price.nextElementSibling.innerText = 'Please enter a price';
+                error = true;
+            } else {
+                price.nextElementSibling.innerText = '';
+            }
 
-        if (description.value === '') {
-            description.nextElementSibling.innerText = 'Please enter a description';
-            error = true;
-        }else {
-            description.nextElementSibling.innerText = '';
-        }
+            if (description.value === '') {
+                description.nextElementSibling.innerText = 'Please enter a description';
+                error = true;
+            } else {
+                description.nextElementSibling.innerText = '';
+            }
 
-        if (full.value === '') {
-            full.nextElementSibling.innerText = 'Please enter the full descriptions of the product';
-            error = true;
-        }else {
-            full.nextElementSibling.innerText = '';
-        }
+            if (full.value === '') {
+                full.nextElementSibling.innerText = 'Please enter the full descriptions of the product';
+                error = true;
+            } else {
+                full.nextElementSibling.innerText = '';
+            }
 
-        if (features.value === '') {
-            features.nextElementSibling.innerText = 'Please enter the features of the product';
-            error = true;
-        }else {
-            features.nextElementSibling.innerText = '';
-        }
+            if (features.value === '') {
+                features.nextElementSibling.innerText = 'Please enter the features of the product';
+                error = true;
+            } else {
+                features.nextElementSibling.innerText = '';
+            }
 
-        if (error) {
-            event.preventDefault(); // Prevent form submission if there are errors
-        } else {
-            // Submit form to server if there are no errors
-            // You can use AJAX to submit the form asynchronously, or just let it submit normally
-        }
-    });
-    </script>
+            if (error) {
+                event.preventDefault(); // Prevent form submission if there are errors
+            } else {
+                // Submit form to server if there are no errors
+                // You can use AJAX to submit the form asynchronously, or just let it submit normally
+            }
+        });
+        </script>
 </body>
 
 </html>

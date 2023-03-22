@@ -8,9 +8,15 @@ include_once('../tools/variables.php');
 $rowid = $_GET['prod_id'];
 $_SESSION['rowid'] = $rowid;
 // Perform the query to retrieve the data for the selected row
-$query2 = "SELECT * FROM products
+$query2 = "SELECT products.*, 
+SUM(inventory.stock_in) as stock_in,
+SUM(inventory.stockout) as stockout,
+SUM(inventory.stock_in) - SUM(inventory.stockout) as total_stocks
+FROM products
 LEFT JOIN inventory ON products.product_id = inventory.product_id
-WHERE products.product_id = '" . $rowid . "';";
+WHERE products.product_id = '" . $rowid . "'
+GROUP BY products.product_id;";
+
 $result2 = mysqli_query($conn, $query2);
 
 
@@ -107,22 +113,10 @@ $invactive = "active";
                                                 ?></td>
                                             </tr>
                                             <tr>
-                                                <?php
-                                                $qty = '';
-                                                $statusClass = '';
-                                                if ($row2['status'] == 'Backordered') {
-                                                    $statusClass = 'badge-gradient-warning';
-                                                } else if ($row2['status'] == 'Inactive') {
-                                                    $statusClass = 'badge-gradient-danger';
-                                                } else if ($row2['status'] == 'In-Stock') {
-                                                    $statusClass = 'badge-gradient-success';
-                                                } else {
-                                                    $statusClass = 'badge-gradient-secondary';
-                                                }
-                                                echo '<th class="bg-gryy">Status:</th>';
-                                                echo '<td><label class="badge ' . $statusClass . '">' . $row2['status'] . '</label></td>';
-                                                ?>
-                                            </tr>
+    <th class="bg-gryy">Total Stocks:</th>
+    <td><?php echo $row2['total_stocks'] < 0 ? 'Stockout' : $row2['total_stocks']; ?></td>
+</tr>
+
                                         </table>
                                     </div>
                                 </div>
@@ -132,44 +126,27 @@ $invactive = "active";
                                 <div class="col-12 grid-margin">
                                     <div class="table-responsive">
                                         <div class="d-flex btn-group-sm supp">
-                                            <h4>Stock in records</h4>
+                                            <h4>Stock Records</h4>
                                             <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addSuppModal">
-                                        Create New<i class=" mdi mdi-plus "></i>
-                                    </button>
+                                                data-bs-target="#addSuppModal">
+                                                <i class=" mdi mdi-plus ">New</i>
+                                            </button>
                                         </div>
-                                        <table class="table table-hover">
+                                        <table class="table table-hover" id="myDataTable">
                                             <thead>
                                                 <tr class="bg-our">
                                                     <th> # </th>
                                                     <th> Supplier </th>
-                                                    <th> Quantity </th>
+                                                    <th> Stock-in </th>
                                                     <th> Stock-in Date </th>
+                                                    <th> Stock-Out </th>
+                                                    <th> Stock-out Date </th>
+                                                    <th> cost </th>
                                                     <th> Action </th>
                                                 </tr>
                                             </thead>
                                             <tbody id="myTable">
                                                 <?php
-
-                                                    
-                                                    if(isset($_GET['page_no']) && $_GET['page_no'] !=''){
-                                                        $page_no = $_GET['page_no'];
-                                                    }else{
-                                                        $page_no = 1;
-                                                    }
-
-                                                    $total_record_per_page = 10;
-                                                    $offset = ($page_no-1) * $total_record_per_page;
-                                                    $previous_page = $page_no -1;
-                                                    $next_page = $page_no +1;
-                                                    $adjacent = "2";
-
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM inventory
-                                                    JOIN products ON products.product_id = inventory.product_id");
-                                                    $total_records = mysqli_fetch_array($result_count);
-                                                    $total_records = $total_records['total_records'];
-                                                    $total_no_of_page = ceil($total_records / $total_record_per_page);
-                                                    $second_last = $total_no_of_page - 1;
                                                 
                                                     // Perform the query
                                                     $query = "SELECT * FROM inventory
@@ -190,13 +167,15 @@ $invactive = "active";
                                                                     echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
                                                                     echo '<td>' . $row['stock_in'] . '</td>';
                                                                     echo '<td>' . $row['stock_in_date'] . '</td>';
-                                                                    
+                                                                    echo '<td>' . $row['stockout'] . '</td>';
+                                                                    echo '<td>' . $row['stock_out_date'] . '</td>';
+                                                                    echo '<td>' . $row['cost'] . '</td>';
                                                                     echo '<td class="btn-group-sm">';
-                                                                    echo '<button class="icns btn btn-info edit" id="' .  $row['inv_id'] . '">';
-                                                                    echo 'Edit <i class="fas fa-edit view-account" id="' .  $row['inv_id'] . '"></i>';
+                                                                    echo '<button class="icns btn btn-info edit edit-invo" id="' .  $row['inv_id'] . '">';
+                                                                    echo '<i class="fas fa-edit view-account" id="' .  $row['inv_id'] . '"></i>';
                                                                     echo '</button>';
                                                                     echo '<button class="icns btn btn-danger delete" id="' .  $row['inv_id'] . '">';
-                                                                    echo 'Delete <i class="fas fa-trash-alt view-account" id="' .  $row['inv_id'] . '"></i>';
+                                                                    echo '<i class="fas fa-trash-alt view-account" id="' .  $row['inv_id'] . '"></i>';
                                                                     echo '</button>';
                                                                     echo '</td>';
                                                                     echo '</tr>';
@@ -224,79 +203,88 @@ $invactive = "active";
                 </div>
 
                 <!--Add Modal -->
-<div class="modal fade" id="addSuppModal" tabindex="-1" aria-labelledby="addSuppModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addSuppModalLabel">Add New</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="add-inventory.php" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label for="supplierSelect" class="form-label">Supplier</label>
-            <select class="form-select" id="supplierSelect" name="supplierSelect">
-                <option value="None">--- select ---</option>
-            <?php
-            // Query the supplier table
-            $sql = "SELECT * FROM supplier";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='" . $row["supplier_id"] . "'>" . $row['fname'] . '  ' . $row['lname'] . "</option>";
-                }
-              }
-            ?>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="quantityInput" class="form-label">Quantity</label>
-            <input type="number" class="form-control" id="quantityInput" name="quantityInput">
-          </div>
-          <div class="mb-3">
-            <label for="stockInDateInput" class="form-label">Stock-in Date</label>
-            <input type="date" class="form-control" id="stockInDateInput" name="stockInDateInput">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <input name="submit" type="submit" class="btn btn-success" value="Save"/>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+                <div class="modal fade" id="addSuppModal" tabindex="-1" aria-labelledby="addSuppModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addSuppModalLabel">Add New</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="add-inventory.php" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="supplierSelect" class="form-label">Supplier</label>
+                                        <select class="form-select" id="supplierSelect" name="supplierSelect">
+                                            <option value="None">--- select ---</option>
+                                            <?php
+                                                // Query the supplier table
+                                                $sql = "SELECT * FROM supplier";
+                                                $result = mysqli_query($conn, $sql);
+                                                if (mysqli_num_rows($result) > 0) {
+                                                    while($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<option value='" . $row["supplier_id"] . "'>" . $row['fname'] . '  ' . $row['lname'] . "</option>";
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="quantityInput" class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" id="quantityInput"
+                                            name="quantityInput">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="stockInDateInput" class="form-label">Stock-in Date</label>
+                                        <input type="date" class="form-control" id="stockInDateInput"
+                                            name="stockInDateInput">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <input name="submit" type="submit" class="btn btn-success" value="Save" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
-<!--edit Modal -->
-<div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editSuppModalLabel">Edit record</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body suppbody">
-        
-      </div>
-    </div>
-  </div>
-</div>
+                <!--edit Modal -->
+                <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editSuppModalLabel">Edit record</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body suppbody">
 
-<!--delete Modal -->
-<div class="modal fade" id="deleteSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editSuppModalLabel">Delete record</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body delsupp">
-        
-      </div>
-    </div>
-  </div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--delete Modal -->
+                <div class="modal fade" id="deleteSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editSuppModalLabel">Delete record</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body delsupp">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 
@@ -346,49 +334,53 @@ $invactive = "active";
     });
     </script>
 
-<script>
-  $(document).ready(function(){
-    $('.edit').click(function(){
+    <script>
+    $(document).ready(function() {
+        $('.edit').click(function() {
 
-        id =  $(this).attr('id');
-        $.ajax({
-        url: 'edit-inventory.php',
-        method: 'post',
-        data: {inv_id:id},
-        success: function(result) {
-            // Handle successful response
-            $('.suppbody').html(result);
-        }
-        });
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'edit-inventory.php',
+                method: 'post',
+                data: {
+                    inv_id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.suppbody').html(result);
+                }
+            });
 
 
-      $('#editSuppModal').modal('show');
+            $('#editSuppModal').modal('show');
+        })
     })
-  })
-</script>
+    </script>
 
-<script>
-$(document).ready(function(){
-    $('.delete').click(function(){
+    <script>
+    $(document).ready(function() {
+        $('.delete').click(function() {
 
-        id =  $(this).attr('id');
-        $.ajax({
-        url: 'delete-inventory.php',
-        method: 'post',
-        data: {inv_id:id},
-        success: function(result) {
-            // Handle successful response
-            $('.delsupp').html(result);
-        }
-        });
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'delete-inventory.php',
+                method: 'post',
+                data: {
+                    inv_id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.delsupp').html(result);
+                }
+            });
 
 
-      $('#deleteSuppModal').modal('show');
+            $('#deleteSuppModal').modal('show');
+        })
     })
-  })
-</script>
+    </script>
 
-<script>
+    <script>
     // Set a timer to hide the alert after 3 seconds
     const alert = document.querySelector("#alert");
     if (alert) {
@@ -396,7 +388,17 @@ $(document).ready(function(){
             alert.style.display = "none";
         }, 2000);
     }
-</script>
+    </script>
+
+<script>
+    j(document).ready(function() {
+        j('#myDataTable').DataTable();
+    });
+
+    j(document).ready(function() {
+        j('#myDataTable2').DataTable();
+    });
+    </script>
 
 </body>
 

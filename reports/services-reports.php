@@ -35,7 +35,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 <a class="nav-link" href="backlogs.php">Backlogs / Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link disabled"></a>
+                            <a class="nav-link"  href="product-reports.php">Products</a>
                             </li>
                         </ul>
                     </div>

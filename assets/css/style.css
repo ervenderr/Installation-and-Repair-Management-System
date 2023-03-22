@@ -22276,3 +22276,7 @@ option{
 th{
   text-transform: uppercase;
 }
+
+.edit-invo{
+  background: #0050e3 !important;
+}

@@ -119,27 +119,12 @@ $prodactive = "active";
                                                 <img class="imgsz" src="' . $image_src2 . '" alt="img3" class="">';
                                                 ?></td>
                                             </tr>
-                                            <tr>
-                                                <?php
-                                                $statusClass = '';
-                                                if ($row['status'] == 'Backordered') {
-                                                    $statusClass = 'badge-gradient-warning';
-                                                } else if ($row['status'] == 'Inactive') {
-                                                    $statusClass = 'badge-gradient-danger';
-                                                } else if ($row['status'] == 'In-Stock') {
-                                                    $statusClass = 'badge-gradient-success';
-                                                } else {
-                                                    $statusClass = 'badge-gradient-secondary';
-                                                }
-                                                echo '<th class="bg-gryy">Status:</th>';
-                                                echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
-                                                ?>
-                                            </tr>
+                                            
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">
                                             <?php
                                             echo '<a href="edit-product.php?&rowid=' .  $row['product_id'] . '" class="btn btn-success btn-fw">Update Details   <i class="fas fa-edit text-white"></i></a>';
-                                            echo '<a href="delete-product.php&rowid=' .  $row['product_id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
+                                            echo '<a href="delete-product.php?&rowid=' .  $row['product_id'] . '" class="btn btn-danger btn-fw red">Delete Details   <i class="fas fa-trash-alt text-white"></i></a>';
                                             ?>
                                         </div>
                                     </div>

@@ -35,7 +35,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 <a class="nav-link" href="backlogs.php">Backlogs / Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link disabled"></a>
+                            <a class="nav-link"  href="product-reports.php">Products</a>
                             </li>
                         </ul>
                     </div>
@@ -319,10 +319,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         var table = document.getElementById(tableId);
         var doc = new jsPDF();
 
-        // Required for jsPDF to work with autoTable correctly
         doc.setFontSize(10);
 
-        // Add a header title
         var title = 'Repair request transactions';
         var titleWidth = doc.getStringUnitWidth(title) * doc.internal.getFontSize() / doc.internal.scaleFactor;
         var x = (doc.internal.pageSize.width - titleWidth) / 2;
@@ -345,7 +343,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 
     document.getElementById('exportExcel').addEventListener('click', function() {
-        // Replace 'myDataTable' with the actual ID of the table you want to export
         exportTableToExcel('myDataTable', 'table_export.xlsx');
     });
 

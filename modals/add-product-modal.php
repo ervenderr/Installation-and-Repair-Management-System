@@ -10,7 +10,25 @@
                 <form class="form-sample" action="add-product.php" method="POST" enctype="multipart/form-data">
                     <p class="card-description"> Product info </p>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-form-label" for="category">Category</label>
+                                <div class="">
+                                    <select name="category" id="" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                        <?php
+                                            $sql = "SELECT * FROM category";
+                                            $result = mysqli_query($conn, $sql);
+                                            while($row = mysqli_fetch_assoc($result)) {
+                                                echo '<option value="' . $row["categ_id"] . '">' . $row["categ_name"] . '</option>';
+                                            }
+                                        ?>
+                                    </select>
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group row">
                                 <label class="col-form-label" for="pname">Product Name</label>
                                 <div class="">
@@ -19,7 +37,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group row">
                                 <label class="col-form-label" for="price">Price</label>
                                 <div class="">

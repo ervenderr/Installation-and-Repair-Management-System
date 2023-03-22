@@ -112,6 +112,18 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 echo "<td><span class='badge " . $statusClass . "'>" . $row['rprq_status'] . "</span></td>";
                                                 ?>
                                             </tr>
+                                            <?php
+                                            $backlog = '';
+                                            if ($row['backlog'] == '1') {
+                                                $backlog = 'backlog-red';
+                                            }else{
+                                                $backlog = 'badge-gradient-success';
+                                            }
+                                            ?>
+                                            <tr>
+                                                <th>Backlog:</th>
+                                                <td><span class="badge <?php echo $backlog; ?> not-back"> </span></td>
+                                            </tr>
                                             <tr>
                                                 <th>Customer Name:</th>
                                                 <td><?php echo $row['cust_fname'] ." " .  $row['cust_lname']?></td>

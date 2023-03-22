@@ -156,7 +156,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                         echo '<a class="icns" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
                                                         echo '<i class="fas fa-edit text-white view-account edit" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
+                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
                                                         echo '<i class="fas fa-trash-alt text-white view-account delete" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';

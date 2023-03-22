@@ -32,16 +32,16 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 <a class="nav-link" href="services-reports.php">Services Sales Report</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="backlogs.php">Backlogs / Cancelled</a>
+                                <a class="nav-link" href="backlogs.php">Backlogs / Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link"  href="product-reports.php">Products</a>
+                                <a class="nav-link active" href="product-reports.php">Products</a>
                             </li>
                         </ul>
                     </div>
                     <div class="card report-card-two text-center rp-card">
                         <div class="card-body">
-                            <h4 class="card-title">Backlogs Request Record</h4>
+                            <h4 class="card-title">Products Record</h4>
                             <div class="row">
                                 <div class="col-12 grid-margin">
                                     <div class="table-responsive">
@@ -55,108 +55,47 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                         <table class="table table-hover" id="myDataTable2">
                                             <thead>
                                                 <tr class="bg-our">
-                                                    <th> # </th>
-                                                    <th> TRANSACTION ID </th>
-                                                    <th> ASSINGED TECHNICIAN </th>
-                                                    <th> TYPE </th>
-                                                    <th> DATE </th>
-                                                    <th> STATUS </th>
-                                                    <th> TOTAL </th>
+                                                    <th> SKU </th>
+                                                    <th> Product Name </th>
+                                                    <th> Category </th>
+                                                    <th> Cost </th>
+                                                    <th> Price </th>
+                                                    <th> Stock-in </th>
+                                                    <th> Stock-out </th>
+                                                    <th> Total stock </th>
                                                     <th> ACTION </th>
                                                 </tr>
                                             </thead>
                                             <tbody id="myTable2">
                                                 <?php
-                                            $sql_all = "SELECT rprq.*, 
-                                            customer.fname AS cust_fname, 
-                                            customer.lname AS cust_lname, 
-                                            technician.fname AS tech_fname, 
-                                            technician.lname AS tech_lname, 
-                                            technician.status AS tech_status_new_name, 
-                                            rprq.status AS rprq_status, 
-                                            accounts.*,
-                                            technician.*,
-                                            invoice.*,
-                                            customer.*
-                                          FROM rprq
-                                          LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-                                          LEFT JOIN customer ON rprq.cust_id = customer.cust_id
-                                          LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                                          LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
-                                            WHERE backlog=1 ORDER BY date_completed DESC";
+                                            $sql_all = "SELECT products.*, 
+                                            SUM(inventory.stock_in) as stock_in,
+                                            SUM(inventory.stockout) as stockout,
+                                            SUM(inventory.stock_in) - SUM(inventory.stockout) as total_stocks,
+                                            COALESCE(inventory.cost, '') AS cost,
+                                            category.categ_name
+                                            FROM products
+                                            LEFT JOIN inventory ON products.product_id = inventory.product_id
+                                            INNER JOIN category ON products.categ_id = category.categ_id
+                                            GROUP BY products.product_id;";
+                                            
                                             $result_all = $conn->query($sql_all);
                                             if ($result_all->num_rows > 0) {
                                                 $count = 1;
                                                 while ($row = $result_all->fetch_assoc()) {
                                                     echo "<tr>";
-                                                    echo "<td>" . $count . "</td>";
-                                                    echo "<td>" . $row["transaction_code"] . "</td>"; 
-                                                    echo "<td>" . $row["tech_fname"] . " " . $row["tech_lname"] ."</td>"; 
-                                                    echo "<td>" . $row["type"] . "</td>"; 
-                                                    echo "<td>" . $row["date_completed"] . "</td>"; 
-                                                    echo "<td>" . $row["status"] . "</td>"; 
-                                                    echo "<td>" . $row["payment"] . "</td>";
+                                                    echo "<td>" . $row["sku"] . "</td>"; 
+                                                    echo "<td>" . $row["name"] . "</td>"; 
+                                                    echo "<td>" . $row["categ_name"] . "</td>"; 
+                                                    echo "<td>" . $row["cost"] . "</td>"; 
+                                                    echo "<td>" . $row["price"] . "</td>"; 
+                                                    echo "<td>" . $row["stock_in"] . "</td>";
+                                                    echo "<td>" . $row["stockout"] . "</td>";
+                                                    echo "<td>" . $row["total_stocks"] . "</td>";
                                                     echo '<td>';
-                                                    echo '<a class="icns" href="../adminServices/view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                    echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['id'] . '"></i>';
-                                                    echo '</a>';
-                                                    echo '</td>';
-                                                    echo "</tr>";
-                                                    $count++;
-                                                }
-                                            } else {
-                                                echo "<tr><td colspan='6'>No data found</td></tr>";
-                                            }
-                                            ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card report-card-two text-center rp-card">
-                        <div class="card-body">
-                            <h4 class="card-title">Cancelled Request Record</h4>
-                            <div class="row">
-                                <div class="col-12 grid-margin">
-                                    <div class="table-responsive">
-                                        <div class="btn-group text-center" role="group">
-                                            <button type="button" class="xpt" id="exportExcel">Export to
-                                                Excel</button>
-                                            <button type="button" class="xpt" id="exportPdf">Export to
-                                                PDF</button>
-                                        </div>
-                                        <table class="table table-hover" id="myDataTable">
-                                            <thead>
-                                                <tr class="bg-our">
-                                                    <th> # </th>
-                                                    <th> TRANSACTION ID </th>
-                                                    <th> TYPE </th>
-                                                    <th> DATE </th>
-                                                    <th> STATUS </th>
-                                                    <th> TOTAL </th>
-                                                    <th> ACTION </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="myTable">
-                                                <?php
-                                            $sql_all = "SELECT * FROM service_request WHERE status='Cancelled' ORDER BY date_completed DESC";
-                                            $result_all = $conn->query($sql_all);
-                                            if ($result_all->num_rows > 0) {
-                                                $count = 1;
-                                                while ($row = $result_all->fetch_assoc()) {
-                                                    echo "<tr>";
-                                                    echo "<td>" . $count . "</td>";
-                                                    echo "<td>" . $row["transaction_code"] . "</td>"; 
-                                                    echo "<td>" . $row["type"] . "</td>"; 
-                                                    echo "<td>" . $row["date_completed"] . "</td>"; 
-                                                    echo "<td>" . $row["status"] . "</td>"; 
-                                                    echo "<td>" . $row["payment"] . "</td>";
-                                                    echo '<td>';
-                                                    echo '<a class="icns" href="../adminServices/view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '">';
-                                                    echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['sreq_id'] . '"></i>';
-                                                    echo '</a>';
+                                                    echo '<a class="icns" href="../inventory/view-inventory.php?prod_id=' .  $row['product_id'] . '">';
+                                                            echo '<i class="fas fa-eye text-white view-accoun view" Prod_id="' .  $row['product_id'] . '"></i>';
+                                                            echo '</a>';
                                                     echo '</td>';
                                                     echo "</tr>";
                                                     $count++;
