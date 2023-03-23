@@ -26,8 +26,6 @@ $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 
 
-
-
 ?>
 
 <body>
@@ -172,9 +170,13 @@ $row = mysqli_fetch_assoc($result);
                     rprq.status AS rprq_status, 
                     accounts.*,
                     technician.*,
+                    electronics.*,
+                    defects.*,
                     customer.*
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+                    LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+                    LEFT JOIN defects ON rprq.defect_id = defects.defect_id
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
                     WHERE rprq.status = 'Done' AND accounts.account_id = '{$user_id}';";
@@ -198,16 +200,31 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
-                                            <span><?php echo $row2['etype']?></span>
+                                            <span><?php echo $row2['elec_name']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Defects:</span>
-                                            <span class="transaction-details-none"><?php echo $row2['defective']?></span>
+                                            <span class="transaction-details-none"><?php
+                                                        if (empty($row2['defect_id']) || $row2['defect_id'] == 0) {
+                                                            echo $row2['other_defects'];
+                                                        } else {
+                                                            echo $row2['defect_name'];
+                                                        }
+                                                        ?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Initial Payment:</span>
                                             <span class="transaction-details-none"><?php echo $row2['initial_payment']?></span>
                                         </div>
+                                        <div class="text-start">
+                                        <?php
+                                        if (!empty($row2['invoice_id'])) {
+                                            $invoice_id = $row['invoice_id'];
+                                            echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-primary btn-fw ">
+                                            Download Invoice <i class="fas fa-download"></i></a>';
+                                        }
+                                        ?>
+                                </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
@@ -231,16 +248,12 @@ $row = mysqli_fetch_assoc($result);
                                             <span class="fw-bold me-2 transaction-details-label">Technician's Contact:</span>
                                             <span><?php echo $row2['tech_phone']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Remarks:</span>
+                                            <textarea class="form-control" rows="3"
+                                                        readonly><?php echo $row2['remarks']?></textarea>
+                                        </div>
                                     </div>
-                                    <div class="text-start">
-                                        <?php
-                                        if (!empty($row['invoice_id'])) {
-                                            $invoice_id = $row['invoice_id'];
-                                            echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-primary btn-fw ">
-                                            Download Invoice <i class="fas fa-download"></i></a>';
-                                        }
-                                        ?>
-                                </div>
                                 </div>
                             </div>
                             

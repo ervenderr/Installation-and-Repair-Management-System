@@ -126,30 +126,31 @@ $row = mysqli_fetch_assoc($result);
                 </div>
                 <div class="col-sm-9 accform ">
                     <nav class="nav nav-pills flex-column flex-sm-row">
-                            <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
-                                href="pending-transaction.php">Pending
-                                <?php
+                        <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
+                            href="pending-transaction.php">Pending
+                            <?php
                                 if($notification_count_pending){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
-                            </a>
+                        </a>
                         <a class="flex-sm-fill text-sm-center nav-link" href="repairing-transaction.php">Repairing
-                        <?php
+                            <?php
                                 if($notification_style_in_progress){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
                         <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">To pickup
-                        <?php
+                            <?php
                                 if($notification_style_done){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="completed-transaction.php">Completed
-                        <?php
+                        <a class="flex-sm-fill text-sm-center nav-link active"
+                            href="completed-transaction.php">Completed
+                            <?php
                                 if($notification_count_completed){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
@@ -169,9 +170,13 @@ $row = mysqli_fetch_assoc($result);
                     rprq.status AS rprq_status, 
                     accounts.*,
                     technician.*,
+                    electronics.*,
+                    defects.*,
                     customer.*
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+                    LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+                    LEFT JOIN defects ON rprq.defect_id = defects.defect_id
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
                     WHERE rprq.status = 'Completed' AND accounts.account_id = '{$user_id}';";
@@ -190,15 +195,21 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Status:</span>
-                                            <span class="transaction-details-pending"><?php echo $row['rprq_status']?></span>
+                                            <span class="transaction-details-pending"><?php echo $row['status']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
-                                            <span><?php echo $row['etype']?></span>
+                                            <span><?php echo $row['elec_name']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Defects:</span>
-                                            <span class="transaction-details-none"><?php echo $row['defective']?></span>
+                                            <span class="transaction-details-none"><?php
+                                                        if (empty($row['defect_id']) || $row['defect_id'] == 0) {
+                                                            echo $row['other_defects'];
+                                                        } else {
+                                                            echo $row['defect_name'];
+                                                        }
+                                                        ?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Total payment:</span>
@@ -208,6 +219,15 @@ $row = mysqli_fetch_assoc($result);
                                             <span class="fw-bold me-2 transaction-details-label">Warranty:</span>
                                             <span class="">3 months</span>
                                         </div>
+                                        <div class="text-start">
+                                        <?php
+                                        if (!empty($row['invoice_id'])) {
+                                            $invoice_id = $row['invoice_id'];
+                                            echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-primary btn-fw ">
+                                            Download Invoice <i class="fas fa-download"></i></a>';
+                                        }
+                                        ?>
+                                    </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
@@ -229,18 +249,16 @@ $row = mysqli_fetch_assoc($result);
                                             <span><?php echo $row['tech_fname'] . " " . $row['tech_lname']?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Technician's Contact:</span>
+                                            <span class="fw-bold me-2 transaction-details-label">Technician's
+                                                Contact:</span>
                                             <span><?php echo $row['tech_phone']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Remarks:</span>
+                                            <textarea class="form-control" rows="3"
+                                                        readonly><?php echo $row['remarks']?></textarea>
+                                        </div>
                                     </div>
-                                    <div class="text-start">
-                                        <?php
-                                        if (!empty($row['invoice_id'])) {
-                                            $invoice_id = $row['invoice_id'];
-                                            echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-primary btn-fw ">
-                                            Download Invoice <i class="fas fa-download"></i></a>';
-                                        }
-                                        ?>
                                 </div>
                             </div>
                         </div>

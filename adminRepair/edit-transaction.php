@@ -14,7 +14,7 @@ $rptrue = "true";
 
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+$query = "SELECT *
           FROM rprq
           JOIN customer ON rprq.cust_id = customer.cust_id
           JOIN accounts ON customer.account_id = accounts.account_id
@@ -85,10 +85,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         rprq.status AS rprq_status, 
                                         accounts.*,
                                         technician.*,
+                                        electronics.*,
+                                        defects.*,
                                         customer.*
                                       FROM rprq
                                       LEFT JOIN technician ON rprq.tech_id = technician.tech_id
                                       LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                                      LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+                                      LEFT JOIN defects ON rprq.defect_id = defects.defect_id
                                       LEFT JOIN accounts ON customer.account_id = accounts.account_id
                                       WHERE rprq.transaction_code = '" . $tcode . "';";
                                         $result6 = mysqli_query($conn, $query6);
@@ -98,6 +102,8 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             $row6 = mysqli_fetch_assoc($result6);
                                         }
                                         $selected_technician_id = $row6['tech_id'];
+                                        $selected_elec_id = $row6['elec_id'];
+                                        $selected_defect_id = $row6['defect_id'];
                                         ?>
                                         <p class="card-description">Update Personal info </p>
                                         <div class="row">
@@ -154,12 +160,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <div class="form-group row">
                                                     <label for="status" class="col-form-label">Status</label>
                                                     <div class="">
-                                                    <select name="status" class="form-control">
+                                                        <select name="status" class="form-control">
                                                             <option value="Pending"
-                                                                <?php if ($row6['rprq_status'] == 'Pending') echo 'selected'; ?>>Pending
+                                                                <?php if ($row6['rprq_status'] == 'Pending') echo 'selected'; ?>>
+                                                                Pending
                                                             </option>
                                                             <option value="Accepted"
-                                                                <?php if ($row6['rprq_status'] == 'Accepted') echo 'selected'; ?>>Accepted
+                                                                <?php if ($row6['rprq_status'] == 'Accepted') echo 'selected'; ?>>
+                                                                Accepted
                                                             </option>
                                                             <option value="In-progress"
                                                                 <?php if ($row6['rprq_status'] == 'In-progress') echo 'selected'; ?>>
@@ -185,20 +193,15 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <div class="">
                                                         <select name="etype" class="form-control">
                                                             <option value="None">--- Select ---</option>
-                                                            <option value="TV"
-                                                                <?php if ($row6['etype'] == 'TV') echo 'selected'; ?>>TV
-                                                            </option>
-                                                            <option value="Refrigerator"
-                                                                <?php if ($row6['etype'] == 'Refrigerator') echo 'selected'; ?>>
-                                                                Refrigerator
-                                                            </option>
-                                                            <option value="Microwave"
-                                                                <?php if ($row6['etype'] == 'Microwave') echo 'selected'; ?>>
-                                                                Microwave
-                                                            </option>
-                                                            <option value="Aircon"
-                                                                <?php if ($row6['etype'] == 'Aircon') echo 'selected'; ?>>
-                                                                Aircon</option>
+                                                            <?php
+                                                                $sql2 = "SELECT * FROM electronics";
+                                                                $result3 = mysqli_query($conn, $sql2);
+                                                                while ($electronics = mysqli_fetch_assoc($result3)) {
+                                                                    $elec_id = mysqli_real_escape_string($conn, $electronics['elec_id']);
+                                                                    $selected = ($elec_id == $selected_elec_id) ? "selected" : "";
+                                                                    echo "<option value='{$elec_id}' {$selected}>{$electronics['elec_name']}</option>";
+                                                                }                                                        
+                                                                ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -206,7 +209,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label for="technician" class="col-form-label">Assigned
-                                                    Technician</label>
+                                                        Technician</label>
                                                     <div class="">
                                                         <select name="technician" class="form-control">
                                                             <option value="None">--- Select ---</option>
@@ -227,10 +230,28 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="defective" class="col-form-label">Defective</label>
-                                                    <div class="">
-                                                        <input name="defective" type="text" class="form-control"
-                                                            value="<?php echo $row6['defective']; ?>" />
+                                                <label for="defective" class="col-form-label">Defective</label>
+                                                        <div class="">
+                                                            <select name="defective" id="defective" class="form-control">
+                                                                <?php
+                                                                $sql2 = "SELECT * FROM defects";
+                                                                $result3 = mysqli_query($conn, $sql2);
+                                                                while ($defects = mysqli_fetch_assoc($result3)) {
+                                                                    $defect_id = mysqli_real_escape_string($conn, $defects['defect_id']);
+                                                                    $selected = ($defect_id == $selected_defect_id) ? "selected" : "";
+                                                                    echo "<option value='{$defect_id}' {$selected}>{$defects['defect_name']}</option>";
+                                                                }
+                                                                ?>
+                                                                <option value="other">Other</option>
+                                                            </select>
+                                                            <span class="error-input"></span>
+                                                        </div>
+                                                    <div class="form-group" id="other-defect-input"
+                                                        style="display:none;">
+                                                        <label for="other_defective" class="col-form-label">Other
+                                                            Defect</label>
+                                                        <input type="text" name="other_defective" id="other_defective"
+                                                            class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
@@ -281,7 +302,8 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="initial_payment" class="col-form-label">Initial Payment</label>
+                                                    <label for="initial_payment" class="col-form-label">Initial
+                                                        Payment</label>
                                                     <div class="">
                                                         <input name="initial_payment" class="form-control" type="text"
                                                             value="<?php echo $row6['initial_payment']; ?>" />
@@ -294,6 +316,34 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     <div class="">
                                                         <input name="payment" class="form-control" type="text"
                                                             value="<?php echo $row6['payment']; ?>" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="remarks" class="col-form-label">Remarks</label>
+                                                    <div class="">
+                                                        <textarea name="remarks" class="form-control"
+                                                            rows="3"><?php echo $row['remarks']?></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="backlog" class="col-form-label">Backlog</label>
+                                                    <div class="">
+                                                    <select name="backlog" class="form-control">
+                                                            <option value="None">--Select--</option>
+                                                            <option value="1"
+                                                                <?php if ($row6['backlog'] == 1) echo 'selected'; ?>>
+                                                                Yes</option>
+                                                            <option value="0"
+                                                                <?php if ($row6['backlog'] == 0) echo 'selected'; ?>>
+                                                                No
+                                                            </option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -353,6 +403,16 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
             });
         });
         </script>
+
+<script>
+    document.getElementById('defective').addEventListener('change', function() {
+        if (this.value === 'other') {
+            document.getElementById('other-defect-input').style.display = 'block';
+        } else {
+            document.getElementById('other-defect-input').style.display = 'none';
+        }
+    });
+</script>
 </body>
 
 </html>

@@ -55,8 +55,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                         data-bs-target="#addProductModal">
                                         <i class=" mdi mdi-plus ">Product</i>
                                     </button>
-                                </li>
-                                <li class="breadcrumb-item active btn-group-sm" aria-current="page">
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
                                         data-bs-target="#addSuppModal">
                                        <i class=" mdi mdi-plus ">Category</i>

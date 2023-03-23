@@ -31,7 +31,7 @@ if(!empty($_FILES['eimg']['name'])){
 $_SESSION['transaction_code'] = $transaction_code;
 $status = htmlentities("Pending");
 
-$query = "INSERT INTO rprq (cust_id, transaction_code, etype, defective, shipping, image, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, defect_id, shipping, image, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = mysqli_prepare($conn, $query);
 
 mysqli_stmt_bind_param($stmt, "issssss", $cust_id, $transaction_code, $etype, $defective, $shipping, $imgcontent, $status);

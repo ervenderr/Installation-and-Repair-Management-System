@@ -103,18 +103,31 @@ $_SESSION["cust_id"] = $row["cust_id"];
                 <div class="form-step">
                     <div class="mb-3">
                         <label for="etype" class="form-label">Electronic Type</label>
-                        <select name="etype" id="etype" class="form-select">
-                            <option value="None">--Select--</option>
-                            <option value="TV">TV</option>
-                            <option value="Refrigerator">Refrigerator</option>
-                            <option value="Microwave">Microwave</option>
-                            <option value="Aircon">Aircon</option>
-                        </select>
+                        <select name="etype" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                        <?php
+                                        $sql = "SELECT * FROM electronics";
+                                        $result = mysqli_query($conn, $sql);
+                                        while($row = mysqli_fetch_assoc($result)) { 
+                                            echo "<option value='" . $row['elec_id'] . "'>" . $row['elec_name'] . "</option>";
+                                        }
+                                    ?>
+                                    </select>
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="defective" class="form-label">Defects</label>
-                        <input type="text" class="form-control" id="defective" name="defective">
+                    <label for="defective" class="col-form-label">Defects</label>
+                    <select name="defective" id="defective" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                        <?php
+                                            $sql = "SELECT * FROM defects";
+                                            $result = mysqli_query($conn, $sql);
+                                            while($row = mysqli_fetch_assoc($result)) { 
+                                                echo "<option value='" . $row['defect_id'] . "'>" . $row['defect_name'] . "</option>";
+                                            }
+                                            ?>
+                                        <option value="other">Other</option>
+                                    </select>
                         <span class="val-error"></span>
                     </div>
                     <div class="mb-3">

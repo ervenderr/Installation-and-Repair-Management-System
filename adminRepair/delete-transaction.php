@@ -7,7 +7,7 @@ $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+$query = "SELECT *
           FROM rprq
           JOIN customer ON rprq.cust_id = customer.cust_id
           JOIN accounts ON customer.account_id = accounts.account_id
@@ -28,7 +28,7 @@ $query6 = "DELETE FROM `rprq` WHERE rprq.transaction_code = '" . $tcode . "';";
 $result6 = mysqli_query($conn, $query6);
 
 if ($result6) {
-    $msg2 = "Record Successfully deleted";
-    header("location: transaction.php?msg2=" . urlencode($msg2));
+    $_SESSION['msg2'] = "Record Deleted Successfully";
+    header("location: transaction.php");
 }
 ?>

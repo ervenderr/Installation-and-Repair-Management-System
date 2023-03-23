@@ -33,12 +33,7 @@
                 </ul>
               </div>
             </li>
-            <li class="nav-item <?php echo $invactive; ?>">
-              <a class="nav-link" href="../tech_service/transaction.php">
-                <span class="menu-title">Service Request</span>
-                <i class="fas fa-cog menu-icon"></i>
-              </a>
-            </li>
+
  
           </ul>
         </nav>

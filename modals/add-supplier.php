@@ -1,14 +1,14 @@
 <!-- Add service Transaction - The modal -->
-<div class="modal fade" id="addTechnicianModal" tabindex="-1" aria-labelledby="addTechnicianModalLabel"
+<div class="modal fade" id="addSuppModal" tabindex="-1" aria-labelledby="addSuppModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addTechnicianModalLabel">Create new Technician</h5>
+                <h5 class="modal-title" id="addSuppModalModalLabel">Create new Supplier</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="form-sample" action="add-technician.php" method="POST" enctype="multipart/form-data">
+                <form class="form-sample" action="add-supp.php" method="POST" enctype="multipart/form-data">
                     <p class="card-description"> Personal info </p>
                     <div class="row">
                         <div class="col-md-6">
@@ -64,9 +64,20 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="etype" class="col-form-label">Assigned</label>
+                                <div class="">
+                                    <select name="etype" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                    </select>
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <input name="submit" type="submit" class="btn btn-primary" value="Add Technician" />
+                            <input name="submit" type="submit" class="btn btn-primary" value="Add" />
                         </div>
                     </div>
                 </form>

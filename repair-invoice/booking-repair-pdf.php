@@ -4,8 +4,10 @@ require_once '../homeIncludes/dbconfig.php';
 require('../fpdf/fpdf.php');
 
 $rp_id = $_SESSION['rp_id'];
-$query = "SELECT * FROM rprq 
-LEFT JOIN customer ON customer.cust_id=rprq.cust_id 
+$query = "SELECT * FROM rprq
+LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN defects ON rprq.defect_id = defects.defect_id
+LEFT JOIN customer ON customer.cust_id=rprq.cust_id
 WHERE id='{$rp_id}'";
 
 $result = mysqli_query($conn, $query);
@@ -59,8 +61,8 @@ if (isset($_POST['download'])) {
     // Get transaction details
     $transaction_code = $row['transaction_code'];
     $status = $row['status'];
-    $etype = $row['etype'];
-    $defective = $row['defective'];
+    $etype = $row['elec_name'];
+    $defective = $row['defect_name'];
     $shipping = $row['shipping'];
     $date_req = $row['date_req'];
     $name = $row['fname'] ." " .  $row['lname'];
