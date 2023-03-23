@@ -60,6 +60,10 @@ if (isset($_POST['id'])) {
           </select>
         </div>
         <div class="mb-3">
+          <label for="remarks" class="form-label">Remarks</label>
+          <textarea class="form-control" id="remarks" name="remarks">' . $row6['remarks'] . '</textarea>
+        </div>
+        <div class="mb-3">
         <label for="completed" class="form-label">Completion Date</label>
         <input type="date" class="form-control" id="completed" name="completed">
         
@@ -81,27 +85,15 @@ if (isset($_POST['submit'])) {
   $id = htmlentities($_SESSION['id']);
   $techId =  htmlentities($_POST['tech_id']);
   $completed = htmlentities($_POST['completed']);
-  $status = htmlentities($_POST['status']); // Get the value of the status
+  $status = htmlentities($_POST['status']); 
+  $remarks = htmlentities($_POST['remarks']); 
 
-  $query = "UPDATE rprq SET date_completed = '$completed', status = '$status' WHERE id = '$id'";
+  $query = "UPDATE rprq SET date_completed = '$completed', status = '$status', remarks = '$remarks' WHERE id = '$id'";
 
   $result = mysqli_query($conn, $query);
 
-  // Determine the technician's status based on the rprq status
-  $techStatus = '';
-  if ($status == 'In-progress') {
-      $techStatus = 'Unavailable';
-  } else if (in_array($status, ['Pending', 'Accepted', 'Done', 'Completed'])) {
-      $techStatus = 'Active';
-  }
 
-  // Update the technician's status
-  if (!empty($techStatus)) {
-      $query2 = "UPDATE technician SET status = '$techStatus' WHERE tech_id = '$techId'";
-      $result2 = mysqli_query($conn, $query2);
-  }
-
-  if ($result2) {
+  if ($result) {
       $_SESSION['msg'] = "Record Updated Successfully";
       header("location: transaction.php");
   } else {

@@ -10,12 +10,13 @@ if(isset($_POST['submit'])) {
     $phone = htmlentities($_POST['phone']);
     $address = htmlentities($_POST['address']);
     $etype = htmlentities($_POST['etype']);
-    $electrician = htmlentities($_POST['electrician']);
+    $technician = htmlentities($_POST['technician']);
     $defective = htmlentities($_POST['defective']);
     $shipping = htmlentities($_POST['shipping']);
     $date = htmlentities($_POST['date']);
     $completed = htmlentities($_POST['completed']);
-    $payment = htmlentities($_POST['payment']);
+    $inipayment = htmlentities($_POST['inipayment']);
+    $other_defective = htmlentities($_POST['other_defective']);
     
 
     // generate transaction code
@@ -53,15 +54,30 @@ if(isset($_POST['submit'])) {
         $customer_id = mysqli_insert_id($conn);
     }
 
-    // insert into rprq table with customer_id
-    $query4 = "INSERT INTO rprq (transaction_code, etype, defective, shipping, status, cust_id) VALUES ('$transaction_code', '$etype', '$defective', '$shipping', '$status', '$customer_id')";
-    $result4 = mysqli_query($conn, $query4);
+    if ($defective === "other"){
 
-    if ($result4) {
-        header("location: transaction.php?msg=Record Added Successfully");
-    } else {
-       echo "FAILED: " . mysqli_error($conn);
+        $query4 = "INSERT INTO rprq (transaction_code, elec_id, other_defects, shipping, status, cust_id, initial_payment, tech_id, date_completed) VALUES ('$transaction_code', '$etype', '$other_defective', '$shipping', '$status', '$customer_id', '$inipayment', '$technician','$completed')";
+        $result4 = mysqli_query($conn, $query4);
+
+        if ($result4) {
+            $_SESSION['msg'] = "Record Added Successfully";
+            header("location: transaction.php?msg=Record Added Successfully");
+        } else {
+        echo "FAILED: " . mysqli_error($conn);
+        }
+    }else{
+
+        $query4 = "INSERT INTO rprq (transaction_code, elec_id, defect_id, shipping, status, cust_id, initial_payment, tech_id, date_completed) VALUES ('$transaction_code', '$etype', '$defective', '$shipping', '$status', '$customer_id', '$inipayment', '$technician', $completed)";
+        $result4 = mysqli_query($conn, $query4);
+
+        if ($result4) {
+            $_SESSION['msg'] = "Record Added Successfully";
+            header("location: transaction.php");
+        } else {
+        echo "FAILED: " . mysqli_error($conn);
+        }
     }
+
 }
 
 ?>

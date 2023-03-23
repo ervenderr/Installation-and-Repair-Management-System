@@ -163,6 +163,8 @@ $row = mysqli_fetch_assoc($result);
                     $query = "SELECT *
                     FROM customer
                     LEFT JOIN rprq ON customer.cust_id = rprq.cust_id
+                    LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+                    LEFT JOIN defects ON rprq.defect_id = defects.defect_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
                     WHERE rprq.status = 'pending' OR status='Accepted' AND accounts.account_id='{$user_id}';";
                     $result = mysqli_query($conn, $query);
@@ -170,6 +172,9 @@ $row = mysqli_fetch_assoc($result);
                     if (mysqli_num_rows($result) > 0) { ?>
                     <div class="d-flex flex-wrap pending-card">
                         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                            <?php
+                            $estimatedCost = $row['def_cost'] + $row['elec_cost'];
+                            ?>
                         <div class="card mb-3 transaction-details-card">
                             <div class="card-body">
                                 <div class="row">
@@ -184,11 +189,15 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
-                                            <span><?php echo $row['etype']?></span>
+                                            <span><?php echo $row['elec_name']?></span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Defects:</span>
-                                            <span class="transaction-details-none"><?php echo $row['defective']?></span>
+                                            <span class="transaction-details-none"><?php echo $row['defect_name']?></span>
+                                        </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Estimated Cost ₱:</span>
+                                            <span class=""><?php echo $estimatedCost ?></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -215,6 +224,9 @@ $row = mysqli_fetch_assoc($result);
                                     <div class="text-start">
                                         <form method="post" action="../repair-invoice/booking-repair-pdf.php"
                                             target="_blank">
+                                            <?php
+                                            $_SESSION['rp_id'] = $row['id'];
+                                            ?>
                                             <button type="submit" name="download" value="<?php echo $row['id']; ?>"
                                                 class="btn btn-secondary">Download
                                                 Ticket <i class="fas fa-download"></i></button>

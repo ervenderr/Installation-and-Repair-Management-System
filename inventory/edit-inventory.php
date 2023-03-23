@@ -37,11 +37,15 @@ if(isset($_POST['inv_id'])){
             </select>
           </div>
           <div class="mb-3">
-            <label for="quantityInput" class="form-label">Quantity</label>
+            <label for="quantityInput" class="form-label">Stock-in</label>
             <input type="number" class="form-control" id="quantityInput" name="quantityInput" value="' . $inventory['stock_in'] . '">
           </div>
           <div class="mb-3">
-            <label for="stockInDateInput" class="form-label">Stock-in Date</label>
+            <label for="stockout" class="form-label">Stock-out</label>
+            <input type="number" class="form-control" id="stockout" name="stockout" value="' . $inventory['stockout'] . '">
+          </div>
+          <div class="mb-3">
+            <label for="stockInDateInput" class="form-label">Stock-out Date</label>
             <input type="date" class="form-control" id="stockInDateInput" name="stockInDateInput" value="' . $inventory['stock_in_date'] . '">
           </div>
           <div class="modal-footer">
@@ -58,12 +62,14 @@ if(isset($_POST['submit'])) {
     $invId = htmlentities($_SESSION['inv_id']);
     $supplierId = htmlentities($_POST['supplierSelect']);
     $quantityInput = htmlentities($_POST['quantityInput']);
+    $stockout = htmlentities($_POST['stockout']);
     $stockInDateInput = htmlentities($_POST['stockInDateInput']);
 
     $query = "UPDATE inventory SET 
               product_id = '$productId', 
               supplier_id = '$supplierId', 
-              stock_in = '$quantityInput', 
+              stock_in = '$quantityInput',
+              stockout = '$stockout',
               stock_in_date = '$stockInDateInput'
           WHERE inv_id = '$invId'";
 

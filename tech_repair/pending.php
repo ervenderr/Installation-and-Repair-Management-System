@@ -43,17 +43,12 @@ $user_id = $_SESSION['logged_id'];
                         <div class="row mg-btm">
                                 <div class="col-sm-12 col-md-6 flex">
                                     <h4 class="card-title">List of Pending Transaction</h4>
-
-                                </div>
-                                <div class="col-sm-12 col-md-6 flex flexm">
-                                    <div id="example_filter" class="dataTables_filter"><label>Search:<input type="text"
-                                                placeholder="search" id="myInput" class="form-control"></label></div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12 grid-margin">
                                     <div class="table-responsive">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover" id="myDataTable">
                                             <thead>
                                                 <tr class="bg-our">
                                                     <th> # </th>
@@ -67,29 +62,13 @@ $user_id = $_SESSION['logged_id'];
                                             <tbody id="myTable">
                                                 <?php
                                                     
-                                                    if(isset($_GET['page_no']) && $_GET['page_no'] !=''){
-                                                        $page_no = $_GET['page_no'];
-                                                    }else{
-                                                        $page_no = 1;
-                                                    }
-
-                                                    $total_record_per_page = 10;
-                                                    $offset = ($page_no-1) * $total_record_per_page;
-                                                    $previous_page = $page_no -1;
-                                                    $next_page = $page_no +1;
-                                                    $adjacent = "2";
-
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM rprq WHERE rprq.status = 'Accepted'");
-                                                    $total_records = mysqli_fetch_array($result_count);
-                                                    $total_records = $total_records['total_records'];
-                                                    $total_no_of_page = ceil($total_records / $total_record_per_page);
-                                                    $second_last = $total_no_of_page - 1;
-                                                
+                        
                                                     // Perform the query
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'Accepted'";
+                                                        WHERE rprq.status = 'Accepted'
+                                                        ORDER BY rprq.date_req DESC;";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -120,7 +99,7 @@ $user_id = $_SESSION['logged_id'];
                                                         echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
                                                         echo '<i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i> View';
                                                         echo '</a>';
-                                                        echo '<button class="icns btn btn-danger edit" id="' .  $row['id'] . '">';
+                                                        echo '<button class="icns btn btn-danger edit acceptrp" id="' .  $row['id'] . '">';
                                                         echo '<i class="fas fa-calendar-check view-account" id="' .  $row['id'] . '"> </i> Assign';
                                                         echo '</button>';
                                                         echo '</td>';
@@ -132,81 +111,6 @@ $user_id = $_SESSION['logged_id'];
 
                                         </table>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6 flex">
-
-                                </div>
-                                <div class="col-sm-12 col-md-6 flex flexm flexmm">
-                                    <nav aria-label="...">
-                                        <ul class="pagination pagination-sm">
-                                            <li class="page-item disabled oneofone"><?php echo $page_no. "of". $total_no_of_page; ?>
-                                            </li>
-                                            <li class="page-item" <?php if($page_no <= 1) {echo "class='page-item disabled'";} ?>>
-                                            <a class="page-link" <?php if($page_no > 1) {echo "href='?page_no=$previous_page'";} ?>>Previous</a>
-                                            </li>
-
-                                            <?php
-                                                if($total_no_of_page <= 10){
-                                                    for($counter = 1; $counter <= $total_no_of_page; $counter++){
-                                                        if($counter == $page_no){
-                                                            echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                        }else{
-                                                            echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                        }
-                                                    }
-
-                                                }elseif($total_no_of_page > 10){
-                                                    if($page_no <=4){
-
-                                                        for($counter = 1; $counter < 8; $counter++){
-                                                            if($counter == $page_no){
-                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                            }else{
-                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                            }
-                                                        }
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$second_last'>$second_last</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>$total_no_of_page</a></li>";
-                                                    }elseif($page_no > 4 && $page_no < $total_no_of_page - 4){
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=1'>1</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=2'>2</a></li>";
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-
-                                                        for($counter = $page_no - $adjacent; $counter <= $page_no + $adjacent; $counter++){
-                                                            if($counter == $page_no){
-                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                            }else{
-                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                            }
-                                                        }
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$second_last'>$second_last</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>$total_no_of_page</a></li>";
-                                                    }else{
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=1'>1</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=2'>2</a></li>";
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-                                                        for($counter = $total_no_of_page - 6; $counter <= $total_no_of_page; $counter++){
-                                                            if($counter == $page_no){
-                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                            }else{
-                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ?>
-                                            <li class="page-item" <?php if($page_no >= $total_no_of_page) {echo "class='page-item disabled'";} ?>>
-                                            <a class="page-link" <?php if($page_no < $total_no_of_page) {echo "href='?page_no=$next_page'";} ?>>Next</a>
-                                            </li>
-                                            <?php
-                                                if($page_no < $total_no_of_page) {echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>Last &rsaqou; &rsaqou;</a></li>";}
-                                            ?>
-                                        </ul>
-                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -306,6 +210,16 @@ $user_id = $_SESSION['logged_id'];
     })
   })
 </script>
+
+<script>
+    j(document).ready(function() {
+        j('#myDataTable').DataTable();
+    });
+
+    j(document).ready(function() {
+        j('#myDataTable2').DataTable();
+    });
+    </script>
 </body>
 
 </html>

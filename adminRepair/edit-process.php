@@ -18,6 +18,9 @@ if(isset($_POST['submit'])) {
     $completed = htmlentities($_POST['completed']);
     $initial_payment = htmlentities($_POST['initial_payment']);
     $payment = htmlentities($_POST['payment']);
+    $other_defective = htmlentities($_POST['other_defective']);
+    $remarks = htmlentities($_POST['remarks']);
+    $backlog = htmlentities($_POST['backlog']);
 
     $accountid = $_SESSION['account_id'];
     $rowid = $_SESSION['rowid'];
@@ -55,29 +58,29 @@ if(isset($_POST['submit'])) {
         $customer_id = mysqli_insert_id($conn);
     }
 
-
-        $query4 = "UPDATE rprq SET etype='$etype', defective='$defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician', payment='$payment', initial_payment='$initial_payment' WHERE transaction_code='$transaction_code'";
+    if ($defective === "other"){
+        $query4 = "UPDATE rprq SET elec_id='$etype', other_defects='$other_defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician', payment='$payment', initial_payment='$initial_payment', remarks='$remarks', backlog='$backlog' WHERE transaction_code='$transaction_code'";
         $result4 = mysqli_query($conn, $query4);
-        
-        $techStatus = '';
-        if ($status == 'In-progress') {
-            $techStatus = 'Unavailable';
-        } else if (in_array($status, ['Pending', 'Accepted', 'Done', 'Completed'])) {
-            $techStatus = 'Active';
+        if ($result4) {
+            $_SESSION['msg'] = "Record updated Successfully.";
+            header("location: view-transaction.php?transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
+        } else {
+            echo "FAILED: " . mysqli_error($conn);
         }
 
-          // Update the technician's status
-  if (!empty($techStatus)) {
-    $query5 = "UPDATE technician SET status = '$techStatus' WHERE tech_id = '$technician'";
-    $result5 = mysqli_query($conn, $query5);
-}
+    }else{
+        $query4 = "UPDATE rprq SET elec_id='$etype', defect_id='$defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician', payment='$payment', initial_payment='$initial_payment', remarks='$remarks', backlog='$backlog' WHERE transaction_code='$transaction_code'";
+        $result4 = mysqli_query($conn, $query4);
+        if ($result4) {
+            $_SESSION['msg'] = "Record updated Successfully.";
+            header("location: view-transaction.php?transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
+        } else {
+            echo "FAILED: " . mysqli_error($conn);
+        }
+    }
+
         
 
-    if ($result5) {
-        header("location: view-transaction.php?msg=Record updated Successfully.&transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
-    } else {
-        echo "FAILED: " . mysqli_error($conn);
-    }
 }
 
 ?>

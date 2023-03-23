@@ -11,7 +11,10 @@
     "invoice_no"=>"",
     "invoice_date"=>"",
     "total_amt"=>"",
+    "transaction_id"=>"",
+    "initial_payments"=>"",
   ];
+  
 
   $query = "SELECT * FROM invoice
   JOIN rprq ON invoice.invoice_id = rprq.invoice_id
@@ -28,8 +31,9 @@
       "invoice_no"=>$row["invoice_no"],
       "invoice_date"=>$row["invoice_date"],
       "total_amt"=>$row["grand_total"],
-      
+      "transaction_id"=>$row["transaction_code"],
     ];
+    $info["initial_payments"] = $row["initial_payments"];
   }
 
     //invoice Products
@@ -85,7 +89,7 @@
       $this->Cell(50,7,"PH: " . $info["phone"],0,1); // Added phone number
       $this->Cell(50,7,$info["address"],0,1);
         
-      //Display Invoice no
+      //Display Invoice No
       $this->SetY(55);
       $this->SetX(-60);
       $this->Cell(50,7,"Invoice No : ".$info["invoice_no"]);
@@ -94,7 +98,12 @@
       $this->SetY(63);
       $this->SetX(-60);
       $this->Cell(50,7,"Invoice Date : ".$info["invoice_date"]);
-        
+
+      //Display Transaction ID
+      $this->SetY(71);
+      $this->SetX(-60);
+      $this->Cell(50,7,"Transaction ID : ".$info["transaction_id"]);
+      
       //Display Table headings
       $this->SetY(95);
       $this->SetX(10);
@@ -122,10 +131,13 @@
       }
       //Display table total row
       $this->SetFont('Arial','B',12);
-      $this->Cell(150,9,"TOTAL",1,0,"R");
-      $this->Cell(40,9,$info["total_amt"],1,1,"R");
+      $this->Cell(150,9,"INITIAL PAYMENT",1,0,"R");
+      $this->Cell(40,9,$info["initial_payments"],1,1,"R");
 
-      
+      //Display initial payment row
+      $this->SetFont('Arial','B',12);
+      $this->Cell(150,9,"GRAND TOTAL",1,0,"R");
+      $this->Cell(40,9,$info["total_amt"],1,1,"R");
         
   }
   
@@ -152,3 +164,4 @@
   $pdf->body($info,$products_info);
   $pdf->Output();
 ?>
+

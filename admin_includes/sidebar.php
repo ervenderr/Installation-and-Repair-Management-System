@@ -48,6 +48,12 @@
                 </ul>
               </div>
             </li>
+            <li class="nav-item <?php echo $reports; ?>">
+              <a class="nav-link" href="../reports/reports.php">
+                <span class="menu-title">Reports</span>
+                <i class="fas fa-file-invoice menu-icon"></i>
+              </a>
+            </li>
             <p class="text-secondary paragh">Maintenance</p>
             <li class="nav-item <?php echo $prodactive; ?>">
               <a class="nav-link" href="../admin_products/products.php">

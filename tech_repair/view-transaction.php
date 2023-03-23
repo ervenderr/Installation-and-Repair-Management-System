@@ -17,21 +17,25 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
 }
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT rprq.*, 
-            customer.fname AS cust_fname, 
-            customer.lname AS cust_lname, 
-            technician.fname AS tech_fname, 
-            technician.lname AS tech_lname, 
-            technician.status AS tech_status_new_name, 
-            rprq.status AS rprq_status, 
-            accounts.*,
-            technician.*,
-            invoice.*,
-            customer.*
-          FROM rprq
-          LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-          LEFT JOIN customer ON rprq.cust_id = customer.cust_id
-          LEFT JOIN accounts ON customer.account_id = accounts.account_id
-          LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
+customer.fname AS cust_fname, 
+customer.lname AS cust_lname, 
+technician.fname AS tech_fname, 
+technician.lname AS tech_lname, 
+technician.status AS tech_status_new_name, 
+rprq.status AS rprq_status, 
+accounts.*,
+technician.*,
+electronics.*,
+defects.*,
+invoice.*,
+customer.*
+FROM rprq
+LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN defects ON rprq.defect_id = defects.defect_id
+LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN accounts ON customer.account_id = accounts.account_id
+LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
           WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
@@ -85,37 +89,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-12 grid-margin">
+                        <div class="col-lg-6 grid-margin">
                             <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Customer Details</h4>
+                                </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
-                                            <tr>
-                                                <th>Transaction Code:</th>
-                                                <td><?php echo $row['transaction_code']?></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Invoice Number:</th>
-                                                <td><?php echo $row['invoice_no']?></td>
-                                            </tr>
-                                            <tr>
-                                                <?php
-                                                $statusClass = '';
-                                                if ($row['rprq_status'] == 'Pending') {
-                                                  $statusClass = 'badge-gradient-warning';
-                                                } else if ($row['rprq_status'] == 'In-progress') {
-                                                  $statusClass = 'badge-gradient-info';
-                                                } else if ($row['rprq_status'] == 'Done') {
-                                                  $statusClass = 'badge-gradient-success';
-                                                } else if ($row['rprq_status'] == 'Completed') {
-                                                    $statusClass = 'badge-gradient-success';
-                                                  } else {
-                                                  $statusClass = 'badge-gradient-secondary';
-                                                }      
-                                                echo "<th>Status:</th>";
-                                                echo "<td><span class='badge " . $statusClass . "'>" . $row['rprq_status'] . "</span></td>";
-                                                ?>
-                                            </tr>
                                             <tr>
                                                 <th>Customer Name:</th>
                                                 <td><?php echo $row['cust_fname'] ." " .  $row['cust_lname']?></td>
@@ -132,13 +113,74 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <th>Email:</th>
                                                 <td><?php echo $row['email']?></td>
                                             </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 grid-margin">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Request Details</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
                                             <tr>
-                                                <th>Electronic Type:</th>
-                                                <td><?php echo $row['etype']?></td>
+                                                <th>Transaction Code:</th>
+                                                <td><?php echo $row['transaction_code']?></td>
                                             </tr>
                                             <tr>
+                                                <th>Invoice Number:</th>
+                                                <td><?php echo $row['invoice_no']?></td>
+                                            </tr>
+                                            <?php
+                        $statusClass = '';
+                        if ($row['rprq_status'] == 'Pending') {
+                            $statusClass = 'badge-gradient-warning';
+                        } else if ($row['rprq_status'] == 'In-progress') {
+                            $statusClass = 'badge-gradient-info';
+                        } else if ($row['rprq_status'] == 'Done') {
+                            $statusClass = 'badge-gradient-success';
+                        } else if ($row['rprq_status'] == 'Completed') {
+                            $statusClass = 'badge-gradient-success';
+                        } else {
+                            $statusClass = 'badge-gradient-secondary';
+                        }
+                        echo "<tr>";
+                        echo "<th>Status:</th>";
+                        echo "<td><span class='badge " . $statusClass . "'>" . $row['rprq_status'] . "</span></td>";
+                        echo "</tr>";
+                    ?>
+                                            <?php
+                        $backlog = '';
+                        if ($row['backlog'] == '1') {
+                            $backlog = 'backlog-red';
+                        } else {
+                            $backlog = 'badge-gradient-success';
+                        }
+                    ?>
+                                            <tr>
+                                                <th>Backlog:</th>
+                                                <td><span class="badge <?php echo $backlog; ?> not-back"> </span></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Electronic Type:</th>
+                                                <td><?php echo $row['elec_name']?></td>
+                                            </tr>
+                                            <tr>
+                                            <tr>
                                                 <th>Defective:</th>
-                                                <td><?php echo $row['defective']?></td>
+                                                <td>
+                                                    <?php
+                                                        if (empty($row['defect_id']) || $row['defect_id'] == 0) {
+                                                            echo $row['other_defects'];
+                                                        } else {
+                                                            echo $row['defect_name'];
+                                                        }
+                                                        ?>
+                                                </td>
+                                            </tr>
                                             </tr>
                                             <tr>
                                                 <th>Date Requested:</th>
@@ -168,12 +210,19 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <th>Full Payment:</th>
                                                 <td><?php echo $row['payment']?></td>
                                             </tr>
+                                            <tr>
+                                                <th>Remarks:</th>
+                                                <td>
+                                                    <textarea class="form-control" rows="3"
+                                                        readonly><?php echo $row['remarks']?></textarea>
+                                                </td>
+                                            </tr>
                                         </table>
                                         <div class="d-flex btn-details">
                                         <?php
                                             if($row['rprq_status'] != 'Completed'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
-                                                echo '<button class="icns btn btn-success edit" id="' .  $row['id'] . '">';
+                                                echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
                                                 echo 'Update Status <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
                                             }

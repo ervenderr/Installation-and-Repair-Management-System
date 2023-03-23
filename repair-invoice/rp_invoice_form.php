@@ -13,10 +13,26 @@ $rptrue = "true";
 $rowid = $_GET['rowid'];
 $transaction_code = $_GET['transaction_code'];
 
-$query = "SELECT rprq.id, rprq.transaction_code, rprq.status, customer.fname, customer.lname, customer.address, customer.phone, accounts.account_id, accounts.email, rprq.etype, rprq.defective, rprq.date_req, rprq.date_completed, rprq.shipping
+$query = "SELECT rprq.*, 
+            customer.fname AS cust_fname, 
+            customer.lname AS cust_lname, 
+            technician.fname AS tech_fname, 
+            technician.lname AS tech_lname, 
+            technician.status AS tech_status_new_name, 
+            rprq.status AS rprq_status, 
+            accounts.*,
+            technician.*,
+            electronics.*,
+            defects.*,
+            invoice.*,
+            customer.*
           FROM rprq
-          JOIN customer ON rprq.cust_id = customer.cust_id
-          JOIN accounts ON customer.account_id = accounts.account_id
+          LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+          LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+          LEFT JOIN defects ON rprq.defect_id = defects.defect_id
+          LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+          LEFT JOIN accounts ON customer.account_id = accounts.account_id
+          LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
           WHERE rprq.transaction_code = '" . $transaction_code . "';";
 $result = mysqli_query($conn, $query);
 
@@ -38,11 +54,26 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
-        <?php include_once('../admin_includes/navbar.php'); ?>
+
+        
+        <?php 
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
+            include_once('../admin_includes/navbar.php'); 
+        }else{
+            include_once('../technician_includes/navbar.php');
+        }
+        ?>
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
-            <?php include_once('../admin_includes/sidebar.php'); ?>
+            <?php 
+        if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
+            include_once('../admin_includes/sidebar.php');
+
+        }else{
+            include_once('../technician_includes/sidebar.php');
+        }
+        ?>
 
             <!-- partial -->
             <div class="main-panel">
@@ -51,16 +82,17 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
                                 <i class="far fa-file-invoice menu-icon"></i>
-                            </span> Invoice form <span class="bread">/ Transaction code: <?php echo $_SESSION['transaction_code']; ?></span>
+                            </span> Invoice form <span class="bread">/ Transaction code:
+                                <?php echo $_SESSION['transaction_code']; ?></span>
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <?php echo '<a class="icns" href="../adminRepair/view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';?>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        <span></span><i
-                                            class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
-                                        </i>
-                                    </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <span></span><i
+                                        class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
+                                    </i>
+                                </li>
                                 </a>
                             </ul>
                         </nav>
@@ -103,7 +135,9 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <h5 class='text-success'>Invoice Details</h5>
                                                 <div class='form-group'>
                                                     <label>Invoice No</label>
-                                                    <input type='text' name='invoice_no' value='<?php echo $invoice_number; ?>' required class='form-control'>
+                                                    <input type='text' name='invoice_no'
+                                                        value='<?php echo $invoice_number; ?>' required
+                                                        class='form-control'>
                                                 </div>
                                                 <div class='form-group'>
                                                     <label>Invoice Date</label>
@@ -141,6 +175,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
+                                                            <td colspan='2' class='text-right'>Initial Payment</td>
+                                                            <td colspan='2'><input type='text' name='initial_payment'
+                                                                    id='initial_payment'
+                                                                    value="<?php echo $row['initial_payment'] ?>"
+                                                                    class='form-control' required></td>
+                                                        </tr>
+
+                                                        <tr>
                                                             <td><input type='button' value='+ Add Row'
                                                                     class='btn btn-primary btn-sm' id='btn-add-row'>
                                                             </td>
@@ -148,6 +190,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                             <td><input type='text' name='grand_total' id='grand_total'
                                                                     class='form-control' required></td>
                                                         </tr>
+
                                                     </tfoot>
                                                 </table>
                                                 <input type='submit' name='submit' value='Save Invoice'
@@ -193,48 +236,59 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         <script src="../assets/js/dashboard.js"></script>
         <script src="../assets/js/todolist.js"></script>
         <!-- End custom js for this page -->
-        
-        
-        <script src="https://code.jquery.com/ui/1.13.0-rc.3/jquery-ui.min.js" integrity="sha256-R6eRO29lbCyPGfninb/kjIXeRjMOqY3VWPVk6gMhREk=" crossorigin="anonymous"></script>
-        
-        <script>
-      $(document).ready(function(){
-        
-        $("#btn-add-row").click(function(){
-          var row="<tr> <td><input type='text' required name='pname[]' class='form-control'></td> <td><input type='text' required name='price[]' class='form-control price'></td> <td><input type='text' required name='qty[]' class='form-control qty'></td> <td><input type='text' required name='total[]' class='form-control total'></td> <td><input type='button' value='x' class='btn btn-danger btn-sm btn-row-remove'> </td> </tr>";
-          $("#product_tbody").append(row);
-        });
-        
-        $("body").on("click",".btn-row-remove",function(){
-          if(confirm("Are You Sure?")){
-            $(this).closest("tr").remove();
-            grand_total();
-          }
-        });
 
-        $("body").on("keyup",".price",function(){
-          var price=Number($(this).val());
-          var qty=Number($(this).closest("tr").find(".qty").val());
-          $(this).closest("tr").find(".total").val(price*qty);
-          grand_total();
+
+        <script src="https://code.jquery.com/ui/1.13.0-rc.3/jquery-ui.min.js"
+            integrity="sha256-R6eRO29lbCyPGfninb/kjIXeRjMOqY3VWPVk6gMhREk=" crossorigin="anonymous"></script>
+
+        <script>
+        $(document).ready(function() {
+
+            $("#btn-add-row").click(function() {
+                var row =
+                    "<tr> <td><input type='text' required name='pname[]' class='form-control'></td> <td><input type='text' required name='price[]' class='form-control price'></td> <td><input type='text' required name='qty[]' class='form-control qty'></td> <td><input type='text' required name='total[]' class='form-control total'></td> <td><input type='button' value='x' class='btn btn-danger btn-sm btn-row-remove'> </td> </tr>";
+                $("#product_tbody").append(row);
+            });
+
+            $("body").on("click", ".btn-row-remove", function() {
+                if (confirm("Are You Sure?")) {
+                    $(this).closest("tr").remove();
+                    grand_total();
+                }
+            });
+
+            $("body").on("keyup", ".price", function() {
+                var price = Number($(this).val());
+                var qty = Number($(this).closest("tr").find(".qty").val());
+                $(this).closest("tr").find(".total").val(price * qty);
+                grand_total();
+            });
+
+            $("body").on("keyup", ".qty", function() {
+                var qty = Number($(this).val());
+                var price = Number($(this).closest("tr").find(".price").val());
+                $(this).closest("tr").find(".total").val(price * qty);
+                grand_total();
+            });
+
+            function grand_total() {
+                var tot = 0;
+                $(".total").each(function() {
+                    tot += Number($(this).val());
+                });
+
+                var initial_payment = Number($("#initial_payment").val());
+                var grand_total = tot - initial_payment;
+                $("#grand_total").val(grand_total);
+            }
+
+            $("#initial_payment").on("keyup", function() {
+                grand_total();
+            });
+
+
         });
-        
-        $("body").on("keyup",".qty",function(){
-          var qty=Number($(this).val());
-          var price=Number($(this).closest("tr").find(".price").val());
-          $(this).closest("tr").find(".total").val(price*qty);
-          grand_total();
-        });      
-        
-        function grand_total(){
-          var tot=0;
-          $(".total").each(function(){
-            tot+=Number($(this).val());
-          });
-          $("#grand_total").val(tot);
-        }
-      });
-    </script>
+        </script>
 
         <script>
         const form = document.querySelector('.form-sample');

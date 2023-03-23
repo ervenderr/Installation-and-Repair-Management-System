@@ -57,7 +57,15 @@ require_once '../homeIncludes/dbconfig.php';
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
                                         data-bs-target="#addTransactionModal">
-                                        Add New Transaction <i class=" mdi mdi-plus "></i>
+                                        <i class=" mdi mdi-plus ">Transaction</i>
+                                    </button>
+                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
+                                        data-bs-target="#addElecModal">
+                                        <i class=" mdi mdi-plus ">Electronics</i>
+                                    </button>
+                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
+                                        data-bs-target="#addDefectModal">
+                                        <i class=" mdi mdi-plus ">Defects</i>
                                     </button>
                                 </li>
                             </ul>
@@ -68,17 +76,12 @@ require_once '../homeIncludes/dbconfig.php';
                             <div class="row mg-btm">
                                 <div class="col-sm-12 col-md-6 flex">
                                     <h4 class="card-title">List of Repair Transaction</h4>
-
-                                </div>
-                                <div class="col-sm-12 col-md-6 flex flexm">
-                                    <div id="example_filter" class="dataTables_filter"><label>Search:<input type="text"
-                                                placeholder="search" id="myInput" class="form-control"></label></div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12 grid-margin">
                                     <div class="table-responsive">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover" id="myDataTable2">
                                             <thead>
                                                 <tr class="bg-our">
                                                     <th> # </th>
@@ -86,35 +89,18 @@ require_once '../homeIncludes/dbconfig.php';
                                                     <th> Customer </th>
                                                     <th> Status </th>
                                                     <th> Date </th>
+                                                    <th> Backlog </th>
                                                     <th> Action </th>
                                                 </tr>
                                             </thead>
                                             <tbody id="myTable">
                                                 <?php
-
-                                                    if(isset($_GET['page_no']) && $_GET['page_no'] !=''){
-                                                        $page_no = $_GET['page_no'];
-                                                    }else{
-                                                        $page_no = 1;
-                                                    }
-
-                                                    $total_record_per_page = 10;
-                                                    $offset = ($page_no-1) * $total_record_per_page;
-                                                    $previous_page = $page_no -1;
-                                                    $next_page = $page_no +1;
-                                                    $adjacent = "2";
-
-                                                    $result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM rprq WHERE rprq.status = 'In-progress' OR rprq.status = 'Done'");
-                                                    $total_records = mysqli_fetch_array($result_count);
-                                                    $total_records = $total_records['total_records'];
-                                                    $total_no_of_page = ceil($total_records / $total_record_per_page);
-                                                    $second_last = $total_no_of_page - 1;
-
                                                     // Perform the query
-                                                    $query = "SELECT rprq.id, rprq.transaction_code, customer.fname, customer.lname, rprq.status, rprq.date_req
+                                                    $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed'";
+                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed'
+                                                        ORDER BY rprq.date_req DESC;";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -126,29 +112,38 @@ require_once '../homeIncludes/dbconfig.php';
                                                         echo '<td>' . $row['fname'] . '  ' . $row['lname'] . '</td>';
                                                     
                                                         $statusClass = '';
+                                                        
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
                                                         } else if ($row['status'] == 'In-progress') {
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-success';
+                                                            $statusClass = 'badge-gradient-danger';
                                                         } else if ($row['status'] == 'Completed') {
                                                             $statusClass = 'badge-gradient-success';
                                                         } else {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         }
+
+                                                        $backlog = '';
+                                                        if ($row['backlog'] == '1') {
+                                                            $backlog = 'backlog-red';
+                                                        }else{
+                                                            $backlog = 'badge-gradient-success';
+                                                        }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
+                                                        echo '<td><span class="badge ' . $backlog . ' not-back"> </span></td>';
                                                         echo '<td>';
                                                         echo '<a class="icns" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '<a class="icns" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<i class="fas fa-edit text-white view-account edit" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
+                                                        echo '<i class="fas fa-trash-alt text-white view-account delete" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
@@ -161,80 +156,61 @@ require_once '../homeIncludes/dbconfig.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6 flex">
+                        </div>
+                    </div>
+                </div>
 
-                                </div>
-                                <div class="col-sm-12 col-md-6 flex flexm flexmm">
-                                    <nav aria-label="...">
-                                        <ul class="pagination pagination-sm">
-                                            <li class="page-item disabled oneofone"><?php echo $page_no. "of". $total_no_of_page; ?>
-                                            </li>
-                                            <li class="page-item" <?php if($page_no <= 1) {echo "class='page-item disabled'";} ?>>
-                                            <a class="page-link" <?php if($page_no > 1) {echo "href='?page_no=$previous_page'";} ?>>Previous</a>
-                                            </li>
+                <div class="modal fade" id="addElecModal" tabindex="-1" aria-labelledby="addElecModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addElecModalLabel">Add New Electronic</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="add-electronic.php" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="electronic" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="electronic" name="electronic">
+                                        <label for="cost" class="form-label">Cost</label>
+                                        <input type="number" class="form-control" id="cost" name="cost">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <input name="submit" type="submit" class="btn btn-success" value="Save" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                            <?php
-                                                if($total_no_of_page <= 10){
-                                                    for($counter = 1; $counter <= $total_no_of_page; $counter++){
-                                                        if($counter == $page_no){
-                                                            echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                        }else{
-                                                            echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                        }
-                                                    }
-
-                                                }elseif($total_no_of_page > 10){
-                                                    if($page_no <=4){
-
-                                                        for($counter = 1; $counter < 8; $counter++){
-                                                            if($counter == $page_no){
-                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                            }else{
-                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                            }
-                                                        }
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$second_last'>$second_last</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>$total_no_of_page</a></li>";
-                                                    }elseif($page_no > 4 && $page_no < $total_no_of_page - 4){
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=1'>1</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=2'>2</a></li>";
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-
-                                                        for($counter = $page_no - $adjacent; $counter <= $page_no + $adjacent; $counter++){
-                                                            if($counter == $page_no){
-                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                            }else{
-                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                            }
-                                                        }
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$second_last'>$second_last</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>$total_no_of_page</a></li>";
-                                                    }else{
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=1'>1</a></li>";
-                                                        echo "<li class='page-item'><a class='page-link' href='?page_no=2'>2</a></li>";
-                                                        echo '<li class="page-item"><a class="page-link">...</a></li>';
-                                                        for($counter = $total_no_of_page - 6; $counter <= $total_no_of_page; $counter++){
-                                                            if($counter == $page_no){
-                                                                echo "<li class='page-item active'><a class='page-link'>$counter</a></li>";
-                                                            }else{
-                                                                echo "<li class='page-item'><a class='page-link' href='?page_no=$counter'>$counter</a></li>";
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ?>
-                                            <li class="page-item" <?php if($page_no >= $total_no_of_page) {echo "class='page-item disabled'";} ?>>
-                                            <a class="page-link" <?php if($page_no < $total_no_of_page) {echo "href='?page_no=$next_page'";} ?>>Next</a>
-                                            </li>
-                                            <?php
-                                                if($page_no < $total_no_of_page) {echo "<li class='page-item'><a class='page-link' href='?page_no=$total_no_of_page'>Last &rsaqou; &rsaqou;</a></li>";}
-                                            ?>
-                                        </ul>
-                                    </nav>
-                                </div>
+                <div class="modal fade" id="addDefectModal" tabindex="-1" aria-labelledby="addDefectModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addDefectModalLabel">Add New Defect</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="add-defect.php" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="defect" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="defect" name="defect">
+                                        <label for="cost" class="form-label">Cost</label>
+                                        <input type="number" class="form-control" id="cost" name="cost">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <input name="submit" type="submit" class="btn btn-success" value="Save" />
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -297,8 +273,8 @@ require_once '../homeIncludes/dbconfig.php';
         });
     });
     </script>
-    
-    
+
+
 
     <script>
     const form = document.querySelector('.form-sample');
@@ -423,6 +399,25 @@ require_once '../homeIncludes/dbconfig.php';
     });
     </script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
+    </script>
+
+    <script>
+    j(document).ready(function() {
+        j('#myDataTable').DataTable();
+    });
+
+    j(document).ready(function() {
+        j('#myDataTable2').DataTable();
+    });
+    </script>
 </body>
 
 </html>

@@ -31,5 +31,6 @@
     $techactive = "";
     $prodactive = "";
     $suppactive = "";
+    $reports = "";
 
 ?>

@@ -4,6 +4,7 @@ require_once '../homeIncludes/dbconfig.php';
 
 if(isset($_POST['submit'])) {
     // assign form data to variables
+    $category = $_POST['category'];
     $pname = $_POST['pname'];
     $price = $_POST['price'];
     $description = $_POST['description'];
@@ -15,7 +16,7 @@ if(isset($_POST['submit'])) {
     $suffix = mt_rand(1000, 9999) . chr(mt_rand(65, 90));
     $sku = $prefix . $suffix;
 
-    $status = "In-Stock";
+
 
     $image_contents = array();
 
@@ -32,7 +33,7 @@ if(isset($_POST['submit'])) {
         }
     }
 
-    $sql = "INSERT INTO products (sku, name, price, description, full_descriptions, features, img1, img2, img3, status) 
+    $sql = "INSERT INTO products (sku, categ_id, name, price, description, full_descriptions, features, img1, img2, img3) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = mysqli_stmt_init($conn);
@@ -40,11 +41,11 @@ if(isset($_POST['submit'])) {
         // Handle error
         exit();
     } else {
-        mysqli_stmt_bind_param($stmt, "ssssssssss", $sku, $pname, $price, $description, $full, $features, $image_contents[1], $image_contents[2], $image_contents[3], $status);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $sku, $category, $pname, $price, $description, $full, $features, $image_contents[1], $image_contents[2], $image_contents[3]);
         mysqli_stmt_execute($stmt);
 
         if (mysqli_stmt_affected_rows($stmt) > 0) {
-            $_SESSION['msg'] = "Record Updated Successfully";
+            $_SESSION['msg'] = "Record Added Successfully";
             header("location: products.php");
         } else {
             echo "FAILED: " . mysqli_error($conn);
