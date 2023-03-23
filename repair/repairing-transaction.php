@@ -148,9 +148,13 @@ $row = mysqli_fetch_assoc($result);
                     rprq.status AS rprq_status, 
                     accounts.*,
                     technician.*,
+                    electronics.*,
+                    defects.*,
                     customer.*
                     FROM rprq
                     LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+                    LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+                    LEFT JOIN defects ON rprq.defect_id = defects.defect_id
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
                     WHERE rprq.status = 'In-Progress' AND accounts.account_id = '{$user_id}';";
