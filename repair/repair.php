@@ -117,7 +117,8 @@ $_SESSION["cust_id"] = $row["cust_id"];
                     </div>
                     <div class="mb-3">
                     <label for="defective" class="col-form-label">Defects</label>
-                    <select name="defective" id="defective" class="form-control">
+                                <div class="">
+                                    <select name="defective" id="defective" class="form-control">
                                         <option value="None">--- Select ---</option>
                                         <?php
                                             $sql = "SELECT * FROM defects";
@@ -128,8 +129,12 @@ $_SESSION["cust_id"] = $row["cust_id"];
                                             ?>
                                         <option value="other">Other</option>
                                     </select>
-                        <span class="val-error"></span>
-                    </div>
+                                    <span class="val-error"></span>
+                                </div>
+                                <div class="form-group" id="other-defect-input" style="display:none;">
+                                    <label for="other_defective" class="col-form-label">Other Defect</label>
+                                    <input type="text" name="other_defective" id="other_defective" class="form-control">
+                                </div>
                     <div class="mb-3">
                         <label for="shipping" class="form-label">Shipping option</label>
                         <select name="shipping" id="shipping" class="form-select">
@@ -207,6 +212,16 @@ $_SESSION["cust_id"] = $row["cust_id"];
                 })
             }
         });
+    });
+</script>
+
+<script>
+    document.getElementById('defective').addEventListener('change', function() {
+        if (this.value === 'other') {
+            document.getElementById('other-defect-input').style.display = 'block';
+        } else {
+            document.getElementById('other-defect-input').style.display = 'none';
+        }
     });
 </script>
 
