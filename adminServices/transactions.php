@@ -145,7 +145,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<a class="icns" href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
                                                         echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
+                                                        echo '<a class="icns" href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
                                                         echo '<i class="fas fa-trash-alt text-white view-account delete" data-rowid="' .  $row['sreq_id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
