@@ -105,43 +105,63 @@ include_once('../homeIncludes/header.php');
     </div>
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#btn-submit').click(function() {
-            var address = $('#address').val();
-            var phone = $('#phone').val();
-            var valid = true;
+$(document).ready(function() {
+    $('#repair-form').submit(function(event) {
+        var address = $('#address').val();
+        var phone = $('#phone').val();
+        var password = $('input[name="password"]').val();
+        var passwordRepeat = $('input[name="password-repeat"]').val();
+        var valid = true;
 
-            // Check if reCAPTCHA is checked
-            if (!$('.g-recaptcha-response').val()) {
-                $('.val-error').text('Please check the reCAPTCHA box');
-                valid = false;
-            } else {
-                $('.val-error').text('');
-            }
+        // Check if reCAPTCHA is checked
+        if (!$('.g-recaptcha-response').val()) {
+            $('.val-error').text('Please check the reCAPTCHA box');
+            valid = false;
+        } else {
+            $('.val-error').text('');
+        }
 
-            // Address validation
-            if (address == "") {
-                $('#address + .val-error').text('Please enter your address.');
-                valid = false;
-            } else {
-                $('#address + .val-error').text('');
-            }
+        // Address validation
+        if (address == "") {
+            $('#address + .val-error').text('Please enter your address.');
+            valid = false;
+        } else {
+            $('#address + .val-error').text('');
+        }
 
-            // Phone number validation
-            if (phone == "") {
-                $('#phone + .val-error').text('Please enter your phone number.');
-                valid = false;
-            } else {
-                $('#phone + .val-error').text('');
-            }
+        // Phone number validation
+        if (phone == "") {
+            $('#phone + .val-error').text('Please enter your phone number.');
+            valid = false;
+        } else {
+            $('#phone + .val-error').text('');
+        }
 
-            // Submit the form if all fields are valid
-            if (valid) {
-                // The default form submission behavior will submit the form to "signup-process.php"
-            }
-        });
+        // Password validation
+        if (password.length < 8) {
+            $('input[name="password"] + .val-error').text('Password must be at least 8 characters long.');
+            valid = false;
+        } else {
+            $('input[name="password"] + .val-error').text('');
+        }
+
+        // Repeat password validation
+        if (password != passwordRepeat) {
+            $('input[name="password-repeat"] + .val-error').text('Passwords do not match.');
+            valid = false;
+        } else {
+            $('input[name="password-repeat"] + .val-error').text('');
+        }
+
+        // Submit the form if all fields are valid
+        if (!valid) {
+            event.preventDefault(); // Prevent the form from being submitted if validation fails
+        }
     });
-    </script>
+});
+</script>
+
+
 </body>
 
 </html>

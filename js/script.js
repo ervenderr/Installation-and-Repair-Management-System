@@ -59,6 +59,21 @@ function validateFormStep() {
       } else {
         input.nextElementSibling.innerHTML = "";
       }
+    } else if (input.name === "password") {
+      if (input.value.length < 8) {
+        input.nextElementSibling.innerHTML = "Password must be at least 8 characters long.";
+        isValid = false;
+      } else {
+        input.nextElementSibling.innerHTML = "";
+      }
+    } else if (input.name === "password-repeat") {
+      const password = document.querySelector('input[name="password"]').value;
+      if (input.value !== password) {
+        input.nextElementSibling.innerHTML = "Passwords do not match.";
+        isValid = false;
+      } else {
+        input.nextElementSibling.innerHTML = "";
+      }
     } else {
       input.nextElementSibling.innerHTML = "";
     }
@@ -66,6 +81,7 @@ function validateFormStep() {
 
   return isValid;
 }
+
 
 prevBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
