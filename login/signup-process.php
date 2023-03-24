@@ -19,7 +19,7 @@ require '../vendor/autoload.php';
 
         $mail->Host = 'smtp.gmail.com';
         $mail->Username = 'ervenfailed@gmail.com';
-        $mail->Password = 'quljbxjzhpwcqfhx';
+        $mail->Password = 'szahpjggyglgexyz';
 
         $mail->SMTPSecure = "ssl";
         $mail->Port = 465;
