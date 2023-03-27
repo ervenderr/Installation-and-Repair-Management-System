@@ -29,11 +29,15 @@ $_SESSION["cust_id"] = $row["cust_id"];
 
     <?php
     require_once '../homeIncludes/homenav.php';
+    require_once '../modals/repair-process.php';
     ?>
 
     <div id="particles-js"></div>
     <div class="repaircon">
 
+    <button type="button" class="btn btn-primary btn-faq" data-bs-toggle="modal" data-bs-target="#rprocess" >
+    ?
+</button>
         <form action="repair.php" class="form" method="POST" id="repair-form" enctype="multipart/form-data">
 
             <div id='msgs' class='msg'>
@@ -46,6 +50,9 @@ $_SESSION["cust_id"] = $row["cust_id"];
             </div>
    
             <h4 class="text-center">Repair Request Form</h3>
+
+
+
                 <!-- progress bar -->
 
                 <div class="progressbar">
