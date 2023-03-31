@@ -2198,3 +2198,11 @@ input[type="password"],
     right: 1%;
     margin-top: 10px;
 }
+
+.tbh{
+    color: rgb(172, 172, 172);
+}
+
+.card .h-card{
+    margin-bottom: 0 !important;
+}

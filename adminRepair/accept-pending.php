@@ -12,11 +12,24 @@ if(isset($_POST['id'])){
     $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
     $output .= '
-    <form method="POST" action="accept-pending.php" enctype="multipart/form-data">
+    <form method="POST" action="accepted-pending.php" enctype="multipart/form-data">
           <div class="mb-3">
-          <label for="payment" class="form-label">Initial Payment</label>
-          <input type="number" class="form-control" id="payment" name="payment">
-        </div>
+            <label for="tech" class="form-label">Technician</label>
+            <select class="form-select" id="tech" name="tech">
+                <option value="None">--- select ---</option>';
+
+            // Query the supplier table
+            $sql = "SELECT * FROM technician WHERE status = 'Active'";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+                while($row = mysqli_fetch_assoc($result)) {
+                    $output .= "<option value='" . $row["tech_id"] . "'>" . $row['fname'] . '  ' . $row['lname'] . "</option>";
+                }
+              }
+
+    $output .= '
+            </select>
+          </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <input name="submit" type="submit" class="btn btn-danger" value="Accept"/>
@@ -30,18 +43,16 @@ if(isset($_POST['id'])){
 if(isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
     $techId = htmlentities($_POST['tech']);
-    $payment = htmlentities($_POST['payment']);
-    $completed = htmlentities($_POST['completed']);
-    $status = "Accepted";
+    $status = "In-progress";
 
 
-    $query = "UPDATE rprq SET initial_payment = '$payment', status = '$status' WHERE id = '$id'";
-
+    $query = "UPDATE rprq SET tech_id = '$techId', status = '$status' WHERE id = '$id'";
     $result = mysqli_query($conn, $query);
-    
+
 
     if ($result) {
-        $_SESSION['msg'] = "Initial Payment recorded";
+        $_SESSION['techId'] = $techId;
+        $_SESSION['msg'] = "Record Updated Successfully";
         header("location: accepted.php");
     } else {
        echo "FAILED: " . mysqli_error($conn);

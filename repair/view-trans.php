@@ -1,6 +1,5 @@
 <?php
 session_start();
-error_reporting(0);
 if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
@@ -28,16 +27,22 @@ rprq.status AS rprq_status,
 accounts.*,
 technician.*,
 electronics.*,
+rp_timeline.*,
+elec_brand.*,
 defects.*,
 customer.*
 FROM rprq
 LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+LEFT JOIN rp_timeline ON rprq.id = rp_timeline.rprq_id
+LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
 LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-WHERE accounts.account_id = '{$user_id}';";
+WHERE accounts.account_id = '{$user_id}'
+ORDER BY rp_timeline.tm_date DESC, rp_timeline.tm_time DESC;";
 $result = mysqli_query($conn, $query);
+
 
                   if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
@@ -104,7 +109,14 @@ $row = mysqli_fetch_assoc($result);
                 <div class="col-sm-9 accform ">
                     <div class="tracking-list view-nav">
                         <div class="row">
-                            <div class="col-6"><i class="fas fa-chevron-left"></i> Back</div>
+                            <?php
+                            $href = '';
+                            if($row['rprq_status'] == 'Pending'){
+                                $href = 'pending-transaction.php';
+                            }
+                            ?>
+                            <div class="col-6"><a href="<?php echo $href ?>"><i class="fas fa-chevron-left"></i>
+                                    Back</a></div>
                             <div class="col-6 nav-cont">
                                 <span>REQUEST ID: <?php echo $row['transaction_code']?></span>
                                 <span class="half">|</span>
@@ -114,117 +126,136 @@ $row = mysqli_fetch_assoc($result);
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
-                            <div id="tracking-pre"></div>
                             <div id="tracking">
                                 <div class="tracking-list">
+                                    <?php
+                                    $content ='';
+                                    if($row['rprq_status'] == 'Pending'){
+                                        $content ='Repair request received';
+                                    }elseif($row['rprq_status'] == 'In-progress'){
+                                        $content ='The repair request has been assigned to a technician, and they are currently working on the repair';
+                                    }elseif($row['rprq_status'] == 'Awaiting Parts'){
+                                        $content ='The repair is on hold because the necessary parts are not available';
+                                    }elseif($row['rprq_status'] == 'Awaiting Payment'){
+                                        $content ='The technician has completed the evaluation, and the customer needs to pay a partial or full amount before the repair can proceed';
+                                    }elseif($row['rprq_status'] == 'Repairing'){
+                                        $content ='Partial payment has been received, the technician is working on the repair';
+                                    }
+                                    elseif($row['rprq_status'] == 'To pickup'){
+                                        $content ='The repair is completed, your request is ready for picked up or delivered';
+                                    }
+                                    elseif($row['rprq_status'] == 'Completed'){
+                                        $content ='Picked up / Delivered';
+                                    }
+                                    
+                                    $result2 = mysqli_query($conn, $query);
+                                    while ($row2 = mysqli_fetch_assoc($result2)) {
+                                        $status = $row2['tm_status'];
+                                        $date = $row2['tm_date'];
+                                        $time = $row2['tm_time'];
+                                        $location = $row2['tm_location'];
+                                        $isCurrentStatus = $row2['tm_status'];
+                                        $statusClass = $isCurrentStatus ? 'status-intransit' : 'status-delivered';
+                                    ?>
                                     <div class="tracking-item">
-                                        <div class="tracking-icon status-intransit">
-                                            <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true"
-                                                data-prefix="fas" data-icon="circle" role="img"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                                data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z">
-                                                </path>
-                                            </svg>
-                                            <!-- <i class="fas fa-circle"></i> -->
+                                        <div class="tracking-icon <?php echo $statusClass; ?>">
                                         </div>
-                                        <div class="tracking-date">Jul 09, 2018<span>11:04 AM</span></div>
-                                        <div class="tracking-content">Pickup shipment checked in at
-                                            SHENZHEN.<span>SHENZHEN, CHINA, PEOPLE'S REPUBLIC</span></div>
-                                    </div>
-                                    <div class="tracking-item">
-                                        <div class="tracking-icon status-intransit">
-                                            <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true"
-                                                data-prefix="fas" data-icon="circle" role="img"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                                data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z">
-                                                </path>
-                                            </svg>
-                                            <!-- <i class="fas fa-circle"></i> -->
+                                        <div class="tracking-date">
+                                            <?php echo $date; ?><span><?php echo $time; ?></span>
                                         </div>
-                                        <div class="tracking-date">Jul 09, 2018<span>10:09 AM</span></div>
-                                        <div class="tracking-content">Shipment info registered at
-                                            SHENZHEN.<span>SHENZHEN, CHINA, PEOPLE'S REPUBLIC</span></div>
-                                    </div>
-                                    <div class="tracking-item">
-                                        <div class="tracking-icon status-inforeceived">
-                                            <svg class="svg-inline--fa fa-clipboard-list fa-w-12" aria-hidden="true"
-                                                data-prefix="fas" data-icon="clipboard-list" role="img"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"
-                                                data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                    d="M336 64h-80c0-35.3-28.7-64-64-64s-64 28.7-64 64H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM96 424c-13.3 0-24-10.7-24-24s10.7-24 24-24 24 10.7 24 24-10.7 24-24 24zm0-96c-13.3 0-24-10.7-24-24s10.7-24 24-24 24 10.7 24 24-10.7 24-24 24zm0-96c-13.3 0-24-10.7-24-24s10.7-24 24-24 24 10.7 24 24-10.7 24-24 24zm96-192c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zm128 368c0 4.4-3.6 8-8 8H168c-4.4 0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16zm0-96c0 4.4-3.6 8-8 8H168c-4.4 0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16zm0-96c0 4.4-3.6 8-8 8H168c-4.4 0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16z">
-                                                </path>
-                                            </svg>
-                                            <!-- <i class="fas fa-clipboard-list"></i> -->
+                                        <div class="tracking-content">
+                                            <?php echo $status; ?><span><?php echo $content; ?></span>
                                         </div>
-                                        <div class="tracking-date">Jul 06, 2018<span>02:02 PM</span></div>
-                                        <div class="tracking-content">Shipment designated to MALAYSIA.<span>HONG KONG,
-                                                HONGKONG</span></div>
                                     </div>
+                                    <?php
+                }
+                ?>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="d-flex flex-wrap pending-card viewpnd">
                         <?php
-                        $estimatedCost = $row['def_cost'] + $row['elec_cost'];
                         ?>
                         <div class="card mb-3 transaction-details-card view-dtls">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
+                                            <span class="fw-bold me-2 transaction-details-label">Electronic
+                                                Type:</span>
                                             <span><?php echo $row['elec_name']?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Defects:</span>
-                                            <span class="transaction-details-none"><?php
-                                                        if (empty($row['defect_id']) || $row['defect_id'] == 0) {
-                                                            echo $row['other_defects'];
-                                                        } else {
-                                                            echo $row['defect_name'];
-                                                        }
-                                                        ?></span>
+                                            <span class="fw-bold me-2 transaction-details-label">Brand:</span>
+                                            <span class=""><?php echo $row['eb_name'] ?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Warranty:</span>
-                                            <span class="">3 months</span>
+                                            <span class="fw-bold me-2 transaction-details-label">Defects:</span>
+                                            <span
+                                                class="transaction-details-none"><?php echo $row['defect_name']?></span>
                                         </div>
+                                        <div class="text-start">
+                                            <form method="post" action="../repair-invoice/booking-repair-pdf.php"
+                                                target="_blank">
+                                                <?php
+                                            $_SESSION['rp_id'] = $row['id'];
+                                            ?>
+                                                <button type="submit" name="download" value="<?php echo $row['id']; ?>"
+                                                    class="btn btn-secondary">Download
+                                                    Ticket <i class="fas fa-download"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Shipping:</span>
                                             <span
                                                 class="transaction-details-standard-shipping"><?php echo $row['shipping']?></span>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-6">
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Date Requested:</span>
+                                            <span class="fw-bold me-2 transaction-details-label">Date
+                                                Requested:</span>
                                             <span><?php echo $row['date_req']?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Estimated
+                                            <span class="fw-bold me-2 transaction-details-label">Expected
                                                 Completion:</span>
-                                            <span><?php echo $row['date_completed']?></span>
+                                            <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                <?php
+                                                    if($row['date_completed'] == '0000-00-00'){
+                                                        echo 'TBA';
+                                                    }else{
+                                                        echo $row['date_completed'];
+                                                    }
+                                                    ?>
+                                            </span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
                                                 Technician:</span>
-                                            <span><?php echo $row['tech_fname'] . " " . $row['tech_lname']?></span>
+                                            <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                <?php
+                                                    if($row['tech_id'] == ''){
+                                                        echo 'TBA';
+                                                    }else{
+                                                        echo $row['date_completed'];
+                                                    }
+                                                    ?>
+                                            </span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Technician's
                                                 Contact:</span>
-                                            <span><?php echo $row['tech_phone']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Remarks:</span>
-                                            <textarea class="form-control" rows="3"
-                                                readonly><?php echo $row['remarks']?></textarea>
+                                            <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                <?php
+                                                    if($row['tech_phone'] == ''){
+                                                        echo 'TBA';
+                                                    }else{
+                                                        echo $row['tech_phone'];
+                                                    }
+                                                    ?>
                                         </div>
                                     </div>
                                 </div>

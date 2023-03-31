@@ -87,7 +87,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'Accepted'";
+                                                        WHERE rprq.status = 'In-progress'";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;

@@ -160,13 +160,29 @@ $row = mysqli_fetch_assoc($result);
                     </nav>
                     <?php
 
-                    $query = "SELECT *
-                    FROM customer
-                    LEFT JOIN rprq ON customer.cust_id = rprq.cust_id
-                    LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
-                    LEFT JOIN defects ON rprq.defect_id = defects.defect_id
-                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE rprq.status = 'pending' OR status='Accepted' AND accounts.account_id='{$user_id}';";
+$query = "SELECT rprq.*, 
+technician.fname AS tech_fname, 
+technician.lname AS tech_lname, 
+technician.phone AS tech_phone,
+technician.status AS tech_status, 
+customer.fname AS cust_fname, 
+customer.lname AS cust_lname, 
+customer.phone AS cust_phone,
+rprq.status AS rprq_status, 
+accounts.*,
+technician.*,
+electronics.*,
+elec_brand.*,
+defects.*,
+customer.*
+FROM rprq
+LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
+LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN defects ON rprq.defect_id = defects.defect_id
+LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN accounts ON customer.account_id = accounts.account_id
+WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
@@ -188,7 +204,7 @@ $row = mysqli_fetch_assoc($result);
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Status:</span>
                                                 <span
-                                                    class="transaction-details-pending"><?php echo $row['status']?></span>
+                                                    class="transaction-details-pending"><?php echo $row['rprq_status']?></span>
                                             </div>
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Electronic
@@ -196,14 +212,25 @@ $row = mysqli_fetch_assoc($result);
                                                 <span><?php echo $row['elec_name']?></span>
                                             </div>
                                             <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Brand:</span>
+                                                <span class=""><?php echo $row['eb_name'] ?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Defects:</span>
                                                 <span
                                                     class="transaction-details-none"><?php echo $row['defect_name']?></span>
                                             </div>
-                                            <div class="transaction-details-row">
-                                                <span class="fw-bold me-2 transaction-details-label">Estimated Cost
-                                                    ₱:</span>
-                                                <span class=""><?php echo $estimatedCost ?></span>
+                                            <div class="text-start">
+                                                <form method="post" action="../repair-invoice/booking-repair-pdf.php"
+                                                    target="_blank">
+                                                    <?php
+                                            $_SESSION['rp_id'] = $row['id'];
+                                            ?>
+                                                    <button type="submit" name="download"
+                                                        value="<?php echo $row['id']; ?>"
+                                                        class="btn btn-secondary">Download
+                                                        Ticket <i class="fas fa-download"></i></button>
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -220,24 +247,41 @@ $row = mysqli_fetch_assoc($result);
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Expected
                                                     Completion:</span>
-                                                <span></span>
+                                                <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                    <?php
+                                                    if($row['date_completed'] == '0000-00-00'){
+                                                        echo 'TBA';
+                                                    }else{
+                                                        echo $row['date_completed'];
+                                                    }
+                                                    ?>
+                                                </span>
                                             </div>
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Assigned
                                                     Technician:</span>
-                                                <span></span>
+                                                <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                    <?php
+                                                    if($row['tech_id'] == ''){
+                                                        echo 'TBA';
+                                                    }else{
+                                                        echo $row['date_completed'];
+                                                    }
+                                                    ?>
+                                                </span>
                                             </div>
-                                        </div>
-                                        <div class="text-start">
-                                            <form method="post" action="../repair-invoice/booking-repair-pdf.php"
-                                                target="_blank">
-                                                <?php
-                                            $_SESSION['rp_id'] = $row['id'];
-                                            ?>
-                                                <button type="submit" name="download" value="<?php echo $row['id']; ?>"
-                                                    class="btn btn-secondary">Download
-                                                    Ticket <i class="fas fa-download"></i></button>
-                                            </form>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Technician's
+                                                    Contact:</span>
+                                                <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                    <?php
+                                                    if($row['tech_phone'] == ''){
+                                                        echo 'TBA';
+                                                    }else{
+                                                        echo $row['tech_phone'];
+                                                    }
+                                                    ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

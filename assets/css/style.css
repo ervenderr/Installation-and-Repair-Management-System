@@ -22288,5 +22288,19 @@ th{
 
 .updtech{
   background-color: #07cdae !important;
-  padding: 6px 8px;
+  padding: 8px 12px;
+}
+
+.card .h-card{
+  margin-bottom: 0 !important;
+}
+
+.labortotal{
+  background-color: grey;
+  font-weight: 700;
+  color: #fff;
+}
+
+#partqty{
+  height: 35px;
 }
