@@ -155,6 +155,7 @@ foreach ($errors as $error) {
                     <button class="btn btn-primary btn-block" name="submit" type="submit">Sign In</button>
                 </div>
                 <a href="../login/signup.php" class="already">Don't have an account? Sign up here.</a>
+                <p><a href="forgot-password.php">Forgot your password?</a></p>
             </form>
             <div class="image-holder"></div>
         </div>
