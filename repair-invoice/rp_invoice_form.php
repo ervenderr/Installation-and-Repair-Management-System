@@ -169,7 +169,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                                     class='form-control qty'></td>
                                                             <td><input type='text' required name='total[]'
                                                                     class='form-control total'></td>
-                                                            <td><input type='button' value='x'
+                                                                    <td><input type='button' value='x'
                                                                     class='btn btn-danger btn-sm btn-row-remove'> </td>
                                                         </tr>
                                                     </tbody>

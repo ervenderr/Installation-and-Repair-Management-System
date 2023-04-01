@@ -369,8 +369,8 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
     <!-- container-scroller -->
 
     <!-- Accept modal -->
-    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+    <div class="modal fade " id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog diangmod">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>

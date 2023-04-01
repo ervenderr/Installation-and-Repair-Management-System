@@ -28,13 +28,19 @@ if (isset($_POST['id'])) {
   rprq.status AS rprq_status, 
   accounts.*,
   technician.*,
+  elec_brand.*,
   electronics.*,
+  rp_brand_parts.*,
+  brand_parts.*,
   defects.*,
   invoice.*,
   customer.*
   FROM rprq
   LEFT JOIN technician ON rprq.tech_id = technician.tech_id
   LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+  LEFT JOIN elec_brand ON electronics.elec_id = elec_brand.elec_id
+  LEFT JOIN brand_parts ON elec_brand.eb_id = brand_parts.eb_id
+  LEFT JOIN rp_brand_parts ON brand_parts.bp_id = rp_brand_parts.bp_id
   LEFT JOIN defects ON rprq.defect_id = defects.defect_id
   LEFT JOIN customer ON rprq.cust_id = customer.cust_id
   LEFT JOIN accounts ON customer.account_id = accounts.account_id
@@ -68,51 +74,83 @@ if (isset($_POST['id'])) {
   </select>
     </div>
     <div class="mb-3">
-        <label for="comrep" class="form-label">Repair/Replacement Needed<span class="required">*</span></label>
-        <select class="form-select js-example-basic-multiple" id="comrep" name="comrep[]" multiple="multiple" required>';
+    <label for="comrep" class="form-label">Repair/Replacement Needed<span class="required">*</span></label>
+    <select class="form-select js-example-basic-multiple" id="comrep" name="comrep[]" multiple="multiple">';
+
+    // Get the selected common repairs
+$selected_comrep_query = "SELECT comrep_id FROM rp_labor WHERE rprq_rl_id = ?";
+$selected_comrep_stmt = mysqli_prepare($conn, $selected_comrep_query);
+mysqli_stmt_bind_param($selected_comrep_stmt, 'i', $_POST['id']); // Assuming $_POST['id'] is the rprq ID you want to check
+mysqli_stmt_execute($selected_comrep_stmt);
+$selected_comrep_result = mysqli_stmt_get_result($selected_comrep_stmt);
+
+$selected_comrep_ids = array();
+while ($selected_comrep = mysqli_fetch_assoc($selected_comrep_result)) {
+    $selected_comrep_ids[] = $selected_comrep['comrep_id'];
+}
 
 $sql = "SELECT * FROM common_repairs WHERE elec_id = $elec_id";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $output .= "<option value='" . $row["comrep_id"] . "'>" . $row['comrep_name'] ."</option>";
+    while ($row = mysqli_fetch_assoc($result)) {
+        $selected = in_array($row["comrep_id"], $selected_comrep_ids) ? 'selected' : '';
+        $output .= "<option value='" . $row["comrep_id"] . "' $selected>" . $row['comrep_name'] . "</option>";
     }
 }
-
-$output .= '
+    $output .= '
         </select>
     </div>
-    <div class="row mb-3">
-    <div class="col-8">
-        <label for="parts" class="form-label">Parts Needed<span class="required">*</span></label>
-        <select class="form-select js-example-basic-multiple" id="parts" name="parts[]" multiple="multiple">';
 
-$sql = "SELECT * FROM brand_parts WHERE eb_id = $elec_id";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $output .= "<option value='" . $row["bp_id"] . "'>" . $row['bp_name'] ."</option>";
-    }
-}
+    <div class="card">
+    <div class="card-body partsbody">
+      <div class="row mb-3 ">
+      <div class="col-7 partscol">
+          <label for="parts" class="form-label">Parts Needed<span class="required">*</span></label>
+          <select class="form-select" id="parts" name="parts[]">';
+      $sql = "SELECT * FROM brand_parts WHERE eb_id = $elec_id";
+      $result = mysqli_query($conn, $sql);
+      if (mysqli_num_rows($result) > 0) {
+      while($row = mysqli_fetch_assoc($result)) {
+          $output .= "<option value='" . $row["bp_id"] . "'>" . $row['bp_name'] ."</option>";
+      }
+      }
 
-$output .= '
-        </select>
-    </div>
-    <div class="col-4">
-        <label for="partqty" class="form-label">Quantity</label>
-        <input type="number" class="form-control" id="partqty" name="partqty">
+      $output .= '
+          </select>
+      </div>
+      <div class="col-3 partscol">
+      <label for="partqty" class="form-label">Quantity</label>
+      <input type="number" class="form-control" id="partqty" name="partqty" value="' . $row6['quantity'] . '">
+      </div>
+      <div class="col-2 partscolx">
+      <td><input type="button" value="x" class="btn btn-danger btn-sm btn-row-remove"> </td>
+      </div>
+      </div>
+      <tr>
+            <td><input type="button" value="+ Add Row" class="btn btn-primary btn-sm" id="btn-add-row">
+            </td>
+        </tr>
+      </div>
+      </div>
+      <div class="row">
+      <div class="col-6">
+      <div class="mb-3">
+        <label for="from" class="form-label">Estimated Completion (from)</label>
+        <input type="date" class="form-control" id="from" name="from" value="' . $row6['date_from'] . '">
+      </div>
+      </div>
+      <div class="col-6">
+      <div class="mb-3">
+        <label for="to" class="form-label">(to)</label>
+        <input type="date" class="form-control" id="to" name="to" value="' . $row6['date_to'] . '">
         </div>
-    </div>
-        <div class="mb-3">
+        </div>
+      </div>
+      </div>
+      <div class="mb-3">
           <label for="remarks" class="form-label">Remarks</label>
           <textarea class="form-control" id="remarks" name="remarks">' . $row6['remarks'] . '</textarea>
         </div>
-        <div class="mb-3">
-        <label for="from" class="form-label">Estimated Completion (from)</label>
-        <input type="date" class="form-control" id="from" name="from">
-        <label for="to" class="form-label">Estimated Completion (to)</label>
-        <input type="date" class="form-control" id="to" name="to">
-      </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <input name="submit" type="submit" class="btn btn-success" value="Update"/>
@@ -176,5 +214,43 @@ foreach ($parts as $part) {
 <script>
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2({});
+
+    // Add row
+  $('#btn-add-row').on('click', function () {
+    let newRow = `
+      <div class="row mb-3 parts-row">
+        <div class="col-7 partscol">
+          <label for="parts" class="form-label">Parts Needed<span class="required">*</span></label>
+          <select class="form-select" name="parts[]">
+<?php
+$sql = "SELECT * FROM brand_parts WHERE eb_id = $elec_id";
+$result = mysqli_query($conn, $sql);
+if (mysqli_num_rows($result) > 0) {
+  while($row = mysqli_fetch_assoc($result)) {
+    echo "<option value='" . $row["bp_id"] . "'>" . $row['bp_name'] ."</option>";
+  }
+}
+?>
+          </select>
+        </div>
+        <div class="col-3 partscol">
+          <label for="partqty" class="form-label">Quantity</label>
+          <input type="number" class="form-control" name="partqty" value="1">
+        </div>
+        <div class="col-2 partscolx">
+          <input type="button" value="x" class="btn btn-danger btn-sm btn-row-remove">
+        </div>
+      </div>
+    `;
+
+    $('.partsbody').append(newRow);
+  });
+
+  // Remove row
+  $('.partsbody').on('click', '.btn-row-remove', function () {
+    $(this).closest('.parts-row').remove();
+  });
 });
+
+
 </script>

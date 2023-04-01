@@ -22302,5 +22302,31 @@ th{
 }
 
 #partqty{
+  height: 37px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding-left: 10px
+
+}
+
+.diangmod{
+  min-width: 700px;
+}
+
+.partscol{
+  padding-right: 0;
+}
+.partscolx{
+  margin-top: 28px;
+  padding-left: 10px;
+
+}
+
+.partscolx .btn-row-remove{
   height: 35px;
+  width: 35px;
+}
+
+.card .partsbody{
+  padding: 10px
 }
