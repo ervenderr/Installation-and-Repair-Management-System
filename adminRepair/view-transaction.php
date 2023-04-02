@@ -10,28 +10,32 @@ $rptrue = "true";
 
 $rowid = $_GET['rowid'];
 $tcode = $_GET['transaction_code'];
-    
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
+    header('location: ../login/login.php');
+}
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT rprq.*, 
-            customer.fname AS cust_fname, 
-            customer.lname AS cust_lname, 
-            technician.fname AS tech_fname, 
-            technician.lname AS tech_lname, 
-            technician.status AS tech_status_new_name, 
-            rprq.status AS rprq_status, 
-            accounts.*,
-            technician.*,
-            electronics.*,
-            defects.*,
-            invoice.*,
-            customer.*
-          FROM rprq
-          LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-          LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
-          LEFT JOIN defects ON rprq.defect_id = defects.defect_id
-          LEFT JOIN customer ON rprq.cust_id = customer.cust_id
-          LEFT JOIN accounts ON customer.account_id = accounts.account_id
-          LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
+customer.fname AS cust_fname, 
+customer.lname AS cust_lname, 
+technician.fname AS tech_fname, 
+technician.lname AS tech_lname, 
+technician.status AS tech_status_new_name, 
+rprq.status AS rprq_status, 
+accounts.*,
+technician.*,
+electronics.*,
+defects.*,
+invoice.*,
+customer.*
+FROM rprq
+LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN defects ON rprq.defect_id = defects.defect_id
+LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN accounts ON customer.account_id = accounts.account_id
+LEFT JOIN invoice ON rprq.id = invoice.rprq_id
           WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
@@ -66,25 +70,6 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             </span> Repair Transaction
 
                         </h3>
-                        <?php
-            if (isset($_SESSION['msg'])) {
-                $msg = $_SESSION['msg'];
-                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                '. $msg .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-              unset ($_SESSION['msg']);
-            }
-
-            if (isset($_SESSION['msg2'])) {
-                $msg2 = $_SESSION['msg2'];
-                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                '. $msg2 .'
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>';
-            }
-            unset ($_SESSION['msg']);
-        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <?php
@@ -108,8 +93,16 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header d-flex align-items-center justify-content-between">
                                     <h4 class="card-title h-card">Customer Details</h4>
+                                    <div>
+                                        <a href="edit-transaction.php?transaction_code=<?php echo $row['transaction_code']; ?>&rowid=<?php echo $row['id']; ?>"
+                                            class="btn btn-success btn-fw btn-edit">
+                                            <i class="fas fa-edit text-white"></i>
+                                        </a>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -137,9 +130,18 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </div>
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header d-flex align-items-center justify-content-between">
                                     <h4 class="card-title h-card">Request Details</h4>
+                                    <div>
+                                        <a href="edit-transaction.php?transaction_code=<?php echo $row['transaction_code']; ?>&rowid=<?php echo $row['id']; ?>"
+                                            class="btn btn-success btn-fw btn-edit">
+                                            <i class="fas fa-edit text-white"></i>
+                                        </a>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
+
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
@@ -240,7 +242,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="card-title">Labor Cost</h4>
+                            <h4 class="card-title mt-3">Labor Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
                                     <table class="table table-hover table-bordered" id="myDataTable">
@@ -252,62 +254,124 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         </thead>
                                         <tbody id="myTable">
                                             <?php
-                                                $id = $row['id'];
-                                                    // Perform the query
-                                                    $lquery = "SELECT *
-                                                        FROM rprq
-                                                        INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        INNER JOIN rp_labor ON rprq.id = rp_labor.rprq_rl_id
-                                                        INNER JOIN common_repairs ON rp_labor.comrep_id = common_repairs.comrep_id
-                                                        WHERE rprq.id = $id";
+                                            $id = $row['id'];
+                                            $lquery = "SELECT *
+                                                FROM rprq
+                                                INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                INNER JOIN rp_labor ON rprq.id = rp_labor.rprq_rl_id
+                                                INNER JOIN common_repairs ON rp_labor.comrep_id = common_repairs.comrep_id
+                                                WHERE rprq.id = $id";
 
-                                                    
-                                                    $lresult = mysqli_query($conn, $lquery);
+                                            $lresult = mysqli_query($conn, $lquery);
 
-                                                    while ($lrow = mysqli_fetch_assoc($lresult)) {
-                                                        echo '<tr>';
-                                                        echo '<td>' . $row['comrep_name'] . '</td>';
-                                                        echo '<td>' . $row['comrep_cost'] . '</td>';
-                                                        echo '</td>';
-                                                        echo '</tr>';
-                                                    }
-                                                ?>
+                                            // Initialize the labor subtotal
+                                            $labor_subtotal = 0;
+
+                                            while ($lrow = mysqli_fetch_assoc($lresult)) {
+                                                // Add the comrep_cost to the labor subtotal
+                                                $labor_subtotal += $lrow['comrep_cost'];
+                                            
+                                                echo '<tr>';
+                                                echo '<td>' . $lrow['comrep_name'] . '</td>';
+                                                echo '<td>' . $lrow['comrep_cost'] . '</td>';
+                                                echo '</td>';
+                                                echo '</tr>';
+                                            }
+                                            
+                                            // Moved the labor subtotal row outside the while loop
+                                            echo '<tr>';
+                                            echo '<td class="text-end labortotal"> Labor Subtotal:  </td>';
+                                            echo '<td class="labortotal">' . $labor_subtotal .".00". '</td>';
+                                            echo '</tr>';
+                                            
+                                        ?>
                                         </tbody>
-
                                     </table>
                                 </div>
                             </div>
+                            <hr>
+                            <h4 class="card-title mt-2">Parts Cost</h4>
+                            <div class="col-12 grid-margin">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered" id="myDataTable">
+                                        <thead>
+                                            <tr class="bg-our">
+                                                <th> Part name </th>
+                                                <th> price </th>
+                                                <th> qty </th>
+                                                <th> total </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                            <?php
+                                            $id = $row['id'];
+                                            $lquery = "SELECT *
+                                                FROM rprq
+                                                INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                INNER JOIN rp_brand_parts ON rprq.id = rp_brand_parts.rprq_id
+                                                INNER JOIN brand_parts ON rp_brand_parts.bp_id = brand_parts.bp_id
+                                                WHERE rprq.id = $id";
+
+                                            $lresult = mysqli_query($conn, $lquery);
+
+                                            // Initialize the labor subtotal
+                                            $partqty = 0;
+                                            $part_subtotal = 0;
+
+                                            while ($lrow = mysqli_fetch_assoc($lresult)) {
+                                                // Add the comrep_cost to the labor subtotal
+                                                $partqty  = $lrow['bp_cost'] * $lrow['quantity'];
+                                                $part_subtotal += $partqty;
+                                            
+                                                echo '<tr>';
+                                                echo '<td>' . $lrow['bp_name'] . '</td>';
+                                                echo '<td>' . $lrow['bp_cost'] . '</td>';
+                                                echo '<td>' . $lrow['quantity'] . '</td>';
+                                                echo '<td>' . $partqty . '</td>';
+                                                echo '</tr>';
+                                            }
+                                            
+                                            // Moved the parts subtotal row outside the while loop
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end labortotal"> Parts Subtotal:  </td>';
+                                            echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
+                                            echo '</tr>';
+
+                                            $grand_total = $part_subtotal+$labor_subtotal;
+
+
+                                            
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <h3>Total Payable Amount: <?php echo $grand_total.".00" ?></h3>
                         </div>
-
-
-                        <div class="btn-group-sm d-flex btn-details">
+                        <div class="d-flex btn-details">
                             <?php
-                                if (($row['rprq_status'] == 'Pending')) {
-                                    echo '<button class="icns btn btn-danger edit" id="' .  $row['id'] . '">';
-                                    echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
-                                    echo '</button>';
-                                }
-                                else{
-                                    echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-success btn-fw">
-                                    Update Details <i class="fas fa-edit text-white"></i></a>';
-                                }
+                                            if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosing'){
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
+                                                echo 'Update Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '</button>';
+                                            }
+                                            if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
+                                                echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
+                                                Generate Invoice <i class="fas fa-file-invoice"></i></a>';
+                                            }
 
-                                echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-danger btn-fw red">
-                                Delete Details <i class="fas fa-trash-alt text-white"></i></a>';
+                                            if (!empty($row['invoice_id'])) {
+                                                $invoice_id = $row['invoice_id'];
+                                                echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                                                Download Invoice <i class="fas fa-download"></i></a>';
+                                            }
 
-                                if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
-                                    echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
-                                    Generate Invoice <i class="fas fa-file-invoice"></i></a>';
-                                }
+                                            
 
-                                if (!empty($row['invoice_id'])) {
-                                    $invoice_id = $row['invoice_id'];
-                                    echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
-                                    Download Invoice <i class="fas fa-download"></i></a>';
-                                }
-                            ?>
+                                            
+                                            ?>
                         </div>
-
                     </div>
                 </div>
 
@@ -330,11 +394,11 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
     <!-- container-scroller -->
 
     <!-- Accept modal -->
-    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade " id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+        <div class="modal-dialog diangmod">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editSuppModalLabel">Assign Technician</h5>
+                    <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body suppbody">
@@ -379,7 +443,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
             id = $(this).attr('id');
             $.ajax({
-                url: 'accept-pending.php',
+                url: 'update-status.php',
                 method: 'post',
                 data: {
                     id: id
@@ -395,6 +459,37 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         })
     })
     </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
+    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const minimizeButtons = document.querySelectorAll(".minimize");
+
+        minimizeButtons.forEach(function(minimizeButton) {
+            minimizeButton.addEventListener("click", function() {
+                const cardBody = minimizeButton.closest(".card").querySelector(".card-body");
+                cardBody.classList.toggle("d-none");
+
+                if (cardBody.classList.contains("d-none")) {
+                    minimizeButton.innerHTML = '<i class="fas fa-chevron-down text-white"></i>';
+                } else {
+                    minimizeButton.innerHTML = '<i class="fas fa-minus text-white"></i>';
+                }
+            });
+        });
+    });
+</script>
+
+
 </body>
 
 </html>

@@ -13,10 +13,7 @@ if (isset($_POST['id'])) {
   $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
   $output .= '
-  <form method="POST" action="update-status.php" enctype="multipart/form-data">
-        <div class="mb-3">
-          <label for="status" class="form-label">Status</label>
-          <select class="form-select" id="status" name="status">';
+  <form method="POST" action="update-status.php" enctype="multipart/form-data">';
 
   // Query the supplier table
   $query6 = "SELECT rprq.*, 
@@ -44,7 +41,7 @@ if (isset($_POST['id'])) {
   LEFT JOIN defects ON rprq.defect_id = defects.defect_id
   LEFT JOIN customer ON rprq.cust_id = customer.cust_id
   LEFT JOIN accounts ON customer.account_id = accounts.account_id
-  LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
+  LEFT JOIN invoice ON rprq.id = invoice.rprq_id
         WHERE rprq.id = '" . $_POST['id'] . "';";
   $result6 = mysqli_query($conn, $query6);
 
@@ -54,25 +51,8 @@ if (isset($_POST['id'])) {
   }
  $elec_id = $row6['elec_id'];
 
-  $output .= '<option value="Pending"';
-  $output .= ($row6['rprq_status'] == 'Pending') ? ' selected' : '';
-  $output .= '>Pending</option>';
-  $output .= '<option value="Accepted"';
-  $output .= ($row6['rprq_status'] == 'Repairing') ? ' selected' : '';
-  $output .= '>Accepted</option>';
-  $output .= '<option value="In-progress"';
-  $output .= ($row6['rprq_status'] == 'In-progress') ? ' selected' : '';
-  $output .= '>In-progress</option>';
-  $output .= '<option value="Done"';
-  $output .= ($row6['rprq_status'] == 'Cancelled') ? ' selected' : '';
-  $output .= '>Done</option>';
-  $output .= '<option value="Completed"';
-  $output .= ($row6['rprq_status'] == 'Completed') ? ' selected' : '';
-  $output .= '>Completed</option>';
 
   $output .= '
-  </select>
-    </div>
     <div class="mb-3">
     <label for="comrep" class="form-label">Repair/Replacement Needed<span class="required">*</span></label>
     <select class="form-select js-example-basic-multiple" id="comrep" name="comrep[]" multiple="multiple">';
@@ -167,7 +147,7 @@ if (mysqli_num_rows($result) > 0) {
 if (isset($_POST['submit'])) {
   $id = htmlentities($_SESSION['id']);
   $transaction_code = htmlentities($_POST['transaction_code']);
-  $status = htmlentities($_POST['status']); 
+  $status = htmlentities('In-progress'); 
   $remarks = htmlentities($_POST['remarks']);
   $partqty = htmlentities($_POST['partqty']);
   $from = htmlentities($_POST['from']); 
@@ -193,6 +173,29 @@ foreach ($parts as $part) {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
 }
+
+// Calculate rp_labor grandtotal
+$rp_labor_total = 0;
+foreach ($comrep as $comrep_id) {
+    $sql = "SELECT comrep_cost FROM common_repairs WHERE comrep_id = '$comrep_id'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $rp_labor_total += $row['labor_rate'];
+}
+
+// Calculate rp_brand_parts grandtotal
+$rp_brand_parts_total = 0;
+foreach ($parts as $part) {
+    $sql = "SELECT bp_cost FROM brand_parts WHERE bp_id = '$part'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $rp_brand_parts_total += ($row['price'] * $partqty);
+}
+
+// Calculate the grandtotal
+$grandtotal = $rp_labor_total + $rp_brand_parts_total;
+$invquery = "INSERT INTO invoice (rprq_id, invoice_number, grand_total) VALUES ('$id', '$rp_labor_total', '$rp_brand_parts_total')";
+
 
   $query = "UPDATE rprq SET date_from = '$from', date_to = '$to', status = '$status', remarks = '$remarks' WHERE id = '$id'";
 

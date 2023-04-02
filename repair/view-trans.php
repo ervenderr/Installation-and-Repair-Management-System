@@ -220,38 +220,33 @@ $row = mysqli_fetch_assoc($result);
                                             <span><?php echo $row['date_req']?></span>
                                         </div>
                                         <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Expected
+                                            <span class="fw-bold me-2 transaction-details-label">ESTIMATED
                                                 Completion:</span>
-                                            <span class="tbh"><i class="fas fa-exclamation-circle"></i>
-                                                <?php
-                                                    if($row['date_completed'] == '0000-00-00'){
-                                                        echo 'TBA';
+                                            <?php
+                                                    if($row['tech_id'] == ''){
+                                                        echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
                                                     }else{
-                                                        echo $row['date_completed'];
+                                                        echo $row['date_from']." to ".$row['date_to'];
                                                     }
                                                     ?>
-                                            </span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Assigned
                                                 Technician:</span>
-                                            <span class="tbh"><i class="fas fa-exclamation-circle"></i>
-                                                <?php
+                                            <?php
                                                     if($row['tech_id'] == ''){
-                                                        echo 'TBA';
+                                                        echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
                                                     }else{
-                                                        echo $row['date_completed'];
+                                                        echo $row['tech_fname']." ".$row['tech_lname'];
                                                     }
                                                     ?>
-                                            </span>
                                         </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Technician's
                                                 Contact:</span>
-                                            <span class="tbh"><i class="fas fa-exclamation-circle"></i>
-                                                <?php
-                                                    if($row['tech_phone'] == ''){
-                                                        echo 'TBA';
+                                            <?php
+                                                    if($row['tech_id'] == ''){
+                                                        echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
                                                     }else{
                                                         echo $row['tech_phone'];
                                                     }
@@ -260,6 +255,7 @@ $row = mysqli_fetch_assoc($result);
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="row">
                                 <div class="col-sm-12">
                                     <table class="table table-bordered">
@@ -278,6 +274,7 @@ $row = mysqli_fetch_assoc($result);
                                     </table>
                                 </div>
                             </div>
+
                             </table>
                         </div>
                     </div>
@@ -301,6 +298,26 @@ $row = mysqli_fetch_assoc($result);
                             document.body.removeChild(element);
                         });
                     });
+                    </script>
+
+                    <script>
+                    // Add click event listener to toggle buttons
+                    const toggleBtns = document.querySelectorAll('.toggle-btn');
+                    toggleBtns.forEach((toggleBtn) => {
+                        toggleBtn.addEventListener('click', () => {
+                            // Toggle the active class on click
+                            toggleBtn.classList.toggle('active');
+                            // Toggle the visibility of the content cell
+                            const contentCell = toggleBtn.parentNode.querySelector('.toggle-content');
+                            contentCell.classList.toggle('d-none');
+                        });
+                    });
+
+                    // Set initial content
+                    const laborTotal = document.querySelector('.labortotal').textContent;
+                    document.querySelector('.toggle-row:nth-child(1) .toggle-content').textContent = laborTotal;
+                    const partsTotal = document.querySelector('.partstotal').textContent;
+                    document.querySelector('.toggle-row:nth-child(2) .toggle-content').textContent = partsTotal;
                     </script>
 
 </body>

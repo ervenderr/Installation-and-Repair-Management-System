@@ -17550,7 +17550,6 @@ code {
 }
 
 .btn.btn-fw {
-  min-width: 150px;
 }
 
 .btn.btn-sm,
@@ -22335,3 +22334,8 @@ th{
   padding: 10px
 }
 
+.btn-edit{
+  background-color: #015F6B !important;
+  border: none;
+  padding: 5px;
+}

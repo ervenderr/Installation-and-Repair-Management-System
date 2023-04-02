@@ -319,6 +319,8 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             echo '</tr>';
 
                                             $grand_total = $part_subtotal+$labor_subtotal;
+
+
                                             
                                         ?>
                                     </tbody>
@@ -329,7 +331,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </div>
                         <div class="d-flex btn-details">
                                         <?php
-                                            if($row['rprq_status'] != 'Completed'){
+                                            if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosing'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
                                                 echo 'Update Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
