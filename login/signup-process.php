@@ -18,13 +18,13 @@ require '../vendor/autoload.php';
         $mail->SMTPAuth = true;
 
         $mail->Host = 'smtp.gmail.com';
-        $mail->Username = 'robin.almorfi2002@gmail.com';
+        $mail->Username = '@gmail.com';
         $mail->Password = 'qhpxvcziymazcypi';
 
         $mail->SMTPSecure = "ssl";
         $mail->Port = 465;
 
-        $mail->setFrom('robin.almorfi2002@gmail.com');
+        $mail->setFrom('@gmail.com');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
