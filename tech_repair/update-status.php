@@ -106,7 +106,9 @@ if (mysqli_num_rows($result) > 0) {
       <div class="row mb-3 ">
       <div class="col-7 partscol">
           <label for="parts" class="form-label">Parts Needed<span class="required">*</span></label>
-          <select class="form-select" id="parts" name="parts[]">';
+          <select class="form-select" id="parts" name="parts[]">
+          <option value="None">--- Select ---</option>';
+          
       $sql = "SELECT * FROM brand_parts WHERE eb_id = $elec_id";
       $result = mysqli_query($conn, $sql);
       if (mysqli_num_rows($result) > 0) {
@@ -120,16 +122,13 @@ if (mysqli_num_rows($result) > 0) {
       </div>
       <div class="col-3 partscol">
       <label for="partqty" class="form-label">Quantity</label>
-      <input type="number" class="form-control" id="partqty" name="partqty" value="' . $row6['quantity'] . '">
+      <input type="number" class="form-control" id="partqty" name="partqty" value="">
       </div>
       <div class="col-2 partscolx">
-      <td><input type="button" value="x" class="btn btn-danger btn-sm btn-row-remove"> </td>
-      </div>
-      </div>
-      <tr>
-            <td><input type="button" value="+ Add Row" class="btn btn-primary btn-sm" id="btn-add-row">
+      <td><input type="button" value="+" class="btn btn-primary btn-sm partscolxx" id="btn-add-row">
             </td>
-        </tr>
+      </div>
+      </div>
       </div>
       </div>
       <div class="row">
@@ -220,8 +219,8 @@ $(document).ready(function() {
     let newRow = `
       <div class="row mb-3 parts-row">
         <div class="col-7 partscol">
-          <label for="parts" class="form-label">Parts Needed<span class="required">*</span></label>
           <select class="form-select" name="parts[]">
+          <option value="None">--- Select ---</option>
 <?php
 $sql = "SELECT * FROM brand_parts WHERE eb_id = $elec_id";
 $result = mysqli_query($conn, $sql);
@@ -234,8 +233,7 @@ if (mysqli_num_rows($result) > 0) {
           </select>
         </div>
         <div class="col-3 partscol">
-          <label for="partqty" class="form-label">Quantity</label>
-          <input type="number" class="form-control" name="partqty" value="1">
+          <input type="number" class="form-control partscols" id="partqty" name="partqty" value="1">
         </div>
         <div class="col-2 partscolx">
           <input type="button" value="x" class="btn btn-danger btn-sm btn-row-remove">

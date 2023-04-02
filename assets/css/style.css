@@ -22317,9 +22317,13 @@ th{
   padding-right: 0;
 }
 .partscolx{
+  padding-left: 10px;
+}
+.partscolxx{
   margin-top: 28px;
   padding-left: 10px;
-
+  height: 35px;
+  width: 35px;
 }
 
 .partscolx .btn-row-remove{
@@ -22330,3 +22334,4 @@ th{
 .card .partsbody{
   padding: 10px
 }
+

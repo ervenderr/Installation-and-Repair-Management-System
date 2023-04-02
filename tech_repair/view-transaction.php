@@ -35,7 +35,7 @@ LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
+LEFT JOIN invoice ON rprq.id = invoice.rprq_id
           WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
@@ -270,6 +270,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                 </table>
                                 </div>
                             </div>
+                            <hr>
                             <h4 class="card-title mt-2">Parts Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
@@ -316,19 +317,22 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             echo '<td colspan="3" class="text-end labortotal"> Parts Subtotal:  </td>';
                                             echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
                                             echo '</tr>';
+
+                                            $grand_total = $part_subtotal+$labor_subtotal;
                                             
                                         ?>
                                     </tbody>
                                 </table>
                                 </div>
                             </div>
+                            <h3>Total Payable Amount: <?php echo $grand_total.".00" ?></h3>
                         </div>
                         <div class="d-flex btn-details">
                                         <?php
                                             if($row['rprq_status'] != 'Completed'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
-                                                echo 'Update Status <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo 'Update Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
                                             }
 
