@@ -22288,5 +22288,50 @@ th{
 
 .updtech{
   background-color: #07cdae !important;
-  padding: 6px 8px;
+  padding: 8px 12px;
 }
+
+.card .h-card{
+  margin-bottom: 0 !important;
+}
+
+.labortotal{
+  background-color: grey;
+  font-weight: 700;
+  color: #fff;
+}
+
+#partqty{
+  height: 37px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding-left: 10px
+
+}
+
+.diangmod{
+  min-width: 700px;
+}
+
+.partscol{
+  padding-right: 0;
+}
+.partscolx{
+  padding-left: 10px;
+}
+.partscolxx{
+  margin-top: 28px;
+  padding-left: 10px;
+  height: 35px;
+  width: 35px;
+}
+
+.partscolx .btn-row-remove{
+  height: 35px;
+  width: 35px;
+}
+
+.card .partsbody{
+  padding: 10px
+}
+

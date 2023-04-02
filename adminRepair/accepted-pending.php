@@ -51,11 +51,8 @@ if(isset($_POST['submit'])) {
     $status = "In-progress";
 
 
-    $query = "UPDATE rprq SET tech_id = '$techId', date_completed = '$completed', status = '$status' WHERE id = '$id'";
+    $query = "UPDATE rprq SET tech_id = '$techId', status = '$status' WHERE id = '$id'";
     $result = mysqli_query($conn, $query);
-
-    $query2 = "UPDATE technician SET status = 'Unavailable' WHERE tech_id = '$techId'";
-    $result2 = mysqli_query($conn, $query2);
     
 
     if ($result) {

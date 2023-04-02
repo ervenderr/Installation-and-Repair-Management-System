@@ -106,10 +106,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 grid-margin">
+                        <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Customer Details</h4>
+                                    <h4 class="card-title h-card">Customer Details</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -135,10 +135,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 grid-margin">
+                        <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Request Details</h4>
+                                    <h4 class="card-title h-card">Request Details</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -239,6 +239,47 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                 </div>
                             </div>
                         </div>
+                        <div class="card">
+                            <h4 class="card-title">Labor Cost</h4>
+                            <div class="col-12 grid-margin">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered" id="myDataTable">
+                                        <thead>
+                                            <tr class="bg-our">
+                                                <th> LABOR </th>
+                                                <th> COST </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                            <?php
+                                                $id = $row['id'];
+                                                    // Perform the query
+                                                    $lquery = "SELECT *
+                                                        FROM rprq
+                                                        INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                        INNER JOIN rp_labor ON rprq.id = rp_labor.rprq_rl_id
+                                                        INNER JOIN common_repairs ON rp_labor.comrep_id = common_repairs.comrep_id
+                                                        WHERE rprq.id = $id";
+
+                                                    
+                                                    $lresult = mysqli_query($conn, $lquery);
+
+                                                    while ($lrow = mysqli_fetch_assoc($lresult)) {
+                                                        echo '<tr>';
+                                                        echo '<td>' . $row['comrep_name'] . '</td>';
+                                                        echo '<td>' . $row['comrep_cost'] . '</td>';
+                                                        echo '</td>';
+                                                        echo '</tr>';
+                                                    }
+                                                ?>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class="btn-group-sm d-flex btn-details">
                             <?php
                                 if (($row['rprq_status'] == 'Pending')) {

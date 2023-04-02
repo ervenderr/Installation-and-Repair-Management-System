@@ -35,7 +35,7 @@ LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
+LEFT JOIN invoice ON rprq.id = invoice.rprq_id
           WHERE rprq.transaction_code = '" . $tcode . "';";
 $result = mysqli_query($conn, $query);
 
@@ -89,10 +89,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 grid-margin">
+                        <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Customer Details</h4>
+                                    <h4 class="card-title h-card">Customer Details</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -118,10 +118,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 grid-margin">
+                        <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Request Details</h4>
+                                    <h4 class="card-title h-card">Request Details</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -218,12 +218,121 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 </td>
                                             </tr>
                                         </table>
-                                        <div class="d-flex btn-details">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title mt-3">Labor Cost</h4>
+                            <div class="col-12 grid-margin">
+                                <div class="table-responsive">
+                                <table class="table table-hover table-bordered" id="myDataTable">
+                                    <thead>
+                                        <tr class="bg-our">
+                                            <th> LABOR </th>
+                                            <th> COST </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="myTable">
+                                        <?php
+                                            $id = $row['id'];
+                                            $lquery = "SELECT *
+                                                FROM rprq
+                                                INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                INNER JOIN rp_labor ON rprq.id = rp_labor.rprq_rl_id
+                                                INNER JOIN common_repairs ON rp_labor.comrep_id = common_repairs.comrep_id
+                                                WHERE rprq.id = $id";
+
+                                            $lresult = mysqli_query($conn, $lquery);
+
+                                            // Initialize the labor subtotal
+                                            $labor_subtotal = 0;
+
+                                            while ($lrow = mysqli_fetch_assoc($lresult)) {
+                                                // Add the comrep_cost to the labor subtotal
+                                                $labor_subtotal += $lrow['comrep_cost'];
+                                            
+                                                echo '<tr>';
+                                                echo '<td>' . $lrow['comrep_name'] . '</td>';
+                                                echo '<td>' . $lrow['comrep_cost'] . '</td>';
+                                                echo '</td>';
+                                                echo '</tr>';
+                                            }
+                                            
+                                            // Moved the labor subtotal row outside the while loop
+                                            echo '<tr>';
+                                            echo '<td class="text-end labortotal"> Labor Subtotal:  </td>';
+                                            echo '<td class="labortotal">' . $labor_subtotal .".00". '</td>';
+                                            echo '</tr>';
+                                            
+                                        ?>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <hr>
+                            <h4 class="card-title mt-2">Parts Cost</h4>
+                            <div class="col-12 grid-margin">
+                                <div class="table-responsive">
+                                <table class="table table-hover table-bordered" id="myDataTable">
+                                    <thead>
+                                        <tr class="bg-our">
+                                            <th> Part name </th>
+                                            <th> price </th>
+                                            <th> qty </th>
+                                            <th> total </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="myTable">
+                                        <?php
+                                            $id = $row['id'];
+                                            $lquery = "SELECT *
+                                                FROM rprq
+                                                INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                INNER JOIN rp_brand_parts ON rprq.id = rp_brand_parts.rprq_id
+                                                INNER JOIN brand_parts ON rp_brand_parts.bp_id = brand_parts.bp_id
+                                                WHERE rprq.id = $id";
+
+                                            $lresult = mysqli_query($conn, $lquery);
+
+                                            // Initialize the labor subtotal
+                                            $partqty = 0;
+                                            $part_subtotal = 0;
+
+                                            while ($lrow = mysqli_fetch_assoc($lresult)) {
+                                                // Add the comrep_cost to the labor subtotal
+                                                $partqty  = $lrow['bp_cost'] * $lrow['quantity'];
+                                                $part_subtotal += $partqty;
+                                            
+                                                echo '<tr>';
+                                                echo '<td>' . $lrow['bp_name'] . '</td>';
+                                                echo '<td>' . $lrow['bp_cost'] . '</td>';
+                                                echo '<td>' . $lrow['quantity'] . '</td>';
+                                                echo '<td>' . $partqty . '</td>';
+                                                echo '</tr>';
+                                            }
+                                            
+                                            // Moved the parts subtotal row outside the while loop
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end labortotal"> Parts Subtotal:  </td>';
+                                            echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
+                                            echo '</tr>';
+
+                                            $grand_total = $part_subtotal+$labor_subtotal;
+                                            
+                                        ?>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <h3>Total Payable Amount: <?php echo $grand_total.".00" ?></h3>
+                        </div>
+                        <div class="d-flex btn-details">
                                         <?php
                                             if($row['rprq_status'] != 'Completed'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
-                                                echo 'Update Status <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo 'Update Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
                                             }
 
@@ -242,10 +351,6 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             
                                             ?>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -268,11 +373,11 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
     <!-- container-scroller -->
 
     <!-- Accept modal -->
-    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+    <div class="modal fade " id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+  <div class="modal-dialog diangmod">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editSuppModalLabel">Update Status</h5>
+        <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body suppbody">
@@ -330,6 +435,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
       $('#editSuppModal').modal('show');
     })
   })
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
 </script>
 </body>
 
