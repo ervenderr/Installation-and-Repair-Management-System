@@ -18,7 +18,7 @@ require '../vendor/autoload.php';
         $mail->SMTPAuth = true;
 
         $mail->Host = 'smtp.gmail.com';
-        $mail->Username = 'robin.almorfi2002@gmail.com';
+        $mail->Username = '@gmail.com';
         $mail->Password = 'qhpxvcziymazcypi';
 
         $mail->SMTPSecure = "ssl";
