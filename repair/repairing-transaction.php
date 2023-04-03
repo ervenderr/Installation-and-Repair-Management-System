@@ -189,6 +189,10 @@ WHERE rprq.status = 'In-progress' AND accounts.account_id = '{$user_id}';";
                     if (mysqli_num_rows($result) > 0) { ?>
                     <div class="d-flex flex-wrap pending-card">
                         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                            <?php
+                           
+                            $_SESSION['transaction_id'] = $row['transaction_code'];
+                            ?>
                         <a href="view-trans.php" class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
                                 <div class="card-body">

@@ -190,6 +190,7 @@ WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                         <?php
                             $estimatedCost = $row['def_cost'] + $row['elec_cost'];
+                            $_SESSION['transaction_id'] = $row['transaction_code'];
                             ?>
                         <a href="view-trans.php" class="viewtrans">
                             <div class="card mb-3 transaction-details-card">

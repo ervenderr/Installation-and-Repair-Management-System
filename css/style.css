@@ -1095,3 +1095,115 @@ a {
 .particles-js-canvas-el{
     z-index: -1;
 }
+
+.table-trans{
+    border: 1px solid #015F6B;
+}
+
+.total-amount{
+    margin: 16px;
+}
+
+    .tracking-item {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+
+
+    .tracking-icon {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .tracking-icon.checked {
+        background-color: #00cc66;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+    }
+    
+
+    .tracking-icon.checked .checkmark {
+        font-size: 10px;
+    }
+
+    .pending {
+        background-color: #ffb366;
+    }
+
+    .diagnosing {
+        background-color: #66b3ff;
+    }
+
+    .in-progress {
+        background-color: #99ff99;
+    }
+
+    .repairing {
+        background-color: #cc99ff;
+    }
+
+    .awaiting-parts {
+        background-color: #d9d9d9;
+    }
+
+    .awaiting-payment {
+        background-color: #e6b3cc;
+    }
+
+    .to-pickup {
+        background-color: #b3d9ff;
+    }
+
+    .completed {
+        background-color: #00cc66;
+    }
+
+    .tracking-item.current-status .tracking-icon {
+        background-color: #d6d6d6;
+    }
+
+    .tracking-item.latest .tracking-icon {
+        background-color: #fbd15b;
+    }
+
+    .tracking-item.previous-status .tracking-icon {
+        background-color: #d9d9d9;
+        
+    }
+
+    .tracking-date {
+        margin-right: 10px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .status-text {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .status-content {
+        font-size: 14px;
+        margin: 0;
+    }
+    
+
+    @media (max-width: 767px) {
+        .tracking-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .tracking-date {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+    }
