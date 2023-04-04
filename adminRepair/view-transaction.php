@@ -9,7 +9,6 @@ $rpshow = "show";
 $rptrue = "true";
 
 $rowid = $_GET['rowid'];
-$tcode = $_GET['transaction_code'];
 
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
@@ -36,7 +35,7 @@ LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
 LEFT JOIN invoice ON rprq.id = invoice.rprq_id
-          WHERE rprq.transaction_code = '" . $tcode . "';";
+          WHERE rprq.id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -48,7 +47,6 @@ if (mysqli_num_rows($result) > 0) {
 
 $_SESSION['account_id'] = $row['account_id'];
 $_SESSION['rowid'] = $_GET['rowid'];
-$_SESSION['transaction_code'] = $_GET['transaction_code'];
 ?>
 
 <body>
@@ -353,7 +351,12 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosing'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
-                                                echo 'Update Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo 'Add Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '</button>';
+                                            }elseif($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'In-progress'){
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-success initpay updtech" id="' .  $row['id'] . '">';
+                                                echo 'Update Initial Payment <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
                                             }
                                             if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
@@ -367,9 +370,13 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 Download Invoice <i class="fas fa-download"></i></a>';
                                             }
 
-                                            
+                                            if (($row['id'])) {
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-success update_status updtech" id="' .  $row['id'] . '">';
+                                                echo 'Update Status <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '</button>';
+                                            }
 
-                                            
                                             ?>
                         </div>
                     </div>
@@ -402,6 +409,36 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body suppbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- initial payment modal -->
+    <div class="modal fade " id="initpay" tabindex="-1" aria-labelledby="initpayLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="initpayLabel">Update Initial Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body initpays">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- update status modal -->
+    <div class="modal fade " id="update_status" tabindex="-1" aria-labelledby="update_statusLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="update_statusLabel">Update Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body update_statuses">
 
                 </div>
             </div>
@@ -443,7 +480,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
             id = $(this).attr('id');
             $.ajax({
-                url: 'update-status.php',
+                url: 'accept-pending.php',
                 method: 'post',
                 data: {
                     id: id
@@ -456,6 +493,44 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
 
             $('#editSuppModal').modal('show');
+        })
+
+        $('.initpay').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'accepted-pending.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.initpays').html(result);
+                }
+            });
+
+
+            $('#initpay').modal('show');
+        })
+
+        $('.update_status').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-status.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.update_statuses').html(result);
+                }
+            });
+
+
+            $('#update_status').modal('show');
         })
     })
     </script>
@@ -470,7 +545,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
     });
     </script>
 
-<script>
+    <script>
     document.addEventListener("DOMContentLoaded", function() {
         const minimizeButtons = document.querySelectorAll(".minimize");
 
@@ -487,7 +562,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
             });
         });
     });
-</script>
+    </script>
 
 
 </body>

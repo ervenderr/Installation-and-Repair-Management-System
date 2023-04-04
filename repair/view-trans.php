@@ -129,8 +129,6 @@ $row = mysqli_fetch_assoc($result);
         <div id="tracking">
             <div class="tracking-list">
                 <?php
-               
-
                 $result2 = mysqli_query($conn, $query);
                 $first = true;
                 while ($row2 = mysqli_fetch_assoc($result2)) {
@@ -146,7 +144,7 @@ $row = mysqli_fetch_assoc($result);
                         $content = 'Currently working on the repair';
                     } elseif ($row2['tm_status'] == 'Awaiting Parts') {
                         $content = 'The repair is on hold because the necessary parts are not available';
-                    } elseif ($row2['tm_status'] == 'Awaiting Payment') {
+                    } elseif ($row2['tm_status'] == 'Awaiting Initial Payment') {
                         $content = 'The technician has completed the evaluation, and the customer needs to pay a partial or full amount before the repair can proceed';
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Partial payment has been received, and the technician is working on the repair';
@@ -173,7 +171,7 @@ $row = mysqli_fetch_assoc($result);
                             <div class="tracking-icon <?php echo $statusClass; ?>"></div>
                         <?php } ?>
                         <div class="tracking-date">
-                            <?php echo $date; ?><span><?php echo $statusClass; ?></span>
+                            <?php echo $date; ?><span><?php echo $time; ?></span>
                         </div>
                         <div class="tracking-content">
                             <p class="status-text"><?php echo $status; ?></p>

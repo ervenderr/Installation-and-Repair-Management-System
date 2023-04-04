@@ -22248,7 +22248,6 @@ option{
 }
 
 .edit{
-  padding: 3px;
   background: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
 }
 
@@ -22287,7 +22286,6 @@ th{
 
 .updtech{
   background-color: #07cdae !important;
-  padding: 8px 12px;
 }
 
 .card .h-card{

@@ -59,7 +59,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
             <?php include_once ('../technician_includes/sidebar.php'); ?>
-            
+
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
@@ -68,7 +68,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             <span class="page-title-icon text-white me-2">
                                 <i class="mdi mdi-wrench"></i>
                             </span> Repair Transaction
-                            
+
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
@@ -81,18 +81,24 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                 }
                                 ?>
                                 <a href="<?php echo $href; ?>">
-                                <li class="breadcrumb-item active" aria-current="page">
-                                    <span></span><i class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
-                                    </i>
-                                </li></a>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        <span></span><i
+                                            class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
+                                        </i>
+                                    </li>
+                                </a>
                             </ul>
                         </nav>
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title h-card">Customer Details</h4>
+                                <div class="card-header d-flex align-items-center justify-content-between"">
+                                    <h4 class=" card-title h-card">Customer Details</h4>
+                                    <div>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -120,8 +126,12 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </div>
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title h-card">Request Details</h4>
+                                <div class="card-header d-flex align-items-center justify-content-between"">
+                                    <h4 class=" card-title h-card">Request Details</h4>
+                                    <div>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -226,15 +236,15 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             <h4 class="card-title mt-3">Labor Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
-                                <table class="table table-hover table-bordered" id="myDataTable">
-                                    <thead>
-                                        <tr class="bg-our">
-                                            <th> LABOR </th>
-                                            <th> COST </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="myTable">
-                                        <?php
+                                    <table class="table table-bordered" id="myDataTable">
+                                        <thead>
+                                            <tr class="bg-our">
+                                                <th> LABOR </th>
+                                                <th> COST </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                            <?php
                                             $id = $row['id'];
                                             $lquery = "SELECT *
                                                 FROM rprq
@@ -266,25 +276,25 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             echo '</tr>';
                                             
                                         ?>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <hr>
                             <h4 class="card-title mt-2">Parts Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
-                                <table class="table table-hover table-bordered" id="myDataTable">
-                                    <thead>
-                                        <tr class="bg-our">
-                                            <th> Part name </th>
-                                            <th> price </th>
-                                            <th> qty </th>
-                                            <th> total </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="myTable">
-                                        <?php
+                                    <table class="table table-bordered" id="myDataTable">
+                                        <thead>
+                                            <tr class="bg-our">
+                                                <th> Part name </th>
+                                                <th> price </th>
+                                                <th> qty </th>
+                                                <th> total </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                            <?php
                                             $id = $row['id'];
                                             $lquery = "SELECT *
                                                 FROM rprq
@@ -323,14 +333,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
                                             
                                         ?>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <h3>Total Payable Amount: <?php echo $grand_total.".00" ?></h3>
                         </div>
                         <div class="d-flex btn-details">
-                                        <?php
+                            <?php
                                             if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosing'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
@@ -352,7 +362,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
                                             
                                             ?>
-                                        </div>
+                        </div>
                     </div>
                 </div>
 
@@ -376,18 +386,20 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
     <!-- Accept modal -->
     <div class="modal fade " id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-  <div class="modal-dialog diangmod">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body suppbody">
-        
-      </div>
+        <div class="modal-dialog diangmod">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body suppbody">
+
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+
+
 
     <!-- plugins:js -->
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
@@ -418,34 +430,59 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
     });
     </script>
 
-<script>
-  $(document).ready(function(){
-    $('.edit').click(function(){
+    <script>
+    $(document).ready(function() {
+        $('.edit').click(function() {
 
-        id =  $(this).attr('id');
-        $.ajax({
-        url: 'update-status.php',
-        method: 'post',
-        data: {id:id},
-        success: function(result) {
-            // Handle successful response
-            $('.suppbody').html(result);
-        }
-        });
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-status.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.suppbody').html(result);
+                }
+            });
 
 
-      $('#editSuppModal').modal('show');
+            $('#editSuppModal').modal('show');
+        })
+
+        
     })
-  })
-</script>
+    </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
+    <script>
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2({});
     });
-</script>
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const minimizeButtons = document.querySelectorAll(".minimize");
+
+        minimizeButtons.forEach(function(minimizeButton) {
+            minimizeButton.addEventListener("click", function() {
+                const cardBody = minimizeButton.closest(".card").querySelector(".card-body");
+                cardBody.classList.toggle("d-none");
+
+                if (cardBody.classList.contains("d-none")) {
+                    minimizeButton.innerHTML = '<i class="fas fa-chevron-down text-white"></i>';
+                } else {
+                    minimizeButton.innerHTML = '<i class="fas fa-minus text-white"></i>';
+                }
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>

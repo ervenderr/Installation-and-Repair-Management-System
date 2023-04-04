@@ -12,7 +12,7 @@ if(isset($_POST['id'])){
     $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
     $output .= '
-    <form method="POST" action="accepted-pending.php" enctype="multipart/form-data">
+    <form method="POST" action="accept-pending.php" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="tech" class="form-label">Technician</label>
             <select class="form-select" id="tech" name="tech">
@@ -47,6 +47,8 @@ if(isset($_POST['submit'])) {
 
 
     $query = "UPDATE rprq SET tech_id = '$techId', status = '$status' WHERE id = '$id'";
+    $tquery = "INSERT INTO rp_timeline (tech_id, tm_date, tm_time, tm_status) VALUES ('$techId', NOW(), NOW(), '$status');";
+
     $result = mysqli_query($conn, $query);
 
 

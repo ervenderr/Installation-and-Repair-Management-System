@@ -93,7 +93,7 @@ $row = mysqli_fetch_assoc($result2);
                     $query_in_progress = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='In-progress' AND accounts.account_id = '{$user_id}';";
+                    WHERE status='In-progress' OR rprq.status = 'Repairing' AND accounts.account_id = '{$user_id}';";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
 
@@ -183,7 +183,7 @@ LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-WHERE rprq.status = 'In-progress' AND accounts.account_id = '{$user_id}';";
+WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>

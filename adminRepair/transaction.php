@@ -99,7 +99,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed'
+                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed' OR rprq.status = 'Repairing'
                                                         ORDER BY rprq.date_req DESC;";
 
                                                     $result = mysqli_query($conn, $query);
