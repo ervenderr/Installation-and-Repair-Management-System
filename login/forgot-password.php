@@ -39,7 +39,7 @@ if (isset($_POST['email'])) {
         //Recipients
         $mail->setFrom('@gmail.com', 'ProtonTech');
         $mail->addAddress($email); // Add a recipient
-        $mail->addReplyTo('robin.almorfi2002@gmail.com', 'ProtonTech');
+        $mail->addReplyTo('@gmail.com', 'ProtonTech');
 
         //Content
         $mail->isHTML(true); // Set email format to HTML
