@@ -2206,3 +2206,14 @@ input[type="password"],
 .card .h-card{
     margin-bottom: 0 !important;
 }
+
+.grandspan{
+    background-color: #07cdae;
+    padding: 6px 14px;
+    color: #fff;
+    margin-left: 5px;
+    margin-bottom: 0.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }

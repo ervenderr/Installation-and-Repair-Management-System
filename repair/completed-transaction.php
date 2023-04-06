@@ -1,6 +1,6 @@
 <?php
 session_start();
-error_reporting(0);
+
 if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
@@ -13,17 +13,19 @@ $repairtransac = 'account-active';
 include_once('../homeIncludes/header.php');
 
 
+$transaction_code = $_SESSION['transaction_code'];
 $user_id = $_SESSION['logged_id'];
 
-$query = "SELECT * 
+$query2 = "SELECT * 
 FROM customer 
 LEFT JOIN accounts ON customer.account_id=accounts.account_id 
 LEFT JOIN rprq 
 ON rprq.cust_id=customer.cust_id 
+AND rprq.transaction_code='{$transaction_code}' 
 WHERE accounts.account_id='{$user_id}'";
 
-$result = mysqli_query($conn, $query);
-$row = mysqli_fetch_assoc($result);
+$result2 = mysqli_query($conn, $query2);
+$row = mysqli_fetch_assoc($result2);
 
 ?>
 
@@ -84,14 +86,14 @@ $row = mysqli_fetch_assoc($result);
                     $query_pending = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Pending' AND accounts.account_id = '{$user_id}';";
+                    WHERE status='Pending' OR status='Accepted' AND accounts.account_id = '{$user_id}';";
                     $result_pending = mysqli_query($conn, $query_pending);
                     $num_pending = mysqli_num_rows($result_pending);
 
                     $query_in_progress = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='In-progress' AND accounts.account_id = '{$user_id}';";
+                    WHERE status='In-progress' OR rprq.status = 'Repairing' AND accounts.account_id = '{$user_id}';";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
 
@@ -134,7 +136,8 @@ $row = mysqli_fetch_assoc($result);
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link" href="repairing-transaction.php">Repairing
+                        <a class="flex-sm-fill text-sm-center nav-link"
+                            href="repairing-transaction.php">Repairing
                             <?php
                                 if($notification_style_in_progress){
                                     echo'<span class="count-symbol bg-danger"></span>';
@@ -148,8 +151,7 @@ $row = mysqli_fetch_assoc($result);
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active"
-                            href="completed-transaction.php">Completed
+                        <a class="flex-sm-fill text-sm-center nav-link active" href="completed-transaction.php">Completed
                             <?php
                                 if($notification_count_completed){
                                     echo'<span class="count-symbol bg-danger"></span>';
@@ -157,118 +159,138 @@ $row = mysqli_fetch_assoc($result);
                                 ?>
                         </a>
                     </nav>
-
                     <?php
-                    $query = "SELECT rprq.*, 
-                    technician.fname AS tech_fname, 
-                    technician.lname AS tech_lname, 
-                    technician.phone AS tech_phone,
-                    technician.status AS tech_status, 
-                    customer.fname AS cust_fname, 
-                    customer.lname AS cust_lname, 
-                    customer.phone AS cust_phone,
-                    rprq.status AS rprq_status, 
-                    accounts.*,
-                    technician.*,
-                    electronics.*,
-                    defects.*,
-                    customer.*
-                    FROM rprq
-                    LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-                    LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
-                    LEFT JOIN defects ON rprq.defect_id = defects.defect_id
-                    LEFT JOIN customer ON rprq.cust_id = customer.cust_id
-                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE rprq.status = 'Completed' AND accounts.account_id = '{$user_id}';";
+
+$query = "SELECT rprq.*, 
+technician.fname AS tech_fname, 
+technician.lname AS tech_lname, 
+technician.phone AS tech_phone,
+technician.status AS tech_status, 
+customer.fname AS cust_fname, 
+customer.lname AS cust_lname, 
+customer.phone AS cust_phone,
+rprq.status AS rprq_status, 
+accounts.*,
+technician.*,
+electronics.*,
+elec_brand.*,
+defects.*,
+customer.*
+FROM rprq
+LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
+LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN defects ON rprq.defect_id = defects.defect_id
+LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN accounts ON customer.account_id = accounts.account_id
+WHERE rprq.status = 'Completed' AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
                     <div class="d-flex flex-wrap pending-card">
                         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                        <div class="card mb-3 transaction-details-card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Transaction #:</span>
-                                            <span class="text-primary"><?php echo $row['transaction_code']?></span>
+                            <?php
+                           
+                            $_SESSION['transaction_id'] = $row['transaction_code'];
+                            ?>
+                        <a href="view-trans.php" class="viewtrans">
+                            <div class="card mb-3 transaction-details-card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Transaction
+                                                    #:</span>
+                                                <span class="text-primary"><?php echo $row['transaction_code']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Status:</span>
+                                                <span
+                                                    class="transaction-details-pending"><?php echo $row['rprq_status']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Electronic
+                                                    Type:</span>
+                                                <span><?php echo $row['elec_name']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Brand:</span>
+                                                <span class=""><?php echo $row['eb_name'] ?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Defects:</span>
+                                                <span
+                                                    class="transaction-details-none"><?php echo $row['defect_name']?></span>
+                                            </div>
+                                            <div class="text-start">
+                                                <form method="post" action="../repair-invoice/booking-repair-pdf.php"
+                                                    target="_blank">
+                                                    <?php
+                                            $_SESSION['rp_id'] = $row['id'];
+                                            ?>
+                                                    <button type="submit" name="download"
+                                                        value="<?php echo $row['id']; ?>"
+                                                        class="btn btn-secondary">Download
+                                                        Ticket <i class="fas fa-download"></i></button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Status:</span>
-                                            <span class="transaction-details-pending"><?php echo $row['status']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Electronic Type:</span>
-                                            <span><?php echo $row['elec_name']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Defects:</span>
-                                            <span class="transaction-details-none"><?php
-                                                        if (empty($row['defect_id']) || $row['defect_id'] == 0) {
-                                                            echo $row['other_defects'];
-                                                        } else {
-                                                            echo $row['defect_name'];
-                                                        }
-                                                        ?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Total payment:</span>
-                                            <span class="transaction-details-none"><?php echo $row['payment']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Warranty:</span>
-                                            <span class="">3 months</span>
-                                        </div>
-                                        <div class="text-start">
-                                        <?php
-                                        if (!empty($row['invoice_id'])) {
-                                            $invoice_id = $row['invoice_id'];
-                                            echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-primary btn-fw ">
-                                            Download Invoice <i class="fas fa-download"></i></a>';
-                                        }
-                                        ?>
-                                    </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Shipping:</span>
-                                            <span
-                                                class="transaction-details-standard-shipping"><?php echo $row['shipping']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Date Requested:</span>
-                                            <span><?php echo $row['date_req']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Completion Date:</span>
-                                            <span><?php echo $row['date_completed']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Assigned
-                                                Technician:</span>
-                                            <span><?php echo $row['tech_fname'] . " " . $row['tech_lname']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Technician's
-                                                Contact:</span>
-                                            <span><?php echo $row['tech_phone']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Remarks:</span>
-                                            <textarea class="form-control" rows="3"
-                                                        readonly><?php echo $row['remarks']?></textarea>
+                                        <div class="col-sm-6">
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Shipping:</span>
+                                                <span
+                                                    class="transaction-details-standard-shipping"><?php echo $row['shipping']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Date
+                                                    Requested:</span>
+                                                <span><?php echo $row['date_req']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">ESTIMATED
+                                                    Completion:</span>
+                                                <?php
+                                                    if($row['tech_id'] == ''){
+                                                        echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
+                                                    }else{
+                                                        echo $row['date_from']." to ".$row['date_to'];
+                                                    }
+                                                    ?>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Assigned
+                                                    Technician:</span>
+                                                <?php
+                                                    if($row['tech_id'] == ''){
+                                                        echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
+                                                    }else{
+                                                        echo $row['tech_fname']." ".$row['tech_lname'];
+                                                    }
+                                                    ?>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Technician's
+                                                    Contact:</span>
+                                                    <?php
+                                                    if($row['tech_id'] == ''){
+                                                        echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
+                                                    }else{
+                                                        echo $row['tech_phone'];
+                                                    }
+                                                    ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <?php } ?>
                     </div>
 
                     </table>
                     <?php } else { ?>
                     <div class="alert alert-info" role="alert">
-                        <i class="fas fa-exclamation-circle"></i> No Transaction at the moment.
+                        <i class="fas fa-exclamation-circle"></i> No Pending Transaction at the moment.
                     </div>
                     <?php } ?>
 

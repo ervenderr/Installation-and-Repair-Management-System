@@ -9,7 +9,6 @@ $rpshow = "show";
 $rptrue = "true";
 
 $rowid = $_GET['rowid'];
-$tcode = $_GET['transaction_code'];
 
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
@@ -36,7 +35,7 @@ LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
 LEFT JOIN invoice ON rprq.id = invoice.rprq_id
-          WHERE rprq.transaction_code = '" . $tcode . "';";
+          WHERE rprq.id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -48,7 +47,6 @@ if (mysqli_num_rows($result) > 0) {
 
 $_SESSION['account_id'] = $row['account_id'];
 $_SESSION['rowid'] = $_GET['rowid'];
-$_SESSION['transaction_code'] = $_GET['transaction_code'];
 ?>
 
 <body>
@@ -68,8 +66,26 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             <span class="page-title-icon text-white me-2">
                                 <i class="mdi mdi-wrench"></i>
                             </span> Repair Transaction
-
                         </h3>
+                        <?php
+            if (isset($_SESSION['msg'])) {
+                $msg = $_SESSION['msg'];
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                '. $msg .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+              unset ($_SESSION['msg']);
+            }
+
+            if (isset($_SESSION['msg2'])) {
+                $msg2 = $_SESSION['msg2'];
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                '. $msg2 .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+            }
+            unset ($_SESSION['msg']);
+        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <?php
@@ -360,6 +376,13 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 Download Invoice <i class="fas fa-download"></i></a>';
                                             }
 
+                                            if (($row['rprq_status'] == 'Repairing' && $row['rprq_status'] != 'Diagnosing')) {
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<a href="done-trans.php?id=' .  $row['id'] . '" class="icns btn btn-success update_status updtech" id="' .  $row['id'] . '" onclick="return confirm(\'Are you sure you want to mark this as done?\');">';
+                                                echo '<i class="fas fa-check-square"></i> Mark as done';
+                                                echo '</a>';
+
+                                            }                                            
                                             
                                             ?>
                         </div>
@@ -451,7 +474,26 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
             $('#editSuppModal').modal('show');
         })
 
-        
+        $('.update_status').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-status.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.update_statuses').html(result);
+                }
+            });
+
+
+            $('#update_status').modal('show');
+        })
+
+
     })
     </script>
 

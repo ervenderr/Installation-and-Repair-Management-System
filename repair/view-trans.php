@@ -113,6 +113,12 @@ $row = mysqli_fetch_assoc($result);
                             $href = '';
                             if($row['rprq_status'] == 'Pending'){
                                 $href = 'pending-transaction.php';
+                            }elseif($row['rprq_status'] == 'In-progress'){
+                                $href = 'repairing-transaction.php';
+                            }elseif($row['rprq_status'] == 'To Pickup' || $row['rprq_status'] == 'To Deliver'){
+                                $href = 'pickup-transaction.php';
+                            }elseif($row['rprq_status'] == 'Completed'){
+                                $href = 'completed-transaction.php';
                             }
                             ?>
                             <div class="col-6"><a href="<?php echo $href ?>"><i class="fas fa-chevron-left"></i>
@@ -148,8 +154,10 @@ $row = mysqli_fetch_assoc($result);
                         $content = 'The technician has completed the evaluation, and the customer needs to pay a partial or full amount before the repair can proceed';
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Partial payment has been received, and the technician is working on the repair';
-                    } elseif ($row2['tm_status'] == 'To pickup') {
-                        $content = 'The repair is completed, and your request is ready for pickup or delivery';
+                    } elseif ($row2['tm_status'] == 'To Pickup') {
+                        $content = 'Your request is ready for pickup';
+                    } elseif ($row2['tm_status'] == 'To Deliver') {
+                        $content = 'Your request is ready for delivery';
                     } elseif ($row2['tm_status'] == 'Completed') {
                         $content = 'Picked up / Delivered';
                     }
@@ -370,7 +378,12 @@ $row = mysqli_fetch_assoc($result);
                                         </table>
                                     </div>
                                 </div>
-                                <h4>Total Payable Amount: <?php echo $grand_total.".00" ?></h4>
+                                <div class="d-flex align-items-center grandtotal">
+                                <h4>Total Payable Amount: <?php echo $grand_total.".00"?></h4>
+                                <?php if($row['rprq_status'] == 'Completed'){
+                            echo '<span class="grandspan">Paid <i class="far fa-money-check-edit-alt"></i></span>';
+                        } ?>
+                            </div>
                             </div>
 
                             </table>

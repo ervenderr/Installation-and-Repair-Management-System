@@ -344,19 +344,25 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                     </table>
                                 </div>
                             </div>
-                            <h3>Total Payable Amount: <?php echo $grand_total.".00" ?></h3>
+                            <div class="d-flex align-items-center grandtotal">
+                                <h3>Total Payable Amount: <?php echo $grand_total.".00"?></h3>
+                                <?php if($row['rprq_status'] == 'Completed'){
+                            echo '<span class="grandspan">Paid <i class="far fa-money-check-edit-alt"></i></span>';
+                        } ?>
+                            </div>
                         </div>
                         <div class="d-flex btn-details">
                             <?php
-                                            if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosing'){
+                                            if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosings'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
                                                 echo 'Add Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
+                                                
                                             }elseif($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'In-progress'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success initpay updtech" id="' .  $row['id'] . '">';
-                                                echo 'Update Initial Payment <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '<i class="fas fa-edit"></i> Update Initial Payment';
                                                 echo '</button>';
                                             }
                                             if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
@@ -372,8 +378,8 @@ $_SESSION['rowid'] = $_GET['rowid'];
 
                                             if (($row['id'])) {
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
-                                                echo '<button class="icns btn btn-success update_status updtech" id="' .  $row['id'] . '">';
-                                                echo 'Update Status <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '<button class="icns btn btn-danger update_status" id="' .  $row['id'] . '">';
+                                                echo '<i class="fas fa-edit"></i> Update Status';
                                                 echo '</button>';
                                             }
 

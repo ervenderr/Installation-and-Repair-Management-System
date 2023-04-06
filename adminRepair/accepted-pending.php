@@ -43,7 +43,7 @@ if (isset($_POST['id'])) {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <input name="submit" type="submit" class="btn btn-danger" value="Accept"/>
+          <input name="submit" type="submit" class="btn btn-success" value="Update"/>
         </div>
   </form>';
 
