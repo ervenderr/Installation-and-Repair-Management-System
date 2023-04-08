@@ -61,6 +61,12 @@
                 <i class="fas fa-box menu-icon"></i>
               </a>
             </li>
+            <li class="nav-item <?php echo $parts; ?>">
+              <a class="nav-link" href="../elecparts/parts.php">
+                <span class="menu-title">Electronic Parts</span>
+                <i class="fas fa-dolly-flatbed menu-icon"></i>
+              </a>
+            </li>
             <li class="nav-item <?php echo $invactive; ?>">
               <a class="nav-link" href="../inventory/inventory.php">
                 <span class="menu-title">Inventory</span>

@@ -67,7 +67,7 @@ $user_id = $_SESSION['logged_id'];
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'Diagnosing'
+                                                        WHERE rprq.status = 'Pending'
                                                         ORDER BY rprq.date_req DESC;";
 
                                                     $result = mysqli_query($conn, $query);

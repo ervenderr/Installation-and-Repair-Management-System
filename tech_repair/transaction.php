@@ -89,7 +89,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed' AND rprq.tech_id = $user_id
+                                                        WHERE rprq.status != 'Pending' AND rprq.tech_id = $user_id
                                                         ORDER BY rprq.date_req DESC";
 
                                                     $result = mysqli_query($conn, $query);
@@ -104,14 +104,12 @@ require_once '../homeIncludes/dbconfig.php';
                                                         $statusClass = '';
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'Accepted') {
-                                                            $statusClass = 'badge-gradient-danger';
-                                                        }else if ($row['status'] == 'In-progress') {
+                                                        } else if ($row['status'] == 'In-progress') {
                                                             $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done' || $row['status'] == 'Completed') {
-                                                            $statusClass = 'badge-gradient-success';
-                                                        } else {
+                                                        } else if ($row['status'] == 'Cancelled') {
                                                             $statusClass = 'badge-gradient-secondary';
+                                                        } else {
+                                                            $statusClass = 'badge-gradient-success';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';

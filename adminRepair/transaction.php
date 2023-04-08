@@ -99,7 +99,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed' OR rprq.status = 'Repairing'
+                                                        WHERE rprq.status != 'Pending' OR rprq.status != 'Diagnosing'
                                                         ORDER BY rprq.date_req DESC;";
 
                                                     $result = mysqli_query($conn, $query);
@@ -117,12 +117,10 @@ require_once '../homeIncludes/dbconfig.php';
                                                             $statusClass = 'badge-gradient-warning';
                                                         } else if ($row['status'] == 'In-progress') {
                                                             $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-danger';
-                                                        } else if ($row['status'] == 'Completed') {
-                                                            $statusClass = 'badge-gradient-success';
-                                                        } else {
+                                                        } else if ($row['status'] == 'Cancelled') {
                                                             $statusClass = 'badge-gradient-secondary';
+                                                        } else {
+                                                            $statusClass = 'badge-gradient-success';
                                                         }
 
                                                         $backlog = '';

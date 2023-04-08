@@ -157,12 +157,10 @@ $_SESSION['rowid'] = $_GET['rowid'];
                             $statusClass = 'badge-gradient-warning';
                         } else if ($row['rprq_status'] == 'In-progress') {
                             $statusClass = 'badge-gradient-info';
-                        } else if ($row['rprq_status'] == 'Done') {
-                            $statusClass = 'badge-gradient-success';
-                        } else if ($row['rprq_status'] == 'Completed') {
-                            $statusClass = 'badge-gradient-success';
-                        } else {
+                        } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
+                        } else {
+                            $statusClass = 'badge-gradient-success';
                         }
                         echo "<tr>";
                         echo "<th>Status:</th>";
@@ -224,10 +222,6 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                                 <td><?php echo $row['initial_payment']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Full Payment:</th>
-                                                <td><?php echo $row['payment']?></td>
-                                            </tr>
-                                            <tr>
                                                 <th>Remarks:</th>
                                                 <td>
                                                     <textarea class="form-control" rows="3"
@@ -243,7 +237,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                             <h4 class="card-title mt-3">Labor Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-bordered" id="myDataTable">
+                                    <table class="table table-bordered" id="myDataTable">
                                         <thead>
                                             <tr class="bg-our">
                                                 <th> LABOR </th>
@@ -291,7 +285,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                             <h4 class="card-title mt-2">Parts Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-bordered" id="myDataTable">
+                                    <table class="table table-bordered" id="myDataTable">
                                         <thead>
                                             <tr class="bg-our">
                                                 <th> Part name </th>
@@ -335,15 +329,31 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
                                             echo '</tr>';
 
-                                            $grand_total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end "> </td>';
+                                            echo '<td class=""></td>';
+                                            echo '</tr>';
+                                            $total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Total:  </td>';
+                                            echo '<td class="">' . $total .".00". '</td>';
+                                            echo '</tr>';
+
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
+                                            echo '<td class="">'."- " . $row['initial_payment'] .'</td>';
+                                            echo '</tr>';
 
 
                                             
+                                            $grand_total = $total-$row['initial_payment'];
+
                                         ?>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+                            
                             <div class="d-flex align-items-center grandtotal">
                                 <h3>Total Payable Amount: <?php echo $grand_total.".00"?></h3>
                                 <?php if($row['rprq_status'] == 'Completed'){

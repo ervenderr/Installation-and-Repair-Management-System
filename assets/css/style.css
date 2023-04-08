@@ -21381,6 +21381,8 @@ dl li {
   background: linear-gradient(to bottom, #015F6B, #04bcd4);
   color: #fff;
   border: none;
+  padding: 8px 12px !important;
+  
 }
 
 .bread {
@@ -22356,4 +22358,9 @@ th{
   border-radius: 50px;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.editparts{
+  background-color: #fff !important;
+  border: none;
 }

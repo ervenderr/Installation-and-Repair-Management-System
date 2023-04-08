@@ -60,7 +60,7 @@ if (isset($_POST['id'])) {
     // Get the selected common repairs
 $selected_comrep_query = "SELECT comrep_id FROM rp_labor WHERE rprq_rl_id = ?";
 $selected_comrep_stmt = mysqli_prepare($conn, $selected_comrep_query);
-mysqli_stmt_bind_param($selected_comrep_stmt, 'i', $_POST['id']); // Assuming $_POST['id'] is the rprq ID you want to check
+mysqli_stmt_bind_param($selected_comrep_stmt, 'i', $_POST['id']);
 mysqli_stmt_execute($selected_comrep_stmt);
 $selected_comrep_result = mysqli_stmt_get_result($selected_comrep_stmt);
 
@@ -69,13 +69,15 @@ while ($selected_comrep = mysqli_fetch_assoc($selected_comrep_result)) {
     $selected_comrep_ids[] = $selected_comrep['comrep_id'];
 }
 
-$sql = "SELECT * FROM common_repairs WHERE elec_id = $elec_id";
+$sql = "SELECT * FROM common_repairs 
+LEFT JOIN brand_parts ON common_repairs.brand_parts = brand_parts.bp_id
+WHERE elec_id = $elec_id";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $selected = in_array($row["comrep_id"], $selected_comrep_ids) ? 'selected' : '';
-        $output .= "<option value='" . $row["comrep_id"] . "' $selected>" . $row['comrep_name'] . "</option>";
-    }
+  while ($row = mysqli_fetch_assoc($result)) {
+    $selected = in_array($row["comrep_id"], $selected_comrep_ids) ? 'selected' : '';
+    $output .= "<option value='" . $row["comrep_id"] . "' data-brand-part-id='" . $row["bp_id"] . "' data-brand-part-name='" . $row["bp_name"] . "' $selected>" . $row['comrep_name'] . "</option>";
+}
 }
     $output .= '
         </select>
@@ -86,27 +88,13 @@ if (mysqli_num_rows($result) > 0) {
       <div class="row mb-3 ">
       <div class="col-7 partscol">
           <label for="parts" class="form-label">Parts Needed<span class="required">*</span></label>
-          <select class="form-select" id="parts" name="parts[]">
-          <option value="None">--- Select ---</option>';
-          
-      $sql = "SELECT * FROM brand_parts WHERE eb_id = $elec_id";
-      $result = mysqli_query($conn, $sql);
-      if (mysqli_num_rows($result) > 0) {
-      while($row = mysqli_fetch_assoc($result)) {
-          $output .= "<option value='" . $row["bp_id"] . "'>" . $row['bp_name'] ."</option>";
-      }
-      }
-
-      $output .= '
-          </select>
       </div>
       <div class="col-3 partscol">
-      <label for="partqty" class="form-label">Quantity</label>
-      <input type="number" class="form-control" id="partqty" name="partqty" value="">
+      <td><input type="button" value="+" class="btn btn-primary btn-sm" id="btn-add-row">
+            </td>
       </div>
       <div class="col-2 partscolx">
-      <td><input type="button" value="+" class="btn btn-primary btn-sm partscolxx" id="btn-add-row">
-            </td>
+      
       </div>
       </div>
       </div>
@@ -174,32 +162,15 @@ foreach ($parts as $part) {
     }
 }
 
-// Calculate rp_labor grandtotal
-$rp_labor_total = 0;
-foreach ($comrep as $comrep_id) {
-    $sql = "SELECT comrep_cost FROM common_repairs WHERE comrep_id = '$comrep_id'";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    $rp_labor_total += $row['labor_rate'];
-}
 
-// Calculate rp_brand_parts grandtotal
-$rp_brand_parts_total = 0;
-foreach ($parts as $part) {
-    $sql = "SELECT bp_cost FROM brand_parts WHERE bp_id = '$part'";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    $rp_brand_parts_total += ($row['price'] * $partqty);
-}
 
-// Calculate the grandtotal
-$grandtotal = $rp_labor_total + $rp_brand_parts_total;
-$invquery = "INSERT INTO invoice (rprq_id, invoice_number, grand_total) VALUES ('$id', '$rp_labor_total', '$rp_brand_parts_total')";
 
 
   $query = "UPDATE rprq SET date_from = '$from', date_to = '$to', status = '$status', remarks = '$remarks' WHERE id = '$id'";
+  $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
 
   $result = mysqli_query($conn, $query);
+  $tresult = mysqli_query($conn, $tquery);
 
 
   if ($result) {
@@ -217,9 +188,45 @@ $invquery = "INSERT INTO invoice (rprq_id, invoice_number, grand_total) VALUES (
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2({});
 
+     // Add row function
+     function addRow(brandPartId, brandPartName) {
+        let newRow = `
+        <div class="row mb-3 parts-row">
+            <div class="col-7 partscol">
+                <select class="form-select" name="parts[]">
+                    <option value="${brandPartId}" selected>${brandPartName}</option>
+                </select>
+            </div>
+            <div class="col-3 partscol">
+                <input type="number" class="form-control partscols" id="partqty" name="partqty" value="1">
+            </div>
+            <div class="col-2 partscolx">
+                <input type="button" value="x" class="btn btn-danger btn-sm btn-row-remove">
+            </div>
+        </div>
+        `;
+
+        $('.partsbody').append(newRow);
+    }
+
+    // Listen for common repairs change
+    $('#comrep').on('change', function() {
+        $('.parts-row').remove(); // Remove all existing rows
+        let selectedComrep = $(this).val();
+        if (selectedComrep.length > 0) {
+            $.each(selectedComrep, function(index, comrep_id) {
+                let brandPartId = $("option[value='" + comrep_id + "']").data('brand-part-id');
+                let brandPartName = $("option[value='" + comrep_id + "']").data('brand-part-name');
+                if (brandPartId && brandPartName) {
+                    addRow(brandPartId, brandPartName);
+                }
+            });
+        }
+    });
+
     // Add row
-  $('#btn-add-row').on('click', function () {
-    let newRow = `
+    $('#btn-add-row').on('click', function() {
+        let newRow = `
       <div class="row mb-3 parts-row">
         <div class="col-7 partscol">
           <select class="form-select" name="parts[]">
@@ -244,14 +251,12 @@ if (mysqli_num_rows($result) > 0) {
       </div>
     `;
 
-    $('.partsbody').append(newRow);
-  });
+        $('.partsbody').append(newRow);
+    });
 
-  // Remove row
-  $('.partsbody').on('click', '.btn-row-remove', function () {
-    $(this).closest('.parts-row').remove();
-  });
+    // Remove row
+    $('.partsbody').on('click', '.btn-row-remove', function() {
+        $(this).closest('.parts-row').remove();
+    });
 });
-
-
 </script>

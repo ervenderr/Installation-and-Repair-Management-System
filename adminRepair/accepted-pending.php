@@ -62,6 +62,7 @@ if(isset($_POST['submit'])) {
 
     $query = "UPDATE rprq SET status = '$status', initial_payment = '$initpay' WHERE id = '$id'";
     $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
+
     $result = mysqli_query($conn, $query);
     $tresult = mysqli_query($conn, $tquery);
     

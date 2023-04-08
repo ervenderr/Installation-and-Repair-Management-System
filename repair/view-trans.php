@@ -143,9 +143,9 @@ $row = mysqli_fetch_assoc($result);
                     if ($row2['tm_status'] == 'Pending') {
                         $content = 'Repair request received';
                     } elseif ($row2['tm_status'] == 'Diagnosing') {
-                        $content = 'The repair request has been assigned to a technician, and they are currently diagnosing';
+                        $content = 'The repair request has been assigned to a technician, and they are currently diagnosing your request';
                     } elseif ($row2['tm_status'] == 'In-progress') {
-                        $content = 'The repair request has been assigned to a technician, and they are currently working on the repair';
+                        $content = 'Waiting for initial payment';
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Currently working on the repair';
                     } elseif ($row2['tm_status'] == 'Awaiting Parts') {
@@ -281,7 +281,7 @@ $row = mysqli_fetch_assoc($result);
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-trans" id="myDataTable">
                                             <thead>
-                                                <tr class="bg-our">
+                                                <tr class="bg-our spaces">
                                                     <th> LABOR </th>
                                                     <th> COST </th>
                                                 </tr>
@@ -318,6 +318,7 @@ $row = mysqli_fetch_assoc($result);
                                             echo '<td class="labortotal bold">' . $labor_subtotal .".00". '</td>';
                                             echo '</tr>';
                                             
+                                            
                                         ?>
                                             </tbody>
                                         </table>
@@ -327,7 +328,7 @@ $row = mysqli_fetch_assoc($result);
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-trans" id="myDataTable">
                                             <thead>
-                                                <tr class="bg-our">
+                                                <tr class="bg-our spaces">
                                                     <th> Part name </th>
                                                     <th> price </th>
                                                     <th> qty </th>
@@ -369,7 +370,25 @@ $row = mysqli_fetch_assoc($result);
                                             echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
                                             echo '</tr>';
 
-                                            $grand_total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr class="spaces">';
+                                            echo '<td colspan="4" class="text-end"> </td>';
+                                            echo '</tr>';
+                                            $total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Total:  </td>';
+                                            echo '<td class="">' . $total .".00". '</td>';
+                                            echo '</tr>';
+
+                                            if(!empty($row['initial_payment'])){
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
+                                            echo '<td class="">'."- " . $row['initial_payment'] .'</td>';
+                                            echo '</tr>';
+                                        }
+
+
+                                            
+                                            $grand_total = $total-$row['initial_payment'];
 
 
                                             

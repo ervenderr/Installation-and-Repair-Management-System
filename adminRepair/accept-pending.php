@@ -47,9 +47,10 @@ if(isset($_POST['submit'])) {
 
 
     $query = "UPDATE rprq SET tech_id = '$techId', status = '$status' WHERE id = '$id'";
-    $tquery = "INSERT INTO rp_timeline (tech_id, tm_date, tm_time, tm_status) VALUES ('$techId', NOW(), NOW(), '$status');";
+    $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
 
     $result = mysqli_query($conn, $query);
+    $tresult = mysqli_query($conn, $tquery);
 
 
     if ($result) {

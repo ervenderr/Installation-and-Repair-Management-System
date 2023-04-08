@@ -32,5 +32,6 @@
     $prodactive = "";
     $suppactive = "";
     $reports = "";
+    $parts = "";
 
 ?>

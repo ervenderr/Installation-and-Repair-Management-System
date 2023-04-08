@@ -142,7 +142,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                         </div>
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header d-flex align-items-center justify-content-between"">
+                                <div class="card-header d-flex align-items-center justify-content-between">
                                     <h4 class=" card-title h-card">Request Details</h4>
                                     <div>
                                         <button class="btn btn-success btn-fw btn-edit minimize"><i
@@ -166,12 +166,10 @@ $_SESSION['rowid'] = $_GET['rowid'];
                             $statusClass = 'badge-gradient-warning';
                         } else if ($row['rprq_status'] == 'In-progress') {
                             $statusClass = 'badge-gradient-info';
-                        } else if ($row['rprq_status'] == 'Done') {
-                            $statusClass = 'badge-gradient-success';
-                        } else if ($row['rprq_status'] == 'Completed') {
-                            $statusClass = 'badge-gradient-success';
-                        } else {
+                        } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
+                        } else {
+                            $statusClass = 'badge-gradient-success';
                         }
                         echo "<tr>";
                         echo "<th>Status:</th>";
@@ -231,10 +229,6 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             <tr>
                                                 <th>Initial Payment:</th>
                                                 <td><?php echo $row['initial_payment']?></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Full Payment:</th>
-                                                <td><?php echo $row['payment']?></td>
                                             </tr>
                                             <tr>
                                                 <th>Remarks:</th>
@@ -344,7 +338,24 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
                                             echo '</tr>';
 
-                                            $grand_total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end "> </td>';
+                                            echo '<td class=""></td>';
+                                            echo '</tr>';
+                                            $total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Total:  </td>';
+                                            echo '<td class="">' . $total .".00". '</td>';
+                                            echo '</tr>';
+
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
+                                            echo '<td class="">'."- " . $row['initial_payment'] .'</td>';
+                                            echo '</tr>';
+
+
+                                            
+                                            $grand_total = $total-$row['initial_payment'];
 
 
                                             

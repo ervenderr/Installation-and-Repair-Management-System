@@ -2217,3 +2217,8 @@ input[type="password"],
     font-weight: 600;
     text-transform: uppercase;
   }
+
+  .spaces{
+    background-color: #015F6B;
+    color: #fff;
+  }

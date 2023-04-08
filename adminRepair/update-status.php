@@ -18,7 +18,6 @@ if (isset($_POST['id'])) {
     }else{
       $stat ='To Pickup';
     }
-
     $output .= '
     <form method="POST" action="update-status.php" enctype="multipart/form-data">
           <div class="mb-3">
@@ -27,7 +26,7 @@ if (isset($_POST['id'])) {
                 <option value="Pending"' . ($currentStatus == "Pending" ? " selected" : "") . '>Pending</option>
                 <option value="In-progress"' . ($currentStatus == "In-progress" ? " selected" : "") . '>In-progress</option>
                 <option value="Repairing"' . ($currentStatus == "Repairing" ? " selected" : "") . '>Repairing</option>
-                <option value="'. $stat .'"' . ($currentStatus == "'. $stat .'" ? " selected" : "") . '>'. $stat .'</option>
+                <option value="'. $stat .'"' . ($currentStatus == "$stat" ? " selected" : "") . '>'. $stat .'</option>
                 <option value="Completed"' . ($currentStatus == "Completed" ? " selected" : "") . '>Completed</option>
                 <option value="Cancelled"' . ($currentStatus == "Cancelled" ? " selected" : "") . '>Cancelled</option>
                 <option value="Parts Needed"' . ($currentStatus == "Parts Needed" ? " selected" : "") . '>Parts Needed</option>

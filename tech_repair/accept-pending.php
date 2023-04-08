@@ -48,13 +48,14 @@ if(isset($_POST['submit'])) {
     $techId = htmlentities($_POST['tech']);
     $payment = htmlentities($_POST['payment']);
     $completed = htmlentities($_POST['completed']);
-    $status = "In-progress";
+    $status = "Diagnosing";
 
 
     $query = "UPDATE rprq SET tech_id = '$techId', status = '$status' WHERE id = '$id'";
+    $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
 
     $result = mysqli_query($conn, $query);
-    
+    $tresult = mysqli_query($conn, $tquery);
 
     if ($result) {
         $_SESSION['msg'] = "Record Updated Successfully";
