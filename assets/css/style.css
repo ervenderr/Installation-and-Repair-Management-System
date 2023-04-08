@@ -21411,6 +21411,7 @@ dl li {
 .flex {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .flex .dataTables_length label {
@@ -21444,6 +21445,8 @@ dl li {
 
 .mg-btm {
   margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .pagination>li>a {

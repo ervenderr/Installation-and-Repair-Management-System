@@ -27,7 +27,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
                                 <i class="fas fa-dolly-flatbed menu-icon"></i>
-                            </span> Elecetronic Parts
+                            </span> Electronic Parts
                         </h3>
                         <?php
                             if (isset($_SESSION['msg'])) {
@@ -69,14 +69,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <div class="row mg-btm">
-                                <div class="col-sm-12 col-md-6 flex">
+                            <div class="row mg-btm d-flex justify-content-between">
+                                <div class="col-sm-12 flex ">
                                     <h4 class="card-title">List of Electronic Parts</h4>
-
+                                    <div>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12 grid-margin">
+                                <div class="col-12 grid-margin" id="table-container">
                                     <div class="table-responsive">
                                         <table id="myDataTable" class="table table-hover">
                                             <thead>
@@ -132,8 +135,140 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mg-btm d-flex justify-content-between">
+                                        <div class="col-sm-12 flex ">
+                                            <h4 class="card-title">Electronics</h4>
+                                            <div>
+                                                <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                        class="fas fa-minus text-white"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 grid-margin" id="table-container">
+                                            <div class="table-responsive">
+                                                <table id="myDataTable" class="table table-hover">
+                                                    <thead>
+                                                        <tr class="bg-our">
+                                                            <th> # </th>
+                                                            <th> Electronic Name </th>
+                                                            <th> Warranty </th>
+                                                            <th> Action </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="myTable">
+                                                        <?php
+                                                    // Perform the query
+                                                    $query = "SELECT * FROM electronics";
+
+                                                    $result = mysqli_query($conn, $query);
+                                                    $id = 1;
+
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        $partnum = rand(10000000000, 99999999999);
+                                                        echo '<tr>';
+                                                        echo '<td>' . $id . '</td>';
+                                                        echo '<td>' . $row['elec_name'] . '</td>';
+                                                        echo '<td>' . $row['elec_warranty'] . '</td>';
+
+                                                        echo '<td>';
+                                                        echo '<button class="icns editparts" id="' .  $row['elec_id'] . '">';
+                                                        echo '<i class="fas fa-edit text-success view-account"></i>';
+                                                        echo '</button>';
+                                                        echo '<a class="icns" href="delete-parts.php?rowid=' .  $row['elec_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
+                                                        echo '</a>';
+                                                        echo '</td>';
+                                                        echo '</tr>';
+                                                        $id++;
+
+                                                        $elec_id = $row['elec_id'];
+                                                        $_SESSION['elec_id'] = $elec_id;
+
+                                                    }
+                                                ?>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mg-btm d-flex justify-content-between">
+                                        <div class="col-sm-12 flex ">
+                                            <h4 class="card-title">Electronic Brands</h4>
+                                            <div>
+                                                <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                        class="fas fa-minus text-white"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 grid-margin" id="table-container">
+                                            <div class="table-responsive">
+                                            <table id="myDataTable" class="table table-hover">
+                                                    <thead>
+                                                        <tr class="bg-our">
+                                                            <th> # </th>
+                                                            <th> Brand Name </th>
+                                                            <th> Action </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="myTable">
+                                                        <?php
+                                                    // Perform the query
+                                                    $query = "SELECT * FROM elec_brand";
+
+                                                    $result = mysqli_query($conn, $query);
+                                                    $id = 1;
+
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        $partnum = rand(10000000000, 99999999999);
+                                                        echo '<tr>';
+                                                        echo '<td>' . $id . '</td>';
+                                                        echo '<td>' . $row['eb_name'] . '</td>';
+
+                                                        echo '<td>';
+                                                        echo '<button class="icns editparts" id="' .  $row['eb_id'] . '">';
+                                                        echo '<i class="fas fa-edit text-success view-account"></i>';
+                                                        echo '</button>';
+                                                        echo '<a class="icns" href="delete-parts.php?rowid=' .  $row['eb_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
+                                                        echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
+                                                        echo '</a>';
+                                                        echo '</td>';
+                                                        echo '</tr>';
+                                                        $id++;
+
+                                                        $eb_id = $row['eb_id'];
+                                                        $_SESSION['eb_id'] = $eb_id;
+
+                                                    }
+                                                ?>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
@@ -355,6 +490,19 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     }
     </script>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const minimizeBtn = document.querySelector('.btn-edit.minimize');
+        const tableContainer = document.getElementById('table-container');
+        const icon = minimizeBtn.querySelector('.fas');
+
+        minimizeBtn.addEventListener('click', function() {
+            tableContainer.classList.toggle('d-none');
+            icon.classList.toggle('fa-minus');
+            icon.classList.toggle('fa-chevron-down');
+        });
+    });
+    </script>
 
 
 </body>
