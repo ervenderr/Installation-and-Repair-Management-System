@@ -56,7 +56,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                         <i class=" mdi mdi-plus ">Part</i>
                                     </button>
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addProductModal">
+                                        data-bs-target="#addelectronicModal">
                                         <i class=" mdi mdi-plus ">Electronic</i>
                                     </button>
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
@@ -155,7 +155,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                     <div class="row">
                                         <div class="col-12 grid-margin" id="table-container">
                                             <div class="table-responsive">
-                                                <table id="myDataTable" class="table table-hover">
+                                                <table id="myDataTable3" class="table table-hover">
                                                     <thead>
                                                         <tr class="bg-our">
                                                             <th> # </th>
@@ -169,21 +169,24 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     // Perform the query
                                                     $query = "SELECT * FROM electronics";
 
+                                                    
+
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
                                                     while ($row = mysqli_fetch_assoc($result)) {
+                                                        $warrantys = $row['warranty_num'] . " " . $row['warranty_unit'];
                                                         $partnum = rand(10000000000, 99999999999);
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
                                                         echo '<td>' . $row['elec_name'] . '</td>';
-                                                        echo '<td>' . $row['elec_warranty'] . '</td>';
+                                                        echo '<td>' . $warrantys . '</td>';
 
                                                         echo '<td>';
-                                                        echo '<button class="icns editparts" id="' .  $row['elec_id'] . '">';
+                                                        echo '<button class="icns editparts editelec" id="' .  $row['elec_id'] . '">';
                                                         echo '<i class="fas fa-edit text-success view-account"></i>';
                                                         echo '</button>';
-                                                        echo '<a class="icns" href="delete-parts.php?rowid=' .  $row['elec_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
+                                                        echo '<a class="icns" href="delete-electronics.php?rowid=' .  $row['elec_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
@@ -220,7 +223,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                     <div class="row">
                                         <div class="col-12 grid-margin" id="table-container">
                                             <div class="table-responsive">
-                                            <table id="myDataTable" class="table table-hover">
+                                                <table id="myDataTable2" class="table table-hover">
                                                     <thead>
                                                         <tr class="bg-our">
                                                             <th> # </th>
@@ -243,7 +246,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<td>' . $row['eb_name'] . '</td>';
 
                                                         echo '<td>';
-                                                        echo '<button class="icns editparts" id="' .  $row['eb_id'] . '">';
+                                                        echo '<button class="icns editparts editbrand" id="' .  $row['eb_id'] . '">';
                                                         echo '<i class="fas fa-edit text-success view-account"></i>';
                                                         echo '</button>';
                                                         echo '<a class="icns" href="delete-parts.php?rowid=' .  $row['eb_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
@@ -287,77 +290,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         <!-- page-body-wrapper ends -->
     </div>
 
-    <div class="modal fade " id="addPartsModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editSuppModalLabel">Create New</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body suppbody">
-                    <form method="POST" action="add-parts.php" enctype="multipart/form-data"
-                        onsubmit="return validateForm()">
-                        <div class="mb-3">
-                            <label for="partname" class="form-label">Part Name</label>
-                            <input type="text" class="form-control" name="partname" id="partname">
-                            <span class="error"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label for="electronic" class="form-label">Electronic Type</label>
-                            <select name="electronic" id="electronic" class="form-select">
-                                <option value="None">--- Select ---</option>
-                                <?php
-                                $sql = "SELECT * FROM electronics";
-                                $result = mysqli_query($conn, $sql);
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['elec_id'] . "'>" . $row['elec_name'] . "</option>";
-                                }
-                                ?>
-                            </select>
-                            <span class="error"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label for="brand" class="form-label">Brand</label>
-                            <select name="brand" id="brand" class="form-select">
-                                <option value="None">--- Select ---</option>
-                                <?php
-                                $sql = "SELECT * FROM elec_brand";
-                                $result = mysqli_query($conn, $sql);
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['eb_id'] . "'>" . $row['eb_name'] . "</option>";
-                                }
-                                ?>
-                            </select>
-                            <span class="error"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="number" class="form-control" name="price" id="price">
-                            <span class="error"></span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <input name="submit" type="submit" class="btn btn-danger" value="Submit" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade " id="editPartsModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editSuppModalLabel">Update Parts</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body suppbody">
-
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php require_once 'modal.php'; ?>
 
     <!-- container-scroller -->
     <!-- plugins:js -->
@@ -405,21 +338,14 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
     <script>
     j(document).ready(function() {
+        j('#myDataTable').DataTable();
         j('#myDataTable2').DataTable();
+        j('#myDataTable3').DataTable();
     });
     </script>
 
     <script>
     $(document).ready(function() {
-        j(document).ready(function() {
-            j('#myDataTable').DataTable();
-        });
-
-        $('.addparts').click(function() {
-            $('#editSuppModal').modal('show');
-        });
-
-        // Use event delegation for handling click events on edit buttons
         $('#myDataTable').on('click', '.editparts', function() {
             id = $(this).attr('id');
             $.ajax({
@@ -436,8 +362,27 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
             $('#editPartsModal').modal('show');
         });
+
+        $('#myDataTable3').on('click', '.editelec', function() {
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-electronics.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.suppbody').html(result);
+                }
+            });
+
+            $('#editelectronicsModal').modal('show');
+        });
     });
     </script>
+
+
 
     <script>
     function showError(element, message) {
@@ -458,7 +403,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
         let isValid = true;
 
-        if (!partname.value.trim()) {
+
+
+        if (partname.value === "") {
             showError(partname, "Please enter a part name.");
             isValid = false;
         } else {
@@ -479,11 +426,44 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             clearError(brand);
         }
 
+
         if (!price.value.trim() || parseFloat(price.value) <= 0) {
             showError(price, "Please enter a valid price.");
             isValid = false;
         } else {
             clearError(price);
+        }
+
+        return isValid;
+    }
+
+    function validateFormTwo() {
+        const elecname = document.getElementById("elecname");
+        const brands = document.getElementById("brands");
+        const warranty_number = document.getElementById("warranty_number");
+
+        let isValid = true;
+
+        if (elecname.value === "") {
+            showError(elecname, "Please enter a electronic name.");
+            isValid = false;
+        } else {
+            clearError(elecname);
+        }
+
+        if (brands.value === "") {
+            showError(brands, "Please select a brands.");
+            isValid = false;
+        } else {
+            clearError(brands);
+        }
+
+
+        if (!warranty_number.value.trim() || parseFloat(warranty_number.value) <= 0) {
+            showError(warranty_number, "Cannot be empty.");
+            isValid = false;
+        } else {
+            clearError(warranty_number);
         }
 
         return isValid;
@@ -501,6 +481,16 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             icon.classList.toggle('fa-minus');
             icon.classList.toggle('fa-chevron-down');
         });
+    });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
     });
     </script>
 
