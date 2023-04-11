@@ -28,18 +28,17 @@ if (isset($_POST['id'])) {
     }
 
     $output .= '
-    <form method="POST" action="update-electronics.php" enctype="multipart/form-data"
-                        onsubmit="return validateForm()">
+    <form method="POST" action="update-electronics.php" enctype="multipart/form-data">
                         <div class="mb-3">
                         <label for="elecname" class="form-label">Electronic Name</label>
-                        <input type="text" class="form-control" name="elecname" id="elecname" value="'. $row['elec_name'] .'">
+                        <input type="text" class="form-control" name="elecname" id="elecnameUpdate" value="'. $row['elec_name'] .'">
                         <span class="error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="warranty" class="form-label">Warranty</label>
                         <div class="d-flex">
                             <input type="number" min="1" class="form-control me-2" name="warranty_number"
-                                id="warranty_number" value="'. $row['warranty_num'] .'">
+                                id="warranty_numberUpdate" value="'. $row['warranty_num'] .'">
                             <span class="error"></span>
                             <select class="form-select" name="warranty_unit" id="warranty_unit">
                                 <option value="day(s)" ' . ($selected_warranty_unit == "day(s)" ? "selected" : "") . '>Day(s)</option>
@@ -50,7 +49,7 @@ if (isset($_POST['id'])) {
                     </div>
                     <div class="mb-3">
                         <label for="brand" class="form-label">Brands</label>
-                        <select name="brands[]" id="brands" class="form-select js-example-basic-multiple" multiple="multiple">';
+                        <select name="brands[]" id="brandsUpdate" class="form-select js-example-basic-multiple" multiple="multiple">';
                         $sql = "SELECT * FROM elec_brand";
                         $result = mysqli_query($conn, $sql);
                         while ($row = mysqli_fetch_assoc($result)) {

@@ -203,7 +203,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             </thead>
                                             <tbody id="myTable2">
                                                 <?php
-                                            $sql_all = "SELECT * FROM rprq WHERE status='Completed' ORDER BY date_completed DESC";
+                                            $sql_all = "SELECT * FROM rprq
+                                            LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                                            WHERE status='Completed' ORDER BY date_completed DESC";
                                             $result_all = $conn->query($sql_all);
                                             if ($result_all->num_rows > 0) {
                                                 $count = 1;

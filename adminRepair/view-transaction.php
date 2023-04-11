@@ -203,7 +203,9 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             </tr>
                                             <tr>
                                                 <th>Date Completed:</th>
-                                                <td><?php echo $row['date_completed']?></td>
+                                                <td><?php
+                                                if($row['rprq_status'] == 'Completed'){
+                                                echo $row['date_completed'];}?></td>
                                             </tr>
                                             <tr>
                                                 <th>Assigned Technician:</th>

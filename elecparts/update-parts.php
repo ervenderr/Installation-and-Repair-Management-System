@@ -16,8 +16,7 @@ if (isset($_POST['id'])) {
     $parts = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
     $output .= '
-    <form method="POST" action="update-parts.php" enctype="multipart/form-data"
-                        onsubmit="return validateForm()">
+    <form method="POST" action="update-parts.php" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="partname" class="form-label">Part Name</label>
                             <input type="text" class="form-control" name="partname" id="partname" value="'. $parts['bp_name']. '">

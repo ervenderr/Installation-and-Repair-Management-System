@@ -65,56 +65,45 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group row">
-                                <label for="etype" class="col-form-label">Electronic Type</label>
-                                <div class="">
-                                    <select name="etype" class="form-control">
-                                        <option value="None">--- Select ---</option>
-                                        <?php
-                                        $sql = "SELECT * FROM electronics";
-                                        $result = mysqli_query($conn, $sql);
-                                        while($row = mysqli_fetch_assoc($result)) { 
-                                            echo "<option value='" . $row['elec_id'] . "'>" . $row['elec_name'] . "</option>";
-                                        }
+                            <div class="mb-3">
+                                <label for="etype" class="form-label">Electronic Type</label>
+                                <select name="etype" id="etype" class="form-control">
+                                    <option value="None">--- Select ---</option>
+                                    <?php
+                                    $sql = "SELECT * FROM electronics";
+                                    $result = mysqli_query($conn, $sql);
+                                    while($row = mysqli_fetch_assoc($result)) { 
+                                        echo "<option value='" . $row['elec_id'] . "'>" . $row['elec_name'] . "</option>";
+                                    }
                                     ?>
-                                    </select>
-                                    <span class="error-input"></span>
-                                </div>
+                                </select>
+                                <span class="error-input"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group row">
-                                <label for="technician" class="col-form-label">Assigned Electrician</label>
-                                <div class="">
-                                    <select name="technician" class="form-control">
-                                        <option value="None">--- Select ---</option>
-                                        <?php
-                                        $sql = "SELECT * FROM technician";
-                                        $result = mysqli_query($conn, $sql);
-                                        while($row = mysqli_fetch_assoc($result)) { 
-                                            echo "<option value='" . $row['tech_id'] . "'>" . $row['fname'] ." ". $row['lname'] . "</option>";
-                                        }
-                                    ?>
-                                    </select>
-                                    <span class="error-input"></span>
-                                </div>
+                            <div class="mb-3">
+                                <label for="ebrand" class="form-label">Brand</label>
+                                <select name="ebrand" id="ebrand" class="form-control">
+                                    <option value="None">--Select--</option>
+                                    <!-- Options will be populated using JavaScript/jQuery -->
+                                    <option value="other">Other</option>
+                                </select>
+                                <span class="error-input"></span>
+                            </div>
+                            <div class="form-group" id="other-brand-input" style="display:none;">
+                                <label for="other_brand" class="col-form-label">Other Brand</label>
+                                <input type="text" name="other_brand" id="other_brand" class="form-control">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group row">
+                            <div class="mb-3">
                                 <label for="defective" class="col-form-label">Defects</label>
                                 <div class="">
                                     <select name="defective" id="defective" class="form-control">
                                         <option value="None">--- Select ---</option>
-                                        <?php
-                                            $sql = "SELECT * FROM defects";
-                                            $result = mysqli_query($conn, $sql);
-                                            while($row = mysqli_fetch_assoc($result)) { 
-                                                echo "<option value='" . $row['defect_id'] . "'>" . $row['defect_name'] . "</option>";
-                                            }
-                                            ?>
+                                        <!-- Options will be populated using JavaScript/jQuery -->
                                         <option value="other">Other</option>
                                     </select>
                                     <span class="error-input"></span>
@@ -123,7 +112,6 @@
                                     <label for="other_defective" class="col-form-label">Other Defect</label>
                                     <input type="text" name="other_defective" id="other_defective" class="form-control">
                                 </div>
-
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -144,51 +132,48 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <label for="date" class="col-form-label">Date</label>
+                                <label for="technician" class="col-form-label">Assigned Electrician</label>
                                 <div class="">
-                                    <input name="date" type="date" class="form-control" placeholder="dd/mm/yyyy" />
+                                    <select name="technician" class="form-control">
+                                        <option value="None">--- Select ---</option>
+                                        <?php
+                                        $sql = "SELECT * FROM technician";
+                                        $result = mysqli_query($conn, $sql);
+                                        while($row = mysqli_fetch_assoc($result)) { 
+                                            echo "<option value='" . $row['tech_id'] . "'>" . $row['fname'] ." ". $row['lname'] . "</option>";
+                                        }
+                                    ?>
+                                    </select>
                                     <span class="error-input"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label for="completed" class="col-form-label">Estimated Completion</label>
-                                <div class="">
-                                    <input name="completed" type="date" class="form-control" placeholder="dd/mm/yyyy" />
-                                    <span class="error-input"></span>
-                                </div>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input name="submit" type="submit" class="btn btn-primary" value="Add Transaction" />
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label for="inipayment" class="col-form-label">Initial Payment</label>
-                                <div class="">
-                                    <input name="inipayment" class="form-control" type="text" />
-                                    <span class="error-input"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <input name="submit" type="submit" class="btn btn-primary" value="Add Transaction" />
-
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
+
 <script>
-    document.getElementById('defective').addEventListener('change', function() {
-        if (this.value === 'other') {
-            document.getElementById('other-defect-input').style.display = 'block';
-        } else {
-            document.getElementById('other-defect-input').style.display = 'none';
-        }
-    });
+document.getElementById('defective').addEventListener('change', function() {
+    if (this.value === 'other') {
+        document.getElementById('other-defect-input').style.display = 'block';
+    } else {
+        document.getElementById('other-defect-input').style.display = 'none';
+    }
+});
+
+document.getElementById('ebrand').addEventListener('change', function() {
+    if (this.value === 'other') {
+        document.getElementById('other-brand-input').style.display = 'block';lec_id
+    } else {
+        document.getElementById('other-brand-input').style.display = 'none';
+    }
+});
 </script>
+

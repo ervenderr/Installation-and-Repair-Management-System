@@ -60,7 +60,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                         <i class=" mdi mdi-plus ">Electronic</i>
                                     </button>
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addSuppModal">
+                                        data-bs-target="#addeBrandModal">
                                         <i class=" mdi mdi-plus ">Brand</i>
                                     </button>
                                 </li>
@@ -249,7 +249,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<button class="icns editparts editbrand" id="' .  $row['eb_id'] . '">';
                                                         echo '<i class="fas fa-edit text-success view-account"></i>';
                                                         echo '</button>';
-                                                        echo '<a class="icns" href="delete-parts.php?rowid=' .  $row['eb_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
+                                                        echo '<a class="icns" href="delete-brand.php?rowid=' .  $row['eb_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
@@ -363,6 +363,23 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             $('#editPartsModal').modal('show');
         });
 
+        $('#myDataTable2').on('click', '.editbrand', function() {
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-brand.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.brandbody').html(result);
+                }
+            });
+
+            $('#editbrandsModal').modal('show');
+        });
+
         $('#myDataTable3').on('click', '.editelec', function() {
             id = $(this).attr('id');
             $.ajax({
@@ -373,7 +390,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                 },
                 success: function(result) {
                     // Handle successful response
-                    $('.suppbody').html(result);
+                    $('.elecbody').html(result);
                 }
             });
 
@@ -382,17 +399,31 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
     </script>
 
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
 
+    function initializeSelect2() {
+        $('.js-example-basic-multiple').select2();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeSelect2();
+    });
+    </script>
 
     <script>
     function showError(element, message) {
-        const errorSpan = element.parentElement.querySelector(".error");
+        const errorSpan = element.nextElementSibling;
         errorSpan.textContent = message;
+        element.classList.add("is-invalid");
     }
 
     function clearError(element) {
-        const errorSpan = element.parentElement.querySelector(".error");
+        const errorSpan = element.nextElementSibling;
         errorSpan.textContent = "";
+        element.classList.remove("is-invalid");
     }
 
     function validateForm() {
@@ -402,8 +433,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         const price = document.getElementById("price");
 
         let isValid = true;
-
-
 
         if (partname.value === "") {
             showError(partname, "Please enter a part name.");
@@ -445,7 +474,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         let isValid = true;
 
         if (elecname.value === "") {
-            showError(elecname, "Please enter a electronic name.");
+            showError(elecname, "Please enter an electronic name.");
             isValid = false;
         } else {
             clearError(elecname);
@@ -458,7 +487,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             clearError(brands);
         }
 
-
         if (!warranty_number.value.trim() || parseFloat(warranty_number.value) <= 0) {
             showError(warranty_number, "Cannot be empty.");
             isValid = false;
@@ -466,8 +494,149 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             clearError(warranty_number);
         }
 
+        // Reinitialize Select2 after validation
+        initializeSelect2();
+
         return isValid;
     }
+
+
+    function validateFormThree() {
+
+        const brands = document.getElementById("brandname");
+
+        let isValid = true;
+
+        if (brandname.value === "") {
+            showError(brandname, "Cannot be empty.");
+            isValid = false;
+        } else {
+            clearError(brandname);
+        }
+
+
+        return isValid;
+    }
+
+    function validateFormfour() {
+        const updateForm = document.querySelector('form[action="update-brand.php"]');
+        if (!updateForm) return false; // Return false if the form is not found
+
+        const brandname = updateForm.querySelector("#brandname");
+
+        let isValid = true;
+
+        if (brandname.value === "") {
+            showError(brandname, "Cannot be empty.");
+            isValid = false;
+        } else {
+            clearError(brandname);
+        }
+
+        return isValid;
+    }
+
+    document.addEventListener('submit', function(event) {
+        if (event.target.matches('form[action="update-brand.php"]')) {
+            if (!validateFormfour()) {
+                event.preventDefault();
+            }
+        }
+    });
+
+    function validateFormElectronicsUpdate() {
+        const updateForm = document.querySelector('form[action="update-electronics.php"]');
+        if (!updateForm) return false;
+
+        const elecname = updateForm.querySelector("#elecnameUpdate");
+        const brands = updateForm.querySelector("#brandsUpdate");
+        const warranty_number = updateForm.querySelector("#warranty_numberUpdate");
+
+        let isValid = true;
+
+        if (elecname.value === "") {
+            showError(elecname, "Please enter an electronic name.");
+            isValid = false;
+        } else {
+            clearError(elecname);
+        }
+
+        if (brands.selectedOptions.length === 0) {
+            showError(brands, "Please select a brand.");
+            isValid = false;
+        } else {
+            clearError(brands);
+        }
+
+        if (!warranty_number.value.trim() || parseFloat(warranty_number.value) <= 0) {
+            showError(warranty_number, "Cannot be empty.");
+            isValid = false;
+        } else {
+            clearError(warranty_number);
+        }
+        initializeSelect2();
+
+        return isValid;
+    }
+
+    document.addEventListener('submit', function(event) {
+        if (event.target.matches('form[action="update-electronics.php"]')) {
+            if (!validateFormElectronicsUpdate()) {
+                event.preventDefault();
+            }
+        }
+    });
+
+    function validateFormPartsUpdate() {
+    const updateForm = document.querySelector('form[action="update-parts.php"]');
+    if (!updateForm) return false;
+
+    const partname = updateForm.querySelector("#partname");
+    const electronic = updateForm.querySelector("#electronic");
+    const brand = updateForm.querySelector("#brand");
+    const price = updateForm.querySelector("#price");
+
+    let isValid = true;
+
+    if (partname.value === "") {
+        showError(partname, "Please enter a part name.");
+        isValid = false;
+    } else {
+        clearError(partname);
+    }
+
+    if (electronic.value === "None") {
+        showError(electronic, "Please select an electronic type.");
+        isValid = false;
+    } else {
+        clearError(electronic);
+    }
+
+    if (brand.value === "None") {
+        showError(brand, "Please select a brand.");
+        isValid = false;
+    } else {
+        clearError(brand);
+    }
+
+    if (!price.value.trim() || parseFloat(price.value) <= 0) {
+        showError(price, "Please enter a valid price.");
+        isValid = false;
+    } else {
+        clearError(price);
+    }
+
+    return isValid;
+}
+
+document.addEventListener('submit', function (event) {
+    if (event.target.matches('form[action="update-parts.php"]')) {
+        if (!validateFormPartsUpdate()) {
+            event.preventDefault();
+        }
+    }
+});
+
     </script>
 
     <script>
@@ -488,11 +657,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script>
-    $(document).ready(function() {
-        $('.js-example-basic-multiple').select2({});
-    });
-    </script>
 
 
 </body>

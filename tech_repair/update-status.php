@@ -17,31 +17,30 @@ if (isset($_POST['id'])) {
 
   // Query the supplier table
   $query6 = "SELECT rprq.*, 
-  customer.fname AS cust_fname, 
-  customer.lname AS cust_lname, 
   technician.fname AS tech_fname, 
   technician.lname AS tech_lname, 
-  technician.status AS tech_status_new_name, 
-  rprq.status AS rprq_status, 
+  technician.phone AS tech_phone,
+  technician.status AS tech_status, 
+  customer.fname AS cust_fname, 
+  customer.lname AS cust_lname, 
+  customer.phone AS cust_phone,
+  rprq.status AS rprq_status,
+  rprq.elec_id AS rprq_elec,
   accounts.*,
   technician.*,
-  elec_brand.*,
   electronics.*,
-  rp_brand_parts.*,
-  brand_parts.*,
+  rp_timeline.*,
+  elec_brand.*,
   defects.*,
-  invoice.*,
   customer.*
   FROM rprq
   LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+  LEFT JOIN rp_timeline ON rprq.id = rp_timeline.rprq_id
+  LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
   LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
-  LEFT JOIN elec_brand ON electronics.elec_id = elec_brand.elec_id
-  LEFT JOIN brand_parts ON elec_brand.eb_id = brand_parts.eb_id
-  LEFT JOIN rp_brand_parts ON brand_parts.bp_id = rp_brand_parts.bp_id
   LEFT JOIN defects ON rprq.defect_id = defects.defect_id
   LEFT JOIN customer ON rprq.cust_id = customer.cust_id
   LEFT JOIN accounts ON customer.account_id = accounts.account_id
-  LEFT JOIN invoice ON rprq.id = invoice.rprq_id
         WHERE rprq.id = '" . $_POST['id'] . "';";
   $result6 = mysqli_query($conn, $query6);
 
@@ -49,8 +48,7 @@ if (isset($_POST['id'])) {
   if (mysqli_num_rows($result6) > 0) {
       $row6 = mysqli_fetch_assoc($result6);
   }
- $elec_id = $row6['elec_id'];
-
+ $elec_id = $row6['rprq_elec'];
 
   $output .= '
     <div class="mb-3">
@@ -71,7 +69,7 @@ while ($selected_comrep = mysqli_fetch_assoc($selected_comrep_result)) {
 
 $sql = "SELECT * FROM common_repairs 
 LEFT JOIN brand_parts ON common_repairs.brand_parts = brand_parts.bp_id
-WHERE elec_id = $elec_id";
+WHERE common_repairs.elec_id = $elec_id";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
   while ($row = mysqli_fetch_assoc($result)) {
@@ -162,11 +160,37 @@ foreach ($parts as $part) {
     }
 }
 
+$lquery = "SELECT *
+    FROM rprq
+    INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+    INNER JOIN rp_labor ON rprq.id = rp_labor.rprq_rl_id
+    INNER JOIN common_repairs ON rp_labor.comrep_id = common_repairs.comrep_id
+    WHERE rprq.id = $id";
+$lresult = mysqli_query($conn, $lquery);
 
+$labor_subtotal = 0;
 
+while ($lrow = mysqli_fetch_assoc($lresult)) {
+    $labor_subtotal += $lrow['comrep_cost'];
+}
 
+$$lquery = "SELECT *
+FROM rprq
+INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+INNER JOIN rp_brand_parts ON rprq.id = rp_brand_parts.rprq_id
+INNER JOIN brand_parts ON rp_brand_parts.bp_id = brand_parts.bp_id
+WHERE rprq.id = $id";
 
-  $query = "UPDATE rprq SET date_from = '$from', date_to = '$to', status = '$status', remarks = '$remarks' WHERE id = '$id'";
+$part_subtotal = 0;
+
+while ($lrow = mysqli_fetch_assoc($lresult)) {
+    $partqty  = $lrow['bp_cost'] * $lrow['quantity'];
+    $part_subtotal += $partqty;
+}
+
+$grand_total = $part_subtotal + $labor_subtotal;
+
+  $query = "UPDATE rprq SET payment = '$grand_total', date_from = '$from', date_to = '$to', status = '$status', remarks = '$remarks' WHERE id = '$id'";
   $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
 
   $result = mysqli_query($conn, $query);

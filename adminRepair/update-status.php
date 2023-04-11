@@ -50,7 +50,7 @@ if(isset($_POST['submit'])) {
     $status = htmlentities($_POST['status']);
 
 
-    $query = "UPDATE rprq SET status = '$status' WHERE id = '$id'";
+    $query = "UPDATE rprq SET status = '$status', date_completed = NOW() WHERE id = '$id'";
     $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
 
     $result = mysqli_query($conn, $query);
