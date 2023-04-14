@@ -49,6 +49,7 @@ if (isset($_POST['id'])) {
       $row6 = mysqli_fetch_assoc($result6);
   }
  $elec_id = $row6['rprq_elec'];
+ $eb_id = $row6['eb_id'];
 
   $output .= '
     <div class="mb-3">
@@ -99,17 +100,13 @@ if (mysqli_num_rows($result) > 0) {
       </div>
       <div class="row">
       <div class="col-6">
-      <div class="mb-3">
-        <label for="from" class="form-label">Estimated Completion (from)</label>
-        <input type="date" class="form-control" id="from" name="from" value="' . $row6['date_from'] . '">
+      <div class="mb-3 ">
+        <label for="days" class="form-label">Estimated Completion </label>
+        <span>(day)</span>
+        <input type="number" class="form-control" id="days" name="days" value="' . $row6['date_day'] . '">
       </div>
       </div>
-      <div class="col-6">
-      <div class="mb-3">
-        <label for="to" class="form-label">(to)</label>
-        <input type="date" class="form-control" id="to" name="to" value="' . $row6['date_to'] . '">
-        </div>
-        </div>
+      
       </div>
       </div>
       <div class="mb-3">
@@ -138,6 +135,7 @@ if (isset($_POST['submit'])) {
   $partqty = htmlentities($_POST['partqty']);
   $from = htmlentities($_POST['from']); 
   $to = htmlentities($_POST['to']); 
+  $days = htmlentities($_POST['days']); 
 
   $elec_id = // Get the elec_id from your data source
   $rprq_id = htmlentities($_SESSION['id']);
@@ -190,7 +188,7 @@ while ($lrow = mysqli_fetch_assoc($lresult)) {
 
 $grand_total = $part_subtotal + $labor_subtotal;
 
-  $query = "UPDATE rprq SET payment = '$grand_total', date_from = '$from', date_to = '$to', status = '$status', remarks = '$remarks' WHERE id = '$id'";
+  $query = "UPDATE rprq SET payment = '$grand_total', date_day = '$days', status = '$status', remarks = '$remarks' WHERE id = '$id'";
   $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
 
   $result = mysqli_query($conn, $query);
@@ -256,7 +254,7 @@ $(document).ready(function() {
           <select class="form-select" name="parts[]">
           <option value="None">--- Select ---</option>
 <?php
-$sql = "SELECT * FROM brand_parts WHERE eb_id = $elec_id";
+$sql = "SELECT * FROM brand_parts WHERE eb_id = $eb_id";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
   while($row = mysqli_fetch_assoc($result)) {

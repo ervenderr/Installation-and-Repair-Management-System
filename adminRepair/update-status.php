@@ -25,6 +25,7 @@ if (isset($_POST['id'])) {
             <select class="form-select" id="status" name="status">
                 <option value="Pending"' . ($currentStatus == "Pending" ? " selected" : "") . '>Pending</option>
                 <option value="In-progress"' . ($currentStatus == "In-progress" ? " selected" : "") . '>In-progress</option>
+                <option value="To repair"' . ($currentStatus == "To repair" ? " selected" : "") . '>To repair</option>
                 <option value="Repairing"' . ($currentStatus == "Repairing" ? " selected" : "") . '>Repairing</option>
                 <option value="'. $stat .'"' . ($currentStatus == "$stat" ? " selected" : "") . '>'. $stat .'</option>
                 <option value="Completed"' . ($currentStatus == "Completed" ? " selected" : "") . '>Completed</option>

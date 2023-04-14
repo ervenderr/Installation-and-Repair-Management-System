@@ -146,6 +146,8 @@ $row = mysqli_fetch_assoc($result);
                         $content = 'The repair request has been assigned to a technician, and they are currently diagnosing your request';
                     } elseif ($row2['tm_status'] == 'In-progress') {
                         $content = 'Waiting for initial payment';
+                    } elseif ($row2['tm_status'] == 'To repair') {
+                        $content = 'Technician is preparing to repair your request';
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Currently working on the repair';
                     } elseif ($row2['tm_status'] == 'Awaiting Parts') {
@@ -246,7 +248,7 @@ $row = mysqli_fetch_assoc($result);
                                                     if($row['tech_id'] == ''){
                                                         echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
                                                     }else{
-                                                        echo $row['date_from']." to ".$row['date_to'];
+                                                        echo $row['date_day']." day(s) ";
                                                     }
                                                     ?>
                                         </div>

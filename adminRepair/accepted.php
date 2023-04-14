@@ -118,9 +118,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
                                                         echo '<i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i> View';
                                                         echo '</a>';
-                                                        echo '<button class="icns btn btn-danger edit acceptrp" id="' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-calendar-check view-account" id="' .  $row['id'] . '"> </i> Assign';
-                                                        echo '</button>';
                                                         echo '</td>';
                                                         echo '</tr>';
                                                         $id++;

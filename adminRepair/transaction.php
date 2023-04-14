@@ -107,7 +107,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                         
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
+                                                        } else if ($row['status'] == 'In-progress' || $row['rprq_status'] == 'To repair') {
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Cancelled') {
                                                             $statusClass = 'badge-gradient-secondary';
@@ -116,15 +116,15 @@ require_once '../homeIncludes/dbconfig.php';
                                                         }
 
                                                         $backlog = '';
-                                                        if ($row['backlog'] == '1') {
-                                                            $backlog = 'backlog-red';
+                                                        if ($row['backlog'] == 1) {
+                                                            $backlog = 'Yes';
                                                         }else{
-                                                            $backlog = 'badge-gradient-success';
+                                                            $backlog = 'No';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
-                                                        echo '<td><span class="badge ' . $backlog . ' not-back"> </span></td>';
+                                                        echo '<td><span class="not-back">'.$backlog.'</span></td>';
                                                         echo '<td>';
                                                         echo '<a class="icns" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
                                                         echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['id'] . '"></i>';

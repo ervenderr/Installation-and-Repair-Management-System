@@ -137,14 +137,14 @@ $row = mysqli_fetch_assoc($result2);
                                 ?>
                         </a>
                         <a class="flex-sm-fill text-sm-center nav-link"
-                            href="repairing-transaction.php">Repairing
+                            href="repairing-transaction.php">In-progress
                             <?php
                                 if($notification_style_in_progress){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="pickup-transaction.php">To pickup
+                        <a class="flex-sm-fill text-sm-center nav-link active" href="pickup-transaction.php">To pickup/deliver
                             <?php
                                 if($notification_style_done){
                                     echo'<span class="count-symbol bg-danger"></span>';

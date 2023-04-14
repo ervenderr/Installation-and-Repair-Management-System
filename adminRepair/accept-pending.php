@@ -43,7 +43,7 @@ if(isset($_POST['id'])){
 if(isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
     $techId = htmlentities($_POST['tech']);
-    $status = "In-progress";
+    $status = "Diagnosing";
 
 
     $query = "UPDATE rprq SET tech_id = '$techId', status = '$status' WHERE id = '$id'";

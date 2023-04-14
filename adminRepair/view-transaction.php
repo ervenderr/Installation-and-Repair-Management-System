@@ -155,7 +155,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                         $statusClass = '';
                         if ($row['rprq_status'] == 'Pending') {
                             $statusClass = 'badge-gradient-warning';
-                        } else if ($row['rprq_status'] == 'In-progress') {
+                        } else if ($row['rprq_status'] == 'In-progress' || $row['rprq_status'] == 'To repair') {
                             $statusClass = 'badge-gradient-info';
                         } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
@@ -170,14 +170,14 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             <?php
                         $backlog = '';
                         if ($row['backlog'] == '1') {
-                            $backlog = 'backlog-red';
+                            $backlog = 'Yes';
                         } else {
-                            $backlog = 'badge-gradient-success';
+                            $backlog = 'No';
                         }
                     ?>
                                             <tr>
                                                 <th>Backlog:</th>
-                                                <td><span class="badge <?php echo $backlog; ?> not-back"> </span></td>
+                                                <td><span class="not-back"><?php echo $backlog; ?></span></td>
                                             </tr>
                                             <tr>
                                                 <th>Electronic Type:</th>

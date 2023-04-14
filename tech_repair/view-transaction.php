@@ -164,7 +164,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                         $statusClass = '';
                         if ($row['rprq_status'] == 'Pending') {
                             $statusClass = 'badge-gradient-warning';
-                        } else if ($row['rprq_status'] == 'In-progress') {
+                        } else if ($row['rprq_status'] == 'In-progress' || $row['rprq_status'] == 'To repair') {
                             $statusClass = 'badge-gradient-info';
                         } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
@@ -179,14 +179,14 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             <?php
                         $backlog = '';
                         if ($row['backlog'] == '1') {
-                            $backlog = 'backlog-red';
-                        } else {
-                            $backlog = 'badge-gradient-success';
+                            $backlog = 'Yes';
+                        }else{
+                            $backlog = 'No';
                         }
                     ?>
                                             <tr>
                                                 <th>Backlog:</th>
-                                                <td><span class="badge <?php echo $backlog; ?> not-back"> </span></td>
+                                                <td><span class="not-back"><?php echo $backlog; ?></span></td>
                                             </tr>
                                             <tr>
                                                 <th>Electronic Type:</th>
@@ -376,6 +376,12 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             }
 
 
+                                            if ($row['rprq_status'] == 'To repair') {
+                                                echo '<button class="icns btn btn-success torepair updtech" id="' .  $row['id'] . '">';
+                                                echo 'Start Repair <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '</button>';
+                                            }
+
                                             if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
                                                 echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
                                                 Generate Invoice <i class="fas fa-file-invoice"></i></a>';
@@ -433,6 +439,21 @@ $_SESSION['rowid'] = $_GET['rowid'];
         </div>
     </div>
 
+    <!-- Accept modal -->
+    <div class="modal fade " id="torepairs" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+        <div class="modal-dialog diangmod">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSuppModalLabel">Estimated Completion Date</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body torepairbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- plugins:js -->
@@ -483,6 +504,25 @@ $_SESSION['rowid'] = $_GET['rowid'];
 
 
             $('#editSuppModal').modal('show');
+        })
+
+        $('.torepair').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'to-repair.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.torepairbody').html(result);
+                }
+            });
+
+
+            $('#torepairs').modal('show');
         })
 
         $('.update_status').click(function() {
