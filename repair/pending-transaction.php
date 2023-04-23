@@ -191,6 +191,7 @@ WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                         <?php
                             $estimatedCost = $row['def_cost'] + $row['elec_cost'];
                             $_SESSION['transaction_id'] = $row['transaction_code'];
+                            $_SESSION['rprq_id'] = $row['id'];
                             ?>
                         <a href="view-trans.php" class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
@@ -246,14 +247,14 @@ WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                                                 <span><?php echo $row['date_req']?></span>
                                             </div>
                                             <div class="transaction-details-row">
-                                                <span class="fw-bold me-2 transaction-details-label">Expected
+                                                <span class="fw-bold me-2 transaction-details-label">Estimated
                                                     Completion:</span>
                                                 <span class="tbh"><i class="fas fa-exclamation-circle"></i>
                                                     <?php
                                                     if($row['date_completed'] == '0000-00-00'){
                                                         echo 'TBA';
                                                     }else{
-                                                        echo $row['date_completed'];
+                                                        echo $row['date_day'];
                                                     }
                                                     ?>
                                                 </span>

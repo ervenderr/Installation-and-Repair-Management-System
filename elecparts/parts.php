@@ -4,6 +4,7 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
+$parts = "active";
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
@@ -588,55 +589,54 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
 
     function validateFormPartsUpdate() {
-    const updateForm = document.querySelector('form[action="update-parts.php"]');
-    if (!updateForm) return false;
+        const updateForm = document.querySelector('form[action="update-parts.php"]');
+        if (!updateForm) return false;
 
-    const partname = updateForm.querySelector("#partname");
-    const electronic = updateForm.querySelector("#electronic");
-    const brand = updateForm.querySelector("#brand");
-    const price = updateForm.querySelector("#price");
+        const partname = updateForm.querySelector("#partname");
+        const electronic = updateForm.querySelector("#electronic");
+        const brand = updateForm.querySelector("#brand");
+        const price = updateForm.querySelector("#price");
 
-    let isValid = true;
+        let isValid = true;
 
-    if (partname.value === "") {
-        showError(partname, "Please enter a part name.");
-        isValid = false;
-    } else {
-        clearError(partname);
-    }
-
-    if (electronic.value === "None") {
-        showError(electronic, "Please select an electronic type.");
-        isValid = false;
-    } else {
-        clearError(electronic);
-    }
-
-    if (brand.value === "None") {
-        showError(brand, "Please select a brand.");
-        isValid = false;
-    } else {
-        clearError(brand);
-    }
-
-    if (!price.value.trim() || parseFloat(price.value) <= 0) {
-        showError(price, "Please enter a valid price.");
-        isValid = false;
-    } else {
-        clearError(price);
-    }
-
-    return isValid;
-}
-
-document.addEventListener('submit', function (event) {
-    if (event.target.matches('form[action="update-parts.php"]')) {
-        if (!validateFormPartsUpdate()) {
-            event.preventDefault();
+        if (partname.value === "") {
+            showError(partname, "Please enter a part name.");
+            isValid = false;
+        } else {
+            clearError(partname);
         }
-    }
-});
 
+        if (electronic.value === "None") {
+            showError(electronic, "Please select an electronic type.");
+            isValid = false;
+        } else {
+            clearError(electronic);
+        }
+
+        if (brand.value === "None") {
+            showError(brand, "Please select a brand.");
+            isValid = false;
+        } else {
+            clearError(brand);
+        }
+
+        if (!price.value.trim() || parseFloat(price.value) <= 0) {
+            showError(price, "Please enter a valid price.");
+            isValid = false;
+        } else {
+            clearError(price);
+        }
+
+        return isValid;
+    }
+
+    document.addEventListener('submit', function(event) {
+        if (event.target.matches('form[action="update-parts.php"]')) {
+            if (!validateFormPartsUpdate()) {
+                event.preventDefault();
+            }
+        }
+    });
     </script>
 
     <script>
@@ -656,6 +656,41 @@ document.addEventListener('submit', function (event) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
         integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('#electronic_type').change(function() {
+            var elec_id = $(this).val();
+
+            if (elec_id === "None") {
+                $('#defective').html('<option value="None">--- Select ---</option>');
+            } else {
+                $.ajax({
+                    url: 'get_brands.php',
+                    type: 'POST',
+                    data: {
+                        elec_id: elec_id
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        var options = '<option value="None">--- Select ---</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            options += '<option value="' + data[i].eb_id + '">' + data[
+                                    i]
+                                .eb_name + '</option>';
+
+                        }
+                        $('#electronic_brand').html(options);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
+        });
+    });
+    </script>
 
 
 

@@ -22366,3 +22366,7 @@ th{
   background-color: #fff !important;
   border: none;
 }
+
+.modal.show .sermodals{
+  max-width: 700px ;
+}

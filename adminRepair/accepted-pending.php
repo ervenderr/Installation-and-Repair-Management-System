@@ -39,7 +39,8 @@ if (isset($_POST['id'])) {
         <input type="type" class="form-control" id="status" name="status" value="To repair" hidden>
         <div class="mb-3">
           <label for="initpay" class="form-label">Initial Payment</label>
-          <input type="number" class="form-control" id="initpay" name="initpay" value="'. $half_grand_total .".00". '">
+          <input type="number" class="form-control" id="initpay" name="initpay" value="<?php echo $half_grand_total; ?>" step="0.01" min="0">
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

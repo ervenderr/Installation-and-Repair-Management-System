@@ -4,6 +4,10 @@ if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
 
+if (!isset($_SESSION['rprq_id'])) {
+    header('location: ../repair/pending-transaction.php');
+}
+
 require_once '../homeIncludes/dbconfig.php';
 require_once '../tools/variables.php';
 $page_title = 'ProtonTech | Home';
@@ -247,8 +251,10 @@ $row = mysqli_fetch_assoc($result);
                                             <?php
                                                     if($row['tech_id'] == ''){
                                                         echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
-                                                    }else{
+                                                    }else if(empty($row['date_from']) || $row['date_from'] == '0000-00-00'){
                                                         echo $row['date_day']." day(s) ";
+                                                    }else{
+                                                        echo $row['date_from']." to " . $row['date_to'];
                                                     }
                                                     ?>
                                         </div>

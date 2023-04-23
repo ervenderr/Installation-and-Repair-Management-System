@@ -107,7 +107,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                         
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress' || $row['rprq_status'] == 'To repair') {
+                                                        } else if ($row['status'] == 'In-progress' || $row['status'] == 'To repair') {
                                                             $statusClass = 'badge-gradient-info';
                                                         } else if ($row['status'] == 'Cancelled') {
                                                             $statusClass = 'badge-gradient-secondary';

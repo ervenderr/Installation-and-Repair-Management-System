@@ -66,11 +66,29 @@
                 <span class="menu-title">Electronic Parts</span>
                 <i class="fas fa-dolly-flatbed menu-icon"></i>
               </a>
+            </li>   
+            <li class="nav-item <?php echo $labors; ?>">
+              <a class="nav-link" href="../laborRepairs/repairs.php">
+                <span class="menu-title">Repair service</span>
+                <i class="fas fa-wrench menu-icon"></i>
+              </a>
             </li>
             <li class="nav-item <?php echo $invactive; ?>">
               <a class="nav-link" href="../inventory/inventory.php">
                 <span class="menu-title">Inventory</span>
                 <i class="fas fa-warehouse menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $servicesjob; ?>">
+              <a class="nav-link" href="../servicelist/servicelist.php">
+                <span class="menu-title">Services</span>
+                <i class="fas fa-toolbox menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $packages; ?>">
+              <a class="nav-link" href="../packages/packagelist.php">
+                <span class="menu-title">Packages</span>
+                <i class="fas fa-cubes menu-icon"></i>
               </a>
             </li>
             <li class="nav-item <?php echo $custactive; ?>">

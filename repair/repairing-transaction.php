@@ -93,7 +93,7 @@ $row = mysqli_fetch_assoc($result2);
                     $query_in_progress = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='In-progress' OR rprq.status = 'Repairing' AND accounts.account_id = '{$user_id}';";
+                    WHERE status='In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' AND accounts.account_id = '{$user_id}';";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
 
@@ -183,7 +183,7 @@ LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' AND accounts.account_id = '{$user_id}';";
+WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
@@ -192,6 +192,7 @@ WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' AND accounts.acco
                             <?php
                            
                             $_SESSION['transaction_id'] = $row['transaction_code'];
+                            $_SESSION['rprq_id'] = $row['id'];
                             ?>
                         <a href="view-trans.php" class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
@@ -253,7 +254,7 @@ WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' AND accounts.acco
                                                     if($row['tech_id'] == ''){
                                                         echo '<span class="tbh"><i class="fas fa-exclamation-circle">TBA</i></span>';
                                                     }else{
-                                                        echo $row['date_from']." to ".$row['date_to'];
+                                                        echo $row['date_day']." day(s) ";
                                                     }
                                                     ?>
                                             </div>

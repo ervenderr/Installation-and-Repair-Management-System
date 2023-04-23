@@ -57,13 +57,13 @@ if (isset($_POST['id'])) {
   <div class="mb-3">
   <input type="type" class="form-control" id="status" name="status" value="Repairing" hidden>
     <label for="from" class="form-label">Estimated Completion (from)</label>
-    <input type="date" class="form-control" id="from" name="from" value="' . $row6['date_from'] . '">
+    <input type="date" class="form-control" min="'. date('Y-m-d').'" id="from" name="from" value="' . $row6['date_from'] . '">
   </div>
   </div>
   <div class="col-6">
   <div class="mb-3">
     <label for="to" class="form-label">(to)</label>
-    <input type="date" class="form-control" id="to" name="to" value="' . $row6['date_to'] . '">
+    <input type="date" class="form-control" id="to" min="'. date('Y-m-d').'" name="to" value="' . $row6['date_to'] . '">
     </div>
     </div>
   </div>
