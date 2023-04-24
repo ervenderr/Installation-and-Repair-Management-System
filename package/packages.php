@@ -4,7 +4,7 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
-$servicesjob = "active";
+$packages = "active";
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
@@ -53,8 +53,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addserviceModal">
-                                        <i class=" mdi mdi-plus ">Service</i>
+                                        data-bs-target="#addpackageModal">
+                                        <i class=" mdi mdi-plus ">Package</i>
                                     </button>
                                 </li>
                             </ul>
@@ -75,9 +75,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             <thead>
                                                 <tr class="bg-our">
                                                     <th> # </th>
-                                                    <th> Service Name </th>
-                                                    <th> Description </th>
-                                                    <th> Image </th>
+                                                    <th> Service </th>
+                                                    <th> Package name </th>
+                                                    <th> price </th>
+                                                    <th> description </th>
+                                                    <th> image </th>
                                                     <th> Status </th>
                                                     <th> Action </th>
                                                 </tr>
@@ -85,7 +87,10 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             <tbody id="myTable">
                                                 <?php
                                                     // Perform the query
-                                                    $query = "SELECT * FROM services";
+                                                    $query = "SELECT *, package.price AS package_price, services.price AS service_price, package.status AS package_status
+                                                    FROM package
+                                                    INNER JOIN services ON package.service_id = services.service_id";
+                                          
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -93,7 +98,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     while ($row = mysqli_fetch_assoc($result)) {
                                                         $statusClass = '';
                                                         
-                                                        if ($row['status'] == 'Inactive') {
+                                                        if ($row['package_status'] == 'Inactive') {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         } else {
                                                             $statusClass = 'badge-gradient-success';
@@ -101,34 +106,36 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
 
                                                         $modalId = 'edittechnicianModal-' . $id;
-                                                        $image = $row['img'];
+                                                        $image = $row['image'];
                                                         $image_data = base64_encode($image);
                                                         $image_src = "data:image/jpeg;base64,{$image_data}";
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
                                                         echo '<td>' . $row['service_name'] . '</td>';
+                                                        echo '<td>' . $row['name'] . '</td>';
+                                                        echo '<td>' . $row['package_price'] . '</td>';
                                                         echo '<td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">' . $row['description'] . '</td>';
-                                                        echo '<td><img src="' . $image_src . '" alt="' . $row['service_name'] . '" class=""></td>';
-                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
+                                                        echo '<td><img src="' . $image_src . '" alt="' . $row['name'] . '" class=""></td>';
+                                                        echo '<td><label class="badge ' . $statusClass . '">' . $row['package_status'] . '</label></td>';
 
                                                         
 
                                                         echo '<td>';
-                                                        echo '<a class="icns viewmodal editparts" href="view-service.php?rowid=' .  $row['service_id'] . '">';
+                                                        echo '<a class="icns viewmodal editparts" href="view-package.php?rowid=' .  $row['pkg_id'] . '">';
                                                         echo '<i class="fas fa-eye text-primary view-account"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns editparts editmodal" editparts" href="update-service.php?rowid=' .  $row['service_id'] . '">';
+                                                        echo '<a class="icns editparts editmodal" editparts" href="update-package.php?rowid=' .  $row['pkg_id'] . '">';
                                                         echo '<i class="fas fa-edit text-success view-account"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="delete-service.php?rowid=' .  $row['service_id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
+                                                        echo '<a class="icns" href="delete-package.php?rowid=' .  $row['pkg_id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';
                                                         $id++;
 
-                                                        $service_name = $row['service_name'];
-                                                        $_SESSION['service_name'] = $service_name;
+                                                        $pkg_id = $row['pkg_id'];
+                                                        $_SESSION['pkg_id'] = $pkg_id;
 
                                                     }
                                                 ?>
@@ -142,8 +149,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                     </div>
                 </div>
 
-                <?php include_once('../modals/add-service.php') ?>
-                <?php include_once('modal.php') ?>
+                <?php include_once('../modals/add-package.php') ?>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">
@@ -189,7 +195,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
     <script>
     const form = document.querySelector('.form-sample');
-    const pname = form.querySelector('input[name="sname"]');
+    const sname = document.getElementById('sname');
+    const pname = form.querySelector('input[name="pname"]');
+    const price = form.querySelector('input[name="price"]');
     const description = form.querySelector('textarea[name="description"]');
     const img1 = form.querySelector('input[name="img1"]');
 
@@ -197,11 +205,25 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     form.addEventListener('submit', (event) => {
         let error = false;
 
+        if (sname.value === "None") {
+            sname.nextElementSibling.innerText = 'Please select a Service Type';
+            error = true;
+        } else {
+            sname.nextElementSibling.innerText = '';
+        }
+
         if (pname.value === '') {
-            pname.nextElementSibling.innerText = 'Please enter a Service name';
+            pname.nextElementSibling.innerText = 'Please enter a Package name';
             error = true;
         } else {
             pname.nextElementSibling.innerText = '';
+        }
+
+        if (price.value === '') {
+            price.nextElementSibling.innerText = 'Please enter a Service name';
+            error = true;
+        } else {
+            price.nextElementSibling.innerText = '';
         }
 
 
@@ -229,7 +251,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
     </script>
 
-<script>
+    <script>
     j(document).ready(function() {
         j('#myDataTable').DataTable();
     });

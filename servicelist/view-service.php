@@ -85,7 +85,7 @@ $currentStatus = $row['status'];
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <tr>
-                                                    <th class="bg-gryy">Product Name:</th>
+                                                    <th class="bg-gryy">Service Name:</th>
                                                     <td><?php echo $row['service_name']; ?></td>
                                                 </tr>
                                                 <tr>
@@ -94,7 +94,7 @@ $currentStatus = $row['status'];
                                                             cols="90"><?php echo $row['description']; ?></textarea></td>
                                                 </tr>
                                                 <tr>
-                                                    <th class="bg-gryy">Images:</th>
+                                                    <th class="bg-gryy">Image:</th>
                                                     <td class="maxwidth">
                                                         <?php 
                 $image1 = $row['img'];

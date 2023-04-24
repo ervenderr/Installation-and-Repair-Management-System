@@ -4,7 +4,7 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
-$servicesjob = "active";
+$packages = "active";
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     header('location: ../login/login.php');
@@ -14,16 +14,20 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
   $_SESSION['rowid'] = $rowid;
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT * FROM services WHERE services.service_id = '" . $rowid . "';";
+$query = "SELECT *, package.price AS package_price, services.price AS service_price, package.status AS package_status
+FROM package
+INNER JOIN services ON package.service_id = services.service_id
+WHERE package.PKG_id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
 
 
 // Check if the query was successful and output the data
 if (mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_assoc($result);
+    $rows = mysqli_fetch_assoc($result);
 
 }
-$currentStatus = $row['status'];
+$currentStatus = $rows['package_status'];
+$service = $rows['service_name'];
 ?>
 
 
@@ -43,7 +47,7 @@ $currentStatus = $row['status'];
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
                                 <i class="fas fa-box menu-icon"></i>
-                            </span> Services<span class="bread"> / Update <?php echo $row['service_name']; ?></span>
+                            </span> Package<span class="bread"> / Update <?php echo $rows['name']; ?></span>
                         </h3>
                         <?php
                             if (isset($_SESSION['msg'])) {
@@ -64,10 +68,10 @@ $currentStatus = $row['status'];
                             unset ($_SESSION['msg2']);
                             }
                         ?>
+
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-
-                                <a href="servicelist.php">
+                                <a href="packages.php">
                                     <li class="breadcrumb-item active" aria-current="page">
                                         <span></span><i
                                             class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
@@ -79,76 +83,79 @@ $currentStatus = $row['status'];
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <form id="update-form" class="form-sample" action="fetch.php" method="POST"
-                                enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-form-label" for="sname">Service Name</label>
-                                            <div class="">
-                                                <input type="text" id="sname" name="sname" class="form-control"
-                                                    placeholder="" value="<?php echo $row['service_name']; ?>" />
-                                                <span class="error-input" id="sname-error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-form-label" for="img1">Image</label>
-                                            <div class="">
-                                                <input type="file" class="form-control" id="img" name="img1" />
-                                                <span class="error-input" id="img-error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="row">
+                                <div class="col-12 grid-margin">
+                                    <div class="card">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th class="bg-gryy">Service Type:</th>
+                                                    <td><?php echo $rows['service_name']; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="bg-gryy">Package Name:</th>
+                                                    <td><?php echo $rows['name']; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="bg-gryy">Price:</th>
+                                                    <td><?php echo $rows['package_price']; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="bg-gryy">Featured Description:</th>
+                                                    <td><textarea readonly rows="7"
+                                                            cols="90"><?php echo $rows['descriptions']; ?></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="bg-gryy">Images:</th>
+                                                    <td class="maxwidth">
+                                                        <?php 
+                $image1 = $rows['image'];
+                $image_data1 = base64_encode($image1);
+                $image_src1 = "data:image/jpeg;base64,{$image_data1}";
+            ?>
+                                                        <img class="imgsz" src="<?php echo $image_src1; ?>" alt="img1">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <?php
+                                                     $statusClass = '';
+                                                        
+                                                     if ($rows['package_status'] == 'Inactive') {
+                                                         $statusClass = 'badge-gradient-secondary';
+                                                     } else {
+                                                         $statusClass = 'badge-gradient-success';
+                                                     }
+                                                     ?>
+                                                    <th class="bg-gryy">Status</th>
+                                                    <td><label
+                                                            class="badge <?php echo $statusClass ?>"><?php echo $rows['package_status'] ?></label>
+                                                    </td>
+                                                </tr>
+                                            </table>
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label for="description" class="col-form-label">Description</label>
-                                            <div class="">
-                                                <textarea name="description" class="form-control" type="text" rows="5"
-                                                    placeholder=""><?php echo $row['description']; ?></textarea>
-                                                <span class="error-input" id="description-error"></span>
-                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label for="status" class="form-label">Status</label>
-                                                <div class="">
-                                                    <select class="form-select" id="status" name="status">
-                                                        <option value="Active"
-                                                            <?php echo ($currentStatus == "Active" ? "selected" : ""); ?>>
-                                                            Active
-                                                        </option>
-                                                        <option value="Inactive"
-                                                            <?php echo ($currentStatus == "Inactive" ? "selected" : ""); ?>>
-                                                            Inactive
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="btn-group-sm d-flex btn-details">
+                                        <a href="update-package.php?rowid=<?php echo $rows['pkg_id']; ?>"
+                                            class="btn btn-success btn-fw">
+                                            Update Details <i class="fas fa-edit text-white"></i>
+                                        </a>
+                                        <a href="delete-package.php?rowid=<?php echo $rows['pkg_id']; ?>"
+                                            class="btn btn-danger btn-fw red"
+                                            onclick="return confirm('Are you sure you want to delete this record?')">
+                                            Delete Details <i class="fas fa-trash-alt text-white"></i>
+                                        </a>
+
                                     </div>
-                                    <div class="row">
-                                        <div class="modal-footer">
-                                            <input name="service_id" type="hidden" id="service_id"
-                                                class="btn btn-primary" />
-                                            <button type="submit" name="submit" id="update"
-                                                class="btn btn-primary">Update</button>
-                                        </div>
-                                    </div>
+
+
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <?php include_once('../modals/add-service.php') ?>
-                <?php include_once('modal.php') ?>
+                <?php include_once('../modals/add-package.php') ?>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">
@@ -194,19 +201,34 @@ $currentStatus = $row['status'];
 
     <script>
     const form = document.querySelector('.form-sample');
-    const pname = form.querySelector('input[name="sname"]');
+    const sname = document.getElementById('sname');
+    const pname = form.querySelector('input[name="pname"]');
+    const price = form.querySelector('input[name="price"]');
     const description = form.querySelector('textarea[name="description"]');
-    const img1 = form.querySelector('input[name="img1"]');
 
 
     form.addEventListener('submit', (event) => {
         let error = false;
 
+        if (sname.value === "None") {
+            sname.nextElementSibling.innerText = 'Please select a Service Type';
+            error = true;
+        } else {
+            sname.nextElementSibling.innerText = '';
+        }
+
         if (pname.value === '') {
-            pname.nextElementSibling.innerText = 'Please enter a Service name';
+            pname.nextElementSibling.innerText = 'Please enter a Package name';
             error = true;
         } else {
             pname.nextElementSibling.innerText = '';
+        }
+
+        if (price.value === '') {
+            price.nextElementSibling.innerText = 'Please enter a Service name';
+            error = true;
+        } else {
+            price.nextElementSibling.innerText = '';
         }
 
 
@@ -216,6 +238,8 @@ $currentStatus = $row['status'];
         } else {
             description.nextElementSibling.innerText = '';
         }
+
+
 
 
         if (error) {

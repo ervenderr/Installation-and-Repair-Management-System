@@ -4,7 +4,8 @@ require_once '../homeIncludes/dbconfig.php';
 
 if(isset($_POST['submit'])) {
     // assign form data to variables
-    $pname = $_POST['sname'];
+    $sname = $_POST['sname'];
+    $pname = $_POST['pname'];
     $price = $_POST['price'];
     $description = $_POST['description'];
     $status = 'Active';
@@ -24,20 +25,20 @@ if(isset($_POST['submit'])) {
         }
     }
 
-    $sql = "INSERT INTO services (service_name, descriptions, img, status) 
-        VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO package (service_id, name, price, descriptions, image, status) 
+        VALUES (?, ?, ?, ?, ?, ?)";
 
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         // Handle error
         exit();
     } else {
-        mysqli_stmt_bind_param($stmt, "ssss", $pname, $description, $image_contents[1], $status);
+        mysqli_stmt_bind_param($stmt, "ssssss", $sname, $pname, $price, $description, $image_contents[1], $status);
         mysqli_stmt_execute($stmt);
 
         if (mysqli_stmt_affected_rows($stmt) > 0) {
             $_SESSION['msg'] = "Record Added Successfully";
-            header("location: servicelist.php");
+            header("location: packages.php");
         } else {
             echo "FAILED: " . mysqli_error($conn);
         }

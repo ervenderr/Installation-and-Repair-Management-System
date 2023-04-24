@@ -86,7 +86,7 @@
               </a>
             </li>
             <li class="nav-item <?php echo $packages; ?>">
-              <a class="nav-link" href="../packages/packagelist.php">
+              <a class="nav-link" href="../package/packages.php">
                 <span class="menu-title">Packages</span>
                 <i class="fas fa-cubes menu-icon"></i>
               </a>
