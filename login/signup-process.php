@@ -10,28 +10,28 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require '../vendor/autoload.php';
 
-    function sendEmail_verify($fname, $email, $verify_token){
+function sendEmail_verify($fname, $email, $verify_token){
 
-        $mail = new PHPMailer(true);
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
+    $mail = new PHPMailer(true);
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+    $mail->isSMTP();
+    $mail->SMTPAuth = true;
 
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Username = '@gmail.com';
-        $mail->Password = 'qhpxvcziymazcypi';
+    $mail->Host = 'smtp.hostinger.com';
+    $mail->Username = 'protontech@proton-tech.online';
+    $mail->Password = 'szahpjggyglgexyz';
 
-        $mail->SMTPSecure = "ssl";
-        $mail->Port = 465;
+    $mail->SMTPSecure = "ssl";
+    $mail->Port = 465;
 
-        $mail->setFrom('@gmail.com');
-        $mail->addAddress($email);
+    $mail->setFrom('protontech@proton-tech.online');
+    $mail->addAddress($email);
 
-        $mail->isHTML(true);
-        $mail->Subject = 'Email verification from Proton Electronics and Services';
+    $mail->isHTML(true);
+    $mail->Subject = 'Email verification from Proton Electronics and Services';
 
-        // Email Template
-        $email_template = "
+    // Email Template
+    $email_template = "
         <html>
         <head>
             <style>
@@ -41,20 +41,17 @@ require '../vendor/autoload.php';
                     background-color: #F7F7F7;
                     font-family: Arial, Helvetica, sans-serif;
                 }
-
                 .header {
                     font-size: 24px;
                     font-weight: bold;
                     color: #333333;
                     margin-bottom: 10px;
                 }
-
                 .message {
                     font-size: 16px;
                     color: #666666;
                     margin-bottom: 20px;
                 }
-
                 .button {
                     display: inline-block;
                     background-color: #015F6B !important;
@@ -63,14 +60,12 @@ require '../vendor/autoload.php';
                     padding: 10px 20px;
                     border-radius: 5px;
                 }
-
                 .button:hover {
                     background-color: #015F6B;
                     color: #ffffff;
                 }
             </style>
         </head>
-
         <body>
             <div class='container'>
                 <div class='header'>Welcome to Proton Electronics and Services</div>
@@ -79,10 +74,13 @@ require '../vendor/autoload.php';
     </html>
     ";
 
-        $mail->Body = $email_template;
+    $mail->Body = $email_template;
+    try {
         $mail->send();
-
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
+}
 
 
 
