@@ -7,7 +7,24 @@ $job = 'actives activess';
 $servpkgnav = 'servactives';
 include_once('../homeIncludes/header.php');
 
+$rowid = $_GET['rowid'];
+$_SESSION['rowid'] = $rowid;
+  
+// Perform the query to retrieve the data for the selected row
+$query = "SELECT *, package.price AS package_price, services.price AS service_price, package.status AS package_status
+FROM package
+INNER JOIN services ON package.service_id = services.service_id
+WHERE package.PKG_id = '" . $rowid . "';";
+$result = mysqli_query($conn, $query);
 
+
+// Check if the query was successful and output the data
+if (mysqli_num_rows($result) > 0) {
+  $rows = mysqli_fetch_assoc($result);
+
+}
+$currentStatus = $rows['package_status'];
+$service = $rows['service_name'];
 
 ?>
 
@@ -26,16 +43,62 @@ include_once('../homeIncludes/header.php');
             </li>
             </li>
         </ul>
-        <div class="container" id="product-section">
-            <div class="row">
-                <div class="col-md-6">
-                    … [this is the product image]
+        <div id='msgs' class='msg'>
+            <p id='msgs'>Request Submitted!</p>
+            <div class="msgbtn">
+                <a class="msgb" href="../service/serviceProcess.php" role="button">Get Information
+                    ID</a>
+
+            </div>
+        </div>
+        <div class="container mb-5">
+            <div class="card">
+                <div class="row g-0 p-3 notflexwrap">
+                    <div class="col-md-6 border-end">
+                        <div class="d-flex flex-column justify-content-center">
+                            <div class="main_image">
+                                <?php
+        $imageData = base64_encode($rows['image']);
+        $src = 'data:image/jpeg;base64,'.$imageData;
+        echo '<img src="'.$src.'" id="main_product_image" width="350">';
+    ?>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-6">
+                            <a href="servpkg.php"><i
+                                    class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
+                                </i></a>
+                            <div class="p-3 right-side justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between align-items-center package_name">
+                                    <h4><?php echo $rows['name'] ?></h4> <span class="heart"><i
+                                            class='bx bx-heart'></i></span>
+                                </div>
+                                <h4 class="package_price">₱<?php echo $rows['package_price'] ?></h4>
+                                <div class="mt-3 pr-3 content">
+                                    <?php
+                                    $text = $rows['descriptions'];
+                                    $formatted_text = nl2br($text);
+                                    echo "<p class='package-description'>" . $formatted_text . "</p>";
+                                ?>
+                                </div>
+                                <form action="servreq.php" class="form" method="POST" id="repair-form"
+                                    enctype="multipart/form-data">
+                                    <div class="buttons d-flex flex-row mt-5 gap-3">
+                                        <input type="hidden" id="pkg_id" name="pkg_id"
+                                            value="<?php echo $rows['pkg_id'] ?>">
+                                        <input type="number" id="quantity" name="quantity" min="1" value="1">
+                                        <input type="submit" name="submit" class="btn btn-dark" value="Avail Now" id="btn-submit">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    …[this is the product information]
-                </div>
-            </div><!-- end row -->
-        </div><!-- end container -->
+            </div>
+        </div>
         <br>
         <br>
 
@@ -43,9 +106,41 @@ include_once('../homeIncludes/header.php');
 
 
 
+    <!-- <script type="text/javascript">
+    $(document).ready(function() {
+        $('#btn-submit').click(function(e) {
+            e.preventDefault();
+
+            var valid = true;
+
+            if (valid) {
+                $.ajax({
+                    method: "POST",
+                    url: "#",
+                    data: $('#repair-form').serialize(),
+                    dataType: "text",
+                    success: function(response) {
+                        $('#msgs').css('display', 'block').fadeIn(300);
+                        $('#adis').css('pointer-events', 'none');
+                        $('#btn-submit').css('pointer-events', 'none');
+                        $('#eimg').css('pointer-events', 'none');
+                        $('#shipping').css('pointer-events', 'none');
+                    }
+                })
+            }
+        });
+    });
+    </script> -->
+
+    <script>
+    function changeImage(element) {
+
+        var main_prodcut_image = document.getElementById('main_product_image');
+        main_prodcut_image.src = element.src;
 
 
-
+    }
+    </script>
 
 
 

@@ -723,6 +723,9 @@ a {
     overflow: hidden;
     padding: 10px;
 }
+.productview{
+    background-color: #fff;
+}
 
 .product-image {
     width: 60%;

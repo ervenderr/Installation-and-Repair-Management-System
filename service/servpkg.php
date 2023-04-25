@@ -27,61 +27,59 @@ include_once('../homeIncludes/header.php');
             </li>
         </ul>
         <div class="container">
-
-
-            <?php
+            <section class="section-products">
+                <div class="container">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-md-8 col-lg-6">
+                            <div class="header">
+                                <h2>Packages</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <?php
             $sql = "SELECT * FROM package";
             $result = mysqli_query($conn, $sql);
-            echo '<div class="pcon">';
-            echo '<h4 class="pkgheadtext">CCTV packages</h4>';
-            echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">';
-            
 
-            // Check if there are any rows in the table
             if (mysqli_num_rows($result) > 0) {
-                // If there are rows, output the name, price, description, and image for each row
                 while ($row = mysqli_fetch_assoc($result)) {
                     $service = $row['service_id'];
                     $name = $row['name'];
                     $price = $row['price'];
-                    $description = $row['descriptions'];
                     $image = $row['image'];
 
-                    // Output the product information
-                    if($service == 1){
-                        echo '<div class="col pr">';
-                        echo '<div class="card pkgcard">';
-                        echo '<div class="img-wrapper"><img src="data:image/jpeg;base64,' . base64_encode($image) . '" alt="' . $name . '" class="d-block w-100" alt="..."> </div>';
-                        echo '<div class="card-body">';
-                        echo '<h5 class="card-title">' . $name . '</h5>';
-                        echo '<p class="card-text">₱ ' . $price . '</p>';
-                        echo '<p class="card-text">' . $description . '</p>';
-                        echo '<a href="servreq.php" class="btn btn-primary pkgbtn">Avail now</a>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                        // echo '<div class="ftext">';
-                        // echo '<div class="">';
-                        // echo '<h6 class="pkgtext">Service Offered:</h6>';
-                        // echo '<p class="ptext">Service Offered:</p>';
-                        // echo '</div>';
-                        // echo '<div class="">';
-                        // echo '<h6 class="pkgtext">Add Ons:</h6>';
-                        // echo '<p class="ptext">Service Offered</p>';
-                        // echo '</div>';
-                        
+                    if ($service == 1) {
+                        echo '<div class="col-md-6 col-lg-4 col-xl-3">
+                        <a href="view-packge.php?rowid='. $row['pkg_id'] .'">
+                            <div class="card">
+                                <div id="product-1" class="single-product p-2">
+                                    <div class="part-1">
+                                        <img src="data:image/jpeg;base64,'.base64_encode($image).'" alt="'.$name.'" class="d-block w-100 h-100">
+                                        <ul>
+                                        <a href="view-packge.php?rowid='. $row['pkg_id'] .'" class="btn btn-primary pkgbtn">View Detais</a>
+                                        <a href="view-packge.php?rowid='. $row['pkg_id'] .'" class="btn btn-primary pkgbtn">Avail Now</a>
+                                        </ul>
+                                    </div>
+                                    <div class="part-2 p-2">
+                                        <h3 class="product-title">'.$name.'</h3>
+                                        <h4 class="product-price">₱'.$price.'</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>';
                     }
                 }
             } else {
                 // If there are no rows in the table, display a message
                 echo "No products found.";
             }
-
             ?>
-        </div>
-        <br>
-        <br>
+                    </div>
+                </div>
+            </section>
 
+        </div>
     </div>
 
 
