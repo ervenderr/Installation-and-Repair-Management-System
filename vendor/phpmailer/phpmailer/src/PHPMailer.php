@@ -2046,10 +2046,7 @@ class PHPMailer
             }
         }
 
-        //Only send the DATA command if we have viable recipients
-        if ((count($this->all_recipients) > count($bad_rcpt)) && !$this->smtp->data($header . $body)) {
-            throw new Exception($this->lang('data_not_accepted'), self::STOP_CRITICAL);
-        }
+
 
         $smtp_transaction_id = $this->smtp->getLastTransactionID();
 
