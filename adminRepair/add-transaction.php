@@ -8,22 +8,24 @@ if(isset($_POST['submit'])) {
     $lname = htmlentities($_POST['lname']);
     $email = htmlentities($_POST['email']);
     $phone = htmlentities($_POST['phone']);
-    $address = htmlentities($_POST['address']);
-    $etype = htmlentities($_POST['etype']);
+    $address = htmlentities($_POST['address']);    
     $technician = htmlentities($_POST['technician']);
+
+    if(isset($_POST['etype'])){
+    $etype = $_POST['etype'];
+    }
     $defective = htmlentities($_POST['defective']);
-    $shipping = htmlentities($_POST['shipping']);
-    $date = htmlentities($_POST['date']);
-    $completed = htmlentities($_POST['completed']);
-    $inipayment = htmlentities($_POST['inipayment']);
     $other_defective = htmlentities($_POST['other_defective']);
+    $other_brand = htmlentities($_POST['other_brand']);
+    $ebrand = htmlentities($_POST['ebrand']);
+    $shipping = $_POST['shipping'];
     
 
     // generate transaction code
     $transaction_code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 11);
-    $status = htmlentities("In-progress");
+    $status = htmlentities("Diagnosing");
     $user_type = htmlentities('customer');
-    $cust_type = htmlentities('walk-in');
+    $cust_type = htmlentities('Walk-in');
 
     // check if email already exists in accounts table
     $query = "SELECT account_id FROM accounts WHERE email = '$email'";
@@ -56,28 +58,51 @@ if(isset($_POST['submit'])) {
 
     if ($defective === "other"){
 
-        $query4 = "INSERT INTO rprq (transaction_code, elec_id, other_defects, shipping, status, cust_id, initial_payment, tech_id, date_completed) VALUES ('$transaction_code', '$etype', '$other_defective', '$shipping', '$status', '$customer_id', '$inipayment', '$technician','$completed')";
-        $result4 = mysqli_query($conn, $query4);
-
-        if ($result4) {
-            $_SESSION['msg'] = "Record Added Successfully";
-            header("location: transaction.php?msg=Record Added Successfully");
-        } else {
-        echo "FAILED: " . mysqli_error($conn);
-        }
+        $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, eb_id, other_defects, shipping, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $query);
+    
+        mysqli_stmt_bind_param($stmt, "isssssss", $customer_id, $transaction_code, $etype, $ebrand, $other_defective, $shipping, $status, $technician);
+        mysqli_stmt_execute($stmt);
+        
+    }elseif ($ebrand === "other"){
+    
+        $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, other_brand, defect_id, shipping, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $query);
+    
+        mysqli_stmt_bind_param($stmt, "isssssss", $customer_id, $transaction_code, $etype, $other_brand, $defective, $shipping, $status, $technician);
+        mysqli_stmt_execute($stmt);
+        
+    }elseif ($ebrand === "other" && $defective === "other"){
+    
+        $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, other_brand, other_defects, shipping, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $query);
+    
+        mysqli_stmt_bind_param($stmt, "isssssss", $customer_id, $transaction_code, $etype, $other_brand, $other_defective, $shipping, $status, $technician);
+        mysqli_stmt_execute($stmt);
+        
     }else{
+    
+        $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, eb_id, defect_id, shipping, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $query);
+    
+        mysqli_stmt_bind_param($stmt, "isssssss", $customer_id, $transaction_code, $etype, $ebrand, $defective, $shipping, $status, $technician);
+        mysqli_stmt_execute($stmt);
+    }
 
-        $query4 = "INSERT INTO rprq (transaction_code, elec_id, defect_id, shipping, status, cust_id, initial_payment, tech_id, date_completed) VALUES ('$transaction_code', '$etype', '$defective', '$shipping', '$status', '$customer_id', '$inipayment', '$technician', $completed)";
-        $result4 = mysqli_query($conn, $query4);
+    // Get the ID of the newly inserted row
+    $newly_inserted_id = mysqli_insert_id($conn);
+    $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$newly_inserted_id', NOW(), NOW(), '$status');";
+    $tresult = mysqli_query($conn, $tquery);
 
-        if ($result4) {
-            $_SESSION['msg'] = "Record Added Successfully";
-            header("location: transaction.php");
-        } else {
-        echo "FAILED: " . mysqli_error($conn);
-        }
+    if ($tresult) {
+        $_SESSION['msg'] = "Record Added Successfully";
+        header("location: transaction.php");
+    } else {
+    echo "FAILED: " . mysqli_error($conn);
     }
 
 }
 
+
+    
 ?>

@@ -16,6 +16,7 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
+    
     <title>
         <?php echo $page_title; ?>
     </title>

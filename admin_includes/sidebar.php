@@ -43,8 +43,8 @@
               </a>
               <div class="collapse <?php echo $sershow; ?>" id="ui-basic2">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../adminServices/transactions.php">Transactions</a></li>
                   <li class="nav-item"> <a class="nav-link" href="../adminServices/pendings.php">Pending request</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../adminServices/transactions.php">Transactions</a></li>
                 </ul>
               </div>
             </li>
@@ -61,10 +61,34 @@
                 <i class="fas fa-box menu-icon"></i>
               </a>
             </li>
+            <li class="nav-item <?php echo $parts; ?>">
+              <a class="nav-link" href="../elecparts/parts.php">
+                <span class="menu-title">Electronic Parts</span>
+                <i class="fas fa-dolly-flatbed menu-icon"></i>
+              </a>
+            </li>   
+            <li class="nav-item <?php echo $labors; ?>">
+              <a class="nav-link" href="../laborRepairs/repairs.php">
+                <span class="menu-title">Repair service</span>
+                <i class="fas fa-wrench menu-icon"></i>
+              </a>
+            </li>
             <li class="nav-item <?php echo $invactive; ?>">
               <a class="nav-link" href="../inventory/inventory.php">
                 <span class="menu-title">Inventory</span>
                 <i class="fas fa-warehouse menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $servicesjob; ?>">
+              <a class="nav-link" href="../servicelist/servicelist.php">
+                <span class="menu-title">Services</span>
+                <i class="fas fa-toolbox menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $packages; ?>">
+              <a class="nav-link" href="../package/packages.php">
+                <span class="menu-title">Packages</span>
+                <i class="fas fa-cubes menu-icon"></i>
               </a>
             </li>
             <li class="nav-item <?php echo $custactive; ?>">

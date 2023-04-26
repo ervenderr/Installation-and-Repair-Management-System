@@ -60,7 +60,12 @@ if ($defective === "other"){
 
     mysqli_stmt_bind_param($stmt, "isssssss", $cust_id, $transaction_code, $etype, $ebrand, $defective, $shipping, $imgcontent, $status);
     mysqli_stmt_execute($stmt);
-
 }
+
+// Get the ID of the newly inserted row
+$newly_inserted_id = mysqli_insert_id($conn);
+$tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$newly_inserted_id', NOW(), NOW(), '$status');";
+$tresult = mysqli_query($conn, $tquery);
+
 ?>
 

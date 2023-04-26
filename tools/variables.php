@@ -32,5 +32,9 @@
     $prodactive = "";
     $suppactive = "";
     $reports = "";
+    $parts = "";
+    $labors = "";
+    $servicesjob = "";
+    $packages = "";
 
 ?>

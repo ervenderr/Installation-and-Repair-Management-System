@@ -1,8 +1,8 @@
 <?php
+// accepted-pending.php
 session_start();
 
 require_once '../homeIncludes/dbconfig.php';
-
 
 if(isset($_POST['sreq_id'])){
   $_SESSION['sreq_id'] = $_POST['sreq_id'];
@@ -14,12 +14,11 @@ if(isset($_POST['sreq_id'])){
   $inventory = mysqli_fetch_assoc($result);
 
   echo '
-  <form method="POST" action="accept-pending.php" enctype="multipart/form-data">
+  <form method="POST" action="accept-pending.php" enctype="multipart/form-data" id="form">
       <input type="hidden" name="sreq_id" value="'.$_POST['sreq_id'].'">
       <div class="mb-3">
           <label for="tech" class="form-label">Technician<span class="required">*</span></label>
-          <select class="form-select js-example-basic-multiple" id="tech" name="tech[]" multiple="multiple" required>
-              <option value="">--- select ---</option>';
+          <select class="form-select js-example-basic-multiple" id="tech" name="tech[]" multiple="multiple">';
 
               $sql = "SELECT * FROM technician WHERE status = 'Active'";
               $result = mysqli_query($conn, $sql);
@@ -31,23 +30,18 @@ if(isset($_POST['sreq_id'])){
 
   echo '
           </select>
-          <div class="invalid-feedback">
-              Please select at least one technician.
-          </div>
+          <span class="error"></span>
+      </div>
+      <div class="mb-3 ">
+        <label for="days" class="form-label">Estimated Completion </label>
+        <span>(day)</span>
+        <input type="number" class="form-control" id="days" name="days" value="' . $row6['date_day'] . '" pattern="[0-9]*">
+        <span class="error"></span>
       </div>
       <div class="mb-3">
-          <label for="payment" class="form-label">Initial Payment<span class="required">*</span></label>
-          <input type="number" class="form-control" id="payment" name="payment" min="0" required>
-          <div class="invalid-feedback">
-              Please enter a valid payment amount.
-          </div>
-      </div>
-      <div class="mb-3">
-          <label for="completed" class="form-label">Expected Completion<span class="required">*</span></label>
-          <input type="date" class="form-control" id="completed" name="completed" required>
-          <div class="invalid-feedback">
-              Please enter a valid date.
-          </div>
+      <label for="start" class="form-label">Start of Service<span class="required">*</span></label>
+      <input type="date" min="'. date('Y-m-d').'" class="form-control" id="start" name="start">
+      <span class="error"></span>
       </div>
       <button name="submit" type="submit" class="btn btn-danger mb-3">Accept</button>
   </form>';
@@ -57,14 +51,14 @@ if(isset($_POST['sreq_id'])){
 if (isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['sreq_id']);
     $techIds = $_POST['tech'];
-    $completed = htmlentities($_POST['completed']);
-    $payment = htmlentities($_POST['payment']);
+    $days = htmlentities($_POST['days']);
+    $start = htmlentities($_POST['start']);
     $status = "In-progress";
 
     // Update the service_request table
-    $query = "UPDATE service_request SET payment = ?, date_completed = ?, status = ? WHERE sreq_id = ?";
+    $query = "UPDATE service_request SET dat_date = ?, date_from = ?, status = ? WHERE sreq_id = ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, 'issi', $payment, $completed, $status, $id);
+    mysqli_stmt_bind_param($stmt, 'issi', $days, $start, $status, $id);
     mysqli_stmt_execute($stmt);
 
     // Remove any existing technicians assigned to this service request
@@ -73,20 +67,17 @@ if (isset($_POST['submit'])) {
     mysqli_stmt_bind_param($delete_stmt, 'i', $id);
     mysqli_stmt_execute($delete_stmt);
 
-    // Assign the new technicians to the service request and set their status to "Unavailable"
     foreach ($techIds as $techId) {
         $insert_query = "INSERT INTO service_request_technicians (sreq_id, tech_id) VALUES (?, ?)";
         $insert_stmt = mysqli_prepare($conn, $insert_query);
         mysqli_stmt_bind_param($insert_stmt, 'ii', $id, $techId);
         mysqli_stmt_execute($insert_stmt);
 
-        // Update the technician status
-        $tech_status = "Unavailable";
-        $tech_update_query = "UPDATE technician SET status = ? WHERE tech_id = ?";
-        $tech_update_stmt = mysqli_prepare($conn, $tech_update_query);
-        mysqli_stmt_bind_param($tech_update_stmt, 'si', $tech_status, $techId);
-        mysqli_stmt_execute($tech_update_stmt);
+        
     }
+    $newly_inserted_id = mysqli_insert_id($conn);
+    $tquery = "INSERT INTO rp_timeline (sreq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
+    $tresult = mysqli_query($conn, $tquery);
 
     if (mysqli_stmt_affected_rows($stmt) > 0) {
         $_SESSION['msg'] = "Record Updated Successfully";
@@ -101,8 +92,35 @@ if (isset($_POST['submit'])) {
 ?>
 
 <script>
-    $(document).ready(function() {
-        $('.js-example-basic-multiple').select2({});
-    });
-</script>
+$(document).ready(function() {
+    $('.js-example-basic-multiple').select2({});
 
+    $('#days').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Allow only numbers
+    });
+
+    $('#form').submit(function(event) {
+        // Check if the form inputs are not empty
+        if ($.trim($('#tech').val()) == '' || $.trim($('#start').val()) == '' || $.trim($('#days')
+                .val()) == '') {
+            event.preventDefault();
+            $('.error').empty(); // Clear any previous error messages
+            if ($.trim($('#tech').val()) == '') {
+                $('#tech').siblings('.error').text('Technician field is required.');
+            }
+            if ($.trim($('#start').val()) == '') {
+                $('#start').siblings('.error').text('Start of Service field is required.');
+            }
+            if ($.trim($('#days').val()) == '') {
+                $('#days').siblings('.error').text('Estimated Completion field is required.');
+            }
+        }
+
+        // Validate number input for Estimated Completion field
+        if (!$.isNumeric($('#days').val())) {
+            event.preventDefault();
+            $('#days').siblings('.error').text('Estimated Completion must be a number.');
+        }
+    });
+});
+</script>

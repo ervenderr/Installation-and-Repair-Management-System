@@ -12,7 +12,7 @@ if(isset($_POST['id'])){
     $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
     $output .= '
-    <form method="POST" action="accepted-pending.php" enctype="multipart/form-data">
+    <form method="POST" action="accept-pending.php" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="tech" class="form-label">Technician</label>
             <select class="form-select" id="tech" name="tech">
@@ -43,17 +43,20 @@ if(isset($_POST['id'])){
 if(isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
     $techId = htmlentities($_POST['tech']);
-    $status = "In-progress";
+    $status = "Diagnosing";
 
 
     $query = "UPDATE rprq SET tech_id = '$techId', status = '$status' WHERE id = '$id'";
+    $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
+
     $result = mysqli_query($conn, $query);
+    $tresult = mysqli_query($conn, $tquery);
 
 
     if ($result) {
         $_SESSION['techId'] = $techId;
         $_SESSION['msg'] = "Record Updated Successfully";
-        header("location: accepted.php");
+        header("location: view-transaction.php?rowid=" . $id . "");
     } else {
        echo "FAILED: " . mysqli_error($conn);
     }

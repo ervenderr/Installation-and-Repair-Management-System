@@ -37,7 +37,7 @@ include_once('../homeIncludes/header.php');
 
                     // Output the product information
                     echo '<div class="col">';
-                    echo '<div class="product">';
+                    echo '<div class="product productview">';
                     echo '<img src="data:image/jpeg;base64,' . base64_encode($image1) . '" alt="' . $name . '" class="product-image" data-toggle="modal" data-target="#img-modal-' . $name . '">';
                     echo '<h2 class="serv">' . $name . '</h2>';
                     echo '<p>' . $description . '</p>';

@@ -9,30 +9,33 @@ $rpshow = "show";
 $rptrue = "true";
 
 $rowid = $_GET['rowid'];
-$tcode = $_GET['transaction_code'];
-    
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
+    header('location: ../login/login.php');
+}
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT rprq.*, 
-            customer.fname AS cust_fname, 
-            customer.lname AS cust_lname, 
-            technician.fname AS tech_fname, 
-            technician.lname AS tech_lname, 
-            technician.status AS tech_status_new_name, 
-            rprq.status AS rprq_status, 
-            accounts.*,
-            technician.*,
-            electronics.*,
-            defects.*,
-            invoice.*,
-            customer.*
-          FROM rprq
-          LEFT JOIN technician ON rprq.tech_id = technician.tech_id
-          LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
-          LEFT JOIN defects ON rprq.defect_id = defects.defect_id
-          LEFT JOIN customer ON rprq.cust_id = customer.cust_id
-          LEFT JOIN accounts ON customer.account_id = accounts.account_id
-          LEFT JOIN invoice ON rprq.invoice_id = invoice.invoice_id
-          WHERE rprq.transaction_code = '" . $tcode . "';";
+customer.fname AS cust_fname, 
+customer.lname AS cust_lname, 
+technician.fname AS tech_fname, 
+technician.lname AS tech_lname, 
+technician.status AS tech_status_new_name, 
+rprq.status AS rprq_status, 
+accounts.*,
+technician.*,
+electronics.*,
+defects.*,
+invoice.*,
+customer.*
+FROM rprq
+LEFT JOIN technician ON rprq.tech_id = technician.tech_id
+LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN defects ON rprq.defect_id = defects.defect_id
+LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN accounts ON customer.account_id = accounts.account_id
+LEFT JOIN invoice ON rprq.id = invoice.rprq_id
+          WHERE rprq.id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -44,7 +47,6 @@ if (mysqli_num_rows($result) > 0) {
 
 $_SESSION['account_id'] = $row['account_id'];
 $_SESSION['rowid'] = $_GET['rowid'];
-$_SESSION['transaction_code'] = $_GET['transaction_code'];
 ?>
 
 <body>
@@ -91,6 +93,8 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                 $href = "";
                                 if ($row['rprq_status'] == 'Pending'){
                                     $href = "pending.php";
+                                }elseif ($row['rprq_status'] == 'Diagnosing'){
+                                    $href = "accepted.php";
                                 }else{
                                     $href = "transaction.php";
                                 }
@@ -108,8 +112,16 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header d-flex align-items-center justify-content-between">
                                     <h4 class="card-title h-card">Customer Details</h4>
+                                    <div>
+                                        <a href="edit-transaction.php?transaction_code=<?php echo $row['transaction_code']; ?>&rowid=<?php echo $row['id']; ?>"
+                                            class="btn btn-success btn-fw btn-edit">
+                                            <i class="fas fa-edit text-white"></i>
+                                        </a>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -137,9 +149,18 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </div>
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header d-flex align-items-center justify-content-between">
                                     <h4 class="card-title h-card">Request Details</h4>
+                                    <div>
+                                        <a href="edit-transaction.php?transaction_code=<?php echo $row['transaction_code']; ?>&rowid=<?php echo $row['id']; ?>"
+                                            class="btn btn-success btn-fw btn-edit">
+                                            <i class="fas fa-edit text-white"></i>
+                                        </a>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
+
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
@@ -155,14 +176,12 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         $statusClass = '';
                         if ($row['rprq_status'] == 'Pending') {
                             $statusClass = 'badge-gradient-warning';
-                        } else if ($row['rprq_status'] == 'In-progress') {
+                        } else if ($row['rprq_status'] == 'In-progress' || $row['rprq_status'] == 'To repair') {
                             $statusClass = 'badge-gradient-info';
-                        } else if ($row['rprq_status'] == 'Done') {
-                            $statusClass = 'badge-gradient-success';
-                        } else if ($row['rprq_status'] == 'Completed') {
-                            $statusClass = 'badge-gradient-success';
-                        } else {
+                        } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
+                        } else {
+                            $statusClass = 'badge-gradient-info';
                         }
                         echo "<tr>";
                         echo "<th>Status:</th>";
@@ -172,14 +191,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             <?php
                         $backlog = '';
                         if ($row['backlog'] == '1') {
-                            $backlog = 'backlog-red';
+                            $backlog = 'Yes';
                         } else {
-                            $backlog = 'badge-gradient-success';
+                            $backlog = 'No';
                         }
                     ?>
                                             <tr>
                                                 <th>Backlog:</th>
-                                                <td><span class="badge <?php echo $backlog; ?> not-back"> </span></td>
+                                                <td><span class="not-back"><?php echo $backlog; ?></span></td>
                                             </tr>
                                             <tr>
                                                 <th>Electronic Type:</th>
@@ -205,7 +224,9 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             </tr>
                                             <tr>
                                                 <th>Date Completed:</th>
-                                                <td><?php echo $row['date_completed']?></td>
+                                                <td><?php
+                                                if($row['rprq_status'] == 'Completed'){
+                                                echo $row['date_completed'];}?></td>
                                             </tr>
                                             <tr>
                                                 <th>Assigned Technician:</th>
@@ -224,10 +245,6 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <td><?php echo $row['initial_payment']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Full Payment:</th>
-                                                <td><?php echo $row['payment']?></td>
-                                            </tr>
-                                            <tr>
                                                 <th>Remarks:</th>
                                                 <td>
                                                     <textarea class="form-control" rows="3"
@@ -240,10 +257,10 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="card-title">Labor Cost</h4>
+                            <h4 class="card-title mt-3">Labor Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-bordered" id="myDataTable">
+                                    <table class="table table-bordered" id="myDataTable">
                                         <thead>
                                             <tr class="bg-our">
                                                 <th> LABOR </th>
@@ -252,62 +269,165 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         </thead>
                                         <tbody id="myTable">
                                             <?php
-                                                $id = $row['id'];
-                                                    // Perform the query
-                                                    $lquery = "SELECT *
-                                                        FROM rprq
-                                                        INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        INNER JOIN rp_labor ON rprq.id = rp_labor.rprq_rl_id
-                                                        INNER JOIN common_repairs ON rp_labor.comrep_id = common_repairs.comrep_id
-                                                        WHERE rprq.id = $id";
+                                            $id = $row['id'];
+                                            $lquery = "SELECT *
+                                                FROM rprq
+                                                INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                INNER JOIN rp_labor ON rprq.id = rp_labor.rprq_rl_id
+                                                INNER JOIN common_repairs ON rp_labor.comrep_id = common_repairs.comrep_id
+                                                WHERE rprq.id = $id";
 
-                                                    
-                                                    $lresult = mysqli_query($conn, $lquery);
+                                            $lresult = mysqli_query($conn, $lquery);
 
-                                                    while ($lrow = mysqli_fetch_assoc($lresult)) {
-                                                        echo '<tr>';
-                                                        echo '<td>' . $row['comrep_name'] . '</td>';
-                                                        echo '<td>' . $row['comrep_cost'] . '</td>';
-                                                        echo '</td>';
-                                                        echo '</tr>';
-                                                    }
-                                                ?>
+                                            // Initialize the labor subtotal
+                                            $labor_subtotal = 0;
+
+                                            while ($lrow = mysqli_fetch_assoc($lresult)) {
+                                                // Add the comrep_cost to the labor subtotal
+                                                $labor_subtotal += $lrow['comrep_cost'];
+                                            
+                                                echo '<tr>';
+                                                echo '<td>' . $lrow['comrep_name'] . '</td>';
+                                                echo '<td>' . $lrow['comrep_cost'] . '</td>';
+                                                echo '</td>';
+                                                echo '</tr>';
+                                            }
+                                            
+                                            // Moved the labor subtotal row outside the while loop
+                                            echo '<tr>';
+                                            echo '<td class="text-end labortotal"> Labor Subtotal:  </td>';
+                                            echo '<td class="labortotal">' . $labor_subtotal .".00". '</td>';
+                                            echo '</tr>';
+                                            
+                                        ?>
                                         </tbody>
-
                                     </table>
                                 </div>
                             </div>
+                            <hr>
+                            <h4 class="card-title mt-2">Parts Cost</h4>
+                            <div class="col-12 grid-margin">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="myDataTable">
+                                        <thead>
+                                            <tr class="bg-our">
+                                                <th> Part name </th>
+                                                <th> price </th>
+                                                <th> qty </th>
+                                                <th> total </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                            <?php
+                                            $id = $row['id'];
+                                            $lquery = "SELECT *
+                                                FROM rprq
+                                                INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
+                                                INNER JOIN rp_brand_parts ON rprq.id = rp_brand_parts.rprq_id
+                                                INNER JOIN brand_parts ON rp_brand_parts.bp_id = brand_parts.bp_id
+                                                WHERE rprq.id = $id";
+
+                                            $lresult = mysqli_query($conn, $lquery);
+
+                                            // Initialize the labor subtotal
+                                            $partqty = 0;
+                                            $part_subtotal = 0;
+
+                                            while ($lrow = mysqli_fetch_assoc($lresult)) {
+                                                // Add the comrep_cost to the labor subtotal
+                                                $partqty  = $lrow['bp_cost'] * $lrow['quantity'];
+                                                $part_subtotal += $partqty;
+                                            
+                                                echo '<tr>';
+                                                echo '<td>' . $lrow['bp_name'] . '</td>';
+                                                echo '<td>' . $lrow['bp_cost'] . '</td>';
+                                                echo '<td>' . $lrow['quantity'] . '</td>';
+                                                echo '<td>' . $partqty . '</td>';
+                                                echo '</tr>';
+                                            }
+                                            
+                                            // Moved the parts subtotal row outside the while loop
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end labortotal"> Parts Subtotal:  </td>';
+                                            echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
+                                            echo '</tr>';
+
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end "> </td>';
+                                            echo '<td class=""></td>';
+                                            echo '</tr>';
+                                            $total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Total:  </td>';
+                                            echo '<td class="">' . $total .".00". '</td>';
+                                            echo '</tr>';
+
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
+                                            echo '<td class="">'."- " . $row['initial_payment'] .'</td>';
+                                            echo '</tr>';
+
+
+                                            
+                                            $grand_total = $total-$row['initial_payment'];
+
+                                            
+
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center grandtotal">
+                                <h3>Total Payable Amount: <?php echo $grand_total.".00"?></h3>
+                                <?php if($row['rprq_status'] == 'Completed'){
+                            echo '<span class="grandspan">Paid <i class="far fa-money-check-edit-alt"></i></span>';
+                        } ?>
+                            </div>
                         </div>
-
-
-                        <div class="btn-group-sm d-flex btn-details">
+                        <div class="d-flex btn-details">
                             <?php
-                                if (($row['rprq_status'] == 'Pending')) {
-                                    echo '<button class="icns btn btn-danger edit" id="' .  $row['id'] . '">';
-                                    echo 'Accept <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
-                                    echo '</button>';
-                                }
-                                else{
-                                    echo '<a href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-success btn-fw">
-                                    Update Details <i class="fas fa-edit text-white"></i></a>';
-                                }
+                                            if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosings'){
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
+                                                echo 'Add Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '</button>';
+                                                
+                                            }elseif($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'In-progress'){
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-success initpay updtech" id="' .  $row['id'] . '">';
+                                                echo '<i class="fas fa-edit"></i> Update Initial Payment';
+                                                echo '</button>';
+                                            }
+                                            if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
+                                                echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
+                                                Generate Invoice <i class="fas fa-file-invoice"></i></a>';
+                                            }
 
-                                echo '<a href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-danger btn-fw red">
-                                Delete Details <i class="fas fa-trash-alt text-white"></i></a>';
+                                            if (!empty($row['invoice_id'])) {
+                                                $invoice_id = $row['invoice_id'];
+                                                echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                                                Download Invoice <i class="fas fa-download"></i></a>';
+                                            }
 
-                                if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
-                                    echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
-                                    Generate Invoice <i class="fas fa-file-invoice"></i></a>';
-                                }
+                                            if (($row['id'])) {
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-danger update_status" id="' .  $row['id'] . '">';
+                                                echo '<i class="fas fa-edit"></i> Update Status';
+                                                echo '</button>';
+                                            }
 
-                                if (!empty($row['invoice_id'])) {
-                                    $invoice_id = $row['invoice_id'];
-                                    echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
-                                    Download Invoice <i class="fas fa-download"></i></a>';
-                                }
-                            ?>
+                                            if (($row['rprq_status'] == 'Pending')) {
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-danger edit acceptrp" id="' .  $row['id'] . '">';
+                                                        echo '<i class="fas fa-calendar-check view-account" id="' .  $row['id'] . '"> </i> Accept';
+                                                        echo '</button>';
+                                            }
+
+                                            ?>
                         </div>
-
                     </div>
                 </div>
 
@@ -330,14 +450,44 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
     <!-- container-scroller -->
 
     <!-- Accept modal -->
-    <div class="modal fade" id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade " id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+        <div class="modal-dialog diangmod">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editSuppModalLabel">Assign Technician</h5>
+                    <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body suppbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- initial payment modal -->
+    <div class="modal fade " id="initpay" tabindex="-1" aria-labelledby="initpayLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="initpayLabel">Update Initial Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body initpays">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- update status modal -->
+    <div class="modal fade " id="update_status" tabindex="-1" aria-labelledby="update_statusLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="update_statusLabel">Update Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body update_statuses">
 
                 </div>
             </div>
@@ -393,8 +543,77 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
             $('#editSuppModal').modal('show');
         })
+
+        $('.initpay').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'accepted-pending.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.initpays').html(result);
+                }
+            });
+
+
+            $('#initpay').modal('show');
+        })
+
+        $('.update_status').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-status.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.update_statuses').html(result);
+                }
+            });
+
+
+            $('#update_status').modal('show');
+        })
     })
     </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const minimizeButtons = document.querySelectorAll(".minimize");
+
+        minimizeButtons.forEach(function(minimizeButton) {
+            minimizeButton.addEventListener("click", function() {
+                const cardBody = minimizeButton.closest(".card").querySelector(".card-body");
+                cardBody.classList.toggle("d-none");
+
+                if (cardBody.classList.contains("d-none")) {
+                    minimizeButton.innerHTML = '<i class="fas fa-chevron-down text-white"></i>';
+                } else {
+                    minimizeButton.innerHTML = '<i class="fas fa-minus text-white"></i>';
+                }
+            });
+        });
+    });
+    </script>
+
+
 </body>
 
 </html>

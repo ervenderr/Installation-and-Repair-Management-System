@@ -24,11 +24,26 @@ if (mysqli_num_rows($result) > 0) {
 ?>
 
 <?php
-$query6 = "DELETE FROM `rprq` WHERE rprq.transaction_code = '" . $tcode . "';";
+$query5 = "DELETE FROM `rp_timeline` WHERE rp_timeline.rprq_id = '" . $rowid . "';";
+$result5 = mysqli_query($conn, $query5);
+
+$query6 = "DELETE FROM `rp_brand_parts` WHERE rp_brand_parts.rprq_id = '" . $rowid . "';";
 $result6 = mysqli_query($conn, $query6);
 
-if ($result6) {
-    $_SESSION['msg2'] = "Record Deleted Successfully";
-    header("location: transaction.php");
-}
+$query7 = "DELETE FROM `rp_labor` WHERE rp_labor.rprq_rl_id = '" . $rowid . "';";
+$result7 = mysqli_query($conn, $query7);
+
+if ($result7) {
+    $query6 = "DELETE FROM `rprq` WHERE rprq.transaction_code = '" . $tcode . "';";
+    $result6 = mysqli_query($conn, $query6);
+    if($result6){
+
+        $_SESSION['msg2'] = "Record Deleted Successfully";
+        header("location: transaction.php");
+    }else {
+        echo "FAILED: " . mysqli_error($conn);
+     }
+} else {
+    echo "FAILED: " . mysqli_error($conn);
+ }
 ?>

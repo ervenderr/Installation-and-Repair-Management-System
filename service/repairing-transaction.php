@@ -1,6 +1,5 @@
 <?php
 session_start();
-error_reporting(0);
 if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
@@ -29,13 +28,13 @@ $row = mysqli_fetch_assoc($result);
 
 ?>
 
-<body>
+<body class="view-body">
     <?php include_once('../homeIncludes/homenav.php');?>
 
     <div class="accountcon">
         <div class="container-fluid">
             <div class="accheader">
-                <h4>My Transactions</h4>
+                <h4>My Transactions <?php echo $user_id ." " .  $transaction_code?></h4>
             </div>
             <div class="row">
 
@@ -100,7 +99,7 @@ $row = mysqli_fetch_assoc($result);
                     $query_done = "SELECT * FROM service_request 
                     LEFT JOIN customer ON service_request.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Done' AND accounts.account_id = '{$user_id}';";
+                    WHERE status='Underway' AND accounts.account_id = '{$user_id}';";
                     $result_done = mysqli_query($conn, $query_done);
                     $num_done = mysqli_num_rows($result_done);
 
@@ -127,7 +126,7 @@ $row = mysqli_fetch_assoc($result);
 
                 </div>
                 <div class="col-sm-9 accform ">
-                <nav class="nav nav-pills flex-column flex-sm-row">
+                    <nav class="nav nav-pills flex-column flex-sm-row">
                         <a class="flex-sm-fill text-sm-center nav-link" aria-current="page"
                             href="pending-transaction.php">Pending
                             <?php
@@ -136,14 +135,15 @@ $row = mysqli_fetch_assoc($result);
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link active" href="repairing-transaction.php">Installing
+                        <a class="flex-sm-fill text-sm-center nav-link active"
+                            href="repairing-transaction.php">In-progress
                             <?php
                                 if($notification_style_in_progress){
                                     echo'<span class="count-symbol bg-danger"></span>';
                                 }
                                 ?>
                         </a>
-                        <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">Done
+                        <a class="flex-sm-fill text-sm-center nav-link" href="pickup-transaction.php">Underway
                             <?php
                                 if($notification_style_done){
                                     echo'<span class="count-symbol bg-danger"></span>';
@@ -159,91 +159,163 @@ $row = mysqli_fetch_assoc($result);
                         </a>
                     </nav>
                     <?php
-                    $query = "SELECT sr.*, 
-                    c.fname AS cust_fname, 
-                    c.lname AS cust_lname, 
-                    c.phone AS cust_phone,
-                    GROUP_CONCAT(CONCAT(t.fname, ' ', t.lname) SEPARATOR ', ') AS tech_names,
-                    GROUP_CONCAT(CONCAT(t.phone) SEPARATOR ', ') AS tech_phones,
-                    a.*,
-                    c.*,
-                    s.*,
-                    p.*
-                 FROM service_request sr
-                 LEFT JOIN customer c ON sr.cust_id = c.cust_id
-                 LEFT JOIN accounts a ON c.account_id = a.account_id
-                 LEFT JOIN services s ON sr.service_id = s.service_id
-                 LEFT JOIN package p ON sr.pkg_id = p.pkg_id
-                 LEFT JOIN service_request_technicians srt ON sr.sreq_id = srt.sreq_id
-                 LEFT JOIN technician t ON srt.tech_id = t.tech_id
-                 WHERE sr.status = 'In-Progress' AND a.account_id = '{$user_id}'
-                 GROUP BY sr.sreq_id;";
-         
+                    $query = "SELECT service_request.*, 
+                    customer.fname AS cust_fname, 
+                    customer.lname AS cust_lname, 
+                    customer.phone AS cust_phone,
+                    service_request.status AS sr_status, 
+                    accounts.*,
+                    services.*,
+                    package.*,
+                    customer.*
+                    FROM service_request
+                    LEFT JOIN services ON service_request.service_id = services.service_id
+                    LEFT JOIN package ON service_request.pkg_id = package.pkg_id
+                    LEFT JOIN customer ON service_request.cust_id = customer.cust_id
+                    LEFT JOIN accounts ON customer.account_id = accounts.account_id
+                    WHERE (service_request.status = 'In-progress' OR service_request.status = 'Waiting for parts') 
+                    AND accounts.account_id = '{$user_id}';";
+                
+            
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
                     <div class="d-flex flex-wrap pending-card">
                         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                        <div class="card mb-3 transaction-details-card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Transaction #:</span>
-                                            <span class="text-primary"><?php echo $row['transaction_code']?></span>
+                        <?php
+                            $_SESSION['transaction_id'] = $row['transaction_code'];
+                            $_SESSION['sreq_id'] = $row['sreq_id'];
+
+                            $tquery = "SELECT service_request.*, 
+                    technician.fname AS tech_fname, 
+                    technician.lname AS tech_lname, 
+                    technician.phone AS tech_phone,
+                    technician.status AS tech_status, 
+                    service_request.status AS sr_status, 
+                    GROUP_CONCAT(CONCAT(technician.fname, ' ', technician.lname)) AS tech_names,
+                    GROUP_CONCAT(DISTINCT CONCAT(technician.phone)) AS tech_phones,
+                    technician.*
+                    FROM service_request
+                    LEFT JOIN service_request_technicians ON service_request.sreq_id = service_request_technicians.sreq_id
+                    LEFT JOIN technician ON service_request_technicians.tech_id = technician.tech_id
+                    WHERE service_request.status = 'Underway';";
+                    $tresult = mysqli_query($conn, $tquery);
+                    $lrow = mysqli_fetch_assoc($tresult);
+                            ?>
+                        <a href="../service/view-trans.php" class="viewtrans">
+                            <div class="card mb-3 transaction-details-card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <div class="trans_image center">
+                                                <?php
+        $imageData = base64_encode($row['image']);
+        $src = 'data:image/jpeg;base64,'.$imageData;
+        echo '<img src="'.$src.'" id="main_product_image" width="350">';
+    ?>
+                                            </div>
                                         </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Status:</span>
-                                            <span class="transaction-details-pending"><?php echo $row['status']?></span>
+                                        <div class="col-sm-5">
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Transaction
+                                                    #:</span>
+                                                <span class="text-primary"><?php echo $row['transaction_code']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Status:</span>
+                                                <span
+                                                    class="transaction-details-pending"><?php echo $row['sr_status']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Service
+                                                    Type:</span>
+                                                <span><?php echo $row['service_name']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Package
+                                                    Type:</span>
+                                                <span
+                                                    class="transaction-details-none text-secondary"><?php echo $row['name']?></span>
+                                            </div>
                                         </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Service Type:</span>
-                                            <span><?php echo $row['service_name']?></span>
+                                        <div class="col-sm-5">
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Date
+                                                    Requested:</span>
+                                                <span><?php echo $row['date_req']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Estimated
+                                                    Completion:</span>
+                                                <?php
+                                                    if($row['dat_date'] == ''){
+                                                        echo '<span class="tbh">';
+                                                        echo '<i class="fas fa-exclamation-circle"></i>' . 'TBA';
+                                                        echo '</span>';
+                                                    }else{
+                                                       
+                                                        echo '<span class="">';
+                                                        echo $row['dat_date'] . " day(s)";
+                                                        echo '</span>';
+                                                    }
+                                                    ?>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Assigned
+                                                    Technician(s):</span>
+
+                                                <?php
+                                                    if($lrow['tech_names'] == ''){
+                                                        echo '<span class="tbh">';
+                                                        echo '<i class="fas fa-exclamation-circle"></i>' . 'TBA';
+                                                        echo '</span>';
+                                                    }else{
+                                                       
+                                                        echo '<span class="">';
+                                                        echo  $lrow['tech_names'];
+                                                        echo '</span>';
+                                                    }
+                                                    ?>
+
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Technician's
+                                                    Contact:</span>
+                                                <?php
+                                                    if($lrow['tech_phones'] == ''){
+                                                        echo '<span class="tbh">';
+                                                        echo '<i class="fas fa-exclamation-circle"></i>' . 'TBA';
+                                                        echo '</span>';
+                                                    }else{
+                                                       
+                                                        echo '<span class="">';
+                                                        echo  $lrow['tech_phones'];
+                                                        echo '</span>';
+                                                    }
+                                                    ?>
+                                            </div>
                                         </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Package Type:</span>
-                                            <span class="transaction-details-none text-secondary"><?php echo $row['name']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Initial Payment:</span>
-                                            <span class="transaction-details-none"><?php echo $row['initial_payment ']?></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Other concern:</span>
-                                            <span
-                                                class="transaction-details-standard-shipping"><?php echo $row['other']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Date Requested:</span>
-                                            <span><?php echo $row['date_req']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Expected
-                                                Completion:</span>
-                                            <span><?php echo $row['date_completed']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Assigned
-                                                Technicians:</span>
-                                            <span><?php echo $row['tech_names']?></span>
-                                        </div>
-                                        <div class="transaction-details-row">
-                                            <span class="fw-bold me-2 transaction-details-label">Technician's Contact:</span>
-                                            <span><?php echo $row['tech_phones']?></span>
+                                        <div class="text-start">
+                                            <form method="post" action="../repair-invoice/booking-repair-pdf.php"
+                                                target="_blank">
+                                                <?php
+    if($row['sr_status'] == 'Pending') {
+        echo '<button type="submit" name="download" value="' . $row['sreq_id'] . '" class="btn btn-secondary">Download Ticket <i class="fas fa-download"></i></button>';
+    }
+    ?>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <?php } ?>
                     </div>
 
                     </table>
                     <?php } else { ?>
                     <div class="alert alert-info" role="alert">
-                        <i class="fas fa-exclamation-circle"></i> No Transaction at the moment.
+                        <i class="fas fa-exclamation-circle"></i> No Pending Transaction at the moment.
                     </div>
                     <?php } ?>
 

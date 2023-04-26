@@ -59,14 +59,6 @@ require_once '../homeIncludes/dbconfig.php';
                                         data-bs-target="#addTransactionModal">
                                         <i class=" mdi mdi-plus ">Transaction</i>
                                     </button>
-                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addElecModal">
-                                        <i class=" mdi mdi-plus ">Electronics</i>
-                                    </button>
-                                    <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addDefectModal">
-                                        <i class=" mdi mdi-plus ">Defects</i>
-                                    </button>
                                 </li>
                             </ul>
                         </nav>
@@ -99,8 +91,8 @@ require_once '../homeIncludes/dbconfig.php';
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress' OR rprq.status = 'Done' OR rprq.status = 'Completed'
-                                                        ORDER BY rprq.date_req DESC;";
+                                                        WHERE rprq.status != 'Pending' AND rprq.status != 'Diagnosing'
+                                                        ORDER BY rprq.time DESC;";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -115,32 +107,27 @@ require_once '../homeIncludes/dbconfig.php';
                                                         
                                                         if ($row['status'] == 'Pending') {
                                                             $statusClass = 'badge-gradient-warning';
-                                                        } else if ($row['status'] == 'In-progress') {
+                                                        } else if ($row['status'] == 'In-progress' || $row['status'] == 'To repair') {
                                                             $statusClass = 'badge-gradient-info';
-                                                        } else if ($row['status'] == 'Done') {
-                                                            $statusClass = 'badge-gradient-danger';
-                                                        } else if ($row['status'] == 'Completed') {
-                                                            $statusClass = 'badge-gradient-success';
-                                                        } else {
+                                                        } else if ($row['status'] == 'Cancelled') {
                                                             $statusClass = 'badge-gradient-secondary';
+                                                        } else {
+                                                            $statusClass = 'badge-gradient-info';
                                                         }
 
                                                         $backlog = '';
-                                                        if ($row['backlog'] == '1') {
-                                                            $backlog = 'backlog-red';
+                                                        if ($row['backlog'] == 1) {
+                                                            $backlog = 'Yes';
                                                         }else{
-                                                            $backlog = 'badge-gradient-success';
+                                                            $backlog = 'No';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
-                                                        echo '<td><span class="badge ' . $backlog . ' not-back"> </span></td>';
+                                                        echo '<td><span class="not-back">'.$backlog.'</span></td>';
                                                         echo '<td>';
                                                         echo '<a class="icns" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
                                                         echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['id'] . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="edit-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
-                                                        echo '<i class="fas fa-edit text-white view-account edit" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
                                                         echo '<i class="fas fa-trash-alt text-white view-account delete" data-rowid="' .  $row['id'] . '"></i>';
@@ -280,16 +267,39 @@ require_once '../homeIncludes/dbconfig.php';
     const form = document.querySelector('.form-sample');
     const fname = form.querySelector('input[name="fname"]');
     const lname = form.querySelector('input[name="lname"]');
-    // const email = form.querySelector('input[name="email"]');
     const phone = form.querySelector('input[name="phone"]');
     const address = form.querySelector('input[name="address"]');
-    const etype = form.querySelector('select[name="etype"]');
-    // const electrician = form.querySelector('select[name="electrician"]');
-    const defective = form.querySelector('input[name="defective"]');
-    const shipping = form.querySelector('select[name="shipping"]');
-    const date = form.querySelector('input[name="date"]');
-    const completed = form.querySelector('input[name="completed"]');
-    const payment = form.querySelector('input[name="payment"]');
+    const etype = form.querySelector('#etype');
+    const ebrand = form.querySelector('#ebrand');
+    const other_brand = form.querySelector('#other_brand');
+    const defective = form.querySelector('#defective');
+    const other_defective = form.querySelector('#other_defective');
+    const shipping = form.querySelector('[name="shipping"]');
+
+    etype.addEventListener('change', () => {
+        if (etype.value !== 'None') {
+            etype.nextElementSibling.innerText = '';
+        }
+    });
+
+    ebrand.addEventListener('change', () => {
+        if (ebrand.value === 'other') {
+            document.getElementById('other-brand-input').style.display = 'block';
+        } else {
+            document.getElementById('other-brand-input').style.display = 'none';
+            other_brand.value = '';
+        }
+    });
+
+    defective.addEventListener('change', () => {
+        if (defective.value === 'other') {
+            document.getElementById('other-defect-input').style.display = 'block';
+        } else {
+            document.getElementById('other-defect-input').style.display = 'none';
+            other_defective.value = '';
+        }
+    });
+
 
     form.addEventListener('submit', (event) => {
         let error = false;
@@ -314,13 +324,6 @@ require_once '../homeIncludes/dbconfig.php';
             lname.nextElementSibling.innerText = '';
         }
 
-        // if (email.value === '') {
-        //     email.nextElementSibling.innerText = 'Please enter your email';
-        //     error = true;
-        // } else {
-        //     email.nextElementSibling.innerText = '';
-        // }
-
         if (phone.value === '') {
             phone.nextElementSibling.innerText = 'Please enter phone number';
             error = true;
@@ -342,21 +345,27 @@ require_once '../homeIncludes/dbconfig.php';
         }
 
         if (etype.value === 'None') {
-            etype.nextElementSibling.innerText = 'Please select an electronic type';
+            etype.nextElementSibling.innerText = 'Please select electronic type';
             error = true;
         } else {
             etype.nextElementSibling.innerText = '';
         }
 
-        // if (electrician.value === 'None') {
-        //     electrician.nextElementSibling.innerText = 'Please select an electrician';
-        //     error = true;
-        // } else {
-        //     electrician.nextElementSibling.innerText = '';
-        // }
+        if (ebrand.value === 'None') {
+            ebrand.nextElementSibling.innerText = 'Please select a brand';
+            error = true;
+        } else if (ebrand.value === 'other' && other_brand.value.trim() === '') {
+            ebrand.nextElementSibling.innerText = 'Please enter other brand name';
+            error = true;
+        } else {
+            ebrand.nextElementSibling.innerText = '';
+        }
 
-        if (defective.value === '') {
-            defective.nextElementSibling.innerText = 'Please enter your defective';
+        if (defective.value === 'None') {
+            defective.nextElementSibling.innerText = 'Please select a defect';
+            error = true;
+        } else if (defective.value === 'other' && other_defective.value.trim() === '') {
+            defective.nextElementSibling.innerText = 'Please enter other defect description';
             error = true;
         } else {
             defective.nextElementSibling.innerText = '';
@@ -367,27 +376,6 @@ require_once '../homeIncludes/dbconfig.php';
             error = true;
         } else {
             shipping.nextElementSibling.innerText = '';
-        }
-
-        if (date.value === '') {
-            date.nextElementSibling.innerText = 'Please select a date';
-            error = true;
-        } else {
-            date.nextElementSibling.innerText = '';
-        }
-
-        if (completed.value === '') {
-            completed.nextElementSibling.innerText = 'Please select a completion date';
-            error = true;
-        } else {
-            completed.nextElementSibling.innerText = '';
-        }
-
-        if (payment.value === '') {
-            payment.nextElementSibling.innerText = 'Please enter a payment amount';
-            error = true;
-        } else {
-            payment.nextElementSibling.innerText = '';
         }
 
         if (error) {
@@ -416,6 +404,71 @@ require_once '../homeIncludes/dbconfig.php';
 
     j(document).ready(function() {
         j('#myDataTable2').DataTable();
+    });
+    </script>
+
+    <script>
+    $(document).ready(function() {
+        $('#etype').change(function() {
+            var etype_id = $(this).val();
+
+            if (etype_id === "None") {
+                $('#defective').html('<option value="None">--- Select ---</option>');
+            } else {
+                $.ajax({
+                    url: 'fetch_defects.php',
+                    type: 'POST',
+                    data: {
+                        etype_id: etype_id
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        var options = '<option value="None">--- Select ---</option>' +
+                            '<option value="other">Other</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            options += '<option value="' + data[i].defect_id + '">' + data[
+                                    i]
+                                .defect_name + '</option>';
+
+                        }
+                        $('#defective').html(options);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
+        });
+
+        $('#etype').change(function() {
+            var etype_id = $(this).val();
+
+            if (etype_id === "None") {
+                $('#ebrand').html('<option value="None">--- Select ---</option>');
+            } else {
+                $.ajax({
+                    url: 'fetch_brands.php',
+                    type: 'POST',
+                    data: {
+                        etype_id: etype_id
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        var options = '<option value="None">--- Select ---</option>' +
+                            '<option value="other">Other</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            options += '<option value="' + data[i].eb_id + '">' + data[i]
+                                .eb_name + '</option>';
+                        }
+                        console.log(data)
+                        $('#ebrand').html(options);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
+        });
     });
     </script>
 </body>

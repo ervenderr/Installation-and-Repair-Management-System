@@ -17550,7 +17550,6 @@ code {
 }
 
 .btn.btn-fw {
-  min-width: 150px;
 }
 
 .btn.btn-sm,
@@ -21382,6 +21381,8 @@ dl li {
   background: linear-gradient(to bottom, #015F6B, #04bcd4);
   color: #fff;
   border: none;
+  padding: 8px 12px !important;
+  
 }
 
 .bread {
@@ -21410,6 +21411,7 @@ dl li {
 .flex {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .flex .dataTables_length label {
@@ -21443,6 +21445,8 @@ dl li {
 
 .mg-btm {
   margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .pagination>li>a {
@@ -21503,10 +21507,9 @@ option{
 
 .select2-container {
   box-sizing: border-box;
-  display: inline-block;
   margin: 0;
   position: relative;
-  vertical-align: middle
+  vertical-align: middle;
 }
 
 .select2-container .select2-selection--single {
@@ -22249,7 +22252,6 @@ option{
 }
 
 .edit{
-  padding: 3px;
   background: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
 }
 
@@ -22288,7 +22290,6 @@ th{
 
 .updtech{
   background-color: #07cdae !important;
-  padding: 8px 12px;
 }
 
 .card .h-card{
@@ -22335,3 +22336,37 @@ th{
   padding: 10px
 }
 
+.btn-edit{
+  background-color: #015F6B !important;
+  border: none;
+  padding: 5px;
+}
+
+
+.paid{
+  background-color: #015F6B;
+}
+
+.grandtotal{
+  margin: 0;
+}
+
+.grandspan{
+  background-color: #07cdae;
+  padding: 6px 14px;
+  color: #fff;
+  margin-left: 5px;
+  margin-bottom: 0.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.editparts{
+  background-color: #fff !important;
+  border: none;
+}
+
+.modal.show .sermodals{
+  max-width: 700px ;
+}

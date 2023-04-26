@@ -3,9 +3,8 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <h5 class="text-light">About Us</h5>
-                <p class="text-secondary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget placerat
-                    ligula.
-                    Sed consectetur felis quis massa sollicitudin, et efficitur lectus bibendum.</p>
+                <p class="text-secondary">Proton Tech Electronics and Services is a reliable electronic repair shop that provides
+                        top-quality services and repairs for your electronics.</p>
             </div>
             <div class="col-md-4 mb-4">
                 <h5 class="text-light">Contact</h5>

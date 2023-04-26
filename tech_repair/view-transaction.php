@@ -9,7 +9,6 @@ $rpshow = "show";
 $rptrue = "true";
 
 $rowid = $_GET['rowid'];
-$tcode = $_GET['transaction_code'];
 
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
@@ -36,7 +35,7 @@ LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
 LEFT JOIN invoice ON rprq.id = invoice.rprq_id
-          WHERE rprq.transaction_code = '" . $tcode . "';";
+          WHERE rprq.id = '" . $rowid . "';";
 $result = mysqli_query($conn, $query);
 
 
@@ -48,7 +47,6 @@ if (mysqli_num_rows($result) > 0) {
 
 $_SESSION['account_id'] = $row['account_id'];
 $_SESSION['rowid'] = $_GET['rowid'];
-$_SESSION['transaction_code'] = $_GET['transaction_code'];
 ?>
 
 <body>
@@ -59,7 +57,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
             <?php include_once ('../technician_includes/sidebar.php'); ?>
-            
+
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
@@ -68,8 +66,26 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             <span class="page-title-icon text-white me-2">
                                 <i class="mdi mdi-wrench"></i>
                             </span> Repair Transaction
-                            
                         </h3>
+                        <?php
+            if (isset($_SESSION['msg'])) {
+                $msg = $_SESSION['msg'];
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                '. $msg .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+              unset ($_SESSION['msg']);
+            }
+
+            if (isset($_SESSION['msg2'])) {
+                $msg2 = $_SESSION['msg2'];
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                '. $msg2 .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+            }
+            unset ($_SESSION['msg']);
+        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <?php
@@ -81,18 +97,24 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                 }
                                 ?>
                                 <a href="<?php echo $href; ?>">
-                                <li class="breadcrumb-item active" aria-current="page">
-                                    <span></span><i class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
-                                    </i>
-                                </li></a>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        <span></span><i
+                                            class=" mdi mdi-arrow-left-bold icon-sm text-primary align-middle">Back
+                                        </i>
+                                    </li>
+                                </a>
                             </ul>
                         </nav>
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title h-card">Customer Details</h4>
+                                <div class="card-header d-flex align-items-center justify-content-between"">
+                                    <h4 class=" card-title h-card">Customer Details</h4>
+                                    <div>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -120,8 +142,12 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         </div>
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title h-card">Request Details</h4>
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <h4 class=" card-title h-card">Request Details</h4>
+                                    <div>
+                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
+                                                class="fas fa-minus text-white"></i></button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -138,14 +164,12 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                         $statusClass = '';
                         if ($row['rprq_status'] == 'Pending') {
                             $statusClass = 'badge-gradient-warning';
-                        } else if ($row['rprq_status'] == 'In-progress') {
+                        } else if ($row['rprq_status'] == 'In-progress' || $row['rprq_status'] == 'To repair') {
                             $statusClass = 'badge-gradient-info';
-                        } else if ($row['rprq_status'] == 'Done') {
-                            $statusClass = 'badge-gradient-success';
-                        } else if ($row['rprq_status'] == 'Completed') {
-                            $statusClass = 'badge-gradient-success';
-                        } else {
+                        } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
+                        } else {
+                            $statusClass = 'badge-gradient-info';
                         }
                         echo "<tr>";
                         echo "<th>Status:</th>";
@@ -155,14 +179,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             <?php
                         $backlog = '';
                         if ($row['backlog'] == '1') {
-                            $backlog = 'backlog-red';
-                        } else {
-                            $backlog = 'badge-gradient-success';
+                            $backlog = 'Yes';
+                        }else{
+                            $backlog = 'No';
                         }
                     ?>
                                             <tr>
                                                 <th>Backlog:</th>
-                                                <td><span class="badge <?php echo $backlog; ?> not-back"> </span></td>
+                                                <td><span class="not-back"><?php echo $backlog; ?></span></td>
                                             </tr>
                                             <tr>
                                                 <th>Electronic Type:</th>
@@ -207,10 +231,6 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 <td><?php echo $row['initial_payment']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Full Payment:</th>
-                                                <td><?php echo $row['payment']?></td>
-                                            </tr>
-                                            <tr>
                                                 <th>Remarks:</th>
                                                 <td>
                                                     <textarea class="form-control" rows="3"
@@ -226,15 +246,15 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                             <h4 class="card-title mt-3">Labor Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
-                                <table class="table table-hover table-bordered" id="myDataTable">
-                                    <thead>
-                                        <tr class="bg-our">
-                                            <th> LABOR </th>
-                                            <th> COST </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="myTable">
-                                        <?php
+                                    <table class="table table-bordered" id="myDataTable">
+                                        <thead>
+                                            <tr class="bg-our">
+                                                <th> LABOR </th>
+                                                <th> COST </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                            <?php
                                             $id = $row['id'];
                                             $lquery = "SELECT *
                                                 FROM rprq
@@ -266,25 +286,25 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             echo '</tr>';
                                             
                                         ?>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <hr>
                             <h4 class="card-title mt-2">Parts Cost</h4>
                             <div class="col-12 grid-margin">
                                 <div class="table-responsive">
-                                <table class="table table-hover table-bordered" id="myDataTable">
-                                    <thead>
-                                        <tr class="bg-our">
-                                            <th> Part name </th>
-                                            <th> price </th>
-                                            <th> qty </th>
-                                            <th> total </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="myTable">
-                                        <?php
+                                    <table class="table table-bordered" id="myDataTable">
+                                        <thead>
+                                            <tr class="bg-our">
+                                                <th> Part name </th>
+                                                <th> price </th>
+                                                <th> qty </th>
+                                                <th> total </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                            <?php
                                             $id = $row['id'];
                                             $lquery = "SELECT *
                                                 FROM rprq
@@ -318,24 +338,49 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                             echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
                                             echo '</tr>';
 
-                                            $grand_total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end "> </td>';
+                                            echo '<td class=""></td>';
+                                            echo '</tr>';
+                                            $total = $part_subtotal+$labor_subtotal;
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Total:  </td>';
+                                            echo '<td class="">' . $total .".00". '</td>';
+                                            echo '</tr>';
+
+                                            echo '<tr>';
+                                            echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
+                                            echo '<td class="">'."- " . $row['initial_payment'] .'</td>';
+                                            echo '</tr>';
+
+
+                                            
+                                            $grand_total = $total-$row['initial_payment'];
+
+
                                             
                                         ?>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <h3>Total Payable Amount: <?php echo $grand_total.".00" ?></h3>
                         </div>
                         <div class="d-flex btn-details">
-                                        <?php
-                                            if($row['rprq_status'] != 'Completed'){
+                            <?php
+                                            if($row['rprq_status'] != 'Completed' && $row['rprq_status'] == 'Diagnosing'){
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
                                                 echo '<button class="icns btn btn-success edit updtech" id="' .  $row['id'] . '">';
                                                 echo 'Update Diagnosing <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
                                             }
 
+
+                                            if ($row['rprq_status'] == 'To repair') {
+                                                echo '<button class="icns btn btn-success torepair updtech" id="' .  $row['id'] . '">';
+                                                echo 'Start Repair <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
+                                                echo '</button>';
+                                            }
 
                                             if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
                                                 echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
@@ -348,9 +393,16 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                 Download Invoice <i class="fas fa-download"></i></a>';
                                             }
 
+                                            if (($row['rprq_status'] == 'Repairing' && $row['rprq_status'] != 'Diagnosing')) {
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<a href="done-trans.php?id=' .  $row['id'] . '" class="icns btn btn-success update_status updtech" id="' .  $row['id'] . '" onclick="return confirm(\'Are you sure you want to mark this as done?\');">';
+                                                echo '<i class="fas fa-check-square"></i> Mark as done';
+                                                echo '</a>';
+
+                                            }                                            
                                             
                                             ?>
-                                        </div>
+                        </div>
                     </div>
                 </div>
 
@@ -374,18 +426,35 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
 
     <!-- Accept modal -->
     <div class="modal fade " id="editSuppModal" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-  <div class="modal-dialog diangmod">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body suppbody">
-        
-      </div>
+        <div class="modal-dialog diangmod">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSuppModalLabel">Repair Request Diagnosing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body suppbody">
+
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+
+    <!-- Accept modal -->
+    <div class="modal fade " id="torepairs" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
+        <div class="modal-dialog diangmod">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSuppModalLabel">Estimated Completion Date</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body torepairbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- plugins:js -->
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
@@ -416,34 +485,97 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
     });
     </script>
 
-<script>
-  $(document).ready(function(){
-    $('.edit').click(function(){
+    <script>
+    $(document).ready(function() {
+        $('.edit').click(function() {
 
-        id =  $(this).attr('id');
-        $.ajax({
-        url: 'update-status.php',
-        method: 'post',
-        data: {id:id},
-        success: function(result) {
-            // Handle successful response
-            $('.suppbody').html(result);
-        }
-        });
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-status.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.suppbody').html(result);
+                }
+            });
 
 
-      $('#editSuppModal').modal('show');
+            $('#editSuppModal').modal('show');
+        })
+
+        $('.torepair').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'to-repair.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.torepairbody').html(result);
+                }
+            });
+
+
+            $('#torepairs').modal('show');
+        })
+
+        $('.update_status').click(function() {
+
+            id = $(this).attr('id');
+            $.ajax({
+                url: 'update-status.php',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function(result) {
+                    // Handle successful response
+                    $('.update_statuses').html(result);
+                }
+            });
+
+
+            $('#update_status').modal('show');
+        })
+
+
     })
-  })
-</script>
+    </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
+    <script>
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2({});
     });
-</script>
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const minimizeButtons = document.querySelectorAll(".minimize");
+
+        minimizeButtons.forEach(function(minimizeButton) {
+            minimizeButton.addEventListener("click", function() {
+                const cardBody = minimizeButton.closest(".card").querySelector(".card-body");
+                cardBody.classList.toggle("d-none");
+
+                if (cardBody.classList.contains("d-none")) {
+                    minimizeButton.innerHTML = '<i class="fas fa-chevron-down text-white"></i>';
+                } else {
+                    minimizeButton.innerHTML = '<i class="fas fa-minus text-white"></i>';
+                }
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>

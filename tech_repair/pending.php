@@ -67,7 +67,7 @@ $user_id = $_SESSION['logged_id'];
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'Diagnosing'
+                                                        WHERE rprq.status = 'Pending'
                                                         ORDER BY rprq.date_req DESC;";
 
                                                     $result = mysqli_query($conn, $query);
@@ -90,7 +90,7 @@ $user_id = $_SESSION['logged_id'];
                                                         } else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';
                                                         } else {
-                                                            $statusClass = 'badge-gradient-secondary';
+                                                            $statusClass = 'badge-gradient-info';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';

@@ -35,7 +35,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 <a class="nav-link" href="backlogs.php">Backlogs / Cancelled</a>
                             </li>
                             <li class="nav-item">
-                            <a class="nav-link"  href="product-reports.php">Products</a>
+                                <a class="nav-link" href="product-reports.php">Products</a>
                             </li>
                         </ul>
                     </div>
@@ -112,17 +112,21 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
                         </div>
                     </div>
+
                     <div class="card report-card">
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="xpt" id="exportExcel">Export to
+                                            Excel</button>
+                                        <button type="button" class="xpt" id="exportPdf">Export to
+                                            PDF</button>
+                                    </div>
+                                </div>
                                 <div class="col-12 grid-margin">
                                     <div class="table-responsive text-center">
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="xpt" id="exportExcel">Export to
-                                                Excel</button>
-                                            <button type="button" class="xpt" id="exportPdf">Export to
-                                                PDF</button>
-                                        </div>
+                                        
                                         <table id="myDataTable" class="table table-hover">
                                             <thead>
                                                 <tr class="bg-our">
@@ -139,36 +143,42 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     <th> OCT </th>
                                                     <th> NOV </th>
                                                     <th> DEC </th>
+                                                    <th> TOTAL </th>
                                                 </tr>
                                             </thead>
                                             <?php
-                                            
-                                            $sql = "SELECT EXTRACT(YEAR FROM date_completed) as year, EXTRACT(MONTH FROM date_completed) as month, SUM(payment) as total FROM rprq WHERE status = 'Completed' GROUP BY EXTRACT(YEAR FROM date_completed), EXTRACT(MONTH FROM date_completed) ORDER BY EXTRACT(YEAR FROM date_completed), EXTRACT(MONTH FROM date_completed)";
-                                                $result = $conn->query($sql);
-                                                
-
-                                                $salesData = [];
-                                                if ($result->num_rows > 0) {
-                                                    while($row = $result->fetch_assoc()) {
-                                                        $salesData[$row["year"]][$row["month"]] = $row["total"];
-                                                    }
-                                                }
-                                            ?>
+                            $sql = "SELECT EXTRACT(YEAR FROM date_completed) as year, EXTRACT(MONTH FROM date_completed) as month, SUM(payment) as total FROM rprq WHERE status = 'Completed' GROUP BY EXTRACT(YEAR FROM date_completed), EXTRACT(MONTH FROM date_completed) ORDER BY EXTRACT(YEAR FROM date_completed), EXTRACT(MONTH FROM date_completed)";
+                            $result = $conn->query($sql);
+                            $salesData = [];
+                            $totalSales = array_fill_keys(range(2023, date('Y')), 0); // Initialize an array with all years between 2023 and current year, and set the total sales for each year to 0.
+                            if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
+                                    $year = $row["year"];
+                                    $month = $row["month"];
+                                    $sales = $row["total"];
+                                    $salesData[$year][$month] = $sales;
+                                    $totalSales[$year] += $sales; // Add the sales for each month to the total sales for the year.
+                                }
+                            }
+                        ?>
                                             <tbody id="myTable">
                                                 <?php
-                                                    $startYear = 2023; 
-                                                    $endYear = date('Y'); 
+                                $startYear = 2023; 
+                                $endYear = date('Y'); 
+                                foreach(range($startYear, $endYear) as $year) {
+                                    echo "<tr>";
+                                    echo "<td>$year</td>";
+                                    $total = 0;
+                                    foreach(range(1, 12) as $month) {
+                                        $sales = isset($salesData[$year][$month]) ? $salesData[$year][$month] : 0;
+                                        echo "<td>$sales</td>";
+                                        $total += $sales;
+                                    }
+                                    echo "<td>$total</td>";
+                                    echo "</tr>";
+                                }
+                            ?>
 
-                                                    for ($year = $startYear; $year <= $endYear; $year++) {
-                                                        echo "<tr>";
-                                                        echo "<td>$year</td>";
-                                                        for ($month = 1; $month <= 12; $month++) {
-                                                            $sales = isset($salesData[$year][$month]) ? $salesData[$year][$month] : 0;
-                                                            echo "<td>$sales</td>";
-                                                        }
-                                                        echo "</tr>";
-                                                    }
-                                                ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -176,18 +186,20 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </div>
                         </div>
                     </div>
-                    <div class="card report-card-two text-center">
+                    <div class="card report-card-two">
                         <div class="card-body">
-                            <h4 class="card-title">Repair Transaction Record</h4>
+                            <h4 class="card-title text-center">Repair Transaction Record</h4>
                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="xpt" id="exportExcel2">Export to
+                                            Excel</button>
+                                        <button type="button" class="xpt" id="exportPdf2">Export to
+                                            PDF</button>
+                                    </div>
+                                </div>
                                 <div class="col-12 grid-margin">
-                                    <div class="table-responsive">
-                                        <div class="btn-group text-center" role="group">
-                                            <button type="button" class="xpt" id="exportExcel2">Export to
-                                                Excel</button>
-                                            <button type="button" class="xpt" id="exportPdf2">Export to
-                                                PDF</button>
-                                        </div>
+                                    <div class="table-responsive text-center">
 
                                         <table class="table table-hover" id="myDataTable2">
                                             <thead>
@@ -203,7 +215,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             </thead>
                                             <tbody id="myTable2">
                                                 <?php
-                                            $sql_all = "SELECT * FROM rprq WHERE status='Completed' ORDER BY date_completed DESC";
+                                            $sql_all = "SELECT * FROM rprq
+                                            LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+                                            WHERE status='Completed' ORDER BY date_completed DESC";
                                             $result_all = $conn->query($sql_all);
                                             if ($result_all->num_rows > 0) {
                                                 $count = 1;
@@ -299,6 +313,26 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             var value = $(this).val().toLowerCase();
             $("#myTable2 tr").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    </script>
+
+    <script>
+    $(document).ready(function() {
+        j(document).ready(function() {
+            // filter by date range
+            var table = j('#myDataTable').DataTable();
+
+            j('#filterBtn').click(function() {
+                var startDate = j('#startDate').val();
+                var endDate = j('#endDate').val();
+
+                if (startDate != '' && endDate != '') {
+                    table.columns(0).search(startDate + ':' + endDate).draw();
+                } else {
+                    table.columns(0).search('').draw();
+                }
             });
         });
     });
