@@ -111,7 +111,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $query = "SELECT service_request.sreq_id, service_request.transaction_code, customer.fname, customer.lname, service_request.status, service_request.date_req
                                                         FROM service_request
                                                         JOIN customer ON service_request.Cust_id = customer.Cust_id
-                                                        WHERE service_request.status = 'In-progress' OR service_request.status = 'Done' OR service_request.status = 'Completed'";
+                                                        WHERE service_request.status != 'Pending'
+                                                        ORDER BY service_request.date_req DESC";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -133,20 +134,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         } else if ($row['status'] == 'Completed') {
                                                             $statusClass = 'badge-gradient-success';
                                                         }else {
-                                                            $statusClass = 'badge-gradient-secondary';
+                                                            $statusClass = 'badge-gradient-info';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
                                                         echo '<td>';
-                                                        echo '<a class="icns" href="view-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-eye text-primary view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
+                                                        echo '<a class="icns" href="view-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '">';
+                                                        echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['sreq_id'] . '"></i>';
                                                         echo '</a>';
-                                                        echo '<a class="icns" href="edit-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
-                                                        echo '</a>';
-                                                        echo '<a class="icns" href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['sreq_id'] . '">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account" data-rowid="' . $row['sreq_id'] . '"></i>';
+                                                        echo '<a class="icns" href="delete-transactions.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['sreq_id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
+                                                        echo '<i class="fas fa-trash-alt text-white view-account delete" data-rowid="' .  $row['sreq_id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';

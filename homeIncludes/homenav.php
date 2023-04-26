@@ -39,7 +39,7 @@
                             </li>
                             <li>
                                 <a class="dropdown-item <?php echo $job; ?>" href="../service/servpkg.php">
-                                    <i class="fas fa-cogs me-2"></i> Service Order
+                                    <i class="fas fa-cogs me-2"></i> Service Packages
                                 </a>
                             </li>
                             <li>
@@ -50,10 +50,10 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-links <?php echo $about; ?>" href="about.php">about</a>
+                        <a class="nav-link nav-links <?php echo $about; ?>" href="../aboutus/about.php">about</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-links <?php echo $contact; ?>" href="" data-toggle="modal"
+                        <a class="nav-link nav-links <?php echo $contact; ?>" href="../aboutus/contact.php" data-toggle="modal"
                             data-target="#modalContactForm">contact</a>
                     </li>
                 </ul>

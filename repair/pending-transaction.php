@@ -29,7 +29,7 @@ $row = mysqli_fetch_assoc($result);
 
 ?>
 
-<body>
+<body class="view-body">
     <?php include_once('../homeIncludes/homenav.php');?>
 
     <div class="accountcon">
@@ -93,21 +93,24 @@ $row = mysqli_fetch_assoc($result);
                     $query_in_progress = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='In-progress' OR rprq.status = 'Repairing' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' OR rprq.status = 'To repair' OR rprq.status = 'Waiting for parts') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
 
                     $query_done = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Done' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='To pickup' OR rprq.status = 'To deliver') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_done = mysqli_query($conn, $query_done);
                     $num_done = mysqli_num_rows($result_done);
 
                     $query_completed = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Completed' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='Completed' OR rprq.status = 'Cancelled') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_completed = mysqli_query($conn, $query_completed);
                     $num_completed = mysqli_num_rows($result_completed);
 
@@ -159,14 +162,13 @@ $row = mysqli_fetch_assoc($result);
                         </a>
                     </nav>
                     <?php
-
 $query = "SELECT rprq.*, 
 technician.fname AS tech_fname, 
 technician.lname AS tech_lname, 
 technician.phone AS tech_phone,
 technician.status AS tech_status, 
 customer.fname AS cust_fname, 
-customer.lname AS cust_lname, 
+customer.lname AS cust_lname,
 customer.phone AS cust_phone,
 rprq.status AS rprq_status, 
 accounts.*,
@@ -193,7 +195,7 @@ WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                             $_SESSION['transaction_id'] = $row['transaction_code'];
                             $_SESSION['rprq_id'] = $row['id'];
                             ?>
-                        <a href="view-trans.php" class="viewtrans">
+                        <a href="view-trans.php?rowid= <?php echo $row['id']?> " class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
                                 <div class="card-body">
                                     <div class="row">
@@ -249,10 +251,10 @@ WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Estimated
                                                     Completion:</span>
-                                                <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                <span class="tbh">
                                                     <?php
                                                     if($row['date_completed'] == '0000-00-00'){
-                                                        echo 'TBA';
+                                                        echo '<i class="fas fa-exclamation-circle"></i>' . 'TBA';
                                                     }else{
                                                         echo $row['date_day'];
                                                     }
@@ -262,10 +264,10 @@ WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Assigned
                                                     Technician:</span>
-                                                <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                <span class="tbh">
                                                     <?php
                                                     if($row['tech_id'] == ''){
-                                                        echo 'TBA';
+                                                        echo '<i class="fas fa-exclamation-circle"></i>' . 'TBA';
                                                     }else{
                                                         echo $row['date_completed'];
                                                     }
@@ -275,10 +277,10 @@ WHERE rprq.status = 'Pending' AND accounts.account_id = '{$user_id}';";
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Technician's
                                                     Contact:</span>
-                                                <span class="tbh"><i class="fas fa-exclamation-circle"></i>
+                                                <span class="tbh">
                                                     <?php
                                                     if($row['tech_phone'] == ''){
-                                                        echo 'TBA';
+                                                        echo '<i class="fas fa-exclamation-circle"></i>' . 'TBA';
                                                     }else{
                                                         echo $row['tech_phone'];
                                                     }

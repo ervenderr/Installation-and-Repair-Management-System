@@ -29,7 +29,7 @@ $row = mysqli_fetch_assoc($result2);
 
 ?>
 
-<body>
+<body class="view-body">
     <?php include_once('../homeIncludes/homenav.php');?>
 
     <div class="accountcon">
@@ -93,21 +93,24 @@ $row = mysqli_fetch_assoc($result2);
                     $query_in_progress = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' OR rprq.status = 'To repair') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
 
                     $query_done = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Done' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='To pickup' OR rprq.status = 'To deliver') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_done = mysqli_query($conn, $query_done);
                     $num_done = mysqli_num_rows($result_done);
 
                     $query_completed = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Completed' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='Completed' OR rprq.status = 'Cancelled') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_completed = mysqli_query($conn, $query_completed);
                     $num_completed = mysqli_num_rows($result_completed);
 
@@ -183,7 +186,8 @@ LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' AND accounts.account_id = '{$user_id}';";
+WHERE (rprq.status = 'In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' OR rprq.status = 'To repair') 
+AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
 
                     if (mysqli_num_rows($result) > 0) { ?>
@@ -194,7 +198,7 @@ WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' OR rprq.status = 
                             $_SESSION['transaction_id'] = $row['transaction_code'];
                             $_SESSION['rprq_id'] = $row['id'];
                             ?>
-                        <a href="view-trans.php" class="viewtrans">
+                        <a href="view-trans.php?rowid= <?php echo $row['id']?> " class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
                                 <div class="card-body">
                                     <div class="row">
@@ -229,10 +233,12 @@ WHERE rprq.status = 'In-progress' OR rprq.status = 'Repairing' OR rprq.status = 
                                                     <?php
                                             $_SESSION['rp_id'] = $row['id'];
                                             ?>
-                                                    <button type="submit" name="download"
-                                                        value="<?php echo $row['id']; ?>"
-                                                        class="btn btn-secondary">Download
-                                                        Ticket <i class="fas fa-download"></i></button>
+                                                    <?php if ($row['rprq_status'] == 'Pending') { ?>
+                                            <button type="submit" name="download" value="<?php echo $row['id']; ?>"
+                                                class="btn btn-secondary">
+                                                Download Ticket <i class="fas fa-download"></i>
+                                            </button>
+                                            <?php } ?>
                                                 </form>
                                             </div>
                                         </div>

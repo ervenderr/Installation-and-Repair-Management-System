@@ -35,12 +35,12 @@ if (isset($_POST['id'])) {
   $half_grand_total = $grand_total / 2;
 
   $output .= '
-  <form method="POST" action="accepted-pending.php" enctype="multipart/form-data">
+  <form method="POST" action="accepted-pending.php" enctype="multipart/form-data" id="form">
         <input type="type" class="form-control" id="status" name="status" value="To repair" hidden>
         <div class="mb-3">
           <label for="initpay" class="form-label">Initial Payment</label>
-          <input type="number" class="form-control" id="initpay" name="initpay" value="<?php echo $half_grand_total; ?>" step="0.01" min="0">
-
+          <input type="number" class="form-control" id="days" name="initpay" value="'. $half_grand_total.'" step="0.01" min="0">
+          <span class="error"></span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -50,10 +50,6 @@ if (isset($_POST['id'])) {
 
   echo $output;
 }
-
-
-
-
 
 if(isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
@@ -77,3 +73,25 @@ if(isset($_POST['submit'])) {
 }
 
 ?>
+
+<script>
+$(document).ready(function() {
+  $('.js-example-basic-multiple').select2({});
+
+    $('#days').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Allow only numbers
+    });
+
+    $('#form').submit(function(event) {
+        // Check if the form inputs are not empty
+        if ($.trim($('#days').val()) == '') {
+            event.preventDefault();
+            $('.error').empty(); // Clear any previous error messages
+            
+            if ($.trim($('#days').val()) == '') {
+                $('#days').siblings('.error').text('This field is required.');
+            }
+        }
+    });
+});
+</script>

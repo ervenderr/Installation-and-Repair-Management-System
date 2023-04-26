@@ -169,7 +169,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                         } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
                         } else {
-                            $statusClass = 'badge-gradient-success';
+                            $statusClass = 'badge-gradient-info';
                         }
                         echo "<tr>";
                         echo "<th>Status:</th>";

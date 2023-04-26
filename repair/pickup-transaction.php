@@ -29,7 +29,7 @@ $row = mysqli_fetch_assoc($result2);
 
 ?>
 
-<body>
+<body class="view-body">
     <?php include_once('../homeIncludes/homenav.php');?>
 
     <div class="accountcon">
@@ -100,14 +100,16 @@ $row = mysqli_fetch_assoc($result2);
                     $query_done = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Done' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='To pickup' OR rprq.status = 'To deliver') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_done = mysqli_query($conn, $query_done);
                     $num_done = mysqli_num_rows($result_done);
 
                     $query_completed = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE status='Completed' AND accounts.account_id = '{$user_id}';";
+                    WHERE (rprq.status='Completed' OR rprq.status = 'Cancelled') 
+                    AND accounts.account_id = '{$user_id}';";
                     $result_completed = mysqli_query($conn, $query_completed);
                     $num_completed = mysqli_num_rows($result_completed);
 
@@ -193,7 +195,7 @@ WHERE rprq.status = 'To Pickup' OR rprq.status = 'To Deliver' AND accounts.accou
                            
                             $_SESSION['transaction_id'] = $row['transaction_code'];
                             ?>
-                        <a href="view-trans.php" class="viewtrans">
+                        <a href="view-trans.php?rowid= <?php echo $row['id']?> " class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
                                 <div class="card-body">
                                     <div class="row">
@@ -228,10 +230,12 @@ WHERE rprq.status = 'To Pickup' OR rprq.status = 'To Deliver' AND accounts.accou
                                                     <?php
                                             $_SESSION['rp_id'] = $row['id'];
                                             ?>
-                                                    <button type="submit" name="download"
-                                                        value="<?php echo $row['id']; ?>"
-                                                        class="btn btn-secondary">Download
-                                                        Ticket <i class="fas fa-download"></i></button>
+                                                    <?php if ($row['rprq_status'] == 'Pending') { ?>
+                                            <button type="submit" name="download" value="<?php echo $row['id']; ?>"
+                                                class="btn btn-secondary">
+                                                Download Ticket <i class="fas fa-download"></i>
+                                            </button>
+                                            <?php } ?>
                                                 </form>
                                             </div>
                                         </div>

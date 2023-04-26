@@ -7,8 +7,15 @@ $job = 'actives activess';
 $servpkgnav = 'servactives';
 include_once('../homeIncludes/header.php');
 
-$rowid = $_GET['rowid'];
+if (isset($_GET['rowid'])) {
+    $rowid = $_GET['rowid'];
 $_SESSION['rowid'] = $rowid;
+} else {
+    header('location: ../service/servpkg.php');
+    exit; // add this to stop the script execution after redirection
+}
+
+
   
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT *, package.price AS package_price, services.price AS service_price, package.status AS package_status
@@ -26,27 +33,34 @@ if (mysqli_num_rows($result) > 0) {
 $currentStatus = $rows['package_status'];
 $service = $rows['service_name'];
 
+$user_id = $_SESSION['logged_id'];
+
+$sql2 = "SELECT *
+FROM accounts 
+INNER JOIN customer ON accounts.account_id = customer.account_id
+WHERE accounts.account_id = $user_id";
+
+$result2 = mysqli_query($conn, $sql2);
+$row2 = mysqli_fetch_assoc($result2);
+
+$_SESSION['cust_id'] = $row2['cust_id'];
+$_SESSION['logged_id'] = $row2['account_id'];
+
 ?>
 
-<body>
+<body class="view-body">
     <?php
     include_once('../homeIncludes/homenav.php');
     ?>
 
     <div class="jobcon">
         <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link <?php echo $servpkgnav; ?>" aria-current="page" href="servpkg">Packages</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo $servreqnav; ?>" href="servreq.php">Service Request</a>
-            </li>
-            </li>
+            
         </ul>
         <div id='msgs' class='msg'>
             <p id='msgs'>Request Submitted!</p>
             <div class="msgbtn">
-                <a class="msgb" href="../service/serviceProcess.php" role="button">Get Information
+                <a class="msgb" href="../service/pending-transaction.php" role="button">Get Information
                     ID</a>
 
             </div>
@@ -73,8 +87,7 @@ $service = $rows['service_name'];
                                 </i></a>
                             <div class="p-3 right-side justify-content-between align-items-center">
                                 <div class="d-flex justify-content-between align-items-center package_name">
-                                    <h4><?php echo $rows['name'] ?></h4> <span class="heart"><i
-                                            class='bx bx-heart'></i></span>
+                                    <h4><?php echo $rows['name'] ?></h4>
                                 </div>
                                 <h4 class="package_price">₱<?php echo $rows['package_price'] ?></h4>
                                 <div class="mt-3 pr-3 content">
@@ -84,14 +97,28 @@ $service = $rows['service_name'];
                                     echo "<p class='package-description'>" . $formatted_text . "</p>";
                                 ?>
                                 </div>
-                                <form action="servreq.php" class="form" method="POST" id="repair-form"
+                                <?php
+                                $btn="";
+                                $href="";
+                                if(isset($_SESSION['logged_id'])){
+                                    $btn="btn-submit";
+                                    $href="view-packge.php";
+                                }else{
+                                    $btn="btn-submits";
+                                    $href="shipping-address.php";
+                                }
+
+                                ?>
+                                <form action="<?php echo $href; ?>" class="form" method="POST" id="repair-form"
                                     enctype="multipart/form-data">
                                     <div class="buttons d-flex flex-row mt-5 gap-3">
                                         <input type="hidden" id="pkg_id" name="pkg_id"
                                             value="<?php echo $rows['pkg_id'] ?>">
-                                        <input type="number" id="quantity" name="quantity" min="1" value="1">
-                                        <input type="submit" name="submit" class="btn btn-dark" value="Avail Now" id="btn-submit">
+                                        <input type="submit" name="submit" class="btn btn-dark" value="Avail Now" id="<?php echo $btn; ?>">
                                     </div>
+                                    <?php
+                                    $_SESSION['pkg_id'] = $rows['pkg_id'];
+                                    ?>
                                 </form>
                             </div>
                         </div>
@@ -106,7 +133,7 @@ $service = $rows['service_name'];
 
 
 
-    <!-- <script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function() {
         $('#btn-submit').click(function(e) {
             e.preventDefault();
@@ -116,7 +143,7 @@ $service = $rows['service_name'];
             if (valid) {
                 $.ajax({
                     method: "POST",
-                    url: "#",
+                    url: "serviceProcess.php",
                     data: $('#repair-form').serialize(),
                     dataType: "text",
                     success: function(response) {
@@ -130,7 +157,7 @@ $service = $rows['service_name'];
             }
         });
     });
-    </script> -->
+    </script>
 
     <script>
     function changeImage(element) {

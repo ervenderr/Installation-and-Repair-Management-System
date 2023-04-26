@@ -56,7 +56,7 @@ if(isset($_POST['submit'])) {
     if ($result) {
         $_SESSION['techId'] = $techId;
         $_SESSION['msg'] = "Record Updated Successfully";
-        header("location: accepted.php");
+        header("location: view-transaction.php?rowid=" . $id . "");
     } else {
        echo "FAILED: " . mysqli_error($conn);
     }

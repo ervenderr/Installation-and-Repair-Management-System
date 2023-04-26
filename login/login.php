@@ -47,7 +47,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     // if no errors, log in user
     if (count($errors) == 0) {
 
-        $stmt = $conn->prepare("SELECT * FROM accounts WHERE email=? AND password=? LIMIT 1");
+        $stmt = $conn->prepare("SELECT * FROM accounts WHERE BINARY email=? AND BINARY password=? LIMIT 1");
         $stmt->bind_param("ss", $email, $password);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -107,10 +107,7 @@ foreach ($errors as $error) {
             <form method="post" action="login.php">
                 <?php
                     if (isset($_SESSION['signup_success']) && $_SESSION['signup_success']) {
-                        echo '<div id="alert" class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                            "Sign up successful! Please log in."
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>';
+                        
                         $_SESSION['signup_success'] = false;
                     }
                 ?>
@@ -155,7 +152,7 @@ foreach ($errors as $error) {
                     <button class="btn btn-primary btn-block" name="submit" type="submit">Sign In</button>
                 </div>
                 <a href="../login/signup.php" class="already">Don't have an account? Sign up here.</a>
-                <p><a href="forgot-password.php">Forgot your password?</a></p>
+                <p><a href="forgot-password.php" class="already">Forgot your password?</a></p>
             </form>
             <div class="image-holder"></div>
         </div>

@@ -75,6 +75,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     <th> # </th>
                                                     <th> Service Name </th>
                                                     <th> Electronic Type </th>
+                                                    <th> Electronic Part </th>
                                                     <th> Price </th>
                                                     <th> Action </th>
                                                 </tr>
@@ -83,7 +84,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                 <?php
                                                     // Perform the query
                                                     $query = "SELECT * FROM common_repairs
-                                                    INNER JOIN electronics ON common_repairs.elec_id = electronics.elec_id";
+                                                    INNER JOIN electronics ON common_repairs.elec_id = electronics.elec_id
+                                                    INNER JOIN brand_parts ON common_repairs.brand_parts = brand_parts.bp_id";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -94,6 +96,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<td>' . $id . '</td>';
                                                         echo '<td>' . $row['comrep_name'] . '</td>';
                                                         echo '<td>' . $row['elec_name'] . '</td>';
+                                                        echo '<td>' . $row['bp_name'] . '</td>';
                                                         echo '<td>₱ ' . $row['comrep_cost'] . '</td>';
 
                                                         echo '<td>';

@@ -4,7 +4,7 @@ if (!isset($_SESSION['logged_id'])) {
     header('location: ../login/login.php');
 }
 
-if (!isset($_SESSION['rprq_id'])) {
+if (!isset($_GET['rowid'])) {
     header('location: ../repair/pending-transaction.php');
 }
 
@@ -57,7 +57,7 @@ $row = mysqli_fetch_assoc($result);
 
 ?>
 
-<body>
+<body class="view-body">
     <?php include_once('../homeIncludes/homenav.php');?>
 
     <div class="accountcon">
@@ -114,18 +114,18 @@ $row = mysqli_fetch_assoc($result);
                     <div class="tracking-list view-nav">
                         <div class="row">
                             <?php
-                            $href = '';
+                            $hrefs = '';
                             if($row['rprq_status'] == 'Pending'){
-                                $href = 'pending-transaction.php';
-                            }elseif($row['rprq_status'] == 'In-progress'){
-                                $href = 'repairing-transaction.php';
+                                $hrefs = 'pending-transaction.php';
+                            }elseif($row['rprq_status'] == 'In-progress' || $row['rprq_status'] == 'Diagnosing' || $row['rprq_status'] == 'Repairing' || $row['rprq_status'] == 'To repair'){
+                                $hrefs = 'repairing-transaction.php';
                             }elseif($row['rprq_status'] == 'To Pickup' || $row['rprq_status'] == 'To Deliver'){
-                                $href = 'pickup-transaction.php';
+                                $hrefs = 'pickup-transaction.php';
                             }elseif($row['rprq_status'] == 'Completed'){
-                                $href = 'completed-transaction.php';
+                                $hrefs = 'completed-transaction.php';
                             }
                             ?>
-                            <div class="col-6"><a href="<?php echo $href ?>"><i class="fas fa-chevron-left"></i>
+                            <div class="col-6"><a href="<?php echo $hrefs ?>"><i class="fas fa-chevron-left"></i>
                                     Back</a></div>
                             <div class="col-6 nav-cont">
                                 <span>REQUEST ID: <?php echo $row['transaction_code']?></span>
@@ -228,9 +228,12 @@ $row = mysqli_fetch_assoc($result);
                                                 <?php
                                             $_SESSION['rp_id'] = $row['id'];
                                             ?>
-                                                <button type="submit" name="download" value="<?php echo $row['id']; ?>"
-                                                    class="btn btn-secondary">Download
-                                                    Ticket <i class="fas fa-download"></i></button>
+                                                <?php if ($row['rprq_status'] == 'Pending') { ?>
+                                            <button type="submit" name="download" value="<?php echo $row['id']; ?>"
+                                                class="btn btn-secondary">
+                                                Download Ticket <i class="fas fa-download"></i>
+                                            </button>
+                                            <?php } ?>
                                             </form>
                                         </div>
                                     </div>

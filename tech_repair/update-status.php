@@ -13,7 +13,7 @@ if (isset($_POST['id'])) {
   $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
   $output .= '
-  <form method="POST" action="update-status.php" enctype="multipart/form-data">';
+  <form method="POST" action="update-status.php" enctype="multipart/form-data" id="form">';
 
   // Query the supplier table
   $query6 = "SELECT rprq.*, 
@@ -80,6 +80,7 @@ if (mysqli_num_rows($result) > 0) {
 }
     $output .= '
         </select>
+        <span class="error"></span>
     </div>
 
     <div class="card">
@@ -103,7 +104,8 @@ if (mysqli_num_rows($result) > 0) {
       <div class="mb-3 ">
         <label for="days" class="form-label">Estimated Completion </label>
         <span>(day)</span>
-        <input type="number" class="form-control" id="days" name="days" value="' . $row6['date_day'] . '">
+        <input type="number" class="form-control" id="days" name="days" min="1" value="1">
+        <span class="error"></span>
       </div>
       </div>
       
@@ -112,6 +114,7 @@ if (mysqli_num_rows($result) > 0) {
       <div class="mb-3">
           <label for="remarks" class="form-label">Remarks</label>
           <textarea class="form-control" id="remarks" name="remarks">' . $row6['remarks'] . '</textarea>
+          <span class="error"></span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -172,13 +175,13 @@ while ($lrow = mysqli_fetch_assoc($lresult)) {
     $labor_subtotal += $lrow['comrep_cost'];
 }
 
-$$lquery = "SELECT *
+$lquery = "SELECT *
 FROM rprq
 INNER JOIN customer ON rprq.Cust_id = customer.Cust_id
 INNER JOIN rp_brand_parts ON rprq.id = rp_brand_parts.rprq_id
 INNER JOIN brand_parts ON rp_brand_parts.bp_id = brand_parts.bp_id
 WHERE rprq.id = $id";
-
+$lresult = mysqli_query($conn, $lquery);
 $part_subtotal = 0;
 
 while ($lrow = mysqli_fetch_assoc($lresult)) {
@@ -279,6 +282,30 @@ if (mysqli_num_rows($result) > 0) {
     // Remove row
     $('.partsbody').on('click', '.btn-row-remove', function() {
         $(this).closest('.parts-row').remove();
+    });
+
+    $('#form').submit(function(event) {
+        // Check if the form inputs are not empty
+        if ($.trim($('#comrep').val()) == '' || $.trim($('#remarks').val()) == '' || $.trim($('#days')
+                .val()) == '') {
+            event.preventDefault();
+            $('.error').empty(); // Clear any previous error messages
+            if ($.trim($('#comrep').val()) == '') {
+                $('#comrep').siblings('.error').text('This field is required.');
+            }
+            if ($.trim($('#remarks').val()) == '') {
+                $('#remarks').siblings('.error').text('Start of Service field is required.');
+            }
+            if ($.trim($('#days').val()) == '') {
+                $('#days').siblings('.error').text('This field is required..');
+            }
+        }
+
+        // Validate number input for Estimated Completion field
+        if (!$.isNumeric($('#days').val())) {
+            event.preventDefault();
+            $('#days').siblings('.error').text('Estimated Completion must be a number.');
+        }
     });
 });
 </script>

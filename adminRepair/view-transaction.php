@@ -68,12 +68,33 @@ $_SESSION['rowid'] = $_GET['rowid'];
                             </span> Repair Transaction
 
                         </h3>
+                        <?php
+            if (isset($_SESSION['msg'])) {
+                $msg = $_SESSION['msg'];
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                '. $msg .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+              unset ($_SESSION['msg']);
+            }
+
+            if (isset($_SESSION['msg2'])) {
+                $msg2 = $_SESSION['msg2'];
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                '. $msg2 .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+            }
+            unset ($_SESSION['msg']);
+        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <?php
                                 $href = "";
                                 if ($row['rprq_status'] == 'Pending'){
                                     $href = "pending.php";
+                                }elseif ($row['rprq_status'] == 'Diagnosing'){
+                                    $href = "accepted.php";
                                 }else{
                                     $href = "transaction.php";
                                 }
@@ -160,7 +181,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                         } else if ($row['rprq_status'] == 'Cancelled') {
                             $statusClass = 'badge-gradient-secondary';
                         } else {
-                            $statusClass = 'badge-gradient-success';
+                            $statusClass = 'badge-gradient-info';
                         }
                         echo "<tr>";
                         echo "<th>Status:</th>";
@@ -350,9 +371,12 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             
                                             $grand_total = $total-$row['initial_payment'];
 
+                                            
+
                                         ?>
                                         </tbody>
                                     </table>
+                                    
                                 </div>
                             </div>
                             
@@ -393,6 +417,13 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                                 echo '<button class="icns btn btn-danger update_status" id="' .  $row['id'] . '">';
                                                 echo '<i class="fas fa-edit"></i> Update Status';
                                                 echo '</button>';
+                                            }
+
+                                            if (($row['rprq_status'] == 'Pending')) {
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<button class="icns btn btn-danger edit acceptrp" id="' .  $row['id'] . '">';
+                                                        echo '<i class="fas fa-calendar-check view-account" id="' .  $row['id'] . '"> </i> Accept';
+                                                        echo '</button>';
                                             }
 
                                             ?>

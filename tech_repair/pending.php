@@ -90,7 +90,7 @@ $user_id = $_SESSION['logged_id'];
                                                         } else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';
                                                         } else {
-                                                            $statusClass = 'badge-gradient-secondary';
+                                                            $statusClass = 'badge-gradient-info';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';

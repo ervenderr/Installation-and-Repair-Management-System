@@ -109,7 +109,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                         } else if ($row['status'] == 'Cancelled') {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         } else {
-                                                            $statusClass = 'badge-gradient-success';
+                                                            $statusClass = 'badge-gradient-info';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';

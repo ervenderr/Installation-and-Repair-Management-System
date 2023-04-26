@@ -91,8 +91,8 @@ require_once '../homeIncludes/dbconfig.php';
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status != 'Pending' OR rprq.status != 'Diagnosing'
-                                                        ORDER BY rprq.date_req DESC;";
+                                                        WHERE rprq.status != 'Pending' AND rprq.status != 'Diagnosing'
+                                                        ORDER BY rprq.time DESC;";
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -112,7 +112,7 @@ require_once '../homeIncludes/dbconfig.php';
                                                         } else if ($row['status'] == 'Cancelled') {
                                                             $statusClass = 'badge-gradient-secondary';
                                                         } else {
-                                                            $statusClass = 'badge-gradient-success';
+                                                            $statusClass = 'badge-gradient-info';
                                                         }
 
                                                         $backlog = '';

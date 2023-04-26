@@ -87,7 +87,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                     $query = "SELECT *
                                                         FROM rprq
                                                         JOIN customer ON rprq.Cust_id = customer.Cust_id
-                                                        WHERE rprq.status = 'In-progress'";
+                                                        WHERE rprq.status = 'Diagnosing'
+                                                        ORDER BY rprq.time DESC;";
+                                                        
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
@@ -109,14 +111,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         }else if ($row['status'] == 'Done') {
                                                             $statusClass = 'badge-gradient-success';
                                                         } else {
-                                                            $statusClass = 'badge-gradient-secondary';
+                                                            $statusClass = 'badge-gradient-info';
                                                         }
                                                     
                                                         echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                         echo '<td>' . $row['date_req'] . '</td>';
                                                         echo '<td class="btn-group-sm">';
-                                                        echo '<a class="icns btn btn-info" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' . $row['id'] . '">';
-                                                        echo '<i class="fas fa-eye view-account" Prod_id="' .  $row['id'] . '"></i> View';
+                                                        echo '<a class="icns" href="view-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '">';
+                                                        echo '<i class="fas fa-eye text-white view-accoun view" data-rowid="' .  $row['id'] . '"></i>';
+                                                        echo '</a>';
+                                                        echo '<a class="icns" href="delete-transaction.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete this product?\')">';
+                                                        echo '<i class="fas fa-trash-alt text-white view-account delete" data-rowid="' .  $row['id'] . '"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
                                                         echo '</tr>';

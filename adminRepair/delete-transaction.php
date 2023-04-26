@@ -27,7 +27,13 @@ if (mysqli_num_rows($result) > 0) {
 $query5 = "DELETE FROM `rp_timeline` WHERE rp_timeline.rprq_id = '" . $rowid . "';";
 $result5 = mysqli_query($conn, $query5);
 
-if ($result5) {
+$query6 = "DELETE FROM `rp_brand_parts` WHERE rp_brand_parts.rprq_id = '" . $rowid . "';";
+$result6 = mysqli_query($conn, $query6);
+
+$query7 = "DELETE FROM `rp_labor` WHERE rp_labor.rprq_rl_id = '" . $rowid . "';";
+$result7 = mysqli_query($conn, $query7);
+
+if ($result7) {
     $query6 = "DELETE FROM `rprq` WHERE rprq.transaction_code = '" . $tcode . "';";
     $result6 = mysqli_query($conn, $query6);
     if($result6){

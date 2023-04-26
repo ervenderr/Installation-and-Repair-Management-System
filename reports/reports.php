@@ -126,10 +126,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                                 <div class="col-12 grid-margin">
                                     <div class="table-responsive text-center">
-                                        <h4 class="mb-3">Filter by date range:</h4>
-                                        <input type="date" id="startDate" placeholder="Start Date"> -
-                                        <input type="date" id="endDate" placeholder="End Date">
-                                        <button type="button" id="filterBtn" class="xpt">Filter</button>
+                                        
                                         <table id="myDataTable" class="table table-hover">
                                             <thead>
                                                 <tr class="bg-our">
@@ -203,10 +200,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                                 <div class="col-12 grid-margin">
                                     <div class="table-responsive text-center">
-                                    <h4 class="mb-3">Filter by date range:</h4>
-                                        <input type="date" id="startDate" placeholder="Start Date"> -
-                                        <input type="date" id="endDate" placeholder="End Date">
-                                        <button type="button" id="filterBtn" class="xpt">Filter</button>
 
                                         <table class="table table-hover" id="myDataTable2">
                                             <thead>

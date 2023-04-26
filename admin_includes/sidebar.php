@@ -43,8 +43,8 @@
               </a>
               <div class="collapse <?php echo $sershow; ?>" id="ui-basic2">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../adminServices/transactions.php">Transactions</a></li>
                   <li class="nav-item"> <a class="nav-link" href="../adminServices/pendings.php">Pending request</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../adminServices/transactions.php">Transactions</a></li>
                 </ul>
               </div>
             </li>

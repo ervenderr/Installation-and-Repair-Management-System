@@ -1942,7 +1942,6 @@ input[type="password"],
     display: flex;
     align-items: center;
     justify-content: center;
-    left: 25px;
     right: 25px;
     top: 9%;
 }
@@ -2435,7 +2434,8 @@ body {
 }
 
 .section-products .header {
-    margin-bottom: 50px;
+    margin-bottom: 25px;
+    margin-top: 25px;
 }
 
 .section-products .header h3 {
@@ -2584,4 +2584,80 @@ body {
 
 .notflexwrap{
     flex-wrap:unset;
+    height: auto;
+}
+
+.view-packge-shipping{
+    width: 78px;
+    height: 78px;
+}
+
+.package-summary{
+    background-color: #f5f5f5;
+    color: #333;
+    margin-left: 40px;
+}
+
+.package-summary button{
+    background-color: #015F6B;
+}
+
+.view-body{
+    background-color: #fff;
+}
+
+.trans_image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trans_image img{
+    width: auto;
+    height: 110px;
+
+}
+
+.about-section{
+    margin-top: 70px;
+}
+
+.container-contact{
+    width: 60%;
+    padding: 45px;
+    border-radius: 0;
+}
+
+.row-contact{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.colcontact{
+    padding: 20px;
+}
+.colcontacts{
+    background: #015F6B;
+    padding: 20px;
+    color: white;
+}
+.form-control-contact{
+    height: 52px;
+    background: #fff;
+    color: #000;
+    font-size: 14px;
+    border-radius: 2px;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.btn-contact {
+    color: #fff;
+    border-radius: 5px;
+    background-color: #015F6B;
+    border-color: #fff;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
 }

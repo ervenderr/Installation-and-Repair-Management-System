@@ -18,13 +18,7 @@ include_once('../homeIncludes/header.php');
 
     <div class="jobcon">
         <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link <?php echo $servpkgnav; ?>" aria-current="page" href="servpkg">Packages</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo $servreqnav; ?>" href="servreq.php">Service Request</a>
-            </li>
-            </li>
+
         </ul>
         <div class="container">
             <section class="section-products">
