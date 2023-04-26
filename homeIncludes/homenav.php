@@ -50,7 +50,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-links <?php echo $about; ?>" href="about.php">about</a>
+                        <a class="nav-link nav-links <?php echo $about; ?>" href="../adminAboutUS/about_dynamic.php">about</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link nav-links <?php echo $contact; ?>" href="" data-toggle="modal"
