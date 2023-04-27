@@ -28,7 +28,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <h3 class="page-title">
                             <span class="page-title-icon text-white me-2">
                                 <i class="fas fa-box menu-icon"></i>
-                            </span> Services
+                            </span> Packages
                         </h3>
                         <?php
                             if (isset($_SESSION['msg'])) {
@@ -64,7 +64,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <div class="card-body">
                             <div class="row mg-btm">
                                 <div class="col-sm-12 col-md-6 flex">
-                                    <h4 class="card-title">List of Services</h4>
+                                    <h4 class="card-title">List of Packages</h4>
 
                                 </div>
                             </div>
