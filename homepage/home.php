@@ -29,11 +29,11 @@ $home = 'actives';
                 </p>
                 <div class="req">
                     <p>
-                        <a class="btn btn-outline-success log2" role="submit" href="#">Request a custom service</a>
+                        <a class="btn btn-outline-success log2" role="submit" href="../service/services.php">Request a custom service</a>
 
                     </p>
                     <p>
-                        <a class="btn btn-outline-success log1" role="submit" href="#">Request a Repair</a>
+                        <a class="btn btn-outline-success log1" role="submit" href="../repair/repair.php">Request a Repair</a>
 
                     </p>
                 </div>

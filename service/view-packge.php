@@ -33,9 +33,10 @@ if (mysqli_num_rows($result) > 0) {
 $currentStatus = $rows['package_status'];
 $service = $rows['service_name'];
 
-$user_id = $_SESSION['logged_id'];
 
-$sql2 = "SELECT *
+if (isset($_SESSION['logged_id'])){
+    $user_id = $_SESSION['logged_id'];
+    $sql2 = "SELECT *
 FROM accounts 
 INNER JOIN customer ON accounts.account_id = customer.account_id
 WHERE accounts.account_id = $user_id";
@@ -45,6 +46,9 @@ $row2 = mysqli_fetch_assoc($result2);
 
 $_SESSION['cust_id'] = $row2['cust_id'];
 $_SESSION['logged_id'] = $row2['account_id'];
+}
+
+
 
 ?>
 
