@@ -14,8 +14,6 @@ $_SESSION['rowid'] = $rowid;
     header('location: ../service/servpkg.php');
     exit; // add this to stop the script execution after redirection
 }
-
-
   
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT *, package.price AS package_price, services.price AS service_price, package.status AS package_status
