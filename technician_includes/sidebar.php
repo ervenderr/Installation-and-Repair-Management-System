@@ -33,6 +33,12 @@
                 </ul>
               </div>
             </li>
+            <li class="nav-item <?php echo $prodactive; ?>">
+              <a class="nav-link" href="../technician_service/transaction.php">
+                <span class="menu-title">Products</span>
+                <i class="fas fa-box menu-icon"></i>
+              </a>
+            </li>
 
  
           </ul>

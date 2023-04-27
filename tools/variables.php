@@ -36,5 +36,6 @@
     $labors = "";
     $servicesjob = "";
     $packages = "";
+    $techserv = "";
 
 ?>

@@ -44,9 +44,6 @@ $home = 'actives';
             </div>
         </div>
     </div>
-
-    
-
     <!-- Featured Services -->
     <div class="container mt-5 values-section">
         <h2 class="text-center mb-5">Featured Services </h2>
