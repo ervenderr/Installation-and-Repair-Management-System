@@ -32,22 +32,6 @@ $currentStatus = $rows['package_status'];
 $service = $rows['service_name'];
 
 
-if (isset($_SESSION['logged_id'])){
-    $user_id = $_SESSION['logged_id'];
-    $sql2 = "SELECT *
-FROM accounts 
-INNER JOIN customer ON accounts.account_id = customer.account_id
-WHERE accounts.account_id = $user_id";
-
-$result2 = mysqli_query($conn, $sql2);
-$row2 = mysqli_fetch_assoc($result2);
-
-$_SESSION['cust_id'] = $row2['cust_id'];
-$_SESSION['logged_id'] = $row2['account_id'];
-}
-
-
-
 ?>
 
 <body class="view-body">
