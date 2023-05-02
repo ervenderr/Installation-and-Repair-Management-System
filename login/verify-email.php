@@ -2,8 +2,8 @@
 session_start();
 require_once '../homeIncludes/dbconfig.php';
 
-if(isset($_GET['token'])){
-    $token = $_GET['token'];
+if(isset($_GET['verify_email'])){
+    $token = $_GET['verify_email'];
     $verify_query = "SELECT verify_token,verify_status  FROM accounts WHERE verify_token='$token' LIMIT 1";
     $verify_query_run = mysqli_query($conn, $verify_query);
 

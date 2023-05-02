@@ -1,3 +1,18 @@
+<?php
+$query = "SELECT *
+FROM technician
+JOIN accounts ON technician.account_id = accounts.account_id
+WHERE technician.account_id = '" . $logged_id . "';";
+$result = mysqli_query($conn, $query);
+
+
+// Check if the query was successful and output the data
+if (mysqli_num_rows($result) > 0) {
+$techrow = mysqli_fetch_assoc($result);
+
+}
+?>
+
 <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
           <a class="navbar-brand brand-logo" href="../admin/dashboard.php">PROTONTECH</a>
@@ -11,11 +26,16 @@
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="../assets/images/faces/face1.jpg" alt="image">
+                <?php 
+                $image1 = $techrow['tech_img'];
+                $image_data1 = base64_encode($image1);
+                $image_src1 = "data:image/jpeg;base64,{$image_data1}";
+            ?>
+                  <img class="imgsz" src="<?php echo $image_src1; ?>" alt="Technician's Profile Picture">
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">Alyasher Aming</p>
+                  <p class="mb-1 text-black"><?php echo $techrow['fname'] ." " .  $techrow['lname']?></p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">

@@ -9,8 +9,22 @@ if(isset($_POST['submit'])) {
     $email = htmlentities($_POST['email']);
     $phone = htmlentities($_POST['phone']);
     $address = htmlentities($_POST['address']);
+    $expertise = htmlentities($_POST['expert']);
+    $password = htmlentities($_POST['password']);
     $status = htmlentities($_POST['status']);
-    $assign = htmlentities($_POST['assign']);
+
+    $image_contents = '';
+
+    // Check if a file was uploaded
+    if (!empty($_FILES['img']['name'])) {
+        $filename = $_FILES['img']['name'];
+        $filetype = pathinfo($filename, PATHINFO_EXTENSION);
+        $allowedtypes = array('png', 'jpg', 'jpeg', 'gif');
+        if (in_array($filetype, $allowedtypes)) {
+            $image = $_FILES['img']['tmp_name'];
+            $image_contents = file_get_contents($image);
+        }
+    }
 
     // check if email already exists in accounts table
     $query = "SELECT account_id FROM accounts WHERE email = '$email'";
@@ -24,11 +38,21 @@ if(isset($_POST['submit'])) {
             $row2 = mysqli_fetch_assoc($result2);
             $technician_id = $row2['tech_id'];
             // update technician record
-            $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', assign='$assign' WHERE tech_id = '$technician_id'";
+            if (!empty($image_contents)){
+                $image_contents = mysqli_real_escape_string($conn, $image_contents);
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', tech_img='$image_contents' WHERE tech_id = '$technician_id'";
+            } else {
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise' WHERE tech_id = '$technician_id'";
+            }            
             $result3 = mysqli_query($conn, $query3);
         } else {
             // insert into technician table and get technician_id
-            $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', assign='$assign' WHERE tech_id = '$technician_id'";
+            if (!empty($image_contents)){
+                $image_contents = mysqli_real_escape_string($conn, $image_contents);
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', tech_img='$image_contents' WHERE tech_id = '$technician_id'";
+            } else {
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise' WHERE tech_id = '$technician_id'";
+            }            
             $result3 = mysqli_query($conn, $query3);
             $technician_id = mysqli_insert_id($conn);
         }
@@ -39,13 +63,19 @@ if(isset($_POST['submit'])) {
         $account_id = mysqli_insert_id($conn);
 
         // insert into technician table and get technician_id
-        $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, assign) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id', '$status', '$assign')";
+        if (!empty($image_contents)){
+            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise, tech_img) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise', '$image_contents')";
+        } else{
+            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise')";
+        }
+        
         $result3 = mysqli_query($conn, $query3);
         $technician_id = mysqli_insert_id($conn);
     }
 
     if ($result3) {
-        header("location: technicians.php?msg=Record Updated Successfully");
+        $_SESSION['msg'] = "Record Updated Successfully";
+        header("location: view-technician.php?&rowid=" . $technician_id);
     } else {
         echo "FAILED: " . mysqli_error($conn);
     }

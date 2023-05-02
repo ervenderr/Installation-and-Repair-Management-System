@@ -186,6 +186,23 @@ $_SESSION["cust_id"] = $row["cust_id"];
                     <label class="form-label" for="eimg">Upload Image (optional)</label>
                     <input type="file" class="form-control" id="eimg" name="eimg" />
                 </div>
+                <hr>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="tech" class="form-label">Select Technician (optional)</label>
+                        <select name="tech" id="tech" class="form-control">
+                            <option value="None">--- Select ---</option>
+                            <?php
+                                    $sql = "SELECT * FROM technician";
+                                    $result = mysqli_query($conn, $sql);
+                                    while($row = mysqli_fetch_assoc($result)) { 
+                                        echo "<option value='" . $row['tech_id'] . "'>" . $row['fname'] . '  ' . $row['lname'] . "</option>";
+                                    }
+                                    ?>
+                        </select>
+                        <span class="val-error"></span>
+                    </div>
+                </div>
                 <div class="btns-group">
                     <a href="#" class="btn btn-primary width-50 btn-prev" id="adis"><i
                             class="fa fa-chevron-left"></i></a>

@@ -170,7 +170,7 @@ $row = mysqli_fetch_assoc($result);
 
                     $status = $row2['tm_status'];
                     $date = $row2['tm_date'];
-                    $time = $row2['tm_time'];
+                    $time = date("h:i a", strtotime($row2['tm_time']));
                     $location = $row2['tm_location'];
                     $isCurrentStatus = $row2['tm_status'];
                     $statusClass = $isCurrentStatus ? 'status-intransit' : 'status-delivered';

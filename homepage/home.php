@@ -11,7 +11,7 @@ $home = 'actives';
 ?>
 
 
-<body>
+<body class="view-body">
     <?php include_once('../homeIncludes/homenav.php');?>
 
     <div id="particles-js"></div>
@@ -29,11 +29,13 @@ $home = 'actives';
                 </p>
                 <div class="req">
                     <p>
-                        <a class="btn btn-outline-success log2" role="submit" href="../service/services.php">Request a custom service</a>
+                        <a class="btn btn-outline-success log2" role="submit" href="../service/services.php">Request a
+                            custom service</a>
 
                     </p>
                     <p>
-                        <a class="btn btn-outline-success log1" role="submit" href="../repair/repair.php">Request a Repair</a>
+                        <a class="btn btn-outline-success log1" role="submit" href="../repair/repair.php">Request a
+                            Repair</a>
 
                     </p>
                 </div>
@@ -173,6 +175,43 @@ $home = 'actives';
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="darks">
+        <div class="container text-center mt-5 mb-2">
+            <h1 class="mb-0">Meet our Technicians</h1><span>Lorem Ipsum is simply dummy text of the printing and
+                typesetting
+                industry. Lorem Ipsum</span>
+        </div>
+        <div class="container mt-3">
+            <div class="row">
+                <?php
+    $query = "SELECT *
+              FROM technician
+              JOIN accounts ON technician.account_id = accounts.account_id";
+    $result = mysqli_query($conn, $query);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $image1 = $row['tech_img'];
+        $image_data1 = base64_encode($image1);
+        $image_src1 = "data:image/jpeg;base64,{$image_data1}";
+    ?>
+
+                <div class="col-md-3">
+                    <div class="bg-white p-3 text-center rounded box"><img class="img-responsive rounded-circle"
+                            src="<?php echo $image_src1; ?>" width="90">
+                        <h5 class="mt-3 name"><?php echo $row['fname'] ." " .  $row['lname']?></h5><span
+                            class="work d-block"><?php echo $row['expertise']?></span><span
+                            class="work d-block">Technician</span>
+                    </div>
+                </div>
+
+                <?php
+    }
+    ?>
+            </div>
+        </div>
+
     </div>
 
 

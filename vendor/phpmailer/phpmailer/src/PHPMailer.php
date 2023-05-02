@@ -750,7 +750,7 @@ class PHPMailer
      *
      * @var string
      */
-    const VERSION = '6.7.1';
+    const VERSION = '6.8.0';
 
     /**
      * Error severity: message only, continue processing.
@@ -2046,7 +2046,10 @@ class PHPMailer
             }
         }
 
-
+        //Only send the DATA command if we have viable recipients
+        if ((count($this->all_recipients) > count($bad_rcpt)) && !$this->smtp->data($header . $body)) {
+            throw new Exception($this->lang('data_not_accepted'), self::STOP_CRITICAL);
+        }
 
         $smtp_transaction_id = $this->smtp->getLastTransactionID();
 
@@ -2420,7 +2423,7 @@ class PHPMailer
      */
     public function addrFormat($addr)
     {
-        if (empty($addr[1])) { //No name provided
+        if (!isset($addr[1]) || ($addr[1] === '')) { //No name provided
             return $this->secureHeader($addr[0]);
         }
 

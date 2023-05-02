@@ -6,6 +6,8 @@ include_once('../tools/variables.php');
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
     header('location: ../login/login.php');
+}else{
+  $logged_id= $_SESSION['logged_id'];
 }
 
 ?>
@@ -25,7 +27,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
               <h3 class="page-title">
                 <span class="page-title-icon text-white me-2">
                 <i class="fas fa-home menu-icon"></i>
-                </span> Techinician Dashboard
+                </span> 
               </h3>
               <nav aria-label="breadcrumb">
                 <ul class="breadcrumb">

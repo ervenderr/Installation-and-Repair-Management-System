@@ -3,7 +3,6 @@ session_start();
 
 require_once '../homeIncludes/dbconfig.php';
 
-
 if(isset($_POST['id'])){
     $output = '';
     $user_id = $_SESSION['logged_id'];
@@ -13,10 +12,7 @@ if(isset($_POST['id'])){
     $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
     $output .= '
-    <form method="POST" action="accept-pending.php" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label for="tech" class="form-label">Technician</label>
-            <select class="form-select" id="tech" name="tech">';
+    <form method="POST" action="#" enctype="multipart/form-data" onsubmit="return checkLimit()">';
 
             // Query the supplier table
             $sql = "SELECT * 
@@ -24,23 +20,35 @@ if(isset($_POST['id'])){
             INNER JOIN accounts ON technician.account_id = accounts.account_id
             WHERE status = 'Active' AND accounts.account_id = '$user_id'";
             $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_assoc($result)) {
-                    $output .= "<option value='" . $row["tech_id"] . "'>" . $row['fname'] . '  ' . $row['lname'] . "</option>";
-                }
-              }
+            $row = mysqli_fetch_assoc($result);
 
     $output .= '
-            </select>
-          </div>
           <div class="modal-footer">
+          <input name="tech_id" type="hidden" id="tech" class="btn btn-danger" value="'. $row["tech_id"] .'" data-limit="'.$row["limit_per_day"].'"/>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <input name="submit" type="submit" class="btn btn-danger" value="Accept"/>
           </div>
-    </form>';
+    </form>
+    <script>
+        function checkLimit() {
+            var techSelect = document.getElementById("tech");
+            var limitPerDay = techSelect.dataset.limit;
+
+            if (limitPerDay == 0) {
+              var confirmation = confirm("You have reached your daily limit. Are you sure you still want to accept this request?");
+              if (!confirmation) {
+                return false;
+              }
+            }
+
+            return true;
+        }
+    </script>';
 
     echo $output;
 }
+
+
 
 
 if(isset($_POST['submit'])) {
@@ -66,3 +74,18 @@ if(isset($_POST['submit'])) {
 }
 
 ?>
+
+<script>
+function checkLimit() {
+    var limit = "<?php echo $inventory['limit_per_day']; ?>";
+    if (limit == 0) {
+        if(confirm("Are you sure you want to accept this request?")) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+</script>

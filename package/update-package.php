@@ -145,7 +145,7 @@ $service = $rows['service_name'];
                                                 <div class="form-group row">
                                                     <label class="col-form-label" for="img1">Image</label>
                                                     <div class="">
-                                                        <input type="file" class="form-control" id="img" name="img1" />
+                                                        <input type="file" class="form-control" id="img" name="img1" accept="image/*"/>
                                                         <span class="error-input" id="img-error"></span>
                                                     </div>
                                                 </div>

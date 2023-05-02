@@ -8,6 +8,7 @@ if(isset($_POST['etype'])){
     $etype = $_POST['etype'];
 }
 $defective = htmlentities($_POST['defective']);
+$tech = htmlentities($_POST['tech']);
 $other_defective = htmlentities($_POST['other_defective']);
 $other_brand = htmlentities($_POST['other_brand']);
 $ebrand = htmlentities($_POST['ebrand']);
@@ -31,34 +32,34 @@ $status = htmlentities("Pending");
 
 if ($defective === "other"){
 
-    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, eb_id, other_defects, shipping, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, eb_id, other_defects, shipping, image, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $query);
 
-    mysqli_stmt_bind_param($stmt, "isssssss", $cust_id, $transaction_code, $etype, $ebrand, $other_defective, $shipping, $imgcontent, $status);
+    mysqli_stmt_bind_param($stmt, "issssssss", $cust_id, $transaction_code, $etype, $ebrand, $other_defective, $shipping, $imgcontent, $status, $tech);
     mysqli_stmt_execute($stmt);
     
 }elseif ($ebrand === "other"){
 
-    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, other_brand, defect_id, shipping, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, other_brand, defect_id, shipping, image, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $query);
 
-    mysqli_stmt_bind_param($stmt, "isssssss", $cust_id, $transaction_code, $etype, $other_brand, $defective, $shipping, $imgcontent, $status);
+    mysqli_stmt_bind_param($stmt, "issssssss", $cust_id, $transaction_code, $etype, $other_brand, $defective, $shipping, $imgcontent, $status, $tech);
     mysqli_stmt_execute($stmt);
     
 }elseif ($ebrand === "other" && $defective === "other"){
 
-    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, other_brand, other_defects, shipping, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, other_brand, other_defects, shipping, image, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $query);
 
-    mysqli_stmt_bind_param($stmt, "isssssss", $cust_id, $transaction_code, $etype, $other_brand, $other_defective, $shipping, $imgcontent, $status);
+    mysqli_stmt_bind_param($stmt, "issssssss", $cust_id, $transaction_code, $etype, $other_brand, $other_defective, $shipping, $imgcontent, $status, $tech);
     mysqli_stmt_execute($stmt);
     
 }else{
 
-    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, eb_id, defect_id, shipping, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO rprq (cust_id, transaction_code, elec_id, eb_id, defect_id, shipping, image, status, tech_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $query);
 
-    mysqli_stmt_bind_param($stmt, "isssssss", $cust_id, $transaction_code, $etype, $ebrand, $defective, $shipping, $imgcontent, $status);
+    mysqli_stmt_bind_param($stmt, "issssssss", $cust_id, $transaction_code, $etype, $ebrand, $defective, $shipping, $imgcontent, $status, $tech);
     mysqli_stmt_execute($stmt);
 }
 
