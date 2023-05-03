@@ -318,7 +318,7 @@ $row = mysqli_fetch_assoc($result);
                                             
                                                 echo '<tr>';
                                                 echo '<td>' . $lrow['comrep_name'] . '</td>';
-                                                echo '<td>' . $lrow['comrep_cost'] . '</td>';
+                                                echo '<td>' . number_format($lrow['comrep_cost'], 2) . '</td>';
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -326,7 +326,7 @@ $row = mysqli_fetch_assoc($result);
                                             // Moved the labor subtotal row outside the while loop
                                             echo '<tr>';
                                             echo '<td class="text-end labortotal"> Labor Subtotal:  </td>';
-                                            echo '<td class="labortotal bold">' . $labor_subtotal .".00". '</td>';
+                                            echo '<td class="labortotal bold">' . number_format($labor_subtotal, 2) . '</td>';
                                             echo '</tr>';
                                             
                                             
@@ -369,16 +369,16 @@ $row = mysqli_fetch_assoc($result);
                                             
                                                 echo '<tr>';
                                                 echo '<td>' . $lrow['bp_name'] . '</td>';
-                                                echo '<td>' . $lrow['bp_cost'] . '</td>';
+                                                echo '<td>' . number_format($lrow['bp_cost'], 2) . '</td>';
                                                 echo '<td>' . $lrow['quantity'] . '</td>';
-                                                echo '<td>' . $partqty . '</td>';
+                                                echo '<td>' . number_format($partqty, 2) . '</td>';
                                                 echo '</tr>';
                                             }
                                             
                                             // Moved the parts subtotal row outside the while loop
                                             echo '<tr>';
                                             echo '<td colspan="3" class="text-end labortotal"> Parts Subtotal:  </td>';
-                                            echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
+                                            echo '<td class="labortotal">' . number_format($part_subtotal, 2) . '</td>';
                                             echo '</tr>';
 
                                             echo '<tr class="spaces">';
@@ -387,13 +387,13 @@ $row = mysqli_fetch_assoc($result);
                                             $total = $part_subtotal+$labor_subtotal;
                                             echo '<tr>';
                                             echo '<td colspan="3" class="text-end"> Total:  </td>';
-                                            echo '<td class="">' . $total .".00". '</td>';
+                                            echo '<td class="">' . number_format($total, 2) .'</td>';
                                             echo '</tr>';
 
                                             if(!empty($row['initial_payment'])){
                                             echo '<tr>';
                                             echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
-                                            echo '<td class="">'."- " . $row['initial_payment'] .'</td>';
+                                            echo '<td class="">'."- " . number_format($row['initial_payment'], 2) .'</td>';
                                             echo '</tr>';
                                         }
 
@@ -409,7 +409,7 @@ $row = mysqli_fetch_assoc($result);
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center grandtotal">
-                                <h4>Total Payable Amount: <?php echo $grand_total.".00"?></h4>
+                                <h4>Total Payable Amount: <?php echo number_format($grand_total, 2) ?></h4>
                                 <?php if($row['rprq_status'] == 'Completed'){
                             echo '<span class="grandspan">Paid <i class="far fa-money-check-edit-alt"></i></span>';
                         } ?>

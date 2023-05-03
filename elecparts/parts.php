@@ -114,7 +114,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                                         echo '<td>' . $row['subcateg_name'] . '</td>';
                                                         echo '<td>' . $row['bp_name'] . '</td>';
                                                         echo '<td>' . $row['eb_name'] . '</td>';
-                                                        echo '<td>₱ ' . $row['bp_cost'] . '</td>';
+                                                        echo '<td>₱ ' . number_format($row['bp_cost'], 2) . '</td>';
 
                                                         echo '<td>';
                                                         echo '<button class="icns editparts" id="' .  $row['bp_id'] . '">';
