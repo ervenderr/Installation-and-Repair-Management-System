@@ -61,12 +61,20 @@
                 <i class="fas fa-box menu-icon"></i>
               </a>
             </li>
-            <li class="nav-item <?php echo $parts; ?>">
-              <a class="nav-link" href="../elecparts/parts.php">
-                <span class="menu-title">Electronic Parts</span>
+            <li class="nav-item <?php echo $electronicsactive; ?>">
+              <a class="nav-link" data-bs-toggle="collapse" href="#uibasic4" aria-expanded="false" aria-controls="uibasic4">
+                <span class="menu-title">Electronics</span>
+                <i class="menu-arrow"></i>
                 <i class="fas fa-dolly-flatbed menu-icon"></i>
               </a>
-            </li>   
+              <div class="collapse <?php echo $electronicsshow; ?>" id="uibasic4">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="../elecparts/electronics.php">Electronics</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../elecparts/sub-category.php">Sub Category</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../elecparts/parts.php">Electronic Parts</a></li>
+                </ul>
+              </div>
+            </li>  
             <li class="nav-item <?php echo $labors; ?>">
               <a class="nav-link" href="../laborRepairs/repairs.php">
                 <span class="menu-title">Repair service</span>

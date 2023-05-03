@@ -52,100 +52,21 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active btn-group-sm" aria-current="page">
-                                    <button type="button" class="btn addnew addparts" data-bs-toggle="modal"
-                                        data-bs-target="#addPartsModal">
-                                        <i class=" mdi mdi-plus ">Part</i>
-                                    </button>
                                     <button type="button" class="btn addnew" data-bs-toggle="modal"
-                                        data-bs-target="#addeBrandModal">
-                                        <i class=" mdi mdi-plus ">Brand</i>
+                                        data-bs-target="#addelectronicModal">
+                                        <i class=" mdi mdi-plus ">Electronic</i>
                                     </button>
                                 </li>
                             </ul>
                         </nav>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mg-btm d-flex justify-content-between">
-                                <div class="col-sm-12 flex ">
-                                    <h4 class="card-title">List of Electronic Parts</h4>
-                                    <div>
-                                        <button class="btn btn-success btn-fw btn-edit minimize"><i
-                                                class="fas fa-minus text-white"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 grid-margin" id="table-container">
-                                    <div class="table-responsive">
-                                        <table id="myDataTable" class="table table-hover">
-                                            <thead>
-                                                <tr class="bg-our">
-                                                    <th> # </th>
-                                                    <th> Part # </th>
-                                                    <th> Category </th>
-                                                    <th> SubCategory </th>
-                                                    <th> Part Name </th>
-                                                    <th> Brand </th>
-                                                    <th> Price </th>
-                                                    <th> Action </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="myTable">
-                                                <?php
-                                                    // Perform the query
-                                                    $query = "SELECT *
-                                                    FROM brand_parts bp
-                                                    LEFT JOIN elec_brand eb ON bp.eb_id = eb.eb_id
-                                                    LEFT JOIN electronics e ON bp.elec_id = e.elec_id
-                                                    LEFT JOIN elec_sub_categ esc ON bp.subcateg_id = esc.elec_sub_categ_id
-                                                    
-                                                    ";
-
-                                                    $result = mysqli_query($conn, $query);
-                                                    $id = 1;
-
-                                                    while ($row = mysqli_fetch_assoc($result)) {
-                                                        $partnum = rand(10000000000, 99999999999);
-                                                        echo '<tr>';
-                                                        echo '<td>' . $id . '</td>';
-                                                        echo '<td>' . $partnum . '</td>';
-                                                        echo '<td>' . $row['elec_name'] . '</td>';
-                                                        echo '<td>' . $row['subcateg_name'] . '</td>';
-                                                        echo '<td>' . $row['bp_name'] . '</td>';
-                                                        echo '<td>' . $row['eb_name'] . '</td>';
-                                                        echo '<td>₱ ' . $row['bp_cost'] . '</td>';
-
-                                                        echo '<td>';
-                                                        echo '<button class="icns editparts" id="' .  $row['bp_id'] . '">';
-                                                        echo '<i class="fas fa-edit text-success view-account"></i>';
-                                                        echo '</button>';
-                                                        echo '<a class="icns" href="delete-parts.php?rowid=' .  $row['bp_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
-                                                        echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
-                                                        echo '</a>';
-                                                        echo '</td>';
-                                                        echo '</tr>';
-                                                        $id++;
-
-                                                        $bp_id = $row['bp_id'];
-                                                        $_SESSION['bp_id'] = $bp_id;
-
-                                                    }
-                                                ?>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row mg-btm d-flex justify-content-between">
                                         <div class="col-sm-12 flex ">
-                                            <h4 class="card-title">Electronic Brands</h4>
+                                            <h4 class="card-title">Electronics</h4>
                                             <div>
                                                 <button class="btn btn-success btn-fw btn-edit minimize"><i
                                                         class="fas fa-minus text-white"></i></button>
@@ -155,44 +76,56 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                     <div class="row">
                                         <div class="col-12 grid-margin" id="table-container">
                                             <div class="table-responsive">
-                                                <table id="myDataTable2" class="table table-hover">
+                                                <table id="myDataTable3" class="table table-hover">
                                                     <thead>
                                                         <tr class="bg-our">
                                                             <th> # </th>
-                                                            <th> Brand Name </th>
+                                                            <th> Electronic Name </th>
+                                                            <th> Warranty </th>
                                                             <th> Action </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="myTable">
                                                         <?php
                                                     // Perform the query
-                                                    $query = "SELECT * FROM elec_brand";
+                                                    $query = "SELECT * FROM electronics";
+
+                                                    
 
                                                     $result = mysqli_query($conn, $query);
                                                     $id = 1;
 
                                                     while ($row = mysqli_fetch_assoc($result)) {
+                                                        $warrantys = $row['warranty_num'] . " " . $row['warranty_unit'];
                                                         $partnum = rand(10000000000, 99999999999);
                                                         echo '<tr>';
                                                         echo '<td>' . $id . '</td>';
-                                                        echo '<td>' . $row['eb_name'] . '</td>';
+                                                        echo '<td>' . $row['elec_name'] . '</td>';
+                                                        echo '<td>' . $warrantys . '</td>';
 
                                                         echo '<td>';
-                                                        echo '<button class="icns editparts editbrand" id="' .  $row['eb_id'] . '">';
+                                                        echo '<button class="icns editparts editelec" id="' .  $row['elec_id'] . '">';
                                                         echo '<i class="fas fa-edit text-success view-account"></i>';
                                                         echo '</button>';
-                                                        echo '<a class="icns" href="delete-brand.php?rowid=' .  $row['eb_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
+                                                        echo '<a class="icns" href="delete-electronics.php?rowid=' .  $row['elec_id'] . '" onclick="return confirm(\'Are you sure you want to delete this record?\')">';
                                                         echo '<i class="fas fa-trash-alt text-danger view-account"></i>';
                                                         echo '</a>';
                                                         echo '</td>';
-                                                        echo '</tr>';
+                                                        echo '</tr>
+                                                        <tr class="subcat-row elec-'. $row['elec_id'].'">
+                                                        <td></td>
+                                                        <td colspan="3">
+                                                            <div class="subcat-container"></div>
+                                                        </td>
+                                                        </tr>';
+
                                                         $id++;
 
-                                                        $eb_id = $row['eb_id'];
-                                                        $_SESSION['eb_id'] = $eb_id;
+                                                        $elec_id = $row['elec_id'];
+                                                        $_SESSION['elec_id'] = $elec_id;
 
-                                                    }
-                                                ?>
+                                                        }
+                                                        ?>
 
                                                     </tbody>
                                                 </table>
@@ -202,6 +135,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
+                    </div>
+
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
@@ -274,40 +209,38 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
     </script>
     <script>
-    $(document).ready(function() {
-        // Hide all subcategory rows initially
-        $('.subcat-row').hide();
+  $(document).ready(function() {
+    // Hide all subcategory rows initially
+    $('.subcat-row').hide();
 
-        // Add click event listener to rows
-        $('.elec-row').click(function() {
-            // Hide all subcategory rows except for the one that corresponds to the clicked electronic
-            $('.subcat-row').not('.elec-' + $(this).data('elec-id')).hide();
+    // Add click event listener to rows
+    $('.elec-row').click(function() {
+      // Hide all subcategory rows except for the one that corresponds to the clicked electronic
+      $('.subcat-row').not('.elec-' + $(this).data('elec-id')).hide();
 
-            // Get the subcategories for the clicked electronic
-            var elecId = $(this).data('elec-id');
-            $.ajax({
-                url: 'get-subcategories.php',
-                data: {
-                    elecId: elecId
-                },
-                success: function(subcats) {
-                    // Update the corresponding subcategory row with a dropdown of subcategories
-                    var subcatRow = $('.subcat-row.elec-' + elecId);
-                    var subcatContainer = subcatRow.find('.subcat-container');
-                    subcatContainer.html('<select>');
-                    var select = subcatContainer.find('select');
-                    $.each(subcats, function(index, subcat) {
-                        select.append('<option>' + subcat + '</option>');
-                    });
-                    select.append('</select>');
+      // Get the subcategories for the clicked electronic
+      var elecId = $(this).data('elec-id');
+      $.ajax({
+        url: 'get-subcategories.php',
+        data: {elecId: elecId},
+        success: function(subcats) {
+          // Update the corresponding subcategory row with a dropdown of subcategories
+          var subcatRow = $('.subcat-row.elec-' + elecId);
+          var subcatContainer = subcatRow.find('.subcat-container');
+          subcatContainer.html('<select>');
+          var select = subcatContainer.find('select');
+          $.each(subcats, function(index, subcat) {
+            select.append('<option>' + subcat + '</option>');
+          });
+          select.append('</select>');
 
-                    // Show the corresponding subcategory row
-                    subcatRow.show();
-                }
-            });
-        });
+          // Show the corresponding subcategory row
+          subcatRow.show();
+        }
+      });
     });
-    </script>
+  });
+</script>
 
     <script>
     $(document).ready(function() {
@@ -378,80 +311,153 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
     </script>
 
-    
+    <script>
+    function showError(element, message) {
+        const errorSpan = element.nextElementSibling;
+        errorSpan.textContent = message;
+        element.classList.add("is-invalid");
+    }
 
-<script>
-    const form = document.querySelector('.form-sample');
-    const electronic_type = form.querySelector('#electronic_type');
-    const brand = form.querySelector('#electronic_brand');
-    const categname = form.querySelector('#categname');
-    const price = form.querySelector('input[name="price"]');
-    const partname = form.querySelector('input[name="partname"]');
+    function clearError(element) {
+        const errorSpan = element.nextElementSibling;
+        errorSpan.textContent = "";
+        element.classList.remove("is-invalid");
+    }
 
-    electronic_type.addEventListener('change', () => {
-        if (electronic_type.value !== 'None') {
-            electronic_type.nextElementSibling.innerText = '';
+
+    function validateFormTwo() {
+        const elecname = document.getElementById("elecname");
+        const brands = document.getElementById("brands");
+        const warranty_number = document.getElementById("warranty_number");
+
+        let isValid = true;
+
+        if (elecname.value === "") {
+            showError(elecname, "Please enter an electronic name.");
+            isValid = false;
+        } else {
+            clearError(elecname);
+        }
+
+        if (brands.value === "") {
+            showError(brands, "Please select a brands.");
+            isValid = false;
+        } else {
+            clearError(brands);
+        }
+
+        if (!warranty_number.value.trim() || parseFloat(warranty_number.value) <= 0) {
+            showError(warranty_number, "Cannot be empty.");
+            isValid = false;
+        } else {
+            clearError(warranty_number);
+        }
+
+        // Reinitialize Select2 after validation
+        initializeSelect2();
+
+        return isValid;
+    }
+
+
+    document.addEventListener('submit', function(event) {
+        if (event.target.matches('form[action="update-brand.php"]')) {
+            if (!validateFormfour()) {
+                event.preventDefault();
+            }
         }
     });
 
-    categname.addEventListener('change', () => {
-        if (categname.value !== 'None') {
-            categname.nextElementSibling.innerText = '';
+    function validateFormElectronicsUpdate() {
+        const updateForm = document.querySelector('form[action="update-electronics.php"]');
+        if (!updateForm) return false;
+
+        const elecname = updateForm.querySelector("#elecnameUpdate");
+        const brands = updateForm.querySelector("#brandsUpdate");
+        const warranty_number = updateForm.querySelector("#warranty_numberUpdate");
+
+        let isValid = true;
+
+        if (elecname.value === "") {
+            showError(elecname, "Please enter an electronic name.");
+            isValid = false;
+        } else {
+            clearError(elecname);
+        }
+
+        if (brands.selectedOptions.length === 0) {
+            showError(brands, "Please select a brand.");
+            isValid = false;
+        } else {
+            clearError(brands);
+        }
+
+        if (!warranty_number.value.trim() || parseFloat(warranty_number.value) <= 0) {
+            showError(warranty_number, "Cannot be empty.");
+            isValid = false;
+        } else {
+            clearError(warranty_number);
+        }
+        initializeSelect2();
+
+        return isValid;
+    }
+
+    document.addEventListener('submit', function(event) {
+        if (event.target.matches('form[action="update-electronics.php"]')) {
+            if (!validateFormElectronicsUpdate()) {
+                event.preventDefault();
+            }
         }
     });
 
-    electronic_brand.addEventListener('change', () => {
-        if (electronic_brand.value !== 'None') {
-            electronic_brand.nextElementSibling.innerText = '';
-        }
-    });
+    function validateFormPartsUpdate() {
+        const updateForm = document.querySelector('form[action="update-parts.php"]');
+        if (!updateForm) return false;
 
-    form.addEventListener('submit', (event) => {
-        let error = false;
+        const partname = updateForm.querySelector("#partname");
+        const electronic = updateForm.querySelector("#electronic");
+        const brand = updateForm.querySelector("#brand");
+        const price = updateForm.querySelector("#price");
 
+        let isValid = true;
 
-        if (partname.value === '') {
-            partname.nextElementSibling.innerText = 'This field is required';
-            error = true;
+        if (partname.value === "") {
+            showError(partname, "Please enter a part name.");
+            isValid = false;
         } else {
-            partname.nextElementSibling.innerText = '';
-        }
-
-        if (price.value === '') {
-            price.nextElementSibling.innerText = 'This field is required';
-            error = true;
-        } else {
-            price.nextElementSibling.innerText = '';
+            clearError(partname);
         }
 
-
-        if (electronic_type.value === 'None') {
-            electronic_type.nextElementSibling.innerText = 'This field is required';
-            error = true;
+        if (electronic.value === "None") {
+            showError(electronic, "Please select an electronic type.");
+            isValid = false;
         } else {
-            electronic_type.nextElementSibling.innerText = '';
+            clearError(electronic);
         }
 
-        if (categname.value === 'None') {
-            categname.nextElementSibling.innerText = 'This field is required';
-            error = true;
+        if (brand.value === "None") {
+            showError(brand, "Please select a brand.");
+            isValid = false;
         } else {
-            categname.nextElementSibling.innerText = '';
+            clearError(brand);
         }
 
-        if (electronic_brand.value === 'None') {
-            electronic_brand.nextElementSibling.innerText = 'This field is required';
-            error = true;
+        if (!price.value.trim() || parseFloat(price.value) <= 0) {
+            showError(price, "Please enter a valid price.");
+            isValid = false;
         } else {
-            electronic_brand.nextElementSibling.innerText = '';
+            clearError(price);
         }
 
+        return isValid;
+    }
 
-        if (error) {
-            event.preventDefault(); // Prevent form submission if there are errors
-        } else {
-            // Submit form to server if there are no errors
-            // You can use AJAX to submit the form asynchronously, or just let it submit normally
+    document.addEventListener('submit', function(event) {
+        if (event.target.matches('form[action="update-parts.php"]')) {
+            if (!validateFormPartsUpdate()) {
+                event.preventDefault();
+            }
         }
     });
     </script>
@@ -481,7 +487,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
             var elec_id = $(this).val();
 
             if (elec_id === "None") {
-                $('#electronic_brand').html('<option value="None">--- Select ---</option>');
+                $('#defective').html('<option value="None">--- Select ---</option>');
             } else {
                 $.ajax({
                     url: 'get_brands.php',
@@ -499,36 +505,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
 
                         }
                         $('#electronic_brand').html(options);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                    }
-                });
-            }
-        });
-
-        $('#electronic_type').change(function() {
-            var elec_id = $(this).val();
-
-            if (elec_id === "None") {
-                $('#categname').html('<option value="None">--- Select ---</option>');
-            } else {
-                $.ajax({
-                    url: 'get_subcateg.php',
-                    type: 'POST',
-                    data: {
-                        elec_id: elec_id
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        var options = '<option value="None">--- Select ---</option>';
-                        for (var i = 0; i < data.length; i++) {
-                            options += '<option value="' + data[i].elec_sub_categ_id + '">' + data[
-                                    i]
-                                .subcateg_name + '</option>';
-
-                        }
-                        $('#categname').html(options);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log(textStatus, errorThrown);

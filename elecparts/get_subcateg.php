@@ -1,15 +1,12 @@
 <?php
-// get_brands.php
+// get_subcateg.php
 
 require_once '../homeIncludes/dbconfig.php';
 
 if (isset($_POST['elec_id'])) {
     $elec_id = $_POST['elec_id'];
 
-    $sql = "SELECT * FROM brand_electronics
-    LEFT JOIN electronics ON brand_electronics.electronic_id = electronics.elec_id
-    LEFT JOIN elec_brand ON brand_electronics.brand_id = elec_brand.eb_id
-            WHERE electronic_id = ?";
+    $sql = "SELECT * FROM elec_sub_categ WHERE elec_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $elec_id);
     mysqli_stmt_execute($stmt);

@@ -37,5 +37,7 @@
     $servicesjob = "";
     $packages = "";
     $techserv = "";
+    $electronicsactive = "";
+    $electronicsshow = "";
 
 ?>

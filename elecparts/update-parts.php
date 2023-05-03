@@ -8,12 +8,15 @@ if (isset($_POST['id'])) {
     $output = '';
     $user_id = $_SESSION['logged_id'];
     $_SESSION['id'] = $_POST['id'];
-    $query = "SELECT * FROM brand_parts 
-    LEFT JOIN electronics ON brand_parts.elec_id = electronics.elec_id
-    LEFT JOIN elec_brand ON brand_parts.eb_id = elec_brand.eb_id
+    $query = "SELECT *
+    FROM brand_parts bp
+    LEFT JOIN elec_brand eb ON bp.eb_id = eb.eb_id
+    LEFT JOIN electronics e ON bp.elec_id = e.elec_id
+    LEFT JOIN elec_sub_categ esc ON bp.subcateg_id = esc.elec_sub_categ_id
     WHERE bp_id = '" . $_POST['id'] . "'";
-    $result = mysqli_query($conn, $query);
-    $parts = mysqli_fetch_assoc($result); // Fetch the data from the result set
+$result = mysqli_query($conn, $query);
+$parts = mysqli_fetch_assoc($result);
+ // Fetch the data from the result set
 
     $output .= '
     <form method="POST" action="update-parts.php" enctype="multipart/form-data">
@@ -31,6 +34,20 @@ if (isset($_POST['id'])) {
                                 while ($row = mysqli_fetch_assoc($elec_result)) {
                                     $selected = ($row['elec_id'] == $parts['elec_id']) ? 'selected' : '';
                                     $output .= "<option value='" . $row['elec_id'] . "' $selected>" . $row['elec_name'] . "</option>";
+                                }
+                                
+    $output .= '      </select>
+                            <span class="error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subname" class="form-label">Subcategory</label>
+                            <select name="subname" id="subname" class="form-select">
+                                <option value="None">--- Select ---</option>';
+                                $sql = "SELECT * FROM elec_sub_categ";
+                                $elec_result = mysqli_query($conn, $sql);
+                                while ($row = mysqli_fetch_assoc($elec_result)) {
+                                    $selected = ($row['elec_sub_categ_id'] == $parts['elec_sub_categ_id']) ? 'selected' : '';
+                                    $output .= "<option value='" . $row['elec_sub_categ_id'] . "' $selected>" . $row['subcateg_name'] . "</option>";
                                 }
                                 
     $output .= '      </select>
@@ -70,11 +87,12 @@ if(isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
     $partname = htmlentities($_POST['partname']);
     $electronic = htmlentities($_POST['electronic']);
+    $subname = htmlentities($_POST['subname']);
     $brand = htmlentities($_POST['brand']);
     $price = htmlentities($_POST['price']);
 
 
-    $query = "UPDATE brand_parts SET bp_name = '$partname', elec_id = '$electronic', eb_id = '$brand', bp_cost = '$price' WHERE bp_id = '$id'";
+    $query = "UPDATE brand_parts SET bp_name = '$partname', elec_id = '$electronic', subcateg_id = '$subname', eb_id = '$brand', bp_cost = '$price' WHERE bp_id = '$id'";
 
     $result = mysqli_query($conn, $query);
 
