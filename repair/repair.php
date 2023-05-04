@@ -133,6 +133,16 @@ $_SESSION["cust_id"] = $row["cust_id"];
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
+                                <label for="categname" class="form-label">Subcategory</label>
+                                <select name="categname" id="categname" class="form-select">
+                                    <option value="None">--- Select ---</option>
+
+                                </select>
+                                <span class="val-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
                                 <label for="ebrand" class="form-label">Brand</label>
                                 <select name="ebrand" id="ebrand" class="form-control">
                                     <option value="None">--Select--</option>
@@ -146,9 +156,6 @@ $_SESSION["cust_id"] = $row["cust_id"];
                                 <input type="text" name="other_brand" id="other_brand" class="form-control">
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="defective" class="col-form-label">Defects</label>
@@ -166,6 +173,9 @@ $_SESSION["cust_id"] = $row["cust_id"];
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3 mt-1">
                                 <label for="shipping" class="form-label">Shipping option</label>
@@ -178,20 +188,20 @@ $_SESSION["cust_id"] = $row["cust_id"];
                                 <span class="val-error"></span>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="eimg">Upload Image (optional)</label>
+                                <input type="file" class="form-control" id="eimg" name="eimg" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-
-                <div class="mb-3">
-                    <label class="form-label" for="eimg">Upload Image (optional)</label>
-                    <input type="file" class="form-control" id="eimg" name="eimg" />
                 </div>
                 <hr>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="tech" class="form-label">Select Technician (optional)</label>
                         <select name="tech" id="tech" class="form-control">
-                            <option value="None">--- Select ---</option>
+                            <option value="None">--- Any ---</option>
                             <?php
                                     $sql = "SELECT * FROM technician";
                                     $result = mysqli_query($conn, $sql);
@@ -222,6 +232,7 @@ $_SESSION["cust_id"] = $row["cust_id"];
 
             var etype = $('#etype').val();
             var ebrand = $('#ebrand').val();
+            var categname = $('#categname').val();
             var defective = $('#defective').val();
             var shipping = $('#shipping').val();
             var eimg = $('#eimg').val();
@@ -241,6 +252,14 @@ $_SESSION["cust_id"] = $row["cust_id"];
                 valid = false;
             } else {
                 $('#ebrand ~ .val-error').text('');
+            }
+
+            // subcateg validation
+            if (categname == "None") {
+                $('#categname ~ .val-error').text('Please select a subcategory.');
+                valid = false;
+            } else {
+                $('#categname ~ .val-error').text('');
             }
 
             // Defective validation
@@ -352,6 +371,36 @@ $_SESSION["cust_id"] = $row["cust_id"];
                         }
                         console.log(data)
                         $('#ebrand').html(options);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
+        });
+
+        $('#etype').change(function() {
+            var etype_id = $(this).val();
+
+            if (etype_id === "None") {
+                $('#categname').html('<option value="None">--- Select ---</option>');
+            } else {
+                $.ajax({
+                    url: 'get_subcateg.php',
+                    type: 'POST',
+                    data: {
+                        etype_id: etype_id
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        var options = '<option value="None">--- Select ---</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            options += '<option value="' + data[i].elec_sub_categ_id + '">' + data[
+                                    i]
+                                .subcateg_name + '</option>';
+
+                        }
+                        $('#categname').html(options);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log(textStatus, errorThrown);

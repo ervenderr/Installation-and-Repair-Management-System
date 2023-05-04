@@ -6,6 +6,8 @@ if (!isset($_SESSION['logged_id'])) {
 
 if (!isset($_GET['rowid'])) {
     header('location: ../repair/pending-transaction.php');
+}else{
+    $rowid = $_GET['rowid'];
 }
 
 require_once '../homeIncludes/dbconfig.php';
@@ -31,6 +33,7 @@ rprq.status AS rprq_status,
 accounts.*,
 technician.*,
 electronics.*,
+elec_sub_categ.*,
 rp_timeline.*,
 elec_brand.*,
 defects.*,
@@ -42,8 +45,9 @@ LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
 LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN elec_sub_categ ON rprq.subcateg_id = elec_sub_categ.elec_sub_categ_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-WHERE accounts.account_id = '{$user_id}' AND rprq.transaction_code = '{$transaction_code}'
+WHERE accounts.account_id = '{$user_id}' AND rprq.id = '{$rowid}'
 ORDER BY rp_timeline.tm_date DESC, rp_timeline.tm_time DESC;";
 $result = mysqli_query($conn, $query);
 
@@ -213,6 +217,10 @@ $row = mysqli_fetch_assoc($result);
                                                 Type:</span>
                                             <span><?php echo $row['elec_name']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Subcategory:</span>
+                                                <span><?php echo $row['subcateg_name']?></span>
+                                            </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Brand:</span>
                                             <span class=""><?php echo $row['eb_name'] ?></span>
@@ -393,7 +401,7 @@ $row = mysqli_fetch_assoc($result);
                                             if(!empty($row['initial_payment'])){
                                             echo '<tr>';
                                             echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
-                                            echo '<td class="">'."- " . number_format($row['initial_payment'], 2) .'</td>';
+                                            echo '<td class="">' . number_format($row['initial_payment'], 2) .'</td>';
                                             echo '</tr>';
                                         }
 

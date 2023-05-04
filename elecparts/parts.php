@@ -273,41 +273,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         j('#myDataTable3').DataTable();
     });
     </script>
-    <script>
-    $(document).ready(function() {
-        // Hide all subcategory rows initially
-        $('.subcat-row').hide();
-
-        // Add click event listener to rows
-        $('.elec-row').click(function() {
-            // Hide all subcategory rows except for the one that corresponds to the clicked electronic
-            $('.subcat-row').not('.elec-' + $(this).data('elec-id')).hide();
-
-            // Get the subcategories for the clicked electronic
-            var elecId = $(this).data('elec-id');
-            $.ajax({
-                url: 'get-subcategories.php',
-                data: {
-                    elecId: elecId
-                },
-                success: function(subcats) {
-                    // Update the corresponding subcategory row with a dropdown of subcategories
-                    var subcatRow = $('.subcat-row.elec-' + elecId);
-                    var subcatContainer = subcatRow.find('.subcat-container');
-                    subcatContainer.html('<select>');
-                    var select = subcatContainer.find('select');
-                    $.each(subcats, function(index, subcat) {
-                        select.append('<option>' + subcat + '</option>');
-                    });
-                    select.append('</select>');
-
-                    // Show the corresponding subcategory row
-                    subcatRow.show();
-                }
-            });
-        });
-    });
-    </script>
 
     <script>
     $(document).ready(function() {

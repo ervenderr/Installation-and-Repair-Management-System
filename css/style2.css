@@ -154,7 +154,6 @@
 
 .repaircon {
     width: 100%;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -164,7 +163,8 @@
 
 
 .repaircon .form {
-    width: 500px;
+    width: auto;
+    max-width: 680px;
     border: 1px solid #ccc;
     border-radius: 0.35rem;
     padding: 1.5rem;

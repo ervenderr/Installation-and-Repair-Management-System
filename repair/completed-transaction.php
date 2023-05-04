@@ -175,6 +175,7 @@ rprq.status AS rprq_status,
 accounts.*,
 technician.*,
 electronics.*,
+elec_sub_categ.*,
 elec_brand.*,
 defects.*,
 customer.*
@@ -184,6 +185,7 @@ LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
 LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN elec_sub_categ ON rprq.subcateg_id = elec_sub_categ.elec_sub_categ_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
 WHERE rprq.status = 'Completed' AND accounts.account_id = '{$user_id}';";
                     $result = mysqli_query($conn, $query);
@@ -195,7 +197,7 @@ WHERE rprq.status = 'Completed' AND accounts.account_id = '{$user_id}';";
                            
                             $_SESSION['transaction_id'] = $row['transaction_code'];
                             ?>
-                        <a href="view-trans.php?rowid= <?php echo $row['id']?> " class="viewtrans">
+                        <a href="view-trans.php?rowid=<?php echo $row['id']?> " class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
                                 <div class="card-body">
                                     <div class="row">
@@ -214,6 +216,10 @@ WHERE rprq.status = 'Completed' AND accounts.account_id = '{$user_id}';";
                                                 <span class="fw-bold me-2 transaction-details-label">Electronic
                                                     Type:</span>
                                                 <span><?php echo $row['elec_name']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Subcategory:</span>
+                                                <span><?php echo $row['subcateg_name']?></span>
                                             </div>
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Brand:</span>

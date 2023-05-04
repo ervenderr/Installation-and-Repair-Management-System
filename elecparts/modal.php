@@ -28,7 +28,7 @@
                         <span class="error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="categname" class="form-label">Subcategory(s)</label>
+                        <label for="categname" class="form-label">Subcategory</label>
                         <select name="categname" id="categname" class="form-select">
                             <option value="None">--- Select ---</option>
                             
