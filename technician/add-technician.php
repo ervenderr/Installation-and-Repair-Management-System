@@ -11,6 +11,7 @@ if(isset($_POST['submit'])) {
     $address = htmlentities($_POST['address']);
     $expertise = htmlentities($_POST['expert']);
     $password = htmlentities($_POST['password']);
+    $limit = htmlentities($_POST['limit']);
 
     $status = htmlentities("Active");
     $user_type = htmlentities('technician');
@@ -28,7 +29,7 @@ if(isset($_POST['submit'])) {
             $tech_id = $row2['tech_id'];
         } else {
             // insert into technician table and get technician_id
-            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise')";
+            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise, limit_per_day) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise', $limit)";
             $result3 = mysqli_query($conn, $query3);
             $tech_id = mysqli_insert_id($conn);
         }
@@ -39,7 +40,7 @@ if(isset($_POST['submit'])) {
         $account_id = mysqli_insert_id($conn);
 
         // insert into technician table and get technician_id
-        $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise')";
+        $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise, limit_per_day) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise', $limit)";
         $result3 = mysqli_query($conn, $query3);
         $tech_id = mysqli_insert_id($conn);
     }

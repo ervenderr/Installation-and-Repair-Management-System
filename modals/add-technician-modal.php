@@ -94,6 +94,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="img" class="col-form-label">Daily Repair Limit</label>
+                                <div class="">
+                                    <input name="limit" class="form-control" type="number" 
+                                        placeholder="">
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="modal-footer">

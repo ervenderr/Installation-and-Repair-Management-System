@@ -7,8 +7,9 @@ include_once('../tools/variables.php');
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
     header('location: ../login/login.php');
+}else{
+    $user_id = $_SESSION['logged_id'];
 }
-$user_id = $_SESSION['logged_id'];
 
 $techquery = "SELECT * FROM technician WHERE account_id = $user_id";
 
@@ -207,6 +208,7 @@ require_once '../homeIncludes/dbconfig.php';
     const date = form.querySelector('input[name="date"]');
     const completed = form.querySelector('input[name="completed"]');
     const payment = form.querySelector('input[name="payment"]');
+    
 
     form.addEventListener('submit', (event) => {
         let error = false;

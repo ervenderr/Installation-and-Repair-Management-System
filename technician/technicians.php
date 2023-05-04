@@ -211,6 +211,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
         const address = form.querySelector('input[name="address"]');
         const expert = form.querySelector('input[name="expert"]');
         const password = form.querySelector('input[name="password"]');
+        const limit = form.querySelector('input[name="limit"]');
 
 
         form.addEventListener('submit', (event) => {
@@ -275,6 +276,13 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                 error = true;
             } else {
                 password.nextElementSibling.innerText = '';
+            }
+
+            if (limit.value === '') {
+                limit.nextElementSibling.innerText = 'Please enter a daily limit';
+                error = true;
+            } else {
+                limit.nextElementSibling.innerText = '';
             }
 
             if (error) {

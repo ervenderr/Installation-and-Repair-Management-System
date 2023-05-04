@@ -36,7 +36,7 @@ if (isset($_POST['id'])) {
 
   $output .= '
   <form method="POST" action="accepted-pending.php" enctype="multipart/form-data" id="form">
-        <input type="type" class="form-control" id="status" name="status" value="To repair" hidden>
+        <input type="type" class="form-control" id="status" name="status" value="For repair" hidden>
         <div class="mb-3">
           <label for="initpay" class="form-label">Initial Payment</label>
           <input type="number" class="form-control" id="days" name="initpay" value="'. $half_grand_total.'" step="0.01" min="0">

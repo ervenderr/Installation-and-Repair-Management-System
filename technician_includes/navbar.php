@@ -2,7 +2,7 @@
 $query = "SELECT *
 FROM technician
 JOIN accounts ON technician.account_id = accounts.account_id
-WHERE technician.account_id = '" . $logged_id . "';";
+WHERE technician.account_id = '" . $user_id . "';";
 $result = mysqli_query($conn, $query);
 
 

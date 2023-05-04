@@ -12,6 +12,7 @@ if(isset($_POST['submit'])) {
     $expertise = htmlentities($_POST['expert']);
     $password = htmlentities($_POST['password']);
     $status = htmlentities($_POST['status']);
+    $limit = htmlentities($_POST['limit']);
 
     $image_contents = '';
 
@@ -40,18 +41,18 @@ if(isset($_POST['submit'])) {
             // update technician record
             if (!empty($image_contents)){
                 $image_contents = mysqli_real_escape_string($conn, $image_contents);
-                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', tech_img='$image_contents' WHERE tech_id = '$technician_id'";
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', tech_img='$image_contents', limit_per_day='$limit' WHERE tech_id = '$technician_id'";
             } else {
-                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise' WHERE tech_id = '$technician_id'";
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', limit_per_day='$limit' WHERE tech_id = '$technician_id'";
             }            
             $result3 = mysqli_query($conn, $query3);
         } else {
             // insert into technician table and get technician_id
             if (!empty($image_contents)){
                 $image_contents = mysqli_real_escape_string($conn, $image_contents);
-                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', tech_img='$image_contents' WHERE tech_id = '$technician_id'";
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', tech_img='$image_contents', limit_per_day='$limit' WHERE tech_id = '$technician_id'";
             } else {
-                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise' WHERE tech_id = '$technician_id'";
+                $query3 = "UPDATE technician SET fname='$fname', lname='$lname', phone='$phone', address='$address', status='$status', expertise='$expertise', limit_per_day='$limit' WHERE tech_id = '$technician_id'";
             }            
             $result3 = mysqli_query($conn, $query3);
             $technician_id = mysqli_insert_id($conn);
@@ -64,9 +65,9 @@ if(isset($_POST['submit'])) {
 
         // insert into technician table and get technician_id
         if (!empty($image_contents)){
-            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise, tech_img) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise', '$image_contents')";
+            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise, limit_per_day, tech_img) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise', '$limit', '$image_contents')";
         } else{
-            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise')";
+            $query3 = "INSERT INTO technician (fname, lname, phone, address, account_id, status, expertise, limit_per_day) VALUES ('$fname', '$lname', '$phone', '$address', '$account_id','$status', '$expertise', '$limit')";
         }
         
         $result3 = mysqli_query($conn, $query3);

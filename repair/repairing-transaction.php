@@ -13,15 +13,13 @@ $repairtransac = 'account-active';
 include_once('../homeIncludes/header.php');
 
 
-$transaction_code = $_SESSION['transaction_code'];
 $user_id = $_SESSION['logged_id'];
 
 $query2 = "SELECT * 
 FROM customer 
 LEFT JOIN accounts ON customer.account_id=accounts.account_id 
 LEFT JOIN rprq 
-ON rprq.cust_id=customer.cust_id 
-AND rprq.transaction_code='{$transaction_code}' 
+ON rprq.cust_id=customer.cust_id
 WHERE accounts.account_id='{$user_id}'";
 
 $result2 = mysqli_query($conn, $query2);

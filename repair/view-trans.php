@@ -154,8 +154,10 @@ $row = mysqli_fetch_assoc($result);
                         $content = 'The repair request has been assigned to a technician, and they are currently diagnosing your request';
                     } elseif ($row2['tm_status'] == 'In-progress') {
                         $content = 'Waiting for initial payment';
-                    } elseif ($row2['tm_status'] == 'To repair') {
+                    } elseif ($row2['tm_status'] == 'For repair') {
                         $content = 'Technician is preparing to repair your request';
+                    } elseif ($row2['tm_status'] == 'Done') {
+                        $content = 'Request is done. Please pay your unpaid balance';
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Currently working on the repair';
                     } elseif ($row2['tm_status'] == 'Awaiting Parts') {
@@ -165,11 +167,11 @@ $row = mysqli_fetch_assoc($result);
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Partial payment has been received, and the technician is working on the repair';
                     } elseif ($row2['tm_status'] == 'To Pickup') {
-                        $content = 'Your request is ready for pickup';
+                        $content = 'Your request is ready for pickup. Please pay your unpaid balance';
                     } elseif ($row2['tm_status'] == 'To Deliver') {
-                        $content = 'Your request is ready for delivery';
+                        $content = 'Your request is ready for delivery. Please pay your unpaid balance';
                     } elseif ($row2['tm_status'] == 'Completed') {
-                        $content = 'Picked up / Delivered';
+                        $content = 'Repair Transaction Completed';
                     }
 
                     $status = $row2['tm_status'];

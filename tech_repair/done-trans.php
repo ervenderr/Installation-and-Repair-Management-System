@@ -16,8 +16,10 @@ if (isset($_GET['id'])) {
     $stat ='';
     if($inventory['shipping'] == 'Deliver'){
       $status ='To Deliver';
+    }else if($inventory['shipping'] == 'Pickup'){
+      $stat ='For Pickup';
     }else{
-      $status ='To Pickup';
+      $status ='Done';
     }
 
     $query = "UPDATE rprq SET status = '$status' WHERE id = '$id'";

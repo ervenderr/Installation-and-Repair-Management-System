@@ -153,10 +153,20 @@ if (mysqli_num_rows($result) > 0) {
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group row">
+                                                    <label for="img" class="col-form-label">Daily Repair Limit</label>
+                                                    <div class="">
+                                                        <input name="limit" class="form-control" type="number"
+                                                            placeholder="" value="<?php echo $row6['limit_per_day']; ?>">
+                                                        <span class="error-input"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
                                                     <label for="img" class="col-form-label">Profile Image</label>
                                                     <div class="">
-                                                        <input name="img" class="form-control" type="file" accept="image/*"
-                                                            placeholder="">
+                                                        <input name="img" class="form-control" type="file"
+                                                            accept="image/*" placeholder="">
                                                         <span class="error-input"></span>
                                                     </div>
                                                 </div>

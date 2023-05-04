@@ -13,6 +13,8 @@ $rowid = $_GET['rowid'];
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
     header('location: ../login/login.php');
+}else{
+    $user_id = $_SESSION['logged_id'];
 }
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT rprq.*, 
