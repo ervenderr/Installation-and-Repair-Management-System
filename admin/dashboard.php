@@ -76,9 +76,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             class="mdi mdi-chart-line mdi-24px float-right"></i>
                                     </h4>
                                     <h2 class="mb-5"><?php echo $current_count; ?></h2>
-                                    <h6 class="card-text">
-                                        <?php printf("%s by %.2f%%", $current_count >= $previous_count ? "Increased" : "Decreased", abs($percentage_change)); ?>
-                                    </h6>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -121,9 +119,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                             class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                                     </h4>
                                     <h2 class="mb-5"><?php echo $current_count2; ?></h2>
-                                    <h6 class="card-text">
-                                        <?php printf("%s by %.2f%%", $current_count2 >= $previous_count2 ? "Increased" : "Decreased", abs($percentage_change2)); ?>
-                                    </h6>
+                                    
                                 </div>
                             </div>
                         </div>

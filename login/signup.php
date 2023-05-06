@@ -39,7 +39,7 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="fname">First Name</label>
-                                <input class="form-control" type="text" name="fname" id="fname" value="Ervens">
+                                <input class="form-control" type="text" name="fname" id="fname" value="">
                                 <span class="val-error"></span>
                             </div>
                         </div>
@@ -53,7 +53,7 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="lname">Last Name</label>
-                                <input class="form-control" type="text" name="lname" id="lname" value="Idjads">
+                                <input class="form-control" type="text" name="lname" id="lname" value="">
                                 <span class="val-error"></span>
                             </div>
                         </div>
@@ -62,21 +62,21 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="email">Email</label>
-                                <input class="form-control" type="email" name="email" id="email" value="ervenidjad12@gmail.com">
+                                <input class="form-control" type="email" name="email" id="email" value="">
                                 <span class="val-error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="password">Password</label>
-                                <input class="form-control" type="password" name="password" id="password" value="password">
+                                <input class="form-control" type="password" name="password" id="password" value="">
                                 <span class="val-error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="password-repeat">Confirm Password</label>
-                                <input class="form-control" type="password" name="password-repeat" id="password-repeat" value="password">
+                                <input class="form-control" type="password" name="password-repeat" id="password-repeat" value="">
                                 <span class="val-error"></span>
                             </div>
                         </div>
@@ -95,7 +95,7 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-6">
                             <div class="">
                                 <label class="form-label" for="address">Street</label>
-                                <input class="form-control" id="address" type="text" name="address" value="Sd Street">
+                                <input class="form-control" id="address" type="text" name="address" value="">
                                 <span class="val-error"></span>
                             </div>
                         </div>
@@ -133,7 +133,7 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-6 mb-2">
                             <div class="">
                                 <label class="form-label">Phone</label>
-                                <input class="form-control" id="phone" type="tel" name="phone" placeholder="Phone" value="09123456789">
+                                <input class="form-control" id="phone" type="tel" name="phone" placeholder="Phone" value="">
                                 <span class="val-error"></span>
                             </div>
                         </div>

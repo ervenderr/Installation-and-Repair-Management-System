@@ -72,7 +72,7 @@ function sendEmail_verify($fname, $email, $verify_token){
 					Before you can access other features, please click the following link to verify your email:</p>
 					<br>
 					<br>
-					<p class=''>http://localhost/Proton-Tech-Management-System/login/verify-email.php?verify_email=$verify_token 
+					<p class=''>http://proton-tech.online/login/verify-email.php?verify_email=$verify_token 
 					.Before you can access other features, please click the following link to verify your email:</p>
             </div>
         </body>
