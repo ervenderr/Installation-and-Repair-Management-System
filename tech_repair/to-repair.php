@@ -53,9 +53,7 @@ if (isset($_POST['id'])) {
 
   $output .= '
   <div class="row">
-  <div class="col-6">
-  </div>
-  <div class="col-6">
+  <div class="col-12">
   <div class="mb-3">
     <label for="to" class="form-label">Estimated Completion</label>
     <input type="date" class="form-control" id="to" min="'. date('Y-m-d').'" name="to" value="' . $row6['date_to'] . '">
@@ -77,7 +75,7 @@ if (isset($_POST['id'])) {
 
 if (isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
-    $status = htmlentities($_POST['status']); 
+    $status = "Repairing"; 
     $to = htmlentities($_POST['to']); 
   
     $elec_id = // Get the elec_id from your data source

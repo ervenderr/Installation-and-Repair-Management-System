@@ -25,12 +25,14 @@ rprq.status AS rprq_status,
 accounts.*,
 technician.*,
 electronics.*,
+rp_warranty.*,
 defects.*,
 invoice.*,
 customer.*
 FROM rprq
 LEFT JOIN technician ON rprq.tech_id = technician.tech_id
 LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN rp_warranty ON rprq.id = rp_warranty.rpwarranty_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
@@ -237,10 +239,6 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                                 <td><?php echo $row['shipping']?></td>
                                             </tr>
                                             <tr>
-                                                <th>Warranty:</th>
-                                                <td>3 Months</td>
-                                            </tr>
-                                            <tr>
                                                 <th>Initial Payment:</th>
                                                 <td><?php echo number_format($row['initial_payment'] ,2)?></td>
                                             </tr>
@@ -250,6 +248,25 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                                     <textarea class="form-control" rows="3"
                                                         readonly><?php echo $row['remarks']?></textarea>
                                                 </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Warranty status:</th>
+                                                <td><?php echo $row['warranty_status']?></td>
+                                                <!-- The table below will show if warranty status is click -->
+                                                <table class="table table-bordered" id="myDataTable">
+                                                    <thead>
+                                                        <tr class="bg-our">
+                                                            <th> Warranty Star Date </th>
+                                                            <th> Warranty End Date </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="myTable">
+                                                        <tr>
+                                                            <td><?php echo $row['warranty_start_date']?></td>
+                                                            <td><?php echo $row['warranty_end_date']?></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </tr>
                                         </table>
                                     </div>
@@ -376,10 +393,10 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                         ?>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex align-items-center grandtotal">
                                 <h3>Total Payable Amount: <?php echo number_format($grand_total, 2) ?></h3>
                                 <?php if($row['rprq_status'] == 'Completed'){
@@ -401,16 +418,16 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                                 echo '<i class="fas fa-edit"></i> Update Initial Payment';
                                                 echo '</button>';
                                             }
-                                            if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
-                                                echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
-                                                Generate Invoice <i class="fas fa-file-invoice"></i></a>';
-                                            }
+                                            // if (empty($row['invoice_id']) && $row['rprq_status'] == 'Done') {
+                                            //     echo '<a href="../repair-invoice/rp_invoice_form.php?transaction_code=' . $row['transaction_code'] . '&rowid=' .  $row['id'] . '" class="btn btn-primary btn-fw">
+                                            //     Generate Invoice <i class="fas fa-file-invoice"></i></a>';
+                                            // }
 
-                                            if (!empty($row['invoice_id'])) {
-                                                $invoice_id = $row['invoice_id'];
-                                                echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
-                                                Download Invoice <i class="fas fa-download"></i></a>';
-                                            }
+                                            // if (!empty($row['invoice_id'])) {
+                                            //     $invoice_id = $row['invoice_id'];
+                                            //     echo '<a href="../repair-invoice/print.php?invoice_id=' . $invoice_id .'" target="_blank" class="btn btn-secondary btn-fw ">
+                                            //     Download Invoice <i class="fas fa-download"></i></a>';
+                                            // }
 
                                             if (($row['id'])) {
                                                 $_SESSION['transaction_code'] = $row['transaction_code'];
@@ -424,6 +441,14 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                                 echo '<button class="icns btn btn-danger edit acceptrp" id="' .  $row['id'] . '">';
                                                         echo '<i class="fas fa-calendar-check view-account" id="' .  $row['id'] . '"> </i> Accept';
                                                         echo '</button>';
+                                            }
+
+                                            if (($row['rprq_status'] == 'For pickup' || $row['rprq_status'] == 'To deliver' || $row['rprq_status'] == 'Done')) {
+                                                $_SESSION['transaction_code'] = $row['transaction_code'];
+                                                echo '<a href="done-trans.php?id=' .  $row['id'] . '" class="icns btn btn-success updtech" id="' .  $row['id'] . '" onclick="return confirm(\'Are you sure you want to mark this as completed?\');">';
+                                                echo '<i class="fas fa-check-square"></i> Mark as Completed';
+                                                echo '</a>';
+
                                             }
 
                                             ?>

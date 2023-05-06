@@ -33,6 +33,7 @@ rprq.status AS rprq_status,
 accounts.*,
 technician.*,
 electronics.*,
+rp_warranty.*,
 elec_sub_categ.*,
 rp_timeline.*,
 elec_brand.*,
@@ -43,6 +44,7 @@ LEFT JOIN technician ON rprq.tech_id = technician.tech_id
 LEFT JOIN rp_timeline ON rprq.id = rp_timeline.rprq_id
 LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
 LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN rp_warranty ON rprq.id = rp_warranty.rpwarranty_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
 LEFT JOIN elec_sub_categ ON rprq.subcateg_id = elec_sub_categ.elec_sub_categ_id
@@ -292,6 +294,10 @@ $row = mysqli_fetch_assoc($result);
                                                         echo $row['tech_phone'];
                                                     }
                                                     ?>
+                                        </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Warranty Status:</span>
+                                            <span><?php echo $row['warranty_status']?></span>
                                         </div>
                                     </div>
                                 </div>

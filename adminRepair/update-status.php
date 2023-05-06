@@ -31,7 +31,6 @@ if (isset($_POST['id'])) {
                 <option value="For repair"' . ($currentStatus == "For repair" ? " selected" : "") . '>For repair</option>
                 <option value="Repairing"' . ($currentStatus == "Repairing" ? " selected" : "") . '>Repairing</option>
                 <option value="'. $stat .'"' . ($currentStatus == "$stat" ? " selected" : "") . '>'. $stat .'</option>
-                <option value="Completed"' . ($currentStatus == "Completed" ? " selected" : "") . '>Completed</option>
                 <option value="Cancelled"' . ($currentStatus == "Cancelled" ? " selected" : "") . '>Cancelled</option>
                 <option value="Parts Needed"' . ($currentStatus == "Parts Needed" ? " selected" : "") . '>Parts Needed</option>
                 <option value="Waiting for parts"' . ($currentStatus == "Waiting for parts" ? " selected" : "") . '>Waiting for parts</option>

@@ -13,7 +13,7 @@ if(isset($_POST['id'])){
     $selected_technician_id = $inventory['tech_id'];
 
     $output .= '
-    <form method="POST" action="#" enctype="multipart/form-data" onsubmit="return checkLimit()">
+    <form method="POST" action="accept-pending.php" enctype="multipart/form-data" onsubmit="return checkLimit()">
           <div class="mb-3">
             <label for="tech" class="form-label">Technician</label>
             <select class="form-select" id="tech" name="tech">

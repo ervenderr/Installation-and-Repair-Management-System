@@ -316,7 +316,7 @@ $_SESSION["cust_id"] = $row["cust_id"];
     });
     </script>
 
-    z<script>
+    <script>
     $(document).ready(function() {
         $('#etype').change(function() {
             var etype_id = $(this).val();
