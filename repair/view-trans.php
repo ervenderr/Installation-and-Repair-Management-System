@@ -21,7 +21,7 @@ include_once('../homeIncludes/header.php');
 $transaction_code = $_SESSION['transaction_id'];
 $user_id = $_SESSION['logged_id'];
 
-$query = "SELECT rprq.*, 
+$querys = "SELECT rprq.*, 
 technician.fname AS tech_fname, 
 technician.lname AS tech_lname, 
 technician.phone AS tech_phone,
@@ -51,15 +51,14 @@ LEFT JOIN elec_sub_categ ON rprq.subcateg_id = elec_sub_categ.elec_sub_categ_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
 WHERE accounts.account_id = '{$user_id}' AND rprq.id = '{$rowid}'
 ORDER BY rp_timeline.tm_date DESC, rp_timeline.tm_time DESC;";
-$result = mysqli_query($conn, $query);
+$result = mysqli_query($conn, $querys);
 
 
                   if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
                   }
 
-$result = mysqli_query($conn, $query);
-$row = mysqli_fetch_assoc($result);
+
 
 ?>
 
@@ -145,9 +144,9 @@ $row = mysqli_fetch_assoc($result);
         <div id="tracking">
             <div class="tracking-list">
                 <?php
-                $result2 = mysqli_query($conn, $query);
+                $results = mysqli_query($conn, $querys);
                 $first = true;
-                while ($row2 = mysqli_fetch_assoc($result2)) {
+                while ($row2 = mysqli_fetch_assoc($results)) {
 
                     $content = '';
                     if ($row2['tm_status'] == 'Pending') {
