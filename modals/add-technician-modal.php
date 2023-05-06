@@ -52,12 +52,54 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <label for="address" class="col-form-label">Address</label>
                                 <div class="">
                                     <input name="address" class="form-control" type="text"
                                         placeholder="ex. Recodo, Zamboanga City">
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="expert" class="col-form-label">Area(s) of expertise</label>
+                                <div class="">
+                                    <input name="expert" class="form-control" type="text"
+                                        placeholder="Repairing Electronics..">
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="password" class="col-form-label">Password</label>
+                                <div class="">
+                                    <input name="password" class="form-control" type="password"
+                                        placeholder="">
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="img" class="col-form-label">Profile Image</label>
+                                <div class="">
+                                    <input name="img" class="form-control" type="file" accept="image/*"
+                                        placeholder="">
+                                    <span class="error-input"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="img" class="col-form-label">Daily Repair Limit</label>
+                                <div class="">
+                                    <input name="limit" class="form-control" type="number" 
+                                        placeholder="">
                                     <span class="error-input"></span>
                                 </div>
                             </div>

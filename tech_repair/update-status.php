@@ -213,8 +213,8 @@ $grand_total = $part_subtotal + $labor_subtotal;
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2({});
 
-     // Add row function
-     function addRow(brandPartId, brandPartName) {
+    // Add row function
+    function addRow(brandPartId, brandPartName) {
         let newRow = `
         <div class="row mb-3 parts-row">
             <div class="col-7 partscol">
@@ -241,7 +241,8 @@ $(document).ready(function() {
         if (selectedComrep.length > 0) {
             $.each(selectedComrep, function(index, comrep_id) {
                 let brandPartId = $("option[value='" + comrep_id + "']").data('brand-part-id');
-                let brandPartName = $("option[value='" + comrep_id + "']").data('brand-part-name');
+                let brandPartName = $("option[value='" + comrep_id + "']").data(
+                    'brand-part-name');
                 if (brandPartId && brandPartName) {
                     addRow(brandPartId, brandPartName);
                 }

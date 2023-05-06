@@ -1,4 +1,5 @@
 <?php
+// fetch_sales_data.php
 header('Content-Type: application/json');
 session_start();
 
@@ -62,7 +63,34 @@ if ($timeFilter === 'yearly') {
         }
     }
 
-} else {
+} elseif ($timeFilter === 'daily') {
+    // Daily data code
+    $sql_repair = "SELECT DATE(date_completed) as date, SUM(payment) as total_payment FROM rprq WHERE date_completed = CURDATE() GROUP BY DATE(date_completed)";
+    $sql_service = "SELECT DATE(date_completed) as date, SUM(payment) as total_payment FROM service_request WHERE date_completed = CURDATE() GROUP BY DATE(date_completed)";
+
+    $result_repair = $conn->query($sql_repair);
+    $result_service = $conn->query($sql_service);
+
+    $sales_data = array();
+
+    for ($i = 0; $i <= 23; $i++) {
+        $sales_data[$i] = array('repair' => 0, 'service' => 0);
+    }
+
+    if ($result_repair->num_rows > 0) {
+        while ($row = $result_repair->fetch_assoc()) {
+            $hour = (new DateTime($row['date']))->format('G');
+            $sales_data[intval($hour)]['repair'] = floatval($row['total_payment']);
+        }
+    }
+
+    if ($result_service->num_rows > 0) {
+        while ($row = $result_service->fetch_assoc()) {
+            $hour = (new DateTime($row['date']))->format('G');
+            $sales_data[intval($hour)]['service'] = floatval($row['total_payment']);
+        }
+    }
+}else {
     // Monthly data code
     $sql_repair = "SELECT MONTH(date_completed) as month, SUM(payment) as total_payment FROM rprq WHERE YEAR(date_completed) = YEAR(CURDATE()) GROUP BY MONTH(date_completed)";
     $sql_service = "SELECT MONTH(date_completed) as month, SUM(payment) as total_payment FROM service_request WHERE YEAR(date_completed) = YEAR(CURDATE()) GROUP BY MONTH(date_completed)";

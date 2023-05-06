@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
@@ -10,7 +11,7 @@ include_once('../tools/variables.php');
 $rowid = $_GET['rowid'];
     
 // Perform the query to retrieve the data for the selected row
-$query = "SELECT technician.tech_id, technician.fname, technician.lname, technician.phone, technician.address, technician.status, technician.assign, accounts.email, accounts.user_type
+$query = "SELECT *
             FROM technician
             JOIN accounts ON technician.account_id = accounts.account_id
             WHERE technician.tech_id = '" . $rowid . "';";
@@ -23,8 +24,8 @@ if (mysqli_num_rows($result) > 0) {
 
 }
 
-$custactive = "active";
-$custshow = "show";
+$techactive = "active";
+
 
 
 ?>
@@ -47,6 +48,16 @@ $custshow = "show";
                             <i class="fas fa-users menu-icon"></i>
                             </span> Technician<span class="bread"></span>
                         </h3>
+                        <?php
+                            if (isset($_SESSION['msg'])) {
+                                $msg = $_SESSION['msg'];
+                                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                '. $msg .'
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                            unset ($_SESSION['msg']);
+                            }
+                        ?>
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 
@@ -81,6 +92,25 @@ $custshow = "show";
                                                 <td><?php echo $row['email']?></td>
                                             </tr>
                                             <tr>
+                                                <th class="bg-gryy">Area of expertise:</th>
+                                                <td><?php echo $row['expertise']?></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-gryy">Repair limit:</th>
+                                                <td><?php echo $row['limit_per_day']?></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-gryy">Profile:</th>
+                                                <td class="maxwidth">
+                                                        <?php 
+                $image1 = $row['tech_img'];
+                $image_data1 = base64_encode($image1);
+                $image_src1 = "data:image/jpeg;base64,{$image_data1}";
+            ?>
+                                                        <img class="imgsz" src="<?php echo $image_src1; ?>" alt="Technician's Profile Picture">
+                                                    </td>
+                                            </tr>
+                                            <tr>
                                                 <?php
                                                  $statusClass = '';
                                                  if ($row['status'] == 'Working') {
@@ -96,10 +126,6 @@ $custshow = "show";
                                                 echo'<th class="bg-gryy">Status:</th>';
                                                 echo '<td><label class="badge ' . $statusClass . '">' . $row['status'] . '</label></td>';
                                                 ?>
-                                            </tr>
-                                            </tr><tr>
-                                                <th class="bg-gryy">Assigned:</th>
-                                                <td><?php echo $row['assign']?></td>
                                             </tr>
                                         </table>
                                         <div class="btn-group-sm d-flex btn-details">

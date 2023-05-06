@@ -53,16 +53,9 @@ if (isset($_POST['id'])) {
 
   $output .= '
   <div class="row">
-  <div class="col-6">
+  <div class="col-12">
   <div class="mb-3">
-  <input type="type" class="form-control" id="status" name="status" value="Repairing" hidden>
-    <label for="from" class="form-label">Estimated Completion (from)</label>
-    <input type="date" class="form-control" min="'. date('Y-m-d').'" id="from" name="from" value="' . $row6['date_from'] . '">
-  </div>
-  </div>
-  <div class="col-6">
-  <div class="mb-3">
-    <label for="to" class="form-label">(to)</label>
+    <label for="to" class="form-label">Estimated Completion</label>
     <input type="date" class="form-control" id="to" min="'. date('Y-m-d').'" name="to" value="' . $row6['date_to'] . '">
     </div>
     </div>
@@ -82,8 +75,7 @@ if (isset($_POST['id'])) {
 
 if (isset($_POST['submit'])) {
     $id = htmlentities($_SESSION['id']);
-    $status = htmlentities($_POST['status']); 
-    $from = htmlentities($_POST['from']); 
+    $status = "Repairing"; 
     $to = htmlentities($_POST['to']); 
   
     $elec_id = // Get the elec_id from your data source
@@ -92,7 +84,7 @@ if (isset($_POST['submit'])) {
     $parts = $_POST['parts'];
     
 
-    $query = "UPDATE rprq SET date_from = '$from', date_to = '$to', status = '$status' WHERE id = '$id'";
+    $query = "UPDATE rprq SET date_from = NOW(), date_to = '$to', status = '$status' WHERE id = '$id'";
     $tquery = "INSERT INTO rp_timeline (rprq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
 
   $result = mysqli_query($conn, $query);

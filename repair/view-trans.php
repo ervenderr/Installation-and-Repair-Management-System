@@ -6,6 +6,8 @@ if (!isset($_SESSION['logged_id'])) {
 
 if (!isset($_GET['rowid'])) {
     header('location: ../repair/pending-transaction.php');
+}else{
+    $rowid = $_GET['rowid'];
 }
 
 require_once '../homeIncludes/dbconfig.php';
@@ -31,6 +33,8 @@ rprq.status AS rprq_status,
 accounts.*,
 technician.*,
 electronics.*,
+rp_warranty.*,
+elec_sub_categ.*,
 rp_timeline.*,
 elec_brand.*,
 defects.*,
@@ -40,10 +44,12 @@ LEFT JOIN technician ON rprq.tech_id = technician.tech_id
 LEFT JOIN rp_timeline ON rprq.id = rp_timeline.rprq_id
 LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
 LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+LEFT JOIN rp_warranty ON rprq.id = rp_warranty.rpwarranty_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN elec_sub_categ ON rprq.subcateg_id = elec_sub_categ.elec_sub_categ_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
-WHERE accounts.account_id = '{$user_id}' AND rprq.transaction_code = '{$transaction_code}'
+WHERE accounts.account_id = '{$user_id}' AND rprq.id = '{$rowid}'
 ORDER BY rp_timeline.tm_date DESC, rp_timeline.tm_time DESC;";
 $result = mysqli_query($conn, $query);
 
@@ -150,8 +156,10 @@ $row = mysqli_fetch_assoc($result);
                         $content = 'The repair request has been assigned to a technician, and they are currently diagnosing your request';
                     } elseif ($row2['tm_status'] == 'In-progress') {
                         $content = 'Waiting for initial payment';
-                    } elseif ($row2['tm_status'] == 'To repair') {
+                    } elseif ($row2['tm_status'] == 'For repair') {
                         $content = 'Technician is preparing to repair your request';
+                    } elseif ($row2['tm_status'] == 'Done') {
+                        $content = 'Request is done. Please pay your unpaid balance';
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Currently working on the repair';
                     } elseif ($row2['tm_status'] == 'Awaiting Parts') {
@@ -161,16 +169,16 @@ $row = mysqli_fetch_assoc($result);
                     } elseif ($row2['tm_status'] == 'Repairing') {
                         $content = 'Partial payment has been received, and the technician is working on the repair';
                     } elseif ($row2['tm_status'] == 'To Pickup') {
-                        $content = 'Your request is ready for pickup';
+                        $content = 'Your request is ready for pickup. Please pay your unpaid balance';
                     } elseif ($row2['tm_status'] == 'To Deliver') {
-                        $content = 'Your request is ready for delivery';
+                        $content = 'Your request is ready for delivery. Please pay your unpaid balance';
                     } elseif ($row2['tm_status'] == 'Completed') {
-                        $content = 'Picked up / Delivered';
+                        $content = 'Repair Transaction Completed';
                     }
 
                     $status = $row2['tm_status'];
                     $date = $row2['tm_date'];
-                    $time = $row2['tm_time'];
+                    $time = date("h:i a", strtotime($row2['tm_time']));
                     $location = $row2['tm_location'];
                     $isCurrentStatus = $row2['tm_status'];
                     $statusClass = $isCurrentStatus ? 'status-intransit' : 'status-delivered';
@@ -213,6 +221,10 @@ $row = mysqli_fetch_assoc($result);
                                                 Type:</span>
                                             <span><?php echo $row['elec_name']?></span>
                                         </div>
+                                        <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Subcategory:</span>
+                                                <span><?php echo $row['subcateg_name']?></span>
+                                            </div>
                                         <div class="transaction-details-row">
                                             <span class="fw-bold me-2 transaction-details-label">Brand:</span>
                                             <span class=""><?php echo $row['eb_name'] ?></span>
@@ -283,6 +295,10 @@ $row = mysqli_fetch_assoc($result);
                                                     }
                                                     ?>
                                         </div>
+                                        <div class="transaction-details-row">
+                                            <span class="fw-bold me-2 transaction-details-label">Warranty Status:</span>
+                                            <span><?php echo $row['warranty_status']?></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +334,7 @@ $row = mysqli_fetch_assoc($result);
                                             
                                                 echo '<tr>';
                                                 echo '<td>' . $lrow['comrep_name'] . '</td>';
-                                                echo '<td>' . $lrow['comrep_cost'] . '</td>';
+                                                echo '<td>' . number_format($lrow['comrep_cost'], 2) . '</td>';
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -326,7 +342,7 @@ $row = mysqli_fetch_assoc($result);
                                             // Moved the labor subtotal row outside the while loop
                                             echo '<tr>';
                                             echo '<td class="text-end labortotal"> Labor Subtotal:  </td>';
-                                            echo '<td class="labortotal bold">' . $labor_subtotal .".00". '</td>';
+                                            echo '<td class="labortotal bold">' . number_format($labor_subtotal, 2) . '</td>';
                                             echo '</tr>';
                                             
                                             
@@ -369,16 +385,16 @@ $row = mysqli_fetch_assoc($result);
                                             
                                                 echo '<tr>';
                                                 echo '<td>' . $lrow['bp_name'] . '</td>';
-                                                echo '<td>' . $lrow['bp_cost'] . '</td>';
+                                                echo '<td>' . number_format($lrow['bp_cost'], 2) . '</td>';
                                                 echo '<td>' . $lrow['quantity'] . '</td>';
-                                                echo '<td>' . $partqty . '</td>';
+                                                echo '<td>' . number_format($partqty, 2) . '</td>';
                                                 echo '</tr>';
                                             }
                                             
                                             // Moved the parts subtotal row outside the while loop
                                             echo '<tr>';
                                             echo '<td colspan="3" class="text-end labortotal"> Parts Subtotal:  </td>';
-                                            echo '<td class="labortotal">' . $part_subtotal .".00". '</td>';
+                                            echo '<td class="labortotal">' . number_format($part_subtotal, 2) . '</td>';
                                             echo '</tr>';
 
                                             echo '<tr class="spaces">';
@@ -387,13 +403,13 @@ $row = mysqli_fetch_assoc($result);
                                             $total = $part_subtotal+$labor_subtotal;
                                             echo '<tr>';
                                             echo '<td colspan="3" class="text-end"> Total:  </td>';
-                                            echo '<td class="">' . $total .".00". '</td>';
+                                            echo '<td class="">' . number_format($total, 2) .'</td>';
                                             echo '</tr>';
 
                                             if(!empty($row['initial_payment'])){
                                             echo '<tr>';
                                             echo '<td colspan="3" class="text-end"> Initial Payment:  </td>';
-                                            echo '<td class="">'."- " . $row['initial_payment'] .'</td>';
+                                            echo '<td class="">' . number_format($row['initial_payment'], 2) .'</td>';
                                             echo '</tr>';
                                         }
 
@@ -409,7 +425,7 @@ $row = mysqli_fetch_assoc($result);
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center grandtotal">
-                                <h4>Total Payable Amount: <?php echo $grand_total.".00"?></h4>
+                                <h4>Total Payable Amount: <?php echo number_format($grand_total, 2) ?></h4>
                                 <?php if($row['rprq_status'] == 'Completed'){
                             echo '<span class="grandspan">Paid <i class="far fa-money-check-edit-alt"></i></span>';
                         } ?>

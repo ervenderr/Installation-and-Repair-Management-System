@@ -4,8 +4,10 @@ include_once('../admin_includes/header.php');
 require_once '../homeIncludes/dbconfig.php';
 include_once('../tools/variables.php');
 
-if (!isset($_SESSION['user_type'])){
-    header('location: ../login/login.php');
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
+  header('location: ../login/login.php');
+}else{
+  $user_id = $_SESSION['logged_id'];
 }
 
 ?>
@@ -25,7 +27,7 @@ if (!isset($_SESSION['user_type'])){
               <h3 class="page-title">
                 <span class="page-title-icon text-white me-2">
                 <i class="fas fa-home menu-icon"></i>
-                </span> Techinician Dashboard
+                </span> 
               </h3>
               <nav aria-label="breadcrumb">
                 <ul class="breadcrumb">
@@ -37,99 +39,34 @@ if (!isset($_SESSION['user_type'])){
             </div>
             <div class="row">
               <div class="col-md-4 stretch-card grid-margin">
-                <div class="card bg-gradient-danger card-img-holder text-white">
+                <div class="card bg-c-pink card-img-holder text-white">
                   <div class="card-body">
+
                   <?php
-                    // Query for current week's count
-                    $sql_current = "SELECT COUNT(*) AS count FROM rprq WHERE date_req >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
-                    $result_current = $conn->query($sql_current);
-
-                    if ($result_current->num_rows > 0) {
-                        while($row = $result_current->fetch_assoc()) {
-                            $current_count = $row["count"];
-                        }
-                    } else {
-                        $current_count = 0;
-                    }
-
-                    // Query for previous week's count
-                    $sql_previous = "SELECT COUNT(*) AS count FROM rprq WHERE date_req BETWEEN DATE_SUB(CURDATE(), INTERVAL 14 DAY) AND DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
-                    $result_previous = $conn->query($sql_previous);
-
-                    if ($result_previous->num_rows > 0) {
-                        while($row = $result_previous->fetch_assoc()) {
-                            $previous_count = $row["count"];
-                        }
-                    } else {
-                        $previous_count = 0;
-                    }
-
-                    // Calculate percentage increase/decrease
-                    if ($previous_count > 0) {
-                        $percentage_change = (($current_count - $previous_count) / $previous_count) * 100;
-                    } else {
-                        $percentage_change = 0;
-                    }
+$result = mysqli_query($conn, "SELECT COUNT(*) FROM rprq WHERE status = 'Completed'");
+$count = mysqli_fetch_array($result)[0];
                     ?>
-                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    
                     <h4 class="font-weight-normal mb-3">Completed Request <i class="mdi mdi-chart-line mdi-24px float-right"></i>
                     </h4>
-                    <h2 class="mb-5"><?php echo $current_count; ?></h2>
-                    <h6 class="card-text"><?php printf("%s by %.2f%%", $current_count >= $previous_count ? "Increased" : "Decreased", abs($percentage_change)); ?></h6>
+                    <h2 class="mb-5"><?php echo $count; ?></h2>
+                    <h6 class="card-text">Increased by 100%</h6>
                   </div>
                 </div>
               </div>
               <div class="col-md-4 stretch-card grid-margin">
-                <div class="card bg-gradient-info card-img-holder text-white">
+                <div class="card bg-c-blue card-img-holder text-white">
                   <div class="card-body">
                   <?php
-    $sql_current2 = "SELECT COUNT(*) AS count FROM service_request WHERE date_req >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
-    $result_current2 = $conn->query($sql_current2);
+$result2 = mysqli_query($conn, "SELECT COUNT(*) FROM rprq WHERE DATE(date_req) = DATE(NOW())");
+$count2 = mysqli_fetch_array($result2)[0];
+                    ?>
 
-    if ($result_current2->num_rows > 0) {
-        while($row2 = $result_current2->fetch_assoc()) {
-            $current_count2 = $row2["count"];
-        }
-    } else {
-        $current_count2 = 0;
-    }
-
-    // Query for previous week's count
-    $sql_previous2 = "SELECT COUNT(*) AS count FROM service_request WHERE date_req BETWEEN DATE_SUB(CURDATE(), INTERVAL 14 DAY) AND DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
-    $result_previous2 = $conn->query($sql_previous2);
-
-    if ($result_previous2->num_rows > 0) {
-        while($row2 = $result_previous2->fetch_assoc()) {
-            $previous_count2 = $row2["count"];
-        }
-    } else {
-        $previous_count2 = 0;
-    }
-
-    // Calculate percentage increase/decrease
-    if ($previous_count2 > 0) {
-        $percentage_change2 = (($current_count2 - $previous_count2) / $previous_count2) * 100;
-    } else {
-        $percentage_change2 = 0;
-    }
-?>
-
-                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h4 class="font-weight-normal mb-3">Cancelled <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                    
+                    <h4 class="font-weight-normal mb-3">Repair Request Today <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                     </h4>
-                    <h2 class="mb-5"><?php echo $current_count2; ?></h2>
-                    <h6 class="card-text"><?php printf("%s by %.2f%%", $current_count2 >= $previous_count2 ? "Increased" : "Decreased", abs($percentage_change2)); ?></h6>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 stretch-card grid-margin">
-                <div class="card bg-gradient-success card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h4 class="font-weight-normal mb-3">Back Jobs <i class="mdi mdi-diamond mdi-24px float-right"></i>
-                    </h4>
-                    <h2 class="mb-5">1</h2>
-                    <h6 class="card-text">Increased by 5%</h6>
+                    <h2 class="mb-5"><?php echo $count2; ?></h2>
+                    
                   </div>
                 </div>
               </div>

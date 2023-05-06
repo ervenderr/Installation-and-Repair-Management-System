@@ -6,7 +6,8 @@ require_once '../homeIncludes/dbconfig.php';
 if(isset($_POST['submit'])) {
     $partname = htmlentities($_POST['partname']);
     $electronic = htmlentities($_POST['electronic_type']);
-    $brand = htmlentities($_POST['electronic_type']);
+    $categname = htmlentities($_POST['categname']);
+    $brand = htmlentities($_POST['electronic_brand']);
     $price = htmlentities($_POST['price']);
 
     $sql = "SELECT * FROM brand_electronics
@@ -15,7 +16,7 @@ if(isset($_POST['submit'])) {
     WHERE electronic_id = $electronic AND brand_id = $brand";
 
     
-        $query = "INSERT INTO brand_parts (bp_name, elec_id, eb_id, bp_cost) VALUES ('$partname', '$electronic', '$brand', '$price');";
+        $query = "INSERT INTO brand_parts (bp_name, elec_id, subcateg_id, eb_id, bp_cost) VALUES ('$partname', '$electronic', '$categname', '$brand', '$price');";
 
         $result = mysqli_query($conn, $query);
 

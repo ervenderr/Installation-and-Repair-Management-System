@@ -229,7 +229,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             </tr>
                                             <tr>
                                                 <th>Initial Payment:</th>
-                                                <td><?php echo $row['initial_payment']?></td>
+                                                <td><?php echo number_format($row['initial_payment'] ,2)?></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -262,7 +262,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             
                                                 echo '<tr>';
                                                 echo '<td>' . $lrow['name'] . '</td>';
-                                                echo '<td>' . $lrow['price'] . '</td>';
+                                                echo '<td>' . number_format($lrow['price'] ,2) . '</td>';
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -281,7 +281,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             if(!empty($row['discount'])){
                                                 echo '<tr>';
                                                 echo '<td class="text-end "> Discount:  </td>';
-                                                echo '<td class="">'."- " . $row['discount'] .'</td>';
+                                                echo '<td class="">'. number_format($row['discount'] ,2) .'</td>';
                                                 echo '</tr>';
                                             }
 
@@ -298,7 +298,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                             </div>
 
                             <div class="d-flex align-items-center grandtotal">
-                                <h3>Total Payable Amount: <?php echo $grand_total.".00"?></h3>
+                                <h3>Total Payable Amount: <?php echo number_format($grand_total, 2) ?></h3>
                                 <?php if($row['sr_status'] == 'Completed'){
                             echo '<span class="grandspan">Paid <i class="far fa-money-check-edit-alt"></i></span>';
                         } ?>

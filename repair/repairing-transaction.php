@@ -13,15 +13,13 @@ $repairtransac = 'account-active';
 include_once('../homeIncludes/header.php');
 
 
-$transaction_code = $_SESSION['transaction_code'];
 $user_id = $_SESSION['logged_id'];
 
 $query2 = "SELECT * 
 FROM customer 
 LEFT JOIN accounts ON customer.account_id=accounts.account_id 
 LEFT JOIN rprq 
-ON rprq.cust_id=customer.cust_id 
-AND rprq.transaction_code='{$transaction_code}' 
+ON rprq.cust_id=customer.cust_id
 WHERE accounts.account_id='{$user_id}'";
 
 $result2 = mysqli_query($conn, $query2);
@@ -93,7 +91,7 @@ $row = mysqli_fetch_assoc($result2);
                     $query_in_progress = "SELECT * FROM rprq 
                     LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                     LEFT JOIN accounts ON customer.account_id = accounts.account_id
-                    WHERE (rprq.status='In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' OR rprq.status = 'To repair') 
+                    WHERE (rprq.status='In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' OR rprq.status = 'To repair' OR rprq.status = 'Waiting for parts') 
                     AND accounts.account_id = '{$user_id}';";
                     $result_in_progress = mysqli_query($conn, $query_in_progress);
                     $num_in_progress = mysqli_num_rows($result_in_progress);
@@ -176,6 +174,7 @@ rprq.status AS rprq_status,
 accounts.*,
 technician.*,
 electronics.*,
+elec_sub_categ.*,
 elec_brand.*,
 defects.*,
 customer.*
@@ -185,6 +184,7 @@ LEFT JOIN elec_brand ON rprq.eb_id = elec_brand.eb_id
 LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
 LEFT JOIN defects ON rprq.defect_id = defects.defect_id
 LEFT JOIN customer ON rprq.cust_id = customer.cust_id
+LEFT JOIN elec_sub_categ ON rprq.subcateg_id = elec_sub_categ.elec_sub_categ_id
 LEFT JOIN accounts ON customer.account_id = accounts.account_id
 WHERE (rprq.status = 'In-progress' OR rprq.status = 'Repairing' OR rprq.status = 'Diagnosing' OR rprq.status = 'To repair') 
 AND accounts.account_id = '{$user_id}';";
@@ -198,7 +198,7 @@ AND accounts.account_id = '{$user_id}';";
                             $_SESSION['transaction_id'] = $row['transaction_code'];
                             $_SESSION['rprq_id'] = $row['id'];
                             ?>
-                        <a href="view-trans.php?rowid= <?php echo $row['id']?> " class="viewtrans">
+                        <a href="view-trans.php?rowid=<?php echo $row['id']?> " class="viewtrans">
                             <div class="card mb-3 transaction-details-card">
                                 <div class="card-body">
                                     <div class="row">
@@ -217,6 +217,10 @@ AND accounts.account_id = '{$user_id}';";
                                                 <span class="fw-bold me-2 transaction-details-label">Electronic
                                                     Type:</span>
                                                 <span><?php echo $row['elec_name']?></span>
+                                            </div>
+                                            <div class="transaction-details-row">
+                                                <span class="fw-bold me-2 transaction-details-label">Subcategory:</span>
+                                                <span><?php echo $row['subcateg_name']?></span>
                                             </div>
                                             <div class="transaction-details-row">
                                                 <span class="fw-bold me-2 transaction-details-label">Brand:</span>

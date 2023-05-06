@@ -1162,7 +1162,7 @@ a {
     }
 
     .completed {
-        background-color: #00cc66;
+        background-color: #4cbb87;
     }
 
     .tracking-item.current-status .tracking-icon {
@@ -1171,6 +1171,9 @@ a {
 
     .tracking-item.latest .tracking-icon {
         background-color: #fbd15b;
+    }
+    .tracking-item.latest .completed {
+        background-color: #4cbb87;
     }
 
     .tracking-item.previous-status .tracking-icon {

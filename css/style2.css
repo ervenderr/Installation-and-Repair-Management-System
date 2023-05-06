@@ -154,7 +154,6 @@
 
 .repaircon {
     width: 100%;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -164,7 +163,8 @@
 
 
 .repaircon .form {
-    width: 500px;
+    width: auto;
+    max-width: 680px;
     border: 1px solid #ccc;
     border-radius: 0.35rem;
     padding: 1.5rem;
@@ -793,8 +793,12 @@ input[type="password"],
 .accpc a .fa-bell,
 .fa-envelope {
     font-size: 20px;
-    margin-right: 20px;
+    margin-right: 0;
     color: #015F6B;
+}
+
+.bellnotifdrop{
+    margin-right: 20px;
 }
 
 .dp-setting li a {
@@ -2076,7 +2080,7 @@ input[type="password"],
     background-color: #f68
 }
 
-.tracking-item .tracking-icon.status-delivered {
+.tracking-item .tracking-icon.Completed {
     background-color: #4cbb87
 }
 
@@ -2661,3 +2665,118 @@ body {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+.name {
+    color: blue;
+  }
+  
+  .work {
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  .about span {
+    font-size: 13px;
+  }
+  
+  .v-profile {
+    color: blue;
+    cursor: pointer;
+  }
+  
+  .box {
+    -webkit-box-shadow: 13px 12px 5px -10px rgba(196,194,196,0.72);
+    -moz-box-shadow: 13px 12px 5px -10px rgba(196,194,196,0.72);
+    box-shadow: 13px 12px 5px -10px rgba(196,194,196,0.72);
+  }
+
+  .rounded-circle{
+    width: 90px;
+    height: 90px;
+  }
+
+  .rounded{
+    min-height: 261px;
+  }
+
+  .notification {
+    position: relative;
+    text-align: right;
+    color: #015F6B;
+    height: 25px;
+    width: 25px;
+    margin-right: 15px;
+  }
+  
+  .notification .bellss{
+    font-size: 23px;
+  }
+  
+  .notification-menu {
+    position: relative;
+    top: 2px;
+    left: -313px;
+    background-color: #e5e5e5;
+    border: #989898;
+    padding: 10px;
+    list-style: none;
+    width: 350px;
+    display: none;
+    text-align: left;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    border-radius: 5px;
+    
+  }
+  
+  .notification-menu li {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #015F6B;
+  }
+  
+  .notification-menu .avatar {
+    padding: 2px 0;
+  }
+  
+  .notification-menu h3 {
+    font-size: 12px;
+    margin: 0 0 5px 0;
+    display: inline;
+    color: #f7dc6f;
+  }
+  
+  .notification-menu p {
+    margin-bottom: 0;
+    margin: 0 0 5px 0;
+    font-size: 12px;
+    text-transform: none;
+  }
+  
+  .btn-like {
+    background-color: #CC0000;
+    border-color: #B20000;
+    color: #fff;
+  }
+
+  .badge-notification {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 0.7rem;
+    min-width: 15px;
+    height: 15px;
+    padding: 0px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timedate{
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #585757;
+  }
+  

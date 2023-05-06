@@ -26,7 +26,7 @@ include_once('../homeIncludes/header.php');
         ?>
 
         <div class="form-container">
-            <form action="signup-process.php" class="form" method="POST" id="repair-form" enctype="multipart/form-data">
+            <form action="mail.php" class="form" method="POST" id="repair-form" enctype="multipart/form-data">
                 <h2 class="text-center login-h4"><strong>Sign Up</strong><img class="login-img"
                         src="../img/proton-logo.png" alt=""></h2>
                 <div class="progressbar">
@@ -39,21 +39,21 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="fname">First Name</label>
-                                <input class="form-control" type="text" name="fname" id="fname">
+                                <input class="form-control" type="text" name="fname" id="fname" value="Ervens">
                                 <span class="val-error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="mname">Middle Name</label>
-                                <input class="form-control" type="text" name="mname" id="mname">
+                                <input class="form-control" type="text" name="mname" id="mname" >
                                 <span class="val-error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="lname">Last Name</label>
-                                <input class="form-control" type="text" name="lname" id="lname">
+                                <input class="form-control" type="text" name="lname" id="lname" value="Idjads">
                                 <span class="val-error"></span>
                             </div>
                         </div>
@@ -62,21 +62,21 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="email">Email</label>
-                                <input class="form-control" type="email" name="email" id="email">
+                                <input class="form-control" type="email" name="email" id="email" value="ervenidjad12@gmail.com">
                                 <span class="val-error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="password">Password</label>
-                                <input class="form-control" type="password" name="password" id="password">
+                                <input class="form-control" type="password" name="password" id="password" value="password">
                                 <span class="val-error"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group lgns">
                                 <label for="password-repeat">Confirm Password</label>
-                                <input class="form-control" type="password" name="password-repeat" id="password-repeat">
+                                <input class="form-control" type="password" name="password-repeat" id="password-repeat" value="password">
                                 <span class="val-error"></span>
                             </div>
                         </div>
@@ -95,7 +95,7 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-6">
                             <div class="">
                                 <label class="form-label" for="address">Street</label>
-                                <input class="form-control" id="address" type="text" name="address">
+                                <input class="form-control" id="address" type="text" name="address" value="Sd Street">
                                 <span class="val-error"></span>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ include_once('../homeIncludes/header.php');
                             <div class="">
                                 <label class="form-label">Province</label>
                                 <select class="form-control select-max" id="province" name="province">
-                                    <option value="None">--- Select ---</option>
+                                    <option value="Basilan">Basilan</option>
                                     <!-- Add more provinces here -->
                                 </select>
                             </div>
@@ -133,7 +133,7 @@ include_once('../homeIncludes/header.php');
                         <div class="col-md-6 mb-2">
                             <div class="">
                                 <label class="form-label">Phone</label>
-                                <input class="form-control" id="phone" type="tel" name="phone" placeholder="Phone">
+                                <input class="form-control" id="phone" type="tel" name="phone" placeholder="Phone" value="09123456789">
                                 <span class="val-error"></span>
                             </div>
                         </div>

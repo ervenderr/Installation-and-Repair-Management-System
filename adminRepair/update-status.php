@@ -15,8 +15,10 @@ if (isset($_POST['id'])) {
     $stat ='';
     if($inventory['shipping'] == 'Deliver'){
       $stat ='To Deliver';
+    }else if($inventory['shipping'] == 'Pickup'){
+      $stat ='For Pickup';
     }else{
-      $stat ='To Pickup';
+      $stat ='Done';
     }
     $output .= '
     <form method="POST" action="update-status.php" enctype="multipart/form-data">
@@ -26,10 +28,9 @@ if (isset($_POST['id'])) {
                 <option value="Pending"' . ($currentStatus == "Pending" ? " selected" : "") . '>Pending</option>
                 <option value="Diagnosing"' . ($currentStatus == "Diagnosing" ? " selected" : "") . '>Diagnosing</option>
                 <option value="In-progress"' . ($currentStatus == "In-progress" ? " selected" : "") . '>In-progress</option>
-                <option value="To repair"' . ($currentStatus == "To repair" ? " selected" : "") . '>To repair</option>
+                <option value="For repair"' . ($currentStatus == "For repair" ? " selected" : "") . '>For repair</option>
                 <option value="Repairing"' . ($currentStatus == "Repairing" ? " selected" : "") . '>Repairing</option>
                 <option value="'. $stat .'"' . ($currentStatus == "$stat" ? " selected" : "") . '>'. $stat .'</option>
-                <option value="Completed"' . ($currentStatus == "Completed" ? " selected" : "") . '>Completed</option>
                 <option value="Cancelled"' . ($currentStatus == "Cancelled" ? " selected" : "") . '>Cancelled</option>
                 <option value="Parts Needed"' . ($currentStatus == "Parts Needed" ? " selected" : "") . '>Parts Needed</option>
                 <option value="Waiting for parts"' . ($currentStatus == "Waiting for parts" ? " selected" : "") . '>Waiting for parts</option>

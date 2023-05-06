@@ -9,10 +9,11 @@ if(isset($_POST['id'])){
     $_SESSION['id'] = $_POST['id'];
     $query = "SELECT * FROM rprq WHERE id = '".$_POST['id']."'";
     $result = mysqli_query($conn, $query);
-    $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
+    $inventory = mysqli_fetch_assoc($result);
+    $selected_technician_id = $inventory['tech_id'];
 
     $output .= '
-    <form method="POST" action="accept-pending.php" enctype="multipart/form-data">
+    <form method="POST" action="accept-pending.php" enctype="multipart/form-data" onsubmit="return checkLimit()">
           <div class="mb-3">
             <label for="tech" class="form-label">Technician</label>
             <select class="form-select" id="tech" name="tech">
@@ -20,11 +21,13 @@ if(isset($_POST['id'])){
 
             // Query the supplier table
             $sql = "SELECT * FROM technician WHERE status = 'Active'";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_assoc($result)) {
-                    $output .= "<option value='" . $row["tech_id"] . "'>" . $row['fname'] . '  ' . $row['lname'] . "</option>";
-                }
+            $result2 = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result2) > 0) {
+                while ($technician = mysqli_fetch_assoc($result2)) {
+                    $tech_id = mysqli_real_escape_string($conn, $technician['tech_id']);
+                    $selected = ($tech_id == $selected_technician_id) ? "selected" : "";
+                    $output .= "<option value='{$tech_id}' data-limit='" . $technician["limit_per_day"] . "' {$selected}>{$technician['fname']} {$technician['lname']}</option>";
+                } 
               }
 
     $output .= '
@@ -34,7 +37,24 @@ if(isset($_POST['id'])){
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <input name="submit" type="submit" class="btn btn-danger" value="Accept"/>
           </div>
-    </form>';
+    </form>
+    <script>
+
+    function checkLimit() {
+        var techSelect = document.getElementById("tech");
+        var selectedOption = techSelect.options[techSelect.selectedIndex];
+        var limitPerDay = selectedOption.dataset.limit;
+      
+        if (limitPerDay == 0) {
+          var confirmation = confirm("This technician has reached their daily limit. Are you sure you want to assign this technician?");
+          if (!confirmation) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+    </script>';
 
     echo $output;
 }

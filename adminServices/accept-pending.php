@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
         
     }
     $newly_inserted_id = mysqli_insert_id($conn);
-    $tquery = "INSERT INTO rp_timeline (sreq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
+    $tquery = "INSERT INTO sr_timeline (sreq_id, tm_date, tm_time, tm_status) VALUES ('$id', NOW(), NOW(), '$status');";
     $tresult = mysqli_query($conn, $tquery);
 
     if (mysqli_stmt_affected_rows($stmt) > 0) {

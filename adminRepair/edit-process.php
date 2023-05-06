@@ -21,6 +21,7 @@ if(isset($_POST['submit'])) {
     $other_defective = htmlentities($_POST['other_defective']);
     $remarks = htmlentities($_POST['remarks']);
     $backlog = htmlentities($_POST['backlog']);
+    $warranty = htmlentities($_POST['warranty']);
 
     $accountid = $_SESSION['account_id'];
     $rowid = $_SESSION['rowid'];
@@ -60,20 +61,24 @@ if(isset($_POST['submit'])) {
 
     if ($defective === "other"){
         $query4 = "UPDATE rprq SET elec_id='$etype', other_defects='$other_defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician', payment='$payment', initial_payment='$initial_payment', remarks='$remarks', backlog='$backlog' WHERE transaction_code='$transaction_code'";
+        $wquery = "UPDATE rp_warranty SET warranty_status='$warranty' WHERE rpwarranty_id=$rowid";
         $result4 = mysqli_query($conn, $query4);
+        $wresult = mysqli_query($conn, $wquery);
         if ($result4) {
             $_SESSION['msg'] = "Record updated Successfully.";
-            header("location: view-transaction.php?transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
+            header("location: view-transaction.php?transaction_code=" . $transaction_code . "&rowid=" . $rowid);
         } else {
             echo "FAILED: " . mysqli_error($conn);
         }
 
     }else{
         $query4 = "UPDATE rprq SET elec_id='$etype', defect_id='$defective', shipping='$shipping', date_req='$date', date_completed='$completed', cust_id='$customer_id', status='$status', tech_id='$technician', payment='$payment', initial_payment='$initial_payment', remarks='$remarks', backlog='$backlog' WHERE transaction_code='$transaction_code'";
+        $wquery = "UPDATE rp_warranty SET warranty_status='$warranty' WHERE rpwarranty_id=$rowid";
         $result4 = mysqli_query($conn, $query4);
+        $wresult = mysqli_query($conn, $wquery);
         if ($result4) {
             $_SESSION['msg'] = "Record updated Successfully.";
-            header("location: view-transaction.php?transaction_code=" . $transaction_code . "&rowid=" . $row['id']);
+            header("location: view-transaction.php?transaction_code=" . $transaction_code . "&rowid=" . $rowid);
         } else {
             echo "FAILED: " . mysqli_error($conn);
         }

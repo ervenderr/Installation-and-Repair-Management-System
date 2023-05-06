@@ -86,12 +86,14 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         accounts.*,
                                         technician.*,
                                         electronics.*,
+                                        rp_warranty.*,
                                         defects.*,
                                         customer.*
                                       FROM rprq
                                       LEFT JOIN technician ON rprq.tech_id = technician.tech_id
                                       LEFT JOIN customer ON rprq.cust_id = customer.cust_id
                                       LEFT JOIN electronics ON rprq.elec_id = electronics.elec_id
+                                      LEFT JOIN rp_warranty ON rprq.id = rp_warranty.rpwarranty_id
                                       LEFT JOIN defects ON rprq.defect_id = defects.defect_id
                                       LEFT JOIN accounts ON customer.account_id = accounts.account_id
                                       WHERE rprq.transaction_code = '" . $tcode . "';";
@@ -104,6 +106,7 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                         $selected_technician_id = $row6['tech_id'];
                                         $selected_elec_id = $row6['elec_id'];
                                         $selected_defect_id = $row6['defect_id'];
+                                        $selected_warranty = $row6['warranty_status'];
                                         ?>
                                         <p class="card-description">Update Personal info </p>
                                         <div class="row">
@@ -343,6 +346,28 @@ $_SESSION['transaction_code'] = $_GET['transaction_code'];
                                                                 <?php if ($row6['backlog'] == 0) echo 'selected'; ?>>
                                                                 No
                                                             </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="warranty" class="col-form-label">Warranty Status</label>
+                                                    <div class="">
+                                                    <select name="warranty" class="form-control">
+                                                            <option value="Under warranty"
+                                                                <?php if ($row6['warranty_status'] == 'Under warranty') echo 'selected'; ?>>
+                                                                Under warranty
+                                                            </option>
+                                                            <option value="Warranty claimed"
+                                                                <?php if ($row6['warranty_status'] == 'Warranty claimed') echo 'selected'; ?>>
+                                                                Warranty claimed
+                                                            </option>
+                                                            <option value="Warranty expired"
+                                                                <?php if ($row6['warranty_status'] == 'Warranty expired') echo 'selected'; ?>>
+                                                                Warranty expired
+                                                            </option>
+                                                            
                                                         </select>
                                                     </div>
                                                 </div>

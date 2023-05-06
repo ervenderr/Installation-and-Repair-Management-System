@@ -10,7 +10,7 @@ include_once('../homeIncludes/header.php');
 
 ?>
 
-<body>
+<body class="view-body">
     <?php include_once('../homeIncludes/homenav.php'); ?>
 
 

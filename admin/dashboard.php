@@ -37,7 +37,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-md-5 stretch-card grid-margin">
+                        <div class="col-md-5 col-sm-12 stretch-card grid-margin">
                             <div class="card bg-c-pink card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -181,6 +181,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                         <div class="filter d-flex align-items-center">
                                             <span class="by">By: </span>
                                             <select id="timeFilter" class="form-select sales-filter">
+                                                <option value="daily">Daily</option>
                                                 <option value="weekly">Weekly</option>
                                                 <option value="monthly">Monthly</option>
                                                 <option value="yearly">Yearly</option>
@@ -241,53 +242,69 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     async function renderSalesChart(timeFilter) {
         const salesData = await fetchSalesData(timeFilter);
 
-        const numPeriods = timeFilter === 'weekly' ? 7 : timeFilter === 'monthly' ? 12 : Object.keys(salesData)
-            .length;
+const numPeriods = timeFilter === 'weekly' ? 7 : 
+                  timeFilter === 'monthly' ? 12 : 
+                  timeFilter === 'daily' ? 24 :
+                  Object.keys(salesData).length;
 
-        const labels = {
-            weekly: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            monthly: [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December',
-            ],
-            yearly: Object.keys(salesData),
-        };
+const getDailyLabels = () => {
+    const currentDate = new Date();
+    const labels = [];
+
+    for (let i = 0; i < numPeriods; i++) {
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + i);
+        const options = { month: 'short', day: 'numeric' };
+        const formattedDate = date.toLocaleDateString('en-US', options);
+        labels.push(formattedDate);
+    }
+
+    return labels;
+}
+
+const labels = {
+    weekly: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    monthly: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+        'October', 'November', 'December'
+    ],
+    yearly: Object.keys(salesData),
+    daily: getDailyLabels(),
+};
+
 
         const repairData = [];
         const serviceData = [];
 
-        for (let i in salesData) {
-            repairData.push(salesData[i].repair);
-            serviceData.push(salesData[i].service);
+        if (timeFilter === 'daily') {
+            for (let i = 0; i < numPeriods; i++) {
+                const salesForPeriod = salesData[i] || {
+                    repair: 0,
+                    service: 0
+                };
+                repairData.push(salesForPeriod.repair);
+                serviceData.push(salesForPeriod.service);
+            }
+        } else {
+            for (let i in salesData) {
+                repairData.push(salesData[i].repair);
+                serviceData.push(salesData[i].service);
+            }
         }
 
         const salesChartData = {
             labels: labels[timeFilter],
             datasets: [{
-                    label: 'Repair Request Sales',
-                    data: repairData,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Service Request Sales',
-                    data: serviceData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                },
-            ],
+                label: 'Repair Request Sales',
+                data: repairData,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+            }, {
+                label: 'Service Request Sales',
+                data: serviceData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+            }],
         };
 
         const ctx = document.getElementById('salesChart').getContext('2d');
@@ -311,8 +328,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
     });
 
     // Call the initial render with the default time filter
-    renderSalesChart('monthly');
+    renderSalesChart('daily');
     </script>
+
 
 
 

@@ -7,8 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="add-parts.php" enctype="multipart/form-data"
-                    onsubmit="return validateForm()">
+                <form method="POST" action="add-parts.php" enctype="multipart/form-data" class="form-sample">
                     <div class="mb-3">
                         <label for="partname" class="form-label">Part Name</label>
                         <input type="text" class="form-control" name="partname" id="partname">
@@ -25,6 +24,14 @@
                                     echo "<option value='" . $row['elec_id'] . "'>" . $row['elec_name'] . "</option>";
                                 }
                                 ?>
+                        </select>
+                        <span class="error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categname" class="form-label">Subcategory</label>
+                        <select name="categname" id="categname" class="form-select">
+                            <option value="None">--- Select ---</option>
+                            
                         </select>
                         <span class="error"></span>
                     </div>
@@ -176,9 +183,58 @@
     </div>
 </div>
 
+<!-- subcategory -->
+<div class="modal fade " id="addsubcategModal" tabindex="-1" aria-labelledby="addsubcategModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addsubcategModalLabel">Create New Subcategory</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="add-subcategory.php" enctype="multipart/form-data" class="form-sample">
+                    <div class="mb-3">
+                        <label for="electronic_type" class="form-label">Electronic Type</label>
+                        <select name="electronic_type" id="electronic_type" class="form-select">
+                            <option value="None">--- Select ---</option>
+                            <?php
+                                $sql = "SELECT * FROM electronics";
+                                $result = mysqli_query($conn, $sql);
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='" . $row['elec_id'] . "'>" . $row['elec_name'] . "</option>";
+                                }
+                                ?>
+                        </select>
+                        <span class="error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subname" class="form-label">SubCategory Name</label>
+                        <input type="text" class="form-control" name="subname" id="subname">
+                        <span class="error"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <input name="submit" type="submit" class="btn btn-danger" value="Submit" />
+                    </div>
+                </form>
 
-<script>
-$(document).ready(function() {
-    $('.js-example-basic-multiple').select2({});
-});
-</script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="editcategModal" tabindex="-1" aria-labelledby="editcategModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editcategModalLabel">Update Subcategory</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body suppbody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

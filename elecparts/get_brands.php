@@ -1,5 +1,5 @@
 <?php
-
+// get_brands.php
 
 require_once '../homeIncludes/dbconfig.php';
 

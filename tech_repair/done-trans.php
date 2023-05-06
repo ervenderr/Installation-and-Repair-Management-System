@@ -13,11 +13,13 @@ if (isset($_GET['id'])) {
     $inventory = mysqli_fetch_assoc($result); // Fetch the data from the result set
 
     $currentStatus = $inventory['status'];
-    $stat ='';
+    $status ='';
     if($inventory['shipping'] == 'Deliver'){
-      $status ='To Deliver';
+      $status ='To deliver';
+    }else if($inventory['shipping'] == 'Pickup'){
+      $status ='For pickup';
     }else{
-      $status ='To Pickup';
+      $status ='Done';
     }
 
     $query = "UPDATE rprq SET status = '$status' WHERE id = '$id'";

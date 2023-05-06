@@ -177,7 +177,7 @@ $row = mysqli_fetch_assoc($result);
 
                     $status = $row2['tm_status'];
                     $date = $row2['tm_date'];
-                    $time = $row2['tm_time'];
+                    $time = date("h:i a", strtotime($row2['tm_time']));
                     $isCurrentStatus = $row2['tm_status'];
                     $statusClass = $isCurrentStatus ? 'status-intransit' : 'status-delivered';
                     $latestClass = $first ? 'latest' : '';
@@ -339,7 +339,7 @@ $row = mysqli_fetch_assoc($result);
                                             
                                                 echo '<tr>';
                                                 echo '<td>' . $lrow['name'] . '</td>';
-                                                echo '<td>' . $lrow['price'] . '</td>';
+                                                echo '<td>' . number_format($lrow['price'], 2) . '</td>';
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -347,7 +347,7 @@ $row = mysqli_fetch_assoc($result);
                                             // Moved the labor subtotal row outside the while loop
                                             echo '<tr>';
                                             echo '<td class="text-end labortotal"> Labor Subtotal:  </td>';
-                                            echo '<td class="Sub Total">' . $labor_subtotal .".00". '</td>';
+                                            echo '<td class="Sub Total">' . number_format($labor_subtotal, 2) . '</td>';
                                             echo '</tr>';
 
 
@@ -358,7 +358,7 @@ $row = mysqli_fetch_assoc($result);
                                             if(!empty($row['discount'])){
                                                 echo '<tr>';
                                                 echo '<td class="text-end"> Discount:  </td>';
-                                                echo '<td class="">'."- " . $row['discount'] .'</td>';
+                                                echo '<td class="">'. number_format($row['discount'], 2) .'</td>';
                                                 echo '</tr>';
                                             }
 
@@ -374,7 +374,7 @@ $row = mysqli_fetch_assoc($result);
                                 </div>
 
                                 <div class="d-flex align-items-center grandtotal">
-                                    <h4>Total Payable Amount: <?php echo $grand_total.".00"?></h4>
+                                    <h4>Total Payable Amount: <?php echo number_format($grand_total, 2) ?></h4>
                                     <?php if($row['sr_status'] == 'Completed'){
                             echo '<span class="grandspan">Paid <i class="far fa-money-check-edit-alt"></i></span>';
                         } ?>

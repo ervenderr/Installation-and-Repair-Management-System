@@ -13,6 +13,8 @@ $rowid = $_GET['rowid'];
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'technician'){
     header('location: ../login/login.php');
+}else{
+    $user_id = $_SESSION['logged_id'];
 }
 // Perform the query to retrieve the data for the selected row
 $query = "SELECT rprq.*, 
@@ -376,7 +378,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
                                             }
 
 
-                                            if ($row['rprq_status'] == 'To repair') {
+                                            if ($row['rprq_status'] == 'For repair') {
                                                 echo '<button class="icns btn btn-success torepair updtech" id="' .  $row['id'] . '">';
                                                 echo 'Start Repair <i class="fas fa-check-square view-account" id="' .  $row['id'] . '"></i>';
                                                 echo '</button>';
@@ -441,7 +443,7 @@ $_SESSION['rowid'] = $_GET['rowid'];
 
     <!-- Accept modal -->
     <div class="modal fade " id="torepairs" tabindex="-1" aria-labelledby="editSuppModalLabel" aria-hidden="true">
-        <div class="modal-dialog diangmod">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editSuppModalLabel">Estimated Completion Date</h5>
