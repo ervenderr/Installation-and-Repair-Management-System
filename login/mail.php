@@ -17,13 +17,13 @@ function sendEmail_verify($fname, $email, $verify_token){
     $mail->SMTPAuth = true;
 
     $mail->Host = 'smtp.gmail.com';
-    $mail->Username = 'ervenfailed@gmail.com';
-    $mail->Password = 'kpzfylxmigejjlny';
+    $mail->Username = '';
+    $mail->Password = '';
 
     $mail->SMTPSecure = "ssl";
     $mail->Port = 465;
 
-    $mail->setFrom('ervenfailed@gmail.com', 'ProtonTech');
+    $mail->setFrom('', 'ProtonTech');
     $mail->addAddress($email, $fname);
 
     $mail->isHTML(true);
