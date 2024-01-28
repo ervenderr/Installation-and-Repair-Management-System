@@ -11,11 +11,11 @@
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="../assets/images/faces/admin1.jpg" alt="image">
+                  <img src="../assets/images/faces/admin2.png" alt="image">
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">Ronalde Dale Fuentebella</p>
+                  <p class="mb-1 text-black">Erven Idjad</p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
