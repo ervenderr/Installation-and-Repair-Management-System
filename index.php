@@ -4,6 +4,6 @@
 
     //start session
     session_start();
-    header('location: homepage/home.php');
+    header('location: login/login.php');
     
 ?>
