@@ -37,7 +37,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-md-5 col-sm-12 stretch-card grid-margin">
+                        <div class="col-md-3 col-sm-12 stretch-card grid-margin">
                             <div class="card bg-c-pink card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -80,7 +80,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5 stretch-card grid-margin">
+                        <div class="col-md-3 stretch-card grid-margin">
                             <div class="card bg-c-blue card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -123,7 +123,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5 stretch-card grid-margin">
+                        <div class="col-md-3 stretch-card grid-margin">
                             <div class="card bg-c-yellow card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
@@ -144,7 +144,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5 stretch-card grid-margin">
+                        <div class="col-md-3 stretch-card grid-margin">
                             <div class="card bg-c-green card-img-holder text-white">
                                 <div class="card-body">
                                     <?php
