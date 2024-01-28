@@ -3,12 +3,12 @@
             <li class="nav-item nav-profile">
               <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                  <img src="../assets/images/faces/admin1.jpg" alt="profile">
+                  <img src="../assets/images/faces/admin2.png" alt="profile">
                   <span class="login-status online"></span>
                   <!--change to offline or busy as needed-->
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
-                  <span class="font-weight-bold mb-2">Ronald Dale F.</span>
+                  <span class="font-weight-bold mb-2">Erven S.</span>
                   <span class="text-secondary text-small">Admin</span>
                 </div>
                 <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
