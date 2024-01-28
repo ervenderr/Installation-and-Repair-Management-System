@@ -123,8 +123,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-5 stretch-card grid-margin">
                             <div class="card bg-c-yellow card-img-holder text-white">
                                 <div class="card-body">
@@ -168,6 +166,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin'){
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12 grid-margin stretch-card">
                             <div class="card">
