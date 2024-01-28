@@ -88,7 +88,8 @@ foreach ($errors as $error) {
 
 
 <body>
-    <?php include_once('../homeIncludes/homenav.php');?>
+    <!-- Write your comments here -->
+    <!-- <?php include_once('../homeIncludes/homenav.php');?> -->
     <div class="register-photo">
 
         <?php
